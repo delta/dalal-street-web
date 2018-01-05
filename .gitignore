@@ -1,0 +1,13 @@
+# Compiled proto files
+proto_build/
+
+# Node modules for the project
+node_modules/
+
+protoc/
+
+# Webpack bundle
+build/
+
+# Log files
+*.log

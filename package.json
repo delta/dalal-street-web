@@ -1,0 +1,37 @@
+{
+  "name": "dalal-street-web",
+  "version": "1.0.0",
+  "description": "gRPC-web based frontend for DalalStreet",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:proto": "bash build_proto.sh",
+    "build:webpack": "webpack -p",
+    "dev-server": "webpack-dev-server --colors --watch --hot --inline --port 8080 --host 0.0.0.0 --output-public-path=https://localhost:8080/build/ --https --cert=./public/tls_keys/dev/server.crt --key=./public/tls_keys/dev/server.key"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coderick14/dalal-street-web.git"
+  },
+  "keywords": [
+    "stocks",
+    "trading"
+  ],
+  "author": "Team Dalal",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/coderick14/dalal-street-web/issues"
+  },
+  "homepage": "https://github.com/coderick14/dalal-street-web#readme",
+  "dependencies": {
+    "@types/google-protobuf": "^3.2.7",
+    "google-protobuf": "^3.5.0",
+    "grpc-web-client": "^0.3.1"
+  },
+  "devDependencies": {
+    "ts-loader": "^3.2.0",
+    "ts-protoc-gen": "^0.4.0",
+    "typescript": "^2.6.2",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.9.7"
+  }
+}
