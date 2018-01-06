@@ -18,6 +18,12 @@ git submodule update --init --recursive
 ```
 npm install
 ```
+- Setup ts-protoc-gen (customized)
+```
+cd ts-protoc-gen
+npm install
+npm run build
+```
 - Build proto files
 ```
 npm run build:proto
