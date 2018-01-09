@@ -3,12 +3,13 @@
     "alwaysStrict": true,
     "sourceMap": true,
     "target": "es5",
+    "lib": ["es5", "es2015.core", "es2015.promise", "dom"],
     "removeComments": true,
     "noImplicitReturns": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "stripInternal": true,
     "noFallthroughCasesInSwitch": true,
-    "noEmitOnError": true
+    "noEmitOnError": true,
   }
 }
