@@ -1,2 +1,99 @@
-<script type="text/javascript" src="/build/bundle.js" charset="utf-8"></script>
-Output in developer console
+<!-- <script type="text/javascript" src="/build/bundle.js" charset="utf-8"></script> -->
+<!-- Output in developer console -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Hello React!</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.css" />
+</head>
+<body>
+	<div id="example"></div>
+	
+	<!-- <div class="ui floating dropdown labeled search icon button">
+		<i class="building icon"></i>
+		<span class="text">Select Stock</span>
+		<div class="menu">
+			<div class="item">Arabic</div>
+			<div class="item">Chinese</div>
+			<div class="item">Danish</div>
+		</div>
+	</div> -->
+
+	<div class="ui bottom attached segment pushable">
+		<div class="ui inverted labeled icon left inline vertical sidebar menu uncover visible" style="">
+			<a class="item">
+				<i class="rupee icon"></i>
+				Trade
+			</a>
+			<a class="item">
+				<i class="book icon"></i>
+				Portfolio
+			</a>
+			<a class="item">
+				<i class="line chart icon"></i>
+				Market
+			</a>
+			<a class="item">
+				<i class="newspaper icon"></i>
+				News
+			</a>
+			<a class="item">
+				<i class="trophy icon"></i>
+				Leaderboard
+			</a>
+			<a class="item">
+				<i class="suitcase icon"></i>
+				Companies
+			</a>
+		</div>
+		<div class="ui two column doubling stackable grid container pusher" style="background: green">
+			<div class="row">
+				<div class="column">
+					<div class="ui floating dropdown labeled search icon button">
+						<i class="building icon"></i>
+						<span class="text">Select Stock</span>
+						<div class="menu">
+							<div class="item">Arabic</div>
+							<div class="item">Chinese</div>
+							<div class="item">Danish</div>
+						</div>
+					</div>
+				</div>
+				<div class="column" style="background: red; border: 5px solid white;">Re</div>
+			</div>
+			<div class="row">
+				<div class="sixteen wide column" style="background: red; border: 5px solid white;">Ga</div>				
+			</div>
+			<div class="row">
+				<div class="column" style="background: red; border: 5px solid white;">Ma</div>
+				<div class="column" style="background: red; border: 5px solid white;">Pa</div>
+			</div>
+			<div class="row">
+				<div class="column" style="background: red; border: 5px solid white;">Dha</div>
+				<div class="column" style="background: red; border: 5px solid white;">Ni sa</div>
+			</div>
+		</div>
+		
+		
+	</div>
+
+	<!-- Dependencies -->
+	<script src="./node_modules/react/umd/react.development.js"></script>
+	<script src="./node_modules/react-dom/umd/react-dom.development.js"></script>
+
+	<!-- JQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<!-- Semantic UI -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+
+	<!-- Main -->
+	<script src="/build/bundle.js"></script>
+
+	<script type="text/javascript">
+		$('.ui.dropdown').dropdown();
+		//$('.sidebar').sidebar();
+	</script>
+</body>
+</html>

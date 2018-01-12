@@ -12,5 +12,6 @@
     "stripInternal": true,
     "noFallthroughCasesInSwitch": true,
     "noEmitOnError": true,
+    "jsx": "react",
   }
 }
