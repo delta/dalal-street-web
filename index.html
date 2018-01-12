@@ -4,9 +4,15 @@
 <html>
 <head>
 	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 	<title>Hello React!</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.css" />
 </head>
+<style>
+	.row{
+		left:100px;
+	}
+</style>
 <body>
 	<div id="example"></div>
 	
@@ -47,9 +53,9 @@
 				Companies
 			</a>
 		</div>
-		<div class="ui two column doubling stackable grid container pusher" style="background: green">
+		<div class="ui celled stackable grid" style="background: green">
 			<div class="row">
-				<div class="column">
+				<div class="eight wide column">
 					<div class="ui floating dropdown labeled search icon button">
 						<i class="building icon"></i>
 						<span class="text">Select Stock</span>
@@ -60,18 +66,18 @@
 						</div>
 					</div>
 				</div>
-				<div class="column" style="background: red; border: 5px solid white;">Re</div>
+				<div class="eight wide column" style="background: red; ">Re</div>
 			</div>
 			<div class="row">
-				<div class="sixteen wide column" style="background: red; border: 5px solid white;">Ga</div>				
+				<div class="sixteen wide column" style="background: red; ">Ga</div>				
 			</div>
 			<div class="row">
-				<div class="column" style="background: red; border: 5px solid white;">Ma</div>
-				<div class="column" style="background: red; border: 5px solid white;">Pa</div>
+				<div class="eight wide column" style="background: green; ">Ma</div>
+				<div class="eight wide column" style="background: red; ">Pa</div>
 			</div>
 			<div class="row">
-				<div class="column" style="background: red; border: 5px solid white;">Dha</div>
-				<div class="column" style="background: red; border: 5px solid white;">Ni sa</div>
+				<div class="eight wide column" style="background: green; ">Dha</div>
+				<div class="eight wide column" style="background: red; ">Ni sa</div>
 			</div>
 		</div>
 		
