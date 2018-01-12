@@ -9,14 +9,42 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.css" />
 </head>
 <style>
+	body {
+		background: #2f323d;		
+	}
+
+	.item {
+		color:#4a4d55 !important;
+	}
+	#navbar .item.active {
+		background: rgb(27,28,29);
+	}
+
 	#main_container {
 		margin: 0; /* celled grid adds margin at top & bottom, we don't want it */
 		width: auto; /* overflows without this */
+		height: 100%;
 	}
+
+	#main_container .column, #main_container .row{
+		box-shadow: none !important;
+	}
+
 	/* make the navbar thinner */
 	#navbar .item {
 		padding-left: 0.5em;
 		padding-right: 0.5em;
+		box-shadow: none;
+	}
+	#navbar .item .icon {
+		font-size: 1.5em !important;
+	}
+	#navbar .item:before {
+		display: none !important;
+	}
+	#navbar .item:hover {
+		color: lightgray !important;
+		background: rgb(27,28,29);
 	}
 	/* push the main container to the left by 90px when navbar is visible.
 	semantic does this already but we don't like the width of the sidebar. */
@@ -31,7 +59,7 @@
 			<i class="rupee icon"></i>
 			Trade
 		</a>
-		<a class="item">
+		<a class="item active">
 			<i class="book icon"></i>
 			Portfolio
 		</a>
@@ -51,10 +79,20 @@
 			<i class="suitcase icon"></i>
 			Companies
 		</a>
+
+		<a class="item">
+				<i class="help circle icon"></i>
+				Help
+		</a>
+
+		<a class="item">
+				<i class="window close icon"></i>
+				Logout
+		</a>
 	</div>
-	<div id="main_container" class="ui celled stackable grid pusher" style="background: green">
+	<div id="main_container" class="ui celled stackable grid pusher">
 		<div class="row">
-			<div class="eight wide column">
+			<div class="three wide column">
 				<div class="ui fluid search selection dropdown">
 					<input name="country" type="hidden">
 					<i class="dropdown icon"></i>
@@ -68,20 +106,20 @@
 					</div>
 				</div>
 			</div>
-			<div class="three wide column" style="background: red; ">Notifs</div>
-			<div class="three wide column" style="background: red; ">Help</div>
-			<div class="two wide column" style="background: red; ">Logout</div>
+			
+			<div class="one wide column right floated" style=" ">Notifs</div>
+
 		</div>
 		<div class="row">
-			<div class="sixteen wide column" style="background: red; ">Ga</div>				
+			<div class="sixteen wide column" style=" ">Ga</div>				
 		</div>
 		<div class="row">
-			<div class="eight wide column" style="background: green; ">Ma</div>
-			<div class="eight wide column" style="background: red; ">Pa</div>
+			<div class="eight wide column" style=" ">Ma</div>
+			<div class="eight wide column" style=" ">Pa</div>
 		</div>
 		<div class="row">
-			<div class="eight wide column" style="background: green; ">Dha</div>
-			<div class="eight wide column" style="background: red; ">Ni sa</div>
+			<div class="eight wide column" style=" ">Dha</div>
+			<div class="eight wide column" style=" ">Ni sa</div>
 		</div>
 	</div>
 	
@@ -102,7 +140,6 @@
 	
 	<script type="text/javascript">
 		$('.ui.dropdown').dropdown();
-		//$('.sidebar').sidebar();
 	</script>
 </body>
 </html>
