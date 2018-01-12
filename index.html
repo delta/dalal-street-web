@@ -9,9 +9,9 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.css" />
 </head>
 <style>
-	.row{
-		left:100px;
-	}
+.row{
+	left:100px;
+}
 </style>
 <body>
 	<div id="example"></div>
@@ -56,17 +56,22 @@
 		<div class="ui celled stackable grid" style="background: green">
 			<div class="row">
 				<div class="eight wide column">
-					<div class="ui floating dropdown labeled search icon button">
-						<i class="building icon"></i>
-						<span class="text">Select Stock</span>
+					<div class="ui fluid multiple search selection dropdown">
+						<input name="country" type="hidden">
+						<i class="dropdown icon"></i>
+						<div class="default text">Select Stock</div>
 						<div class="menu">
-							<div class="item">Arabic</div>
-							<div class="item">Chinese</div>
-							<div class="item">Danish</div>
+							<div class="item" data-value="amazon"><i class="amazon icon"></i>Amazon</div>
+							<div class="item" data-value="facebook"><i class="facebook icon"></i>Facebook</div>
+							<div class="item" data-value="firefox"><i class="firefox icon"></i>Firefox</div>
+							<div class="item" data-value="github"><i class="github icon"></i>Github</div>
+							<div class="item" data-value="google"><i class="google icon"></i>Google</div>
 						</div>
 					</div>
 				</div>
-				<div class="eight wide column" style="background: red; ">Re</div>
+				<div class="three wide column" style="background: red; ">Notifs</div>
+				<div class="three wide column" style="background: red; ">Help</div>
+				<div class="two wide column" style="background: red; ">Logout</div>
 			</div>
 			<div class="row">
 				<div class="sixteen wide column" style="background: red; ">Ga</div>				
@@ -80,8 +85,8 @@
 				<div class="eight wide column" style="background: red; ">Ni sa</div>
 			</div>
 		</div>
-		
-		
+
+
 	</div>
 
 	<!-- Dependencies -->
