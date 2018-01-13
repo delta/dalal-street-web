@@ -3,7 +3,8 @@ const path = require('path');
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 module.exports = {
-  entry: "./public/src/index.ts",
+  cache: true,
+  entry: ["babel-polyfill", "./public/src/index.ts"],
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'bundle.js'
@@ -26,7 +27,7 @@ module.exports = {
             path.resolve(__dirname, 'public/proto_build'),
         ],
         exclude: /node_modules/,
-        loader: "babel-loader?presets[]=es2015!ts-loader", // tsc converts to es6. convert that to es5
+        loaders: ["babel-loader", "ts-loader"], // tsc converts to es6. convert that to es5
       }
     ]
   },

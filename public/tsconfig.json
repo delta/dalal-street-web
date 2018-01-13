@@ -2,9 +2,9 @@
   "compilerOptions": {
     "alwaysStrict": true,
     "sourceMap": true,
-    "target": "es6",
+    "target": "esnext",
     "module": "commonjs",
-    "lib": ["es6", "dom"],
+    "lib": ["es6", "esnext", "dom"],
     "removeComments": true,
     "noImplicitReturns": true,
     "noImplicitAny": true,
