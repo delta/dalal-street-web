@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { BuySellBox } from "./components/trading_terminal/BuySellBox";
+import { PlaceOrderBox } from "./components/trading_terminal/PlaceOrderBox";
 import { Navbar } from "./components/common/Navbar";
 import { TickerBar } from "./components/common/TickerBar"
 
@@ -29,6 +29,31 @@ let data = [
 	},
 	{
 		"companyName": "Amazon4",
+		"currentPrice": 100,
+		"previousPrice": 10
+	},
+	{
+		"companyName": "Google",
+		"currentPrice": 100,
+		"previousPrice": 10
+	},
+	{
+		"companyName": "Google1",
+		"currentPrice": 100,
+		"previousPrice": 10
+	},
+	{
+		"companyName": "Google2",
+		"currentPrice": 100,
+		"previousPrice": 10
+	},
+	{
+		"companyName": "Google3",
+		"currentPrice": 100,
+		"previousPrice": 10
+	},
+	{
+		"companyName": "Google4",
 		"currentPrice": 100,
 		"previousPrice": 10
 	}

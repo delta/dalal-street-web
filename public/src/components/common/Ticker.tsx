@@ -16,9 +16,9 @@ export class Ticker extends React.Component<TickerProps, {}> {
 
         return (
         <div className="ticker_item">
-            <h3 className='stock_name'>
+            <h4 className='stock_name'>
                 { this.props.companyName } 
-            </h3>
+            </h4>
 
             <span className = 'stock_price'>
             { `₹ ${this.props.currentPrice}`}
