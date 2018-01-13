@@ -9,89 +9,92 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.css" />
 </head>
 <style>
-	
-
-	.tab-header{
-		color:white;
-		list-style:none;
-		float:left;
-		width:100
-	}
 
 
-	#myleft, #myright{
-		color:white;
-		font-size:1.5em;
-	}
+.tab-header{
+	color:white;
+	list-style:none;
+	float:left;
+	width:100
+}
 
-	.stock_name{
-		color:white;
-	}
 
-	.stock_price{
-		color:#878f95;
-	}
-	
-	.ticker_item {
-		display: inline-block;
-		width:20%;
-		text-align: center;
-	}
-	
-	.scrolling-wrapper {
-		overflow-x: hidden;
-		overflow-y: hidden;
-		white-space: nowrap;
-		padding-left: 0px !important;
-		padding-right: 0px !important;
-	}
-	
-	.profit{
-		color:green;
-	}
-	
-	.loss{
-		color:red;
-	}
-	
-	
-	body {
-		background: #2f323d;		
-	}
-	
-	.item {
-		color:#4a4d55 !important;
-	}
-	#navbar .item.active {
-		background: rgb(27,28,29);
-	}
-	
-	#main_container {
-		margin: 0; /* celled grid adds margin at top & bottom, we don't want it */
-		width: auto; /* overflows without this */
-		height: 100%;
-	}
-	
-	#main_container .column, #main_container .row{
-		box-shadow: none !important;
-	}
-	
-	/* make the navbar thinner */
-	#navbar .item {
-		padding-left: 0.5em;
-		padding-right: 0.5em;
-		box-shadow: none;
-	}
-	#navbar .item .icon {
-		font-size: 1.5em !important;
-	}
-	#navbar .item:before {
-		display: none !important;
-	}
-	#navbar .item:hover {
-		color: lightgray !important;
-		background: rgb(27,28,29);
-	}
+#myleft, #myright{
+	color:white;
+	font-size:1.5em;
+}
+
+.stock_name{
+	color:white;
+}
+
+.stock_price{
+	color:#878f95;
+}
+
+.ticker_item {
+	display: inline-block;
+	width:20%;
+	text-align: center;
+}
+
+.scrolling-wrapper {
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	padding-left: 0px !important;
+	padding-right: 0px !important;
+}
+
+.profit{
+	color:green;
+}
+
+.loss{
+	color:red;
+}
+
+#ticker-bar {
+	width: auto;
+}
+
+body {
+	background: #2f323d;		
+}
+
+.item {
+	color:#4a4d55 !important;
+}
+#navbar .item.active {
+	background: rgb(27,28,29);
+}
+
+#main_container {
+	margin: 0; /* celled grid adds margin at top & bottom, we don't want it */
+	width: auto; /* overflows without this */
+	height: 100%;
+}
+
+#main_container .column, #main_container .row{
+	box-shadow: none !important;
+}
+
+/* make the navbar thinner */
+#navbar .item {
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	box-shadow: none;
+}
+#navbar .item .icon {
+	font-size: 1.5em !important;
+}
+#navbar .item:before {
+	display: none !important;
+}
+#navbar .item:hover {
+	color: lightgray !important;
+	background: rgb(27,28,29);
+}
 	/* push the main container to the left by 90px when navbar is visible.
 	semantic does this already but we don't like the width of the sidebar. */
 	#navbar.visible ~ #main_container.pusher {
@@ -106,8 +109,8 @@
 	</div>
 
 	<div id="main_container" class="ui celled stackable grid pusher">			
-	<div class="row">			
-			<div td="ticker_bar" class="thirteen column wide">
+		<div class="row">
+			<div id="ticker-bar" class="thirteen column wide">
 				<!-- Our ticker goes here -->
 			</div>
 			<div class="two wide column">
@@ -117,7 +120,7 @@
 			</div>
 			<div class="one wide column right floated" style=" ">Notifs</div>
 		</div>
-	
+
 		<div class="row">
 			<div class="three wide column">
 				<div class="ui fluid search selection dropdown">
@@ -135,7 +138,7 @@
 			</div>
 			
 		</div>
-	
+
 		<div class="row">
 			
 			<div class="eight wide column" id="testreact" style=" "></div>
@@ -147,7 +150,7 @@
 		</div>
 	</div>
 	
-	<!-- Dependencies -->
+	<!-- React -->
 	<script src="./node_modules/react/umd/react.development.js"></script>
 	<script src="./node_modules/react-dom/umd/react-dom.development.js"></script>
 	
@@ -172,9 +175,7 @@
 			});
 			$('i#myleft').click(function(){
 				$stockitem.animate({'scrollLeft':`-=${$(".scrolling-wrapper").width()}px`}, 500);
-			});
-			
-			
+			});	
 		});
 	</script>
 </body>
