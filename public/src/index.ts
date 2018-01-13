@@ -3,8 +3,50 @@ import {DalalActionService, DalalStreamService} from "../proto_build/DalalMessag
 import {LoginRequest, LoginResponse} from "../proto_build/actions/Login_pb";
 import {BuyStocksFromExchangeRequest, BuyStocksFromExchangeResponse} from "../proto_build/actions/BuyStocksFromExchange_pb";
 import {DataStreamType, SubscriptionId, SubscribeRequest, SubscribeResponse} from "../proto_build/datastreams/Subscribe_pb";
+import {Notification} from "../proto_build/models/Notification_pb";
 
 DalalActionService.serviceURL = "https://localhost:8000";
+DalalStreamService.serviceURL = "https://localhost:8000";
+
+let sessionMd: Metadata;
+
+async function subscribe(dst: DataStreamType, dsId?: string) {
+    const subreq = new SubscribeRequest();
+    subreq.setDataStreamType(dst);
+    if (dsId !== undefined) {
+        subreq.setDataStreamId(dsId);
+    }
+
+    const subres = await DalalStreamService.subscribe(subreq, sessionMd);
+    if (!subres.hasSubscriptionId()) {
+        throw new Error("Unable to get subscription id!");
+    }
+
+    return subres.getSubscriptionId() as SubscriptionId;
+}
+
+async function handleNotificationsStream() {
+    const subscriptionId = await subscribe(DataStreamType.NOTIFICATIONS);
+    const stream = DalalStreamService.getNotificationUpdates(subscriptionId, sessionMd);
+
+    for await (const notifUpdate of stream) {
+        const notif = notifUpdate.getNotification() as Notification; // important to make TS think it's not undefined
+        console.log("Notification update", notif.toObject());
+    }
+}
+
+async function handleStockPricesStream() {
+    const subscriptionId = await subscribe(DataStreamType.STOCK_PRICES);
+    const stream = DalalStreamService.getStockPricesUpdates(subscriptionId, sessionMd);
+
+    for await (const stockPricesUpdate of stream) {
+        const update = stockPricesUpdate.getPricesMap();
+        console.log("Stock prices update");
+        update.forEach((newPrice, stockId) => {
+            console.log("StockId %d updated to %d", stockId, newPrice);
+        });
+    }
+}
 
 async function login() {
     const loginRequest = new LoginRequest();
@@ -13,7 +55,11 @@ async function login() {
 
     try {
         const resp = await DalalActionService.login(loginRequest);
-        console.log(resp.getStatusCode());
+        console.log(resp.getStatusCode(), resp.toObject());
+
+        sessionMd = new Metadata({"sessionid": resp.getSessionId()});
+        handleNotificationsStream();
+        handleStockPricesStream();
     }
     catch(e) {
         // error could be grpc error or Dalal error. Both handled in exception
