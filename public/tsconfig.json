@@ -13,5 +13,7 @@
     "noFallthroughCasesInSwitch": true,
     "noEmitOnError": true,
     "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "module": "system",
   }
 }

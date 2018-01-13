@@ -26,10 +26,12 @@
 
 .stock_name{
 	color:white;
+	margin-bottom: 5px;
 }
 
 .stock_price{
 	color:#878f95;
+	font-size: 0.85em;
 }
 
 .ticker_item {
@@ -47,15 +49,27 @@
 }
 
 .profit{
+	font-size: 0.85em;
 	color:green;
 }
 
 .loss{
+	font-size: 0.85em;
 	color:red;
 }
 
 #ticker-bar {
-	width: auto;
+	width: 87%;
+}
+
+.ticker-wrapper {
+	position: relative;
+}
+
+.ticker-arrow-wrapper {
+	position: absolute;
+	right: 0;
+	top: 10px;
 }
 
 body {
@@ -110,19 +124,14 @@ body {
 
 	<div id="main_container" class="ui celled stackable grid pusher">			
 		<div class="row">
-			<div id="ticker-bar" class="thirteen column wide">
+			<div id="ticker-bar" class="fourteen column wide">
 				<!-- Our ticker goes here -->
 			</div>
-			<div class="two wide column">
-				<i id="myleft" style="float:right;" class="chevron left icon"></i>
-				<br/><br/>
-				<i id="myright" style="float:right;" class="chevron right icon"></i>
-			</div>
-			<div class="one wide column right floated" style=" ">Notifs</div>
+			<div class="two wide column right floated" style=" ">Notifs</div>
 		</div>
 
 		<div class="row">
-			<div class="three wide column">
+			<div class="sixteen wide column">
 				<div class="ui fluid search selection dropdown">
 					<input name="country" type="hidden">
 					<i class="dropdown icon"></i>
@@ -169,13 +178,6 @@ body {
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$('.ui.dropdown').dropdown();
-			var $stockitem = $('div.scrolling-wrapper');
-			$('i#myright').click(function(){
-				$stockitem.animate({'scrollLeft':`+=${$(".scrolling-wrapper").width()}px`}, 500);
-			});
-			$('i#myleft').click(function(){
-				$stockitem.animate({'scrollLeft':`-=${$(".scrolling-wrapper").width()}px`}, 500);
-			});	
 		});
 	</script>
 </body>
