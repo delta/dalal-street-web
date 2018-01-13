@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 module.exports = {
   entry: "./public/src/index.ts",
@@ -8,16 +9,24 @@ module.exports = {
     filename: 'bundle.js'
   },
   devtool: 'inline-source-map',
+  plugins: [
+    // automatically optimizes - need to use this because webpack uses default uglifyjs
+    // and default uglifyjs has a problem with ES6. UglifyJsPlugin uses uglifyjs-es which
+    // supports ES6
+    new UglifyJsPlugin({
+      cache: true,
+    }),
+  ],
   module: {
     rules: [
       {
         test: /\.ts$/,
         include: [
             path.resolve(__dirname, 'public/src'),
-            path.resolve(__dirname, 'public/proto_build')
+            path.resolve(__dirname, 'public/proto_build'),
         ],
         exclude: /node_modules/,
-        loader: "ts-loader"
+        loader: "babel-loader?presets[]=es2015!ts-loader", // tsc converts to es6. convert that to es5
       }
     ]
   },
