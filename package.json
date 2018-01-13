@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:proto": "bash build_proto.sh",
-    "build:webpack": "webpack",
+    "build:webpack": "webpack -p",
     "dev-server": "webpack-dev-server --colors --watch --hot --inline --port 8080 --host 0.0.0.0 --output-public-path=https://localhost:8080/build/ --https --cert=./public/tls_keys/dev/server.crt --key=./public/tls_keys/dev/server.key"
   },
   "repository": {

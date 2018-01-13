@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const path = require('path');
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 module.exports = {
   cache: true,
@@ -9,15 +8,8 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
     filename: 'bundle.js'
   },
-  devtool: 'inline-source-map',
-  plugins: [
-    // automatically optimizes - need to use this because webpack uses default uglifyjs
-    // and default uglifyjs has a problem with ES6. UglifyJsPlugin uses uglifyjs-es which
-    // supports ES6
-    new UglifyJsPlugin({
-      cache: true,
-    }),
-  ],
+  //devtool: 'inline-source-map', -> this guy bloats the size of bundle.js a heck lot.
+  // commented out till required
   module: {
     rules: [
       {
