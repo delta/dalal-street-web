@@ -32,6 +32,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
     render() {
         return (
 			<div>
+				<h3 className="panel-header">Place Order</h3>
 				<div className="ui pointing secondary menu">
 					<a className="item active" data-tab="market">Market</a>
 					<a className="item" data-tab="limit">Limit</a>

@@ -6,7 +6,7 @@ export interface TradingHistoryProps {
 
 export class TradingHistory extends React.Component<TradingHistoryProps, {}> {
 	render() {
-		const prices: number[] = [56,34,23,12,34,34,67,7,7,5,65,23,98,11,10];
+		const prices: number[] = [56,34,23,12,34,34,67,7,7,5,65,23,98];
 		let history: any[] = [];
 		history.push(
 			<tr>
