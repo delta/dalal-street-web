@@ -45,6 +45,7 @@
 
 	#top_bar {
 		position: relative;
+		padding: 0 !important;
 		height: 50px;
 		background: rgba(255,255,255,0.95);
 		box-shadow: 0 0 5px 5px 1px #000 inset !important;
@@ -311,7 +312,7 @@
 		<!-- Our navbar gets dumped as it is here.. Maybe sometime later, each icon could become a component -->
 	</div>
 	
-	<div id="main_container" class="ui celled stackable grid pusher">			
+	<div id="main_container" class="ui stackable grid pusher">
 		<!--<div class="row">
 			<div id="ticker-bar" class="fourteen column wide">
 				<! -- Our ticker goes here - - >
@@ -341,17 +342,17 @@
 		</div>
 
 		<div class="row" id="trading-terminal-row1">
-			<div id="trading-history" class="six wide column">
+			<div id="trading-history" class="six wide column box">
 
 			</div>
-			<div class="ten wide column" style=" ">Pa</div>
+			<div class="ten wide column box">Pa</div>
 		</div>
-		<div class="row">
-			<div id="place-order-box" class="six wide column">
+		<div class="row" id="trading-terminal-row2">
+			<div id="place-order-box" class="six wide column box">
 					<!-- PlaceOrderBox goes here -->
 			</div>
 
-			<div class="ten wide column" style=" ">Ni sa</div>
+			<div class="ten wide column box">Ni sa</div>
 		</div>
 	</div>
 	
