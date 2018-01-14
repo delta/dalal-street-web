@@ -76,3 +76,8 @@ ReactDOM.render(
     <Notification messages={messages} icon={icon_name} />,
     document.getElementById("notif-component")
 );
+
+ReactDOM.render(
+	<PlaceOrderBox stockId={4} currentPrice={100} />,
+	document.getElementById("place-order-box")
+);
