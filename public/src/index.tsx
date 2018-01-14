@@ -3,8 +3,11 @@ import * as ReactDOM from "react-dom";
 
 import { PlaceOrderBox } from "./components/trading_terminal/PlaceOrderBox";
 import { Navbar } from "./components/common/Navbar";
-import { TickerBar } from "./components/common/TickerBar"
+import { TickerBar } from "./components/common/TickerBar";
+import {Notification } from "./components/common/Notification";
 
+let icon_name = "open envelope icon";
+let	messages  = ["hi there ","my name", "is Akshay", "Pai."];
 
 let data = [
 	{
@@ -67,4 +70,9 @@ ReactDOM.render(
 ReactDOM.render(
     <TickerBar stocks={data} />,
     document.getElementById("ticker-bar")
+);
+
+ReactDOM.render(
+    <Notification messages={messages} icon={icon_name} />,
+    document.getElementById("notif-component")
 );
