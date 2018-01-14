@@ -67,17 +67,16 @@ ReactDOM.render(
     <Navbar />,
     document.getElementById("navbar")
 );
-
+/*
 ReactDOM.render(
     <TickerBar stocks={data} />,
     document.getElementById("ticker-bar")
 );
-
+*/
 ReactDOM.render(
     <Notification messages={messages} icon={icon_name} />,
     document.getElementById("notif-component")
 );
-
 ReactDOM.render(
 	<PlaceOrderBox stockId={4} currentPrice={100} />,
 	document.getElementById("place-order-box")
