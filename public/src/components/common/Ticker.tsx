@@ -24,8 +24,6 @@ export class Ticker extends React.Component<TickerProps, {}> {
             { `₹ ${this.props.currentPrice}`}
             </span>
 
-            <br/>
-
             <span className = { difference > 0 ? 'profit' : 'loss' }>
                 <strong>{ `${sign}${difference} (${sign}${(difference)/this.props.currentPrice * 100}%)`}</strong>
             </span>

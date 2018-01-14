@@ -1,10 +1,11 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { PlaceOrderBox } from "./components/trading_terminal/PlaceOrderBox";
 import { Navbar } from "./components/common/Navbar";
 import { TickerBar } from "./components/common/TickerBar";
-import {Notification } from "./components/common/Notification";
+import { Notification } from "./components/common/Notification";
+import { PlaceOrderBox } from "./components/trading_terminal/PlaceOrderBox";
+import { TradingHistory } from "./components/trading_terminal/TradingHistory";
 
 let icon_name = "open envelope icon";
 let	messages  = ["hi there ","my name", "is Akshay", "Pai."];
@@ -80,4 +81,9 @@ ReactDOM.render(
 ReactDOM.render(
 	<PlaceOrderBox stockId={4} currentPrice={100} />,
 	document.getElementById("place-order-box")
+);
+
+ReactDOM.render(
+	<TradingHistory stockId={4} />,
+	document.getElementById("trading-history")
 );
