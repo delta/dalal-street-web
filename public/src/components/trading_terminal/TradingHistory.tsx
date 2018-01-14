@@ -40,18 +40,21 @@ export class TradingHistory extends React.Component<TradingHistoryProps, {}> {
 		}
 
 		return (
-			<table className="ui inverted table unstackable">
-				<thead>
-					<tr>
-						<th>Volume</th>
-						<th>Price</th>
-						<th>Date</th>
-					</tr>
-				</thead>
-				<tbody>
-					{history}
-				</tbody>
-			</table>
+			<div>
+				<h3 className="panel-header">Order Book</h3>
+				<table className="ui inverted table unstackable">
+					<thead>
+						<tr>
+							<th>Volume</th>
+							<th>Price</th>
+							<th>Date</th>
+						</tr>
+					</thead>
+					<tbody>
+						{history}
+					</tbody>
+				</table>
+			</div>
 		);
 	}
 }
