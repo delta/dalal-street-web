@@ -9,24 +9,24 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.css" />
 </head>
 <style>
-
+	
 	.ui.pointing.secondary.menu > a.item{
 		color:#888e94 !important;
 	}
-
+	
 	.ui.pointing.secondary.menu > a.item.active{
 		color:white !important;
 	}
-
+	
 	input{
 		background-color:#404a52 !important;
 		color:#757575 !important;
 	}
-
+	
 	.ui.tab{
 		border:none !important;
 	}
-
+	
 	.column {
 		margin-top: 1px !important;
 		margin-bottom: 1px !important;
@@ -45,6 +45,35 @@
 
 	#notifbutton{
 		box-shadow: none !important;
+		font-size:20px;
+		top:15px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+	#notifbuttontext {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 100%;
+		text-align: center;
+	}
+	#notif-component {
+		position: relative;
+		-o-transition: color .2s ease-out,background 0.1s ease-in;
+		-ms-transition:color .2s ease-out,background 0.1s ease-in;
+		-moz-transition: color .2s ease-out,background 0.1s ease-in;
+		-webkit-transition:color .2s ease-out,color .2s ease-out, background 0.1s ease-in;
+		transition:color .2s ease-out, background 0.1s ease-in;
+	}
+	#notif-component:hover #notifbutton {
+		color: white !important;
+	}
+	
+	#notif-component:hover{
+		background: rgb(74,77,85);
 	}
 	
 	.inbox{
@@ -249,7 +278,7 @@
 			<div id="ticker-bar" class="fourteen column wide">
 				<!-- Our ticker goes here -->
 			</div>
-			<div id="notif-component"class="two wide column right floated" style=" ">
+			<div id="notif-component"class="two wide column right floated " style=" ">
 				<!-- Our notifiation goes here -->
 			</div>
 		</div>

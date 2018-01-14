@@ -18,14 +18,11 @@ export class Notification extends React.Component<NotificationProps, {}> {
     );
 
     return (
-        <div id="notifbutton" className="ui right pointing dropdown icon button big inverted">            
-            <i className="inbox icon"></i>Inbox
+        <div id="notifbutton" className="ui dropdown icon item">      
+            <span id="notifbuttontext">
+                <i className="inbox icon"></i>Inbox
+            </span>
             <div id="mymenu" className="menu">
-                <div className="header">
-                <i className="tags icon"></i>
-                    Notifications
-                </div>
-            <div className="divider"></div>
                 {notifications}
             </div>
         </div>
