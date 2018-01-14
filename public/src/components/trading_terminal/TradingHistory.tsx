@@ -10,9 +10,9 @@ export class TradingHistory extends React.Component<TradingHistoryProps, {}> {
 		let history: any[] = [];
 		history.push(
 			<tr>
-				<td><strong>100</strong></td>
+				<td className="volume"><strong>100</strong></td>
 				<td className="profit"><strong>{prices[0]} ⬈</strong></td>
-				<td>{new Date().toTimeString()}</td>
+				<td>{new Date().toLocaleTimeString()}</td>
 			</tr>
 		);
 
@@ -32,15 +32,15 @@ export class TradingHistory extends React.Component<TradingHistoryProps, {}> {
 
 			history.push(
 				<tr>
-					<td><strong>100</strong></td>
+					<td className="volume"><strong>100</strong></td>
 					<td className={diff}><strong>{prices[i]} {diff == "profit" ? "⬈" : "⬊"}</strong></td>
-					<td>{new Date().toTimeString()}</td>
+					<td>{new Date().toLocaleTimeString()}</td>
 				</tr>
 			);
 		}
 
 		return (
-			<table className="ui inverted table">
+			<table className="ui inverted table unstackable">
 				<thead>
 					<tr>
 						<th>Volume</th>
