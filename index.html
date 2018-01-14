@@ -9,106 +9,132 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.css" />
 </head>
 <style>
+
+	.ui.pointing.secondary.menu > a.item{
+		color:#888e94 !important;
+	}
+
+	.ui.pointing.secondary.menu > a.item.active{
+		color:white !important;
+	}
+
+	input{
+		background-color:#404a52 !important;
+		color:#757575 !important;
+	}
+
+	.ui.tab{
+		border:none !important;
+	}
+
+	.column {
+		margin-top: 1px !important;
+		margin-bottom: 1px !important;
+		padding-top: 0px !important;
+		padding-bottom: 0px !important;
+	}
+	
+	.ui.table{
+		font-size:0.8em;
+		line-height: 2px;
+	}
 	#notifbutton{
 		box-shadow: none !important;
 	}
-
+	
 	.inbox{
 		font-size:20px;
 	}
-
-<<<<<<< 9dd0eb8cf6f273c9ee487ac22d5d7631f712e8ec
+	
 	.notif-item{
 		white-space:pre-wrap;
 	}
-=======
-.tab-header{
-	color:white;
-	list-style:none;
-	float:left;
-	width:100
-}
-
-
-#myleft, #myright{
-	color:white;
-	font-size:1.5em;
-}
-
-.stock_name{
-	color:white;
-	margin-bottom: 5px;
-}
-
-.stock_price{
-	color:#878f95;
-	font-size: 0.85em;
-}
-
-.ticker_item {
-	display: inline-block;
-	width:20%;
-	text-align: center;
-}
-
-.scrolling-wrapper {
-	overflow-x: hidden;
-	overflow-y: hidden;
-	white-space: nowrap;
-	padding-left: 0px !important;
-	padding-right: 0px !important;
-}
-
-.profit{
-	font-size: 0.85em;
-	color:green;
-}
-
-.loss{
-	font-size: 0.85em;
-	color:red;
-}
-
-#ticker-bar {
-	width: 87%;
-}
-
-.ticker-wrapper {
-	position: relative;
-}
-
-.ticker-arrow-wrapper {
-	position: absolute;
-	right: 0;
-	top: 10px;
-}
-
-body {
-	background: #2f323d;		
-}
-
-.ui.input, .ui.button {
-	margin: 3px;
-}
-
-.item {
-	color:#4a4d55 !important;
-}
-#navbar .item.active {
-	background: rgb(27,28,29);
-}
-
-#main_container {
-	margin: 0; /* celled grid adds margin at top & bottom, we don't want it */
-	width: auto; /* overflows without this */
-	height: 100%;
-}
-
-#main_container .column, #main_container .row{
-	box-shadow: none !important;
-}
->>>>>>> Add place order box
-
+	.tab-header{
+		color:white;
+		list-style:none;
+		float:left;
+		width:100
+	}
+	
+	
+	#myleft, #myright{
+		color:white;
+		font-size:1.5em;
+	}
+	
+	.stock_name{
+		color:white;
+		margin-bottom: 5px;
+	}
+	
+	.stock_price{
+		color:#878f95;
+		font-size: 0.85em;
+	}
+	
+	.ticker_item {
+		display: inline-block;
+		width:20%;
+		text-align: center;
+	}
+	
+	.scrolling-wrapper {
+		overflow-x: hidden;
+		overflow-y: hidden;
+		white-space: nowrap;
+		padding-left: 0px !important;
+		padding-right: 0px !important;
+	}
+	
+	.profit{
+		font-size: 0.85em;
+		color:green;
+	}
+	
+	.loss{
+		font-size: 0.85em;
+		color:red;
+	}
+	
+	#ticker-bar {
+		width: 87%;
+	}
+	
+	.ticker-wrapper {
+		position: relative;
+	}
+	
+	.ticker-arrow-wrapper {
+		position: absolute;
+		right: 0;
+		top: 10px;
+	}
+	
+	body {
+		background: #2f323d;		
+	}
+	
+	.ui.input, .ui.button {
+		margin: 3px;
+	}
+	
+	.item {
+		color:#4a4d55 !important;
+	}
+	#navbar .item.active {
+		background: rgb(27,28,29);
+	}
+	
+	#main_container {
+		margin: 0; /* celled grid adds margin at top & bottom, we don't want it */
+		width: auto; /* overflows without this */
+		height: 100%;
+	}
+	
+	#main_container .column, #main_container .row{
+		box-shadow: none !important;
+	}
+	
 	#mymenu{
 		max-height:300px;
 		overflow-x: hidden;
@@ -261,7 +287,94 @@ body {
 			<div class="eight wide column" style=" ">Pa</div>
 		</div>
 		<div class="row">
-			<div class="eight wide column" style=" ">Dha</div>
+			<div class="eight wide column" style=" ">
+				<table class="ui inverted table">
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Volume</th>
+							<th>Price</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>John</td>
+							<td>Approved</td>
+							<td>None</td>
+						</tr>
+						<tr>
+							<td>Jamie</td>
+							<td>Approved</td>
+							<td>Requires call</td>
+						</tr>
+						<tr>
+							<td>Jill</td>
+							<td>Denied</td>
+							<td>None</td>
+						</tr>
+						<tr>
+							<td>John</td>
+							<td>Approved</td>
+							<td>None</td>
+						</tr>
+						<tr>
+							<td>Jamie</td>
+							<td>Approved</td>
+							<td>Requires call</td>
+						</tr>
+						<tr>
+							<td>Jill</td>
+							<td>Denied</td>
+							<td>None</td>
+						</tr>
+						<tr>
+							<td>John</td>
+							<td>Approved</td>
+							<td>None</td>
+						</tr>
+						<tr>
+							<td>Jamie</td>
+							<td>Approved</td>
+							<td>Requires call</td>
+						</tr>
+						<tr>
+							<td>Jill</td>
+							<td>Denied</td>
+							<td>None</td>
+						</tr>
+						<tr>
+							<td>John</td>
+							<td>Approved</td>
+							<td>None</td>
+						</tr>
+						<tr>
+							<td>Jamie</td>
+							<td>Approved</td>
+							<td>Requires call</td>
+						</tr>
+						<tr>
+							<td>Jill</td>
+							<td>Denied</td>
+							<td>None</td>
+						</tr>
+						<tr>
+							<td>John</td>
+							<td>Approved</td>
+							<td>None</td>
+						</tr>
+						<tr>
+							<td>Jamie</td>
+							<td>Approved</td>
+							<td>Requires call</td>
+						</tr>
+						<tr>
+							<td>Jill</td>
+							<td>Denied</td>
+							<td>None</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 			<div class="eight wide column" style=" ">Ni sa</div>
 		</div>
 	</div>
