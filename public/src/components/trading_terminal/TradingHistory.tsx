@@ -41,7 +41,6 @@ export class TradingHistory extends React.Component<TradingHistoryProps, {}> {
 
 		return (
 			<div>
-				<h3 className="panel-header">Order Book</h3>
 				<table className="ui inverted table unstackable">
 					<thead>
 						<tr>
