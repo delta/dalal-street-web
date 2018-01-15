@@ -38,6 +38,9 @@ export class OpenOrders extends React.Component<OpenOrdersProps, {}>{
 		
 		return (
 			<div>
+				<div className="ui pointing secondary menu">
+					<h3 className="panel-header right item">Open Orders</h3>
+				</div>
 			<table className="ui inverted table unstackable">
 			<thead>
 			<tr>
