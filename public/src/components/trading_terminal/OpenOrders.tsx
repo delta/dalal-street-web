@@ -23,7 +23,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, {}>{
 		let orderClass;
 
 		let history:any[] = currentOrders.map((order) =>{
-			orderClass = (order.type == "Sell" ? "order_sell" : "order_buy") ;
+			orderClass = (order.type == "Sell" ? "red" : "green") ;
 			orderClass = orderClass + " volume";
 			return(
 				<tr>
