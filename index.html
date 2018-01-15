@@ -325,12 +325,21 @@
 	#trading-terminal-row1 table , #trading-terminal-row2 table {
 		margin: 0 !important;
 		background: #1B1C1D;
+		transition: 0.1s all;
 	}
 	#trading-terminal-row1 table tr td, #trading-terminal-row2 table tr td {
-		border-color: transparent !important;
+		border-bottom: none !important;
 	}
 	#trading-terminal-row1 {
 		min-height: 400px;
+	}
+	#place-order-box .ui.tab {
+		height: 135px;
+	}
+	#market-depth table thead:first-child th:first-child,
+	#market-depth table thead:nth-child(2) th:nth-child(2),
+	#market-depth table td:nth-child(2) {
+		border-right: 1px solid white !important;
 	}
 </style>
 <body>
@@ -381,7 +390,11 @@
 					
 				</div>
 			</div>
-			<div class="ten wide column box">Pa</div>
+			<div class="ten wide column box">
+				<div class="ui pointing secondary menu">
+					<h3 class="panel-header right item">Chart</h3>
+				</div>
+			</div>
 		</div>
 		<div class="row" id="trading-terminal-row2">
 			<div id="place-order-box" class="six wide column box">
