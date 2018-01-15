@@ -47,9 +47,9 @@ export class MarketDepth extends React.Component<MarketDepthProps, {}> {
             buyRows.push(
                 <tr>
                     <td className="volume"><strong>{state.buys[i].volume}</strong></td>
-                    <td className="price"><strong>{state.buys[i].price}</strong></td>
+                    <td className="price green"><strong>{state.buys[i].price}</strong></td>
                     <td className="volume"><strong>{state.sells[i].volume}</strong></td>
-                    <td className="price"><strong>{state.sells[i].price}</strong></td>
+                    <td className="price red"><strong>{state.sells[i].price}</strong></td>
                 </tr>
             );
         }
