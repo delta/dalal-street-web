@@ -5,6 +5,7 @@ import { Navbar } from "./components/common/Navbar";
 import { TickerBar } from "./components/common/TickerBar";
 import { Notification } from "./components/common/Notification";
 import { PlaceOrderBox } from "./components/trading_terminal/PlaceOrderBox";
+import { MarketDepth } from "./components/trading_terminal/MarketDepth";
 import { TradingHistory } from "./components/trading_terminal/TradingHistory";
 
 let icon_name = "open envelope icon";
@@ -80,6 +81,11 @@ ReactDOM.render(
 ReactDOM.render(
 	<PlaceOrderBox stockId={4} currentPrice={100} />,
 	document.getElementById("place-order-box")
+);
+
+ReactDOM.render(
+	<MarketDepth stockId={4} />,
+	document.getElementById("market-depth")
 );
 
 ReactDOM.render(
