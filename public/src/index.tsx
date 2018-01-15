@@ -7,6 +7,7 @@ import { Notification } from "./components/common/Notification";
 import { PlaceOrderBox } from "./components/trading_terminal/PlaceOrderBox";
 import { MarketDepth } from "./components/trading_terminal/MarketDepth";
 import { TradingHistory } from "./components/trading_terminal/TradingHistory";
+import { OpenOrders } from "./components/trading_terminal/OpenOrders";
 
 let icon_name = "open envelope icon";
 let	messages  = ["hi there ","my name", "is Akshay", "Pai."];
@@ -91,4 +92,9 @@ ReactDOM.render(
 ReactDOM.render(
 	<TradingHistory stockId={4} />,
 	document.getElementById("trading-history")
+);
+
+ReactDOM.render(
+	<OpenOrders userId={4} />,
+	document.getElementById("open-orders")
 );
