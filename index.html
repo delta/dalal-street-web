@@ -68,7 +68,7 @@
 		position: relative;
 		padding: 0 !important;
 		height: 50px;
-		background: rgba(255,255,255,0.95);
+		background: #fff;
 		box-shadow: 0 0 5px 5px 1px #000 inset !important;
 	}
 	
@@ -390,10 +390,8 @@
 					
 				</div>
 			</div>
-			<div class="ten wide column box">
-				<div class="ui pointing secondary menu">
-					<h3 class="panel-header right item">Chart</h3>
-				</div>
+			<div id="chart-container" class="ten wide column box">
+				
 			</div>
 		</div>
 		<div class="row" id="trading-terminal-row2">
@@ -418,7 +416,8 @@
 	<!-- Semantic UI -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
 	
-	
+	<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+	<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.js"></script> -->
 	<!-- Main -->
 	<script src="/build/bundle.js"></script>
 	
@@ -428,6 +427,51 @@
 			$('.ui.dropdown').dropdown();
 			$('.menu .item').tab();
 		});
+
+		let chart = new CanvasJS.Chart("chart-container", {
+			animationEnabled: true,
+			//theme: "dark2", // "light1", "light2", "dark1", "dark2"
+			backgroundColor: "#1B1C1D",
+			color: "red",
+			exportEnabled: false,
+			title: {
+				text: "Netflix Stock Price in 2016"
+			},
+			subtitles: [{
+				text: "Weekly Averages"
+			}],
+			axisX: {
+				interval: 1,
+				valueFormatString: "MMM"
+			},
+			axisY: {
+				includeZero: false,
+				prefix: "$",
+				title: "Price"
+			},
+			toolTip: {
+				content: "Date: {x}<br /><strong>Price:</strong><br />Open: {y[0]}, Close: {y[3]}<br />High: {y[1]}, Low: {y[2]}"
+			},
+			data: [{
+				type: "candlestick",
+				yValueFormatString: "$##0.00",
+				dataPoints: [
+					{
+						x: new Date(),
+						y: [109,114,104,111]
+					},
+					{
+						x: new Date("2018/02/17"),
+						y: [109,114,104,104]
+					},
+					{
+						x: new Date("2018/02/27"),
+						y: [109,114,104,111]
+					}
+				]
+			}]
+		});
+		chart.render();
 	</script>
 </body>
 </html>
