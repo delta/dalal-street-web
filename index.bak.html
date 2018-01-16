@@ -1,0 +1,423 @@
+<!-- <script type="text/javascript" src="/build/bundle.js" charset="utf-8"></script> -->
+<!-- Output in developer console -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<title>Dalal Street</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.css" />
+</head>
+<style>
+	
+	.green{
+		color:#7DEA63 !important; 
+	}
+
+	.red{
+		color:#FF6939 !important;
+	}
+
+
+	#open-orders tbody {
+		display:block;
+		height:150px;
+		overflow:auto;
+	}
+	#open-orders thead, tbody ,tr {
+		display:table;
+		width:100%;
+		table-layout:fixed;/* even columns width , fix width of table too*/
+		text-align: center;
+	}
+	
+	.ui.pointing.secondary.menu > a.item{
+		color:#888e94 !important;
+	}
+	
+	.ui.pointing.secondary.menu > a.item.active{
+		color:white !important;
+	}
+	
+	input{
+		background-color:#404a52 !important;
+		color:white !important;
+	}
+	
+	.ui.tab{
+		border:none !important;
+	}
+
+	div.expected-cost {
+		color: white;
+		font-size: 0.9em;
+		font-weight: bold;
+		position: absolute;
+		bottom: 7px;
+		margin: 1px;
+	}
+	
+	.column {
+		margin-top: 1px !important;
+		margin-bottom: 1px !important;
+		padding-top: 0px !important;
+		padding-bottom: 0px !important;
+	}
+	
+	.ui.table{
+		font-size:0.85em;
+		line-height: 2px;
+	}
+	
+	.ui.table > tbody > tr > td.volume {
+		color: #CED2D5;
+	}
+	
+	#top_bar {
+		position: relative;
+		padding: 0 !important;
+		height: 50px;
+		background: #fff;
+		box-shadow: 0 0 5px 5px 1px #000 inset !important;
+	}
+	
+	#search-container {
+		margin: 5px 15px;
+	}
+	
+	#notifbutton{
+		box-shadow: none !important;
+		font-size:20px;
+		top:15px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+	
+	#notifbuttontext {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 100%;
+		text-align: center;
+	}
+	#notif-component {
+		position: absolute !important;
+		right: 0;
+		top: 0;
+		bottom: 3px;
+		width: 100px;
+		margin: 0 !important;
+		position: relative;
+		-o-transition: color .2s ease-out,background 0.1s ease-in;
+		-ms-transition:color .2s ease-out,background 0.1s ease-in;
+		-moz-transition: color .2s ease-out,background 0.1s ease-in;
+		-webkit-transition:color .2s ease-out,color .2s ease-out, background 0.1s ease-in;
+		transition:color .2s ease-out, background 0.1s ease-in;
+	}
+	#notif-component:hover #notifbutton {
+		color: white !important;
+	}
+	
+	#notif-component:hover{
+		background: rgb(74,77,85);
+	}
+	
+	.inbox{
+		font-size:20px;
+	}
+	
+	.notif-item{
+		white-space:pre-wrap;
+	}
+	
+	.profit{
+		font-size: 0.85em;
+		color:#7DEA63;
+	}
+	
+	.loss{
+		font-size: 0.85em;
+		color:#FF6939;
+	}
+	
+	body {
+		background: #2f323d;		
+	}
+	
+	.ui.input, .ui.button {
+		margin: 3px;
+	}
+	
+	#navbar .item.active {
+		background: rgb(27,28,29);
+	}
+	
+	#main_container {
+		margin: 0; /* celled grid adds margin at top & bottom, we don't want it */
+		width: auto; /* overflows without this */
+		min-height: 100%;
+	}
+	
+	#main_container .column, #main_container .row{
+		box-shadow: none !important;
+	}
+	
+	#main_container #top_bar {
+		box-shadow: 2px -3px 2px 0px inset rgba(0,0,0,0.97) !important
+	}
+	#navbar {
+		box-shadow: 0px 0 2px 1px #000 !important;
+	}
+	
+	#mymenu{
+		max-height:300px;
+		overflow-x: hidden;
+		min-width:300px;
+	}
+	
+	.tab-header{
+		color:white;
+		list-style:none;
+		float:left;
+		width:100
+	}
+	
+	
+	#myleft, #myright{
+		color:white;
+		font-size:1.5em;
+	}
+	
+	.stock_name{
+		color:white;
+		margin-bottom: 5px;
+	}
+	
+	.stock_price{
+		color:#878f95;
+		font-size: 0.85em;
+		margin-right: 1em;
+	}
+	
+	.ticker_item {
+		display: inline-block;
+		width:20%;
+		text-align: center;
+		margin-top: 0.5em;
+	}
+	
+	.scrolling-wrapper {
+		overflow-x: hidden;
+		overflow-y: hidden;
+		white-space: nowrap;
+		padding-left: 0px !important;
+		padding-right: 0px !important;
+	}
+	
+	#ticker-bar {
+		width: 87%;
+	}
+	
+	.ticker-wrapper {
+		position: relative;
+	}
+	
+	.ticker-arrow-wrapper {
+		position: absolute;
+		right: 0;
+		top: 10px;
+	}
+	
+	.item {
+		color:#4a4d55 !important;
+	}
+	#navbar .item.active {
+		background: rgb(27,28,29);
+	}
+	
+	#main_container {
+		margin: 0; /* celled grid adds margin at top & bottom, we don't want it */
+		width: auto; /* overflows without this */
+		height: 100%;
+	}
+	
+	#main_container .column, #main_container .row{
+		box-shadow: none !important;
+	}
+	
+	/* make the navbar thinner */
+	#navbar .item {
+		padding-left: 0.5em;
+		padding-right: 0.5em;
+		box-shadow: none;
+	}
+	#navbar .item .icon {
+		font-size: 1.5em !important;
+	}
+	#navbar .item:before {
+		display: none !important;
+	}
+	#navbar .item:hover {
+		color: lightgray !important;
+		background: rgb(27,28,29);
+	}
+	/* push the main container to the left by 90px when navbar is visible.
+	semantic does this already but we don't like the width of the sidebar. */
+	#navbar.visible ~ #main_container.pusher {
+		transform: translate3d(0px, 0px, 0px); /* override semantic's default */
+		margin-left: 90px !important; /* use margin instead to fix row's widths */
+	}
+	h3.panel-header {
+		color: white !important;
+		font-size: 16px;
+		padding: 3px;
+		margin: 0;
+		background: rgba(0,0,0,0.4) !important;
+		border-radius: 5px 5px 0 0 !important;
+	}
+	
+	#trading-terminal-row1 table , #trading-terminal-row2 table {
+		margin: 0 !important;
+		background: #1B1C1D;
+		transition: 0.1s all;
+	}
+	#trading-terminal-row1 table tr td, #trading-terminal-row2 table tr td {
+		border-bottom: none !important;
+	}
+	#trading-terminal-row1 {
+		min-height: 400px;
+	}
+	#place-order-box .ui.tab {
+		height: 135px;
+	}
+	#market-depth table thead:first-child th:first-child,
+	#market-depth table thead:nth-child(2) th:nth-child(2),
+	#market-depth table td:nth-child(2) {
+		border-right: 1px solid white !important;
+	}
+</style>
+<body>
+	<div id="navbar" class="ui sidebar inverted labeled icon left vertical menu uncover visible">
+		<!-- Our navbar gets dumped as it is here.. Maybe sometime later, each icon could become a component -->
+	</div>
+	
+	<div id="main_container" class="ui stackable grid pusher">
+		<!--<div class="row">
+			<div id="ticker-bar" class="fourteen column wide">
+				<! -- Our ticker goes here - - >
+			</div>
+			
+		</div>-->
+		
+		<div class="row" id="top_bar">
+			<div id="search-bar" class="left floated">
+				
+			</div>
+			
+			<div id="notif-component">
+				
+			</div>
+		</div>
+		
+		<div class="row" id="trading-terminal-row1">
+			<div id="orderbook" class="six wide column box">
+				<div class="ui pointing secondary menu">
+					<a class="item active" data-tab="market-depth">Market Depth</a>
+					<a class="item" data-tab="trading-history">Trading History</a>
+					<h3 class="panel-header right item">Order Book</h3>
+				</div>
+				<div class="ui tab inverted active" data-tab="market-depth" id="market-depth">
+					
+				</div>
+				<div class="ui tab inverted" data-tab="trading-history" id="trading-history">
+					
+				</div>
+			</div>
+			<div id="chart-container" class="ten wide column box">
+				
+			</div>
+		</div>
+		<div class="row" id="trading-terminal-row2">
+			<div id="place-order-box" class="six wide column box">
+				<!-- PlaceOrderBox goes here -->
+			</div>
+			
+			<div id="open-orders" class="ten wide column box">
+				<!-- This is where OpenOrders component goes -->
+			</div>
+		</div>
+	</div>
+	
+	<!-- React -->
+	<script src="./node_modules/react/umd/react.development.js"></script>
+	<script src="./node_modules/react-dom/umd/react-dom.development.js"></script>
+	
+	
+	<!-- JQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!-- Semantic UI -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+	
+	<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+	<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.js"></script> -->
+	<!-- Main -->
+	<script src="/build/bundle.js"></script>
+	
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('.ui.dropdown').dropdown();
+			$('.menu .item').tab();
+		});
+
+		let chart = new CanvasJS.Chart("chart-container", {
+			animationEnabled: true,
+			//theme: "dark2", // "light1", "light2", "dark1", "dark2"
+			backgroundColor: "#1B1C1D",
+			color: "red",
+			exportEnabled: false,
+			title: {
+				text: "Netflix Stock Price in 2016"
+			},
+			subtitles: [{
+				text: "Weekly Averages"
+			}],
+			axisX: {
+				interval: 1,
+				valueFormatString: "MMM"
+			},
+			axisY: {
+				includeZero: false,
+				prefix: "$",
+				title: "Price"
+			},
+			toolTip: {
+				content: "Date: {x}<br /><strong>Price:</strong><br />Open: {y[0]}, Close: {y[3]}<br />High: {y[1]}, Low: {y[2]}"
+			},
+			data: [{
+				type: "candlestick",
+				yValueFormatString: "$##0.00",
+				dataPoints: [
+					{
+						x: new Date(),
+						y: [109,114,104,111]
+					},
+					{
+						x: new Date("2018/02/17"),
+						y: [109,114,104,104]
+					},
+					{
+						x: new Date("2018/02/27"),
+						y: [109,114,104,111]
+					}
+				]
+			}]
+		});
+		chart.render();
+	</script>
+</body>
+</html>
