@@ -29,6 +29,28 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 		}
 	}
 
+	predictCost(event: any, orderType: string, orderAction: string) {
+		let stockInputField: HTMLInputElement = document.getElementById(orderType+"-"+orderAction+"-count") as HTMLInputElement;
+		let stockCount: number = Number(stockInputField.value);
+		let expectedCostField: HTMLElement = document.getElementById(orderType+"-"+orderAction+"-estimation") as HTMLElement;
+		if (isNaN(stockCount) || stockCount <= 0) {
+			expectedCostField.innerHTML = "0.00";
+			return;
+		}
+		if (orderType == "market") {
+			expectedCostField.innerHTML = String(this.props.currentPrice * stockCount) + ".00";	
+		}
+		else {
+			let priceInputField: HTMLInputElement = document.getElementById(orderType+"-"+orderAction+"-price") as HTMLInputElement;
+			let triggerPrice: number = Number(priceInputField.value);
+			if (isNaN(triggerPrice) || triggerPrice <= 0) {
+				expectedCostField.innerHTML = "0.00";
+				return;
+			}
+			expectedCostField.innerHTML = String(triggerPrice * stockCount) + ".00";
+		}
+	}
+
     render() {
         return (
 			<div>
@@ -44,16 +66,24 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 						<a className="item red" data-tab="market/sell">SELL</a>
 					</div>
 					<div className="ui bottom attached active tab segment inverted" data-tab="market/buy">
-						<div className="ui input  ">
-							<input id="market-buy-count" placeholder="Number of stocks" type="text" />
+						<div className="ui input">
+							<input id="market-buy-count" placeholder="Number of stocks" type="text" onChange={e => this.predictCost(e,"market","buy")}/>
 						</div>
 						<button className="ui inverted green button" onClick={e => this.handleOrder(e,"market","buy")}>BUY</button>
+						
+						<div className="expected-cost">
+							You will gain approximately ₹ <span id="market-buy-estimation">0.00</span>
+						</div>
 					</div>
 					<div className="ui bottom attached tab segment inverted" data-tab="market/sell">
-						<div className="ui input  ">
-							<input id="market-sell-count" placeholder="Number of stocks" type="text" />
+						<div className="ui input">
+							<input id="market-sell-count" placeholder="Number of stocks" type="text" onChange={e => this.predictCost(e,"market","sell")}/>
 						</div>
 						<button className="ui inverted red button" onClick={e => this.handleOrder(e,"market","sell")}>SELL</button>
+						
+						<div className="expected-cost">
+							You will lose approximately ₹ <span id="market-sell-estimation">0.00</span>
+						</div>
 					</div>
 				</div>
 				<div className="ui tab inverted" data-tab="limit">
@@ -62,22 +92,30 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 						<a className="item red" data-tab="limit/sell">SELL</a>
 					</div>
 					<div className="ui bottom attached tab segment active inverted" data-tab="limit/buy">
-						<div className="ui input  ">
-							<input id="limit-buy-count" placeholder="Number of stocks" type="text" />
+						<div className="ui input">
+							<input id="limit-buy-count" placeholder="Number of stocks" type="text" onChange={e => this.predictCost(e,"limit","buy")}/>
 						</div>
-						<div className="ui input  ">
-							<input id="limit-buy-price" placeholder="Limit Price" type="text" />
+						<div className="ui input">
+							<input id="limit-buy-price" placeholder="Limit Price" type="text" onChange={e => this.predictCost(e,"limit","buy")}/>
 						</div>
 						<button className="ui inverted green button" onClick={e => this.handleOrder(e,"limit","buy")}>BUY</button>
+						
+						<div className="expected-cost">
+							You will gain approximately ₹ <span id="limit-buy-estimation">0.00</span>
+						</div>
 					</div>
 					<div className="ui bottom attached tab segment inverted" data-tab="limit/sell">
-						<div className="ui input  ">
-							<input id="limit-sell-count" placeholder="Number of stocks" type="text" />
+						<div className="ui input">
+							<input id="limit-sell-count" placeholder="Number of stocks" type="text" onChange={e => this.predictCost(e,"limit","sell")}/>
 						</div>
-						<div className="ui input  ">
-							<input id="limit-sell-price" placeholder="Limit Price" type="text" />
+						<div className="ui input">
+							<input id="limit-sell-price" placeholder="Limit Price" type="text" onChange={e => this.predictCost(e,"limit","sell")}/>
 						</div>
 						<button className="ui inverted red button" onClick={e => this.handleOrder(e,"limit","sell")}>SELL</button>
+						
+						<div className="expected-cost">
+							You will lose approximately ₹ <span id="limit-sell-estimation">0.00</span>
+						</div>
 					</div>
 				</div>
 				<div className="ui tab inverted" data-tab="stoploss">
@@ -86,22 +124,30 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 						<a className="item red" data-tab="stoploss/sell">SELL</a>
 					</div>
 					<div className="ui bottom attached tab segment active inverted" data-tab="stoploss/buy">
-						<div className="ui input  ">
-							<input id="stoploss-buy-count" placeholder="Number of stocks" type="text" />
+						<div className="ui input">
+							<input id="stoploss-buy-count" placeholder="Number of stocks" type="text" onChange={e => this.predictCost(e,"stoploss","buy")}/>
 						</div>
-						<div className="ui input  ">
-							<input id="stoploss-buy-price" placeholder="Stoploss Price" type="text" />
+						<div className="ui input">
+							<input id="stoploss-buy-price" placeholder="Stoploss Price" type="text" onChange={e => this.predictCost(e,"stoploss","buy")}/>
 						</div>
 						<button className="ui inverted green button" onClick={e => this.handleOrder(e,"stoploss","buy")}>BUY</button>
+						
+						<div className="expected-cost">
+							You will gain approximately ₹ <span id="stoploss-buy-estimation">0.00</span>
+						</div>
 					</div>
 					<div className="ui bottom attached tab segment inverted" data-tab="stoploss/sell">
-						<div className="ui input  ">
-							<input id="stoploss-sell-count" placeholder="Number of stocks" type="text" />
+						<div className="ui input">
+							<input id="stoploss-sell-count" placeholder="Number of stocks" type="text" onChange={e => this.predictCost(e,"stoploss","sell")}/>
 						</div>
-						<div className="ui input  ">
-							<input id="stoploss-sell-price" placeholder="Stoploss Price" type="text" />
+						<div className="ui input">
+							<input id="stoploss-sell-price" placeholder="Stoploss Price" type="text" onChange={e => this.predictCost(e,"stoploss","sell")}/>
 						</div>
 						<button className="ui inverted red button" onClick={e => this.handleOrder(e,"stoploss","sell")}>SELL</button>
+						
+						<div className="expected-cost">
+							You will lose approximately ₹ <span id="stoploss-sell-estimation">0.00</span>
+						</div>
 					</div>
 				</div>
 			</div>
