@@ -8,9 +8,43 @@ import { PlaceOrderBox } from "./components/trading_terminal/PlaceOrderBox";
 import { MarketDepth } from "./components/trading_terminal/MarketDepth";
 import { TradingHistory } from "./components/trading_terminal/TradingHistory";
 import { OpenOrders } from "./components/trading_terminal/OpenOrders";
+import { SearchBar } from "./components/trading_terminal/SearchBar";
 
 let icon_name = "open envelope icon";
 let	messages  = ["hi there ","my name", "is Akshay", "Pai."];
+
+let stockDetails = [
+	{
+		"stockId": 1,
+		"stockName": "Amazon",
+		"stockFullName": "Amazon",
+		"currentPrice": 100
+	},
+	{
+		"stockId": 2,
+		"stockName": "Facebook",
+		"stockFullName": "Facebook",
+		"currentPrice": 100
+	},
+	{
+		"stockId": 3,
+		"stockName": "Firefox",
+		"stockFullName": "Firefox",
+		"currentPrice": 100
+	},
+	{
+		"stockId": 4,
+		"stockName": "Github",
+		"stockFullName": "Github",
+		"currentPrice": 100
+	},
+	{
+		"stockId": 5,
+		"stockName": "Google",
+		"stockFullName": "Google",
+		"currentPrice": 100
+	}
+];
 
 let data = [
 	{
@@ -75,6 +109,11 @@ ReactDOM.render(
     document.getElementById("ticker-bar")
 );
 */
+ReactDOM.render(
+    <SearchBar stockDetails={stockDetails} />,
+    document.getElementById("search-bar")
+);
+
 ReactDOM.render(
     <Notification messages={messages} icon={icon_name} />,
     document.getElementById("notif-component")
