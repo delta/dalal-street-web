@@ -14,11 +14,11 @@ export class Main extends React.Component<MainProps, {}> {
 	render() {
 		
 		return (
-			<main>
+			<div id="main_container" className="ui stackable grid pusher">
 				<Switch>
 					<Route exact path="/trade" component={TradingTerminal} />
 				</Switch>
-			</main>
+			</div>
 		);
 	}
 }

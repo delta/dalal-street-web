@@ -7,7 +7,7 @@ export class App extends React.Component<{}, {}> {
 		return (
 			<div>
 				<Navbar />
-				<Main />
+				<Main sessionId={"123"}/>
 			</div>
 		);
 	}
