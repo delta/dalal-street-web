@@ -24,7 +24,7 @@ export class SearchBar extends React.Component<SearchBarProps, {}> {
 		return (
 			<div id="search-bar" className="left floated">
 				<div id="search-container" className="ui fluid search selection dropdown">
-					<input name="stock" type="hidden" />
+					<input name="stock" type="hidden" value="amazon" />
 					<i className="dropdown icon"></i>
 					<div className="default text">Select Stock</div>
 					<div className="menu">

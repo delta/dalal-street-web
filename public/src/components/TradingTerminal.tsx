@@ -1,6 +1,5 @@
 import * as React from "react";
 
-
 import { OrderBook } from "./trading_terminal/OrderBook";
 import { OpenOrders } from "./trading_terminal/OpenOrders";
 import { SearchBar } from "./trading_terminal/SearchBar";
@@ -10,10 +9,24 @@ import { PlaceOrderBox } from "./trading_terminal/PlaceOrderBox";
 export interface TradingTerminalProps {
 }
 
+interface semantickedJquery {
+	(selector: string): semantickedJquery
+	dropdown(): void
+	tab(): void
+}
+
+declare var $: semantickedJquery;
+
 export class TradingTerminal extends React.Component<TradingTerminalProps, {}> {
     constructor(props: TradingTerminalProps) {
         super(props);
     }
+
+    componentDidMount() {
+    	$('.ui.dropdown').dropdown();
+		$('.menu .item').tab();
+    }
+
     render(){
         return(
         	<div className="ui stackable grid pusher">
