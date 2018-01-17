@@ -53,7 +53,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 
     render() {
         return (
-			<div>
+			<div id="place-order-box" className="six wide column box">
 				<div className="ui pointing secondary menu">
 					<a className="item active" data-tab="market">Market</a>
 					<a className="item" data-tab="limit">Limit</a>

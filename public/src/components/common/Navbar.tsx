@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 
 export interface NavProps {}
 
@@ -7,40 +8,40 @@ export class Navbar extends React.Component<NavProps, {}> {
 
         return(
         <div id="navbar" className="ui sidebar inverted labeled icon left vertical menu uncover visible">
-		<a className="item" href="/trade">
+		<Link to="/trade" className="item active">
 			<i className="rupee icon"></i>
 			Trade
-		</a>
-		<a className="item active">
+		</Link>
+		<Link to="/portfolio" className="item">
 			<i className="book icon"></i>
 			Portfolio
-		</a>
-		<a className="item">
+		</Link>
+		<Link to="/market" className="item">
 			<i className="line chart icon"></i>
 			Market
-		</a>
-		<a className="item">
+		</Link>
+		<Link to="/news" className="item">
 			<i className="newspaper icon"></i>
 			News
-		</a>
-		<a className="item">
+		</Link>
+		<Link to="/leaderboard" className="item">
 			<i className="trophy icon"></i>
 			Leaderboard
-		</a>
-		<a className="item">
+		</Link>
+		<Link to="/companies" className="item">
 			<i className="suitcase icon"></i>
 			Companies
-		</a>
+		</Link>
 		
-		<a className="item">
+		<Link to="/help" className="item">
 			<i className="help circle icon"></i>
 			Help
-		</a>
+		</Link>
 		
-		<a className="item">
+		<Link to="/logout" className="item">
 			<i className="window close icon"></i>
 			Logout
-		</a>
+		</Link>
 	</div>)  
     };
 }

@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import { MarketDepth } from "./trading_terminal/MarketDepth"
-import { TradingHistory } from "./trading_terminal/TradingHistory";
+
+import { OrderBook } from "./trading_terminal/OrderBook";
 import { OpenOrders } from "./trading_terminal/OpenOrders";
 import { SearchBar } from "./trading_terminal/SearchBar";
 import { Notification } from "./common/Notification";
@@ -15,6 +15,19 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, {}> {
         super(props);
     }
     render(){
-        return(<h1>hi</h1>);
+        return(
+        	<div>
+        		<div className="row" id="trading-terminal-row1">
+					<OrderBook />
+					<div id="chart-container" className="ten wide column box">
+						
+					</div>
+				</div>
+				<div className="row" id="trading-terminal-row2">
+					<PlaceOrderBox stockId={4} currentPrice={100} />
+					<OpenOrders userId={1} />
+				</div>
+        	</div>
+        );
     }
 }
