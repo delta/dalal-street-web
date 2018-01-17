@@ -16,7 +16,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, {}> {
     }
     render(){
         return(
-        	<div>
+        	<div className="ui stackable grid pusher">
         		<div className="row" id="trading-terminal-row1">
 					<OrderBook />
 					<div id="chart-container" className="ten wide column box">
