@@ -55,7 +55,7 @@ export class MarketDepth extends React.Component<MarketDepthProps, {}> {
         }
 
 		return (
-			<div>
+			<div className="ui tab inverted active" data-tab="market-depth" id="market-depth">
 				<table className="ui inverted table unstackable">
                     <thead>
                         <tr>

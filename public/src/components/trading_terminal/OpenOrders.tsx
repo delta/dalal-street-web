@@ -37,24 +37,24 @@ export class OpenOrders extends React.Component<OpenOrdersProps, {}>{
 		});
 		
 		return (
-			<div>
+			<div id="open-orders" className="ten wide column box">
 				<div className="ui pointing secondary menu">
 					<h3 className="panel-header right item">Open Orders</h3>
 				</div>
-			<table className="ui inverted table unstackable">
-			<thead>
-			<tr>
-			<th>Company</th>
-			<th>Type</th>
-			<th>Volume</th>
-			<th>Filled</th>
-			<th>Price</th>
-			</tr>
-			</thead>
-			<tbody>
-			{history}
-			</tbody>
-			</table>
+				<table className="ui inverted table unstackable">
+					<thead>
+						<tr>
+							<th>Company</th>
+							<th>Type</th>
+							<th>Volume</th>
+							<th>Filled</th>
+							<th>Price</th>
+						</tr>
+					</thead>
+					<tbody>
+						{history}
+					</tbody>
+				</table>
 			</div>
 		);
 		
