@@ -6,8 +6,8 @@ export class Navbar extends React.Component<NavProps, {}> {
     render(){
 
         return(
-        <div>
-		<a className="item">
+        <div id="navbar" className="ui sidebar inverted labeled icon left vertical menu uncover visible">
+		<a className="item" href="/trade">
 			<i className="rupee icon"></i>
 			Trade
 		</a>
