@@ -6,6 +6,7 @@ export interface NotificationProps {
 }
 
 export class Notification extends React.Component<NotificationProps, {}> {
+
     render() {
         const messages = this.props.messages;
         const icon = this.props.icon;
