@@ -17,6 +17,39 @@ interface semantickedJquery {
 
 declare var $: semantickedJquery;
 
+let stockDetails = [
+	{
+		"stockId": 1,
+		"stockName": "Amazon",
+		"stockFullName": "Amazon",
+		"currentPrice": 100
+	},
+	{
+		"stockId": 2,
+		"stockName": "Facebook",
+		"stockFullName": "Facebook",
+		"currentPrice": 100
+	},
+	{
+		"stockId": 3,
+		"stockName": "Firefox",
+		"stockFullName": "Firefox",
+		"currentPrice": 100
+	},
+	{
+		"stockId": 4,
+		"stockName": "Github",
+		"stockFullName": "Github",
+		"currentPrice": 100
+	},
+	{
+		"stockId": 5,
+		"stockName": "Google",
+		"stockFullName": "Google",
+		"currentPrice": 100
+	}
+];
+
 export class TradingTerminal extends React.Component<TradingTerminalProps, {}> {
     constructor(props: TradingTerminalProps) {
         super(props);
@@ -29,18 +62,29 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, {}> {
 
     render(){
         return(
-        	<div className="ui stackable grid pusher">
-        		<div className="row" id="trading-terminal-row1">
-					<OrderBook />
-					<div id="chart-container" className="ten wide column box">
-						
+			<div id="main_container" className="ui stackable grid pusher">
+			
+				<div className="row" id="top_bar">
+					<div id="search-bar" className="left floated">	
+						<SearchBar stockDetails={stockDetails} />
+					</div>
+					
+					<div id="notif-component">
+						<Notification messages={["hi","me","yo"]} icon={"open envelope icon"} />
 					</div>
 				</div>
-				<div className="row" id="trading-terminal-row2">
-					<PlaceOrderBox stockId={4} currentPrice={100} />
-					<OpenOrders userId={1} />
+				<div className="ui stackable grid pusher">
+					<div className="row" id="trading-terminal-row1">
+						<OrderBook />
+						<div id="chart-container" className="ten wide column box">
+						</div>
+					</div>
+					<div className="row" id="trading-terminal-row2">
+						<PlaceOrderBox stockId={4} currentPrice={100} />
+						<OpenOrders userId={1} />
+					</div>
 				</div>
-        	</div>
+			</div>
         );
     }
 }
