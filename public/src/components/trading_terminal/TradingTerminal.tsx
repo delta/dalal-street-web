@@ -5,6 +5,7 @@ import { OpenOrders } from "./OpenOrders";
 import { SearchBar } from "./SearchBar";
 import { Notification } from "../common/Notification";
 import { PlaceOrderBox } from "./PlaceOrderBox";
+import { Charts } from "./charts/Charts";
 
 import { Metadata } from "grpc-web-client";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb"
@@ -88,6 +89,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					<div className="row" id="trading-terminal-row1">
 						<OrderBook stockId={this.state.stockId} />
 						<div id="chart-container" className="ten wide column box">
+							<Charts stockId={this.state.stockId} />
 						</div>
 					</div>
 					<div className="row" id="trading-terminal-row2">
