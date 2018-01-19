@@ -144,7 +144,7 @@ body {
 }
 
 .main-container {
-	margin: 0; /* celled grid adds margin at top & bottom, we don't want it */
+	margin: 0 !important; /* celled grid adds margin at top & bottom, we don't want it */
 	width: auto; /* overflows without this */
 	min-height: 100%;
 }

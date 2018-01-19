@@ -18,7 +18,6 @@ module.exports = {
             path.resolve(__dirname, 'public/src'),
             path.resolve(__dirname, 'public/proto_build'),
         ],
-        exclude: /node_modules/,
         loaders: ["babel-loader", "ts-loader"], // tsc converts to es6. convert that to es5
         exclude: [
           path.resolve(__dirname, 'node_modules'),
@@ -28,7 +27,10 @@ module.exports = {
       {
         enforce: "pre",
         test: /\.js$/,
-        loader: "source-map-loader"
+        loader: "source-map-loader",
+        exclude: [
+          path.resolve(__dirname, 'node_modules'),
+        ],
       }
     ]
   },
