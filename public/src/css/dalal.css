@@ -40,9 +40,9 @@ div.expected-cost {
 	color: white;
 	font-size: 0.9em;
 	font-weight: bold;
-	position: absolute;
 	bottom: 7px;
-	margin: 1px;
+	margin-left: 4px;
+	margin-top: 7px;
 }
 
 .column {

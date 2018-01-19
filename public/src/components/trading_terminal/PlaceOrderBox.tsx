@@ -36,7 +36,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 	}
 
 	componentDidMount() {
-		$("#place-order-box-menu .item").tab();
+		$(".place-order-box-menu .item").tab();
 	}
 
 	placeOrder = async (isAsk: boolean, orderType: OrderType, price: number, stockQuantity: number) => {
@@ -105,14 +105,14 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
     render() {
         return (
 			<Fragment>
-				<div id="place-order-box-menu" className="ui pointing secondary menu">
+				<div className="ui pointing secondary menu place-order-box-menu">
 					<a className="item active" data-tab="market">Market</a>
 					<a className="item" data-tab="limit">Limit</a>
 					<a className="item" data-tab="stoploss">Stoploss</a>
 					<h3 className="panel-header item right">Place Order</h3>
 				</div>
 				<div className="ui tab inverted active" data-tab="market">
-					<div className="ui top attached tabular menu inverted">
+					<div className="ui top attached tabular menu inverted place-order-box-menu">
 						<a className="active item green" data-tab="market/buy">BUY</a>
 						<a className="item red" data-tab="market/sell">SELL</a>
 					</div>
@@ -138,7 +138,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 					</div>
 				</div>
 				<div className="ui tab inverted" data-tab="limit">
-					<div className="ui top attached tabular menu inverted">
+					<div className="ui top attached tabular menu inverted place-order-box-menu">
 						<a className="item active green" data-tab="limit/buy">BUY</a>
 						<a className="item red" data-tab="limit/sell">SELL</a>
 					</div>
@@ -170,7 +170,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 					</div>
 				</div>
 				<div className="ui tab inverted" data-tab="stoploss">
-					<div className="ui top attached tabular menu inverted">
+					<div className="ui top attached tabular menu inverted place-order-box-menu">
 						<a className="item active green" data-tab="stoploss/buy">BUY</a>
 						<a className="item red" data-tab="stoploss/sell">SELL</a>
 					</div>
