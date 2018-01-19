@@ -1,19 +1,20 @@
 import * as React from "react";
+import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb"
 
 export interface NotificationProps { 
-    messages: string[],
+    notifications: Notification_pb[],
     icon: string
 }
 
 export class Notification extends React.Component<NotificationProps, {}> {
 
     render() {
-        const messages = this.props.messages;
+        const notifications = this.props.notifications;
         const icon = this.props.icon;
-        const notifications = messages.map((message, index) =>
+        const notifsList = notifications.map((notif, index) =>
             <div key={index} className="item">
                 <i className={icon}></i>
-                <span className="notif-item">{message}</span>
+                <span className="notif-item">{notif.getText()}</span>
             </div>
         );
 
@@ -23,7 +24,7 @@ export class Notification extends React.Component<NotificationProps, {}> {
                     <i className="inbox icon"></i>Inbox
                 </span>
                 <div id="mymenu" className="menu">
-                    {notifications}
+                    {notifsList}
                 </div>
             </div>
         );
