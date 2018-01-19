@@ -74,26 +74,30 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 
     render(){
         return(
-			<div id="main_container" className="ui stackable grid pusher">
-			
+			<div id="trading-terminal" className="main-container ui stackable grid pusher">
 				<div className="row" id="top_bar">
-					<div id="search-bar" className="left floated">	
+					<div id="search-bar" className="">
 						<SearchBar stockDetails={stockDetails} handleStockIdCallback={this.handleStockIdChange} defaultStock={this.state.stockId}/>
 					</div>
-					
+
 					<div id="notif-component">
 						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
 					</div>
 				</div>
-				<div className="ui stackable grid pusher">
-					<div className="row" id="trading-terminal-row1">
+				<div className="row">
+					<div id="order-book-container" className="six wide column box">
 						<OrderBook stockId={this.state.stockId} />
-						<div id="chart-container" className="ten wide column box">
-							<Charts stockId={this.state.stockId} />
-						</div>
 					</div>
-					<div className="row" id="trading-terminal-row2">
+
+					<div id="charts-container" className="ten wide column box">
+						<Charts stockId={this.state.stockId} />
+					</div>
+
+					<div id="place-order-box-container" className="six wide column box">
 						<PlaceOrderBox stockId={this.state.stockId} currentPrice={100} sessionMd={this.props.sessionMd}/>
+					</div>
+
+					<div id="open-orders-container" className="ten wide column box">
 						<OpenOrders sessionMd={this.props.sessionMd} />
 					</div>
 				</div>

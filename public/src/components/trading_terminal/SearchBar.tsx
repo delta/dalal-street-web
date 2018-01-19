@@ -37,14 +37,12 @@ export class SearchBar extends React.Component<SearchBarProps, {}> {
 			<div key={stockDetail.stockId} className="item" data-value={stockDetail.stockId}><i className={stockDetail.stockName.toLowerCase() + " icon"}></i>{stockDetail.stockName}</div>
 		);
 		return (
-			<div id="search-bar" className="left floated">
-				<div id="search-container" className="ui fluid search selection dropdown">
-					<input name="stock" type="hidden" value={this.props.defaultStock}/>
-					<i className="dropdown icon"></i>
-					<div className="default text">Select Stock</div>
-					<div className="menu">
-						{options}
-					</div>
+			<div id="search-container" className="ui fluid search selection dropdown">
+				<input name="stock" type="hidden" value={this.props.defaultStock}/>
+				<i className="dropdown icon"></i>
+				<div className="default text">Select Stock</div>
+				<div className="menu">
+					{options}
 				</div>
 			</div>
 		);

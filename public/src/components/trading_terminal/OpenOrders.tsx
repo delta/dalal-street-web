@@ -1,13 +1,13 @@
 import * as React from "react";
 import { Metadata } from "grpc-web-client";
+import { Fragment } from "react";
 
 export interface OpenOrdersProps{
 	sessionMd: Metadata
 }
 
-export class OpenOrders extends React.Component<OpenOrdersProps, {}>{
-	render(){
-		
+export class OpenOrders extends React.Component<OpenOrdersProps, {}> {
+	render() {
 		const currentOrders = [
 			{"company":"GOOGL", "type":"Sell", "volume":200, "filled":100, "price":"10"},
 			{"company":"GOOGL", "type":"Sell", "volume":200, "filled":100, "price":"10"},
@@ -38,7 +38,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, {}>{
 		});
 		
 		return (
-			<div id="open-orders" className="ten wide column box">
+			<Fragment>
 				<div className="ui pointing secondary menu">
 					<h3 className="panel-header right item">Open Orders</h3>
 				</div>
@@ -56,9 +56,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, {}>{
 						{history}
 					</tbody>
 				</table>
-			</div>
+			</Fragment>
 		);
-		
-		
 	}
 }
