@@ -6,7 +6,12 @@ import { SearchBar } from "./trading_terminal/SearchBar";
 import { Notification } from "./common/Notification";
 import { PlaceOrderBox } from "./trading_terminal/PlaceOrderBox";
 
+import { Metadata } from "grpc-web-client";
+import { Notification as Notification_pb } from "../../proto_build/models/Notification_pb"
+
 export interface TradingTerminalProps {
+	sessionMd: Metadata,
+	notifications: Notification_pb[]
 }
 
 interface semantickedJquery {
@@ -70,7 +75,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, {}> {
 					</div>
 					
 					<div id="notif-component">
-						<Notification messages={["hi","me","yo"]} icon={"open envelope icon"} />
+						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
 					</div>
 				</div>
 				<div className="ui stackable grid pusher">
