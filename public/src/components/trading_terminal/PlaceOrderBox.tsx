@@ -1,4 +1,21 @@
 import * as React from "react";
+import {PlaceOrderRequest, PlaceOrderResponse} from "../../../proto_build/actions/PlaceOrder_pb";
+import { OrderType } from "../../../proto_build/models/OrderType_pb";
+import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
+import { Metadata } from "grpc-web-client";
+
+const LIMIT = OrderType.LIMIT;
+const MARKET = OrderType.MARKET;
+const STOPLOSS = OrderType.STOPLOSS;
+
+const orderTypeToStr = (ot: OrderType): string => {
+	switch(ot) {
+		case LIMIT: return "limit";
+		case MARKET: return "market";
+		case STOPLOSS: return "stoploss";
+	}
+	return "";
+}
 
 function isPositiveInteger(x: number): boolean {
 	return (!isNaN(x) && x % 1 === 0 && x > 0);
@@ -6,23 +23,47 @@ function isPositiveInteger(x: number): boolean {
 
 export interface PlaceOrderBoxProps{
 	stockId: number,
-	currentPrice: number
+	currentPrice: number,
+	sessionMd: Metadata,
 }
 
 export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
-	handleOrder(event: any, orderType: string, orderAction: string) {
-		let stockInputField: HTMLInputElement = document.getElementById(orderType+"-"+orderAction+"-count") as HTMLInputElement;
-		let priceInputField: HTMLInputElement = document.getElementById(orderType+"-"+orderAction+"-price") as HTMLInputElement;
-		let stockCount: number = Number(stockInputField.value);
-		let triggerPrice: number = Number(orderType == "market" ? "-1" : priceInputField.value);
-			
-		if (!(isPositiveInteger(stockCount) && (orderType == "market" || isPositiveInteger(triggerPrice)))) {
+
+	async placeOrder(isAsk: boolean, orderType: OrderType, price: number, stockQuantity: number) {
+		const orderRequest = new PlaceOrderRequest();
+
+		orderRequest.setIsAsk(isAsk);
+		orderRequest.setStockId(this.props.stockId);
+		orderRequest.setOrderType(orderType);
+		orderRequest.setPrice(price);
+		orderRequest.setStockQuantity(stockQuantity);
+
+		try {
+			const resp = await DalalActionService.placeOrder(orderRequest, this.props.sessionMd);
+			console.log(resp.getStatusCode(), resp.toObject());
+		}
+		catch(e) {
+			// error could be grpc error or Dalal error. Both handled in exception
+			console.log("Error happened! ", e.statusCode, e.statusMessage, e);
+		}
+	}
+
+	handleOrder(event: any, orderType: OrderType, orderAction: string) {
+		const orderTypeString = orderTypeToStr(orderType);
+		let stockInputField = document.getElementById(orderTypeString+"-"+orderAction+"-count") as HTMLInputElement;
+		let priceInputField = document.getElementById(orderTypeString+"-"+orderAction+"-price") as HTMLInputElement;
+
+		let stockCount = Number(stockInputField.value);
+		let orderPrice = Number(orderType ==  MARKET ? 0 : priceInputField.value);
+
+		if (!(isPositiveInteger(stockCount) && (orderType ==  MARKET || isPositiveInteger(orderPrice)))) {
 			alert("Please enter a positive integer");
 			return;
 		}
 
-		console.log("Received",orderType,orderAction,"order with stockCount =", stockCount,"triggerPrice =", triggerPrice);
+		console.log("Received",orderType,orderAction,"order with stockCount =", stockCount,"orderPrice =", orderPrice);
 
+		this.placeOrder(orderAction == "buy", orderType,  orderPrice, stockCount);
 		stockInputField.value = "";
 		if (priceInputField) {
 			priceInputField.value = "";
@@ -69,7 +110,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 						<div className="ui input">
 							<input id="market-buy-count" placeholder="Number of stocks" type="text" onChange={e => this.predictCost(e,"market","buy")}/>
 						</div>
-						<button className="ui inverted green button" onClick={e => this.handleOrder(e,"market","buy")}>BUY</button>
+						<button className="ui inverted green button" onClick={e => this.handleOrder(e,  MARKET, "buy")}>BUY</button>
 						
 						<div className="expected-cost">
 							You will gain approximately ₹ <span id="market-buy-estimation">0.00</span>
@@ -79,7 +120,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 						<div className="ui input">
 							<input id="market-sell-count" placeholder="Number of stocks" type="text" onChange={e => this.predictCost(e,"market","sell")}/>
 						</div>
-						<button className="ui inverted red button" onClick={e => this.handleOrder(e,"market","sell")}>SELL</button>
+						<button className="ui inverted red button" onClick={e => this.handleOrder(e, MARKET,"sell")}>SELL</button>
 						
 						<div className="expected-cost">
 							You will lose approximately ₹ <span id="market-sell-estimation">0.00</span>
@@ -98,7 +139,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 						<div className="ui input">
 							<input id="limit-buy-price" placeholder="Limit Price" type="text" onChange={e => this.predictCost(e,"limit","buy")}/>
 						</div>
-						<button className="ui inverted green button" onClick={e => this.handleOrder(e,"limit","buy")}>BUY</button>
+						<button className="ui inverted green button" onClick={e => this.handleOrder(e, LIMIT,"buy")}>BUY</button>
 						
 						<div className="expected-cost">
 							You will gain approximately ₹ <span id="limit-buy-estimation">0.00</span>
@@ -111,7 +152,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 						<div className="ui input">
 							<input id="limit-sell-price" placeholder="Limit Price" type="text" onChange={e => this.predictCost(e,"limit","sell")}/>
 						</div>
-						<button className="ui inverted red button" onClick={e => this.handleOrder(e,"limit","sell")}>SELL</button>
+						<button className="ui inverted red button" onClick={e => this.handleOrder(e, LIMIT,"sell")}>SELL</button>
 						
 						<div className="expected-cost">
 							You will lose approximately ₹ <span id="limit-sell-estimation">0.00</span>
@@ -130,7 +171,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 						<div className="ui input">
 							<input id="stoploss-buy-price" placeholder="Stoploss Price" type="text" onChange={e => this.predictCost(e,"stoploss","buy")}/>
 						</div>
-						<button className="ui inverted green button" onClick={e => this.handleOrder(e,"stoploss","buy")}>BUY</button>
+						<button className="ui inverted green button" onClick={e => this.handleOrder(e, STOPLOSS,"buy")}>BUY</button>
 						
 						<div className="expected-cost">
 							You will gain approximately ₹ <span id="stoploss-buy-estimation">0.00</span>
@@ -143,7 +184,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 						<div className="ui input">
 							<input id="stoploss-sell-price" placeholder="Stoploss Price" type="text" onChange={e => this.predictCost(e,"stoploss","sell")}/>
 						</div>
-						<button className="ui inverted red button" onClick={e => this.handleOrder(e,"stoploss","sell")}>SELL</button>
+						<button className="ui inverted red button" onClick={e => this.handleOrder(e, STOPLOSS,"sell")}>SELL</button>
 						
 						<div className="expected-cost">
 							You will lose approximately ₹ <span id="stoploss-sell-estimation">0.00</span>

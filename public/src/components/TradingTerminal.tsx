@@ -85,7 +85,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, {}> {
 						</div>
 					</div>
 					<div className="row" id="trading-terminal-row2">
-						<PlaceOrderBox stockId={4} currentPrice={100} />
+						<PlaceOrderBox stockId={1} currentPrice={100} sessionMd={this.props.sessionMd}/>
 						<OpenOrders userId={1} />
 					</div>
 				</div>
