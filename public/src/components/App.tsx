@@ -5,6 +5,7 @@ import { Main } from "./Main";
 import {Metadata} from "grpc-web-client";
 import {DalalActionService, DalalStreamService} from "../../proto_build/DalalMessage_pb_service";
 import {LoginRequest, LoginResponse} from "../../proto_build/actions/Login_pb";
+import { Fragment } from "react";
 
 interface AppState {
 	isLoading: boolean
@@ -68,10 +69,10 @@ export class App extends React.Component<{}, AppState> {
 		} else if (this.state.sessionMd != null) {
 			// logged in
 			return (
-				<div>
+				<Fragment>
 					<Navbar />
 					<Main sessionMd={this.state.sessionMd!}/>
-				</div>
+				</Fragment>
 			)
 		} else {
 			// not logged in 

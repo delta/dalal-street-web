@@ -1,5 +1,5 @@
 .green{
-	color:#7DEA63 !important; 
+	color:#7DEA63 !important;
 }
 
 .red{
@@ -143,17 +143,17 @@ body {
 	background: rgb(27,28,29);
 }
 
-#main_container {
+.main-container {
 	margin: 0; /* celled grid adds margin at top & bottom, we don't want it */
 	width: auto; /* overflows without this */
 	min-height: 100%;
 }
 
-#main_container .column, #main_container .row{
+.main-container .column, .main-container .row{
 	box-shadow: none !important;
 }
 
-#main_container #top_bar {
+.main-container #top_bar {
 	box-shadow: 2px -3px 2px 0px inset rgba(0,0,0,0.97) !important
 }
 #navbar {
@@ -226,13 +226,13 @@ body {
 	background: rgb(27,28,29);
 }
 
-#main_container {
+.main-container {
 	margin: 0; /* celled grid adds margin at top & bottom, we don't want it */
 	width: auto; /* overflows without this */
 	height: 100%;
 }
 
-#main_container .column, #main_container .row{
+.main-container .column, .main-container .row{
 	box-shadow: none !important;
 }
 
@@ -254,7 +254,7 @@ body {
 }
 /* push the main container to the left by 90px when navbar is visible.
 semantic does this already but we don't like the width of the sidebar. */
-#navbar.visible ~ #main_container.pusher {
+#navbar.visible ~ .main-container.pusher {
 	transform: translate3d(0px, 0px, 0px); /* override semantic's default */
 	margin-left: 90px !important; /* use margin instead to fix row's widths */
 }
@@ -267,18 +267,15 @@ h3.panel-header {
 	border-radius: 5px 5px 0 0 !important;
 }
 
-#trading-terminal-row1 table , #trading-terminal-row2 table {
+#trading-terminal table , #trading-terminal table {
 	margin: 0 !important;
 	background: #1B1C1D;
 	transition: 0.1s all;
 }
-#trading-terminal-row1 table tr td, #trading-terminal-row2 table tr td {
+#trading-terminal table tr td, #trading-terminal table tr td {
 	border-bottom: none !important;
 }
-#trading-terminal-row1 {
-	min-height: 400px;
-}
-#place-order-box .ui.tab {
+#place-order-box-menu .ui.tab {
 	height: 135px;
 }
 #market-depth table thead:first-child th:first-child,

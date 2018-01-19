@@ -3,6 +3,7 @@ import {PlaceOrderRequest, PlaceOrderResponse} from "../../../proto_build/action
 import { OrderType } from "../../../proto_build/models/OrderType_pb";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { Metadata } from "grpc-web-client";
+import { Fragment } from "react";
 
 const LIMIT = OrderType.LIMIT;
 const MARKET = OrderType.MARKET;
@@ -35,7 +36,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 	}
 
 	componentDidMount() {
-		$("#place-order-box .item").tab();
+		$("#place-order-box-menu .item").tab();
 	}
 
 	placeOrder = async (isAsk: boolean, orderType: OrderType, price: number, stockQuantity: number) => {
@@ -80,9 +81,9 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 	};
 
 	predictCost = (event: any, orderType: string, orderAction: string) => {
-		let stockInputField: HTMLInputElement = document.getElementById(orderType+"-"+orderAction+"-count") as HTMLInputElement;
-		let stockCount: number = Number(stockInputField.value);
-		let expectedCostField: HTMLElement = document.getElementById(orderType+"-"+orderAction+"-estimation") as HTMLElement;
+		const stockInputField = document.getElementById(orderType+"-"+orderAction+"-count") as HTMLInputElement;
+		const stockCount = Number(stockInputField.value);
+		const expectedCostField = document.getElementById(orderType+"-"+orderAction+"-estimation")!;
 		if (isNaN(stockCount) || stockCount <= 0) {
 			expectedCostField.innerHTML = "0.00";
 			return;
@@ -91,8 +92,8 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 			expectedCostField.innerHTML = String(this.props.currentPrice * stockCount) + ".00";	
 		}
 		else {
-			let priceInputField: HTMLInputElement = document.getElementById(orderType+"-"+orderAction+"-price") as HTMLInputElement;
-			let triggerPrice: number = Number(priceInputField.value);
+			let priceInputField = document.getElementById(orderType+"-"+orderAction+"-price") as HTMLInputElement;
+			let triggerPrice = Number(priceInputField.value);
 			if (isNaN(triggerPrice) || triggerPrice <= 0) {
 				expectedCostField.innerHTML = "0.00";
 				return;
@@ -103,8 +104,8 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 
     render() {
         return (
-			<div id="place-order-box" className="six wide column box">
-				<div className="ui pointing secondary menu">
+			<Fragment>
+				<div id="place-order-box-menu" className="ui pointing secondary menu">
 					<a className="item active" data-tab="market">Market</a>
 					<a className="item" data-tab="limit">Limit</a>
 					<a className="item" data-tab="stoploss">Stoploss</a>
@@ -200,7 +201,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 						</div>
 					</div>
 				</div>
-			</div>
+			</Fragment>
         );   
     }
 }
