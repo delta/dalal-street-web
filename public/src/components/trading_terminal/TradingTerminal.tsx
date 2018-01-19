@@ -1,26 +1,22 @@
 import * as React from "react";
 
-import { OrderBook } from "./trading_terminal/OrderBook";
-import { OpenOrders } from "./trading_terminal/OpenOrders";
-import { SearchBar } from "./trading_terminal/SearchBar";
-import { Notification } from "./common/Notification";
-import { PlaceOrderBox } from "./trading_terminal/PlaceOrderBox";
+import { OrderBook } from "./OrderBook/OrderBook";
+import { OpenOrders } from "./OpenOrders";
+import { SearchBar } from "./SearchBar";
+import { Notification } from "../common/Notification";
+import { PlaceOrderBox } from "./PlaceOrderBox";
 
 import { Metadata } from "grpc-web-client";
-import { Notification as Notification_pb } from "../../proto_build/models/Notification_pb"
+import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb"
 
 export interface TradingTerminalProps {
 	sessionMd: Metadata,
 	notifications: Notification_pb[]
 }
 
-interface semantickedJquery {
-	(selector: string): semantickedJquery
-	dropdown(): void
-	tab(): void
+interface TradingTerminalState {
+	stockId: number
 }
-
-declare var $: semantickedJquery;
 
 let stockDetails = [
 	{
@@ -55,15 +51,25 @@ let stockDetails = [
 	}
 ];
 
-export class TradingTerminal extends React.Component<TradingTerminalProps, {}> {
+export class TradingTerminal extends React.Component<TradingTerminalProps, TradingTerminalState> {
     constructor(props: TradingTerminalProps) {
         super(props);
+        this.state = {
+        	stockId: 1
+        }
     }
 
     componentDidMount() {
-    	$('.ui.dropdown').dropdown();
-		$('.menu .item').tab();
+    	//$('.ui.dropdown').dropdown();
+		//$('.menu .item').tab();
     }
+
+    handleStockIdChange = (newStockId: number) => {
+    	console.log("Chal gaya bhai apna with value", newStockId);
+    	this.setState({
+    		stockId: newStockId
+    	});
+    };
 
     render(){
         return(
@@ -71,7 +77,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, {}> {
 			
 				<div className="row" id="top_bar">
 					<div id="search-bar" className="left floated">	
-						<SearchBar stockDetails={stockDetails} />
+						<SearchBar stockDetails={stockDetails} handleStockIdCallback={this.handleStockIdChange} defaultStock={this.state.stockId}/>
 					</div>
 					
 					<div id="notif-component">
@@ -80,13 +86,13 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, {}> {
 				</div>
 				<div className="ui stackable grid pusher">
 					<div className="row" id="trading-terminal-row1">
-						<OrderBook />
+						<OrderBook stockId={this.state.stockId} />
 						<div id="chart-container" className="ten wide column box">
 						</div>
 					</div>
 					<div className="row" id="trading-terminal-row2">
-						<PlaceOrderBox stockId={1} currentPrice={100} sessionMd={this.props.sessionMd}/>
-						<OpenOrders userId={1} />
+						<PlaceOrderBox stockId={this.state.stockId} currentPrice={100} sessionMd={this.props.sessionMd}/>
+						<OpenOrders sessionMd={this.props.sessionMd} />
 					</div>
 				</div>
 			</div>

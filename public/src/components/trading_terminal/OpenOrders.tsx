@@ -1,7 +1,8 @@
 import * as React from "react";
+import { Metadata } from "grpc-web-client";
 
 export interface OpenOrdersProps{
-	userId: number
+	sessionMd: Metadata
 }
 
 export class OpenOrders extends React.Component<OpenOrdersProps, {}>{

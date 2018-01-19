@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Switch, Route } from "react-router-dom";
 import { Notification } from "./common/Notification";
-import { TradingTerminal } from "./TradingTerminal";
+import { TradingTerminal } from "./trading_terminal/TradingTerminal";
 import { SearchBar } from "./trading_terminal/SearchBar"
 import { NotFound } from "./NotFound";
 import { subscribe } from "../streamsutil";
@@ -31,7 +31,7 @@ export class Main extends React.Component<MainProps, MainState> {
 		this.handleNotificationsStream();
 	}
 
-	async handleNotificationsStream() {
+	handleNotificationsStream = async () => {
 		const sessionMd = this.props.sessionMd;
 
 		const subscriptionId = await subscribe(sessionMd, DataStreamType.NOTIFICATIONS);
@@ -47,7 +47,7 @@ export class Main extends React.Component<MainProps, MainState> {
 			});
 			console.log("Notification update", notif.toObject());
 		}
-	}
+	};
 
 	render() {
 		return (
