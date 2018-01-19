@@ -10,7 +10,7 @@ export class NotFound extends React.Component<{}, {}> {
 			"Everyone has the brainpower to follow the stock market. If you made it through fifth-grade math, you can do it. - Peter Lynch"
 		];
 		return (
-			<div id="main_container" className="ui stackable grid pusher">
+			<div id="404_container" className="ui stackable grid pusher main-container">
 				<div className="ui large grey header">
 					The given link does not exist on the server <br />
 					{quotes[Math.floor(Math.random() * 4)]} <br />
