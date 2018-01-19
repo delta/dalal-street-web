@@ -27,9 +27,18 @@ export interface PlaceOrderBoxProps{
 	sessionMd: Metadata,
 }
 
-export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
+declare var $: any;
 
-	async placeOrder(isAsk: boolean, orderType: OrderType, price: number, stockQuantity: number) {
+export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
+	constructor(props: PlaceOrderBoxProps) {
+		super(props);
+	}
+
+	componentDidMount() {
+		$("#place-order-box .item").tab();
+	}
+
+	placeOrder = async (isAsk: boolean, orderType: OrderType, price: number, stockQuantity: number) => {
 		const orderRequest = new PlaceOrderRequest();
 
 		orderRequest.setIsAsk(isAsk);
@@ -46,9 +55,9 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 			// error could be grpc error or Dalal error. Both handled in exception
 			console.log("Error happened! ", e.statusCode, e.statusMessage, e);
 		}
-	}
+	};
 
-	handleOrder(event: any, orderType: OrderType, orderAction: string) {
+	handleOrder = (event: any, orderType: OrderType, orderAction: string) => {
 		const orderTypeString = orderTypeToStr(orderType);
 		let stockInputField = document.getElementById(orderTypeString+"-"+orderAction+"-count") as HTMLInputElement;
 		let priceInputField = document.getElementById(orderTypeString+"-"+orderAction+"-price") as HTMLInputElement;
@@ -68,9 +77,9 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 		if (priceInputField) {
 			priceInputField.value = "";
 		}
-	}
+	};
 
-	predictCost(event: any, orderType: string, orderAction: string) {
+	predictCost = (event: any, orderType: string, orderAction: string) => {
 		let stockInputField: HTMLInputElement = document.getElementById(orderType+"-"+orderAction+"-count") as HTMLInputElement;
 		let stockCount: number = Number(stockInputField.value);
 		let expectedCostField: HTMLElement = document.getElementById(orderType+"-"+orderAction+"-estimation") as HTMLElement;
@@ -90,7 +99,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 			}
 			expectedCostField.innerHTML = String(triggerPrice * stockCount) + ".00";
 		}
-	}
+	};
 
     render() {
         return (

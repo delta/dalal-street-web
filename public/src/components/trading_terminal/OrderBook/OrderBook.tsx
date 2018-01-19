@@ -2,11 +2,21 @@ import * as React from "react";
 import { MarketDepth } from "./MarketDepth"
 import { TradingHistory } from "./TradingHistory";
 
-export interface OrderBookProps {
+declare var $: any;
 
+export interface OrderBookProps {
+	stockId: number
 }
 
 export class OrderBook extends React.Component<OrderBookProps, {}> {
+	constructor(props: OrderBookProps) {
+		super(props);
+	}
+
+	componentDidMount() {
+		$("#orderbook .item").tab();
+	}
+
 	render() {
 		return (
 			<div id="orderbook" className="six wide column box">
@@ -15,8 +25,8 @@ export class OrderBook extends React.Component<OrderBookProps, {}> {
 					<a className="item" data-tab="trading-history">Trading History</a>
 					<h3 className="panel-header right item">Order Book</h3>
 				</div>
-				<MarketDepth stockId={4} />
-				<TradingHistory stockId={4} />
+				<MarketDepth stockId={this.props.stockId} />
+				<TradingHistory stockId={this.props.stockId} />
 			</div>
 		);
 	}
