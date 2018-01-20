@@ -1,28 +1,38 @@
 import * as React from "react";
 
+
+export interface Trade {
+	tradePrice: number,
+	tradeQuantity: number,
+	tradeTime: string
+}
+
 export interface TradingHistoryProps {
-	stockId: number
+	stockId: number,
+	latestTrades: Trade[],
 }
 
 export class TradingHistory extends React.Component<TradingHistoryProps, {}> {
 	render() {
-		const prices: number[] = [56,34,23,12,34,34,67,7,7,5,65,23,98];
+		let latestTrades = this.props.latestTrades;
 		let history: any[] = [];
-		history.push(
-			<tr>
-				<td className="volume"><strong>100</strong></td>
-				<td className="profit"><strong>{prices[0]} ⬈</strong></td>
-				<td>{new Date().toLocaleTimeString()}</td>
-			</tr>
-		);
+		if (latestTrades.length) {
+			history.push(
+				<tr>
+					<td className="volume"><strong>{latestTrades[0].tradeQuantity}</strong></td>
+					<td className="profit"><strong>{latestTrades[0].tradePrice} ⬈</strong></td>
+					<td>{latestTrades[0].tradeTime}</td>
+				</tr>
+			);
+		}
 
 		let lastDiff: string = "profit";
-		for(let i=1; i < prices.length; i++) {
+		for(let i=1; i < latestTrades.length; i++) {
 			let diff: string;
-			if (prices[i] > prices[i-1]) {
+			if (latestTrades[i].tradePrice > latestTrades[i-1].tradePrice) {
 				diff = "profit";
 			}
-			else if (prices[i] < prices[i-1]) {
+			else if (latestTrades[i].tradePrice < latestTrades[i-1].tradePrice) {
 				diff = "loss";
 			}
 			else {
@@ -32,9 +42,9 @@ export class TradingHistory extends React.Component<TradingHistoryProps, {}> {
 
 			history.push(
 				<tr>
-					<td className="volume"><strong>100</strong></td>
-					<td className={diff}><strong>{prices[i]} {diff == "profit" ? "⬈" : "⬊"}</strong></td>
-					<td>{new Date().toLocaleTimeString()}</td>
+					<td className="volume"><strong>{latestTrades[i].tradeQuantity}</strong></td>
+					<td className={diff}><strong>{latestTrades[i].tradePrice} {diff == "profit" ? "⬈" : "⬊"}</strong></td>
+					<td>{latestTrades[i]}</td>
 				</tr>
 			);
 		}
