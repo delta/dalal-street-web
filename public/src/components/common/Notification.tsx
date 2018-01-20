@@ -1,13 +1,17 @@
 import * as React from "react";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb"
 
-export interface NotificationProps { 
+export interface NotificationProps {
     notifications: Notification_pb[],
     icon: string
 }
 
-export class Notification extends React.Component<NotificationProps, {}> {
+declare var $: any;
 
+export class Notification extends React.Component<NotificationProps, {}> {
+    componentDidMount() {
+        $("#notifbutton").dropdown();
+    }
     render() {
         const notifications = this.props.notifications;
         const icon = this.props.icon;

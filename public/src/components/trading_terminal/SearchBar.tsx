@@ -1,17 +1,17 @@
 import * as React from "react";
 
-type stockEntry = {
-	stockId: number,
-	stockName: string,
-	stockFullName: string,
-	currentPrice: number
+type StockBriefInfo = {
+	id: number
+	shortName: string
+	fullName: string
 }
 
 declare var $: any;
 
 export interface SearchBarProps {
-	defaultStock: number,
-	stockDetails: stockEntry[],
+	defaultStock: number
+	stockBriefInfoMap: { [index:number]: StockBriefInfo }
+	stockPricesMap: { [index:number]: number }
 	handleStockIdCallback: (newStockId: number) => void
 }
 
@@ -32,10 +32,17 @@ export class SearchBar extends React.Component<SearchBarProps, {}> {
 	};
 
 	render() {
-		const stockDetails = this.props.stockDetails;
-		const options = stockDetails.map((stockDetail) => 
-			<div key={stockDetail.stockId} className="item" data-value={stockDetail.stockId}><i className={stockDetail.stockName.toLowerCase() + " icon"}></i>{stockDetail.stockName}</div>
-		);
+		const stockBriefInfoMap = this.props.stockBriefInfoMap;
+		const options = [];
+		for (const stockId in stockBriefInfoMap) {
+			const stockInfo = stockBriefInfoMap[stockId];
+			options.push(
+				<div key={stockId} className="item" data-value={stockId}>
+					{/* <i className={stockInfo.fullName.toLowerCase() + " icon"}></i> */}
+					{stockInfo.fullName}
+				</div>
+			);
+		}
 		return (
 			<div id="search-container" className="ui fluid search selection dropdown">
 				<input name="stock" type="hidden" value={this.props.defaultStock}/>

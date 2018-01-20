@@ -283,3 +283,8 @@ h3.panel-header {
 #market-depth table td:nth-child(2) {
 	border-right: 1px solid white !important;
 }
+
+#current-price-container {
+	line-height: 50px;
+	margin: 0 30px;
+}

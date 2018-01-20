@@ -1,5 +1,8 @@
 import * as React from "react";
 
+import { Metadata } from "grpc-web-client";
+import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb"
+
 import { OrderBook } from "./OrderBook/OrderBook";
 import { OpenOrders } from "./OpenOrders";
 import { SearchBar } from "./SearchBar";
@@ -7,77 +10,81 @@ import { Notification } from "../common/Notification";
 import { PlaceOrderBox } from "./PlaceOrderBox";
 import { Charts } from "./charts/Charts";
 
-import { Metadata } from "grpc-web-client";
-import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb"
+export type StockBriefInfo = {
+	id: number
+	shortName: string
+	fullName: string
+}
 
 export interface TradingTerminalProps {
 	sessionMd: Metadata,
 	notifications: Notification_pb[]
+
+	userName: string
+	userCash: number
+
+	stocksOwnedMap:    { [index:number]: number } // stocks owned by user for a given stockid
+	stockBriefInfoMap: { [index:number]: StockBriefInfo } // get stock detail for a given stockid
+	stockPricesMap:    { [index:number]: number }
+	constantsMap:      { [index:string]: number } // various constants. Documentation found in server/actionservice/Login method
+
+	isMarketOpen: boolean
 }
 
 interface TradingTerminalState {
-	stockId: number
+	currentStockId: number
+	currentPrice: number
+	userCash: number
+	stockPricesMap: { [index:number]: number }
 }
-
-let stockDetails = [
-	{
-		"stockId": 1,
-		"stockName": "Amazon",
-		"stockFullName": "Amazon",
-		"currentPrice": 100
-	},
-	{
-		"stockId": 2,
-		"stockName": "Facebook",
-		"stockFullName": "Facebook",
-		"currentPrice": 100
-	},
-	{
-		"stockId": 3,
-		"stockName": "Firefox",
-		"stockFullName": "Firefox",
-		"currentPrice": 100
-	},
-	{
-		"stockId": 4,
-		"stockName": "Github",
-		"stockFullName": "Github",
-		"currentPrice": 100
-	},
-	{
-		"stockId": 5,
-		"stockName": "Google",
-		"stockFullName": "Google",
-		"currentPrice": 100
-	}
-];
 
 export class TradingTerminal extends React.Component<TradingTerminalProps, TradingTerminalState> {
     constructor(props: TradingTerminalProps) {
-        super(props);
+		super(props);
+
+		const currentStockId = Number(Object.keys(this.props.stockBriefInfoMap).sort()[0])
         this.state = {
-        	stockId: 1
-        }
-    }
+			currentStockId: currentStockId,
+			currentPrice: this.props.stockPricesMap[currentStockId],
+			userCash: this.props.userCash,
+			stockPricesMap: this.props.stockPricesMap,
+        };
+	}
 
-    componentDidMount() {
-    	//$('.ui.dropdown').dropdown();
-		//$('.menu .item').tab();
-    }
+	// parent will update the stock prices or cash
+	componentWillReceiveProps(nextProps: TradingTerminalProps) {
+		this.setState(prevState => {
+			return {
+				userCash: nextProps.userCash,
+				currentPrice: nextProps.stockPricesMap[prevState.currentStockId],
+				stockPricesMap: nextProps.stockPricesMap,
+			};
+		});
+	}
 
+	// child will affect the current stock id
     handleStockIdChange = (newStockId: number) => {
-    	console.log("Chal gaya bhai apna with value", newStockId);
-    	this.setState({
-    		stockId: newStockId
-    	});
+    	this.setState(prevState => {
+			return {
+				currentStockId: newStockId,
+				currentPrice: prevState.stockPricesMap[newStockId],
+			}
+		});
     };
 
-    render(){
-        return(
+    render() {
+        return (
 			<div id="trading-terminal" className="main-container ui stackable grid pusher">
 				<div className="row" id="top_bar">
-					<div id="search-bar" className="">
-						<SearchBar stockDetails={stockDetails} handleStockIdCallback={this.handleStockIdChange} defaultStock={this.state.stockId}/>
+					<div id="search-bar">
+						<SearchBar
+							stockBriefInfoMap={this.props.stockBriefInfoMap}
+							stockPricesMap={this.state.stockPricesMap}
+							handleStockIdCallback={this.handleStockIdChange}
+							defaultStock={this.state.currentStockId} />
+					</div>
+					<div id="current-price-container" className="left floated">
+						<b>Current price: {this.state.currentPrice}</b>
 					</div>
 
 					<div id="notif-component">
@@ -86,15 +93,18 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 				</div>
 				<div className="row">
 					<div id="order-book-container" className="six wide column box">
-						<OrderBook stockId={this.state.stockId} />
+						<OrderBook stockId={this.state.currentStockId} />
 					</div>
 
 					<div id="charts-container" className="ten wide column box">
-						<Charts stockId={this.state.stockId} />
+						<Charts stockId={this.state.currentStockId} />
 					</div>
 
 					<div id="place-order-box-container" className="six wide column box">
-						<PlaceOrderBox stockId={this.state.stockId} currentPrice={100} sessionMd={this.props.sessionMd}/>
+						<PlaceOrderBox
+							stockId={this.state.currentStockId}
+							currentPrice={this.state.currentPrice}
+							sessionMd={this.props.sessionMd} />
 					</div>
 
 					<div id="open-orders-container" className="ten wide column box">
