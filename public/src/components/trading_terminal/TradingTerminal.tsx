@@ -93,7 +93,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 				</div>
 				<div className="row">
 					<div id="order-book-container" className="six wide column box">
-						<OrderBook stockId={this.state.currentStockId} />
+						<OrderBook stockId={this.state.currentStockId} sessionMd={this.props.sessionMd} />
 					</div>
 
 					<div id="charts-container" className="ten wide column box">

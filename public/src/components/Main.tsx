@@ -4,10 +4,13 @@ import { Notification } from "./common/Notification";
 import { TradingTerminal, StockBriefInfo } from "./trading_terminal/TradingTerminal";
 import { SearchBar } from "./trading_terminal/SearchBar"
 import { NotFound } from "./NotFound";
-import { subscribe } from "../streamsutil";
+
 import { Metadata } from "grpc-web-client";
-import { DalalStreamService } from "../../proto_build/DalalMessage_pb_service";
+import { DalalActionService, DalalStreamService } from "../../proto_build/DalalMessage_pb_service";
+import { GetNotificationsRequest } from "../../proto_build/actions/GetNotifications_pb";
 import { DataStreamType } from "../../proto_build/datastreams/Subscribe_pb";
+import { subscribe } from "../streamsutil";
+
 import { User as User_pb } from "../../proto_build/models/User_pb";
 import { Stock as Stock_pb } from "../../proto_build/models/Stock_pb";
 import { Notification as Notification_pb } from "../../proto_build/models/Notification_pb";
@@ -73,6 +76,20 @@ export class Main extends React.Component<MainProps, MainState> {
 	handleNotificationsStream = async () => {
 		const sessionMd = this.props.sessionMd;
 
+		// get old notifications
+		const notifReq = new GetNotificationsRequest();
+		notifReq.setCount(10);
+		try {
+			const notifs = await DalalActionService.getNotifications(notifReq, sessionMd);
+			this.setState({
+				notifications: notifs.getNotificationsList()
+			});
+		} catch(e) {
+			alert("error getting notifs");
+			console.log(e);
+		}
+
+		// subscribe to the news ones
 		const subscriptionId = await subscribe(sessionMd, DataStreamType.NOTIFICATIONS);
 		const stream = DalalStreamService.getNotificationUpdates(subscriptionId, sessionMd);
 
