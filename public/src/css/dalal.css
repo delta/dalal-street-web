@@ -6,17 +6,23 @@
 	color:#FF6939 !important;
 }
 
-
-#open-orders tbody {
+#open-orders-container tbody {
 	display:block;
-	height:150px;
+	height:118px;
 	overflow:auto;
 }
-#open-orders thead, tbody ,tr {
+#open-orders-container thead, tbody ,tr {
 	display:table;
 	width:100%;
 	table-layout:fixed;/* even columns width , fix width of table too*/
 	text-align: center;
+}
+
+#open-orders-container .no-open-orders {
+	top:45%;
+	position:relative;
+	color:white;
+	font-weight:bold;
 }
 
 #open-orders-container .dimmer, #open-orders-container .segment {

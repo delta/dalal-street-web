@@ -73,7 +73,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 
 		console.log("Received",orderType,orderAction,"order with stockCount =", stockCount,"orderPrice =", orderPrice);
 
-		this.placeOrder(orderAction == "buy", orderType,  orderPrice, stockCount);
+		this.placeOrder(orderAction == "sell", orderType,  orderPrice, stockCount);
 		stockInputField.value = "";
 		if (priceInputField) {
 			priceInputField.value = "";

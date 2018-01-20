@@ -108,7 +108,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					</div>
 
 					<div id="open-orders-container" className="ten wide column box">
-						<OpenOrders sessionMd={this.props.sessionMd} />
+						<OpenOrders sessionMd={this.props.sessionMd} stockBriefInfoMap={this.props.stockBriefInfoMap} />
 					</div>
 				</div>
 			</div>
