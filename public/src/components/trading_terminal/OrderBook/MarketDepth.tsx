@@ -60,10 +60,10 @@ export class MarketDepth extends React.Component<MarketDepthProps, {}> {
         for (let i=0; i<l; i++) {
                 buyRows.push(
                     <tr>
-                        <td className="volume"><strong>{typeof(bidArray[i].volume) == "undefined" ? bidArray[i].volume : ''}</strong></td>
-                        <td className="price green"><strong>{typeof(bidArray[i].price) == "undefined" ? bidArray[i].price : ''}</strong></td>
-                        <td className="volume"><strong>{typeof(askArray[i].volume) == "undefined" ? askArray[i].volume : ''}</strong></td>
-                        <td className="price red"><strong>{typeof(askArray[i].price) == "undefined" ? askArray[i].price : ''}</strong></td>
+                        <td className="volume"><strong>{typeof(bidArray[i]) != "undefined" ? bidArray[i].volume : ''}</strong></td>
+                        <td className="price green"><strong>{typeof(bidArray[i]) != "undefined" ? bidArray[i].price : ''}</strong></td>
+                        <td className="volume"><strong>{typeof(askArray[i]) != "undefined" ? askArray[i].volume : ''}</strong></td>
+                        <td className="price red"><strong>{typeof(askArray[i]) != "undefined" ? askArray[i].price : ''}</strong></td>
                     </tr>
                 );
         }
