@@ -19,6 +19,11 @@
 	text-align: center;
 }
 
+#open-orders-container .dimmer, #open-orders-container .segment {
+	min-height: 135px;
+	background: #1B1C1D !important;
+}
+
 .ui.pointing.secondary.menu > a.item{
 	color:#888e94 !important;
 }
