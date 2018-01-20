@@ -1,5 +1,5 @@
 import * as React from "react";
-import { MarketDepth } from "./MarketDepth"
+import { MarketDepth } from "../OrderBook/MarketDepth";
 import { TradingHistory, Trade } from "./TradingHistory";
 import { Fragment } from "react";
 
@@ -17,18 +17,25 @@ export interface OrderBookProps {
 }
 
 interface OrderBookState {
-	askDepth: { [index:number]: number }
-	bidDepth: { [index:number]: number }
+	askDepth: { [index:number]: number },
+	bidDepth: { [index:number]: number },
 	latestTrades: Trade[]
 }
 
 export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 	constructor(props: OrderBookProps) {
 		super(props);
+		this.state = {
+			askDepth: {},
+			bidDepth: {},
+			latestTrades: [],
+		}
 	}
 
 	componentDidMount() {
+		alert("hi");
 		$("#orderbook-menu .item").tab();
+		this.handleMarketDepthStream();
 	}
 
 	handleMarketDepthStream = async () => {
@@ -39,10 +46,11 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 		const stream = DalalStreamService.getMarketDepthUpdates(subscriptionId, sessionMd);
 
 		for await (const update of stream) {
+			console.log("got market depth update", update);
 			// is it the first update?
 			if (update.getAskDepthMap().toArray().length) {
-				const askDepth: { [index:number]: number } = {};
-				const bidDepth: { [index:number]: number } = {};
+				const askDepth: { [index:string]: number } = {};
+				const bidDepth: { [index:string]: number } = {};
 
 				update.getAskDepthMap().forEach((volume, price) => askDepth[price] = volume);
 				update.getBidDepthMap().forEach((volume, price) => bidDepth[price] = volume);

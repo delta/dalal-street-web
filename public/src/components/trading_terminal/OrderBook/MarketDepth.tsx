@@ -6,6 +6,15 @@ export interface MarketDepthProps {
     bidDepth: { [index:number]: number }
 }
 
+interface OpenOrdersState {
+    isLoading: boolean,
+}
+
+export interface Depth {
+    price: string,
+    volume: number,
+}
+
 type depthEntry = {
     volume: number,
     price: number,
@@ -16,39 +25,47 @@ export class MarketDepth extends React.Component<MarketDepthProps, {}> {
         super(props);
     }
     componentWillMount() {
-        const buys: depthEntry[] = [];
-        const sells: depthEntry[] = [];
-
-        for(let i = 0; i < 12; i++) {
-            buys.push({
-                volume: Math.floor(Math.random()*100),
-                price: Math.floor(Math.random()*1000),
-            });
-            sells.push({
-                volume: Math.floor(Math.random()*100),
-                price: Math.floor(Math.random()*1000),
-            });
-        }
-
         this.setState({
-            buys,
-            sells,
-        });
+            isLoading: true
+		});
     }
 	render() {
         const buyRows: any[] = [];
-        //const sellRows: any[] = [];
-        const state = this.state as marketDepthState;
+        const askDepth = this.props.askDepth;
+        const bidDepth = this.props.bidDepth;
 
-        for (let i = 0; i < 12; i++) {
-            buyRows.push(
-                <tr>
-                    <td className="volume"><strong>{state.buys[i].volume}</strong></td>
-                    <td className="price green"><strong>{state.buys[i].price}</strong></td>
-                    <td className="volume"><strong>{state.sells[i].volume}</strong></td>
-                    <td className="price red"><strong>{state.sells[i].price}</strong></td>
-                </tr>
-            );
+        const askArray: Depth[] = [];
+        const bidArray: Depth[] = [];
+
+        for (let askKey in askDepth){
+            let tempDepth = {
+                price: askKey,
+                volume: askDepth[askKey],
+            }
+
+            askArray.push(tempDepth);
+        }
+        
+        for (let bidKey in bidDepth){
+            let tempDepth = {
+                price: bidKey,
+                volume: bidDepth[bidKey],
+            }
+
+            bidArray.push(tempDepth);
+        }
+
+        let l = bidArray.length > askArray.length ? bidArray.length : askArray.length;
+
+        for (let i=0; i<l; i++) {
+                buyRows.push(
+                    <tr>
+                        <td className="volume"><strong>{typeof(bidArray[i].volume) == "undefined" ? bidArray[i].volume : ''}</strong></td>
+                        <td className="price green"><strong>{typeof(bidArray[i].price) == "undefined" ? bidArray[i].price : ''}</strong></td>
+                        <td className="volume"><strong>{typeof(askArray[i].volume) == "undefined" ? askArray[i].volume : ''}</strong></td>
+                        <td className="price red"><strong>{typeof(askArray[i].price) == "undefined" ? askArray[i].price : ''}</strong></td>
+                    </tr>
+                );
         }
 
 		return (
