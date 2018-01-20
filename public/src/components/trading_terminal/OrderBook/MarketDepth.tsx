@@ -1,17 +1,14 @@
 import * as React from "react";
 
 export interface MarketDepthProps {
-	stockId: number
+    stockId: number
+    askDepth: { [index:number]: number }
+    bidDepth: { [index:number]: number }
 }
 
 type depthEntry = {
     volume: number,
     price: number,
-};
-
-interface marketDepthState {
-    buys: depthEntry[],
-    sells: depthEntry[],
 };
 
 export class MarketDepth extends React.Component<MarketDepthProps, {}> {

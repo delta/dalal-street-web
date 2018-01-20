@@ -1,5 +1,11 @@
 import * as React from "react";
 
+export interface Trade {
+	tradePrice: number,
+	tradeQuantity: number,
+	tradeTime: string
+}
+
 export interface TradingHistoryProps {
 	stockId: number
 }
