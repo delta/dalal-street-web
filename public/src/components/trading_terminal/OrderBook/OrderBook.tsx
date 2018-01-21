@@ -33,7 +33,7 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 	}
 
 	componentDidMount() {
-		alert("hi");
+		// alert("hi");
 		$("#orderbook-menu .item").tab();
 		this.handleMarketDepthStream();
 	}
@@ -48,14 +48,16 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 		for await (const update of stream) {
 			console.log("got market depth update", update);
 			// is it the first update?
-			if (update.getAskDepthMap().toArray().length) {
+			if (update.getAskDepthMap().toArray().length ||
+				update.getBidDepthMap().toArray().length ||
+				update.getLatestTradesList().length) {
 				const askDepth: { [index:string]: number } = {};
 				const bidDepth: { [index:string]: number } = {};
 
 				update.getAskDepthMap().forEach((volume, price) => askDepth[price] = volume);
 				update.getBidDepthMap().forEach((volume, price) => bidDepth[price] = volume);
 
-				const latestTrades = update.getLatestTradesList().map(t => {
+				const latestTrades = update.getLatestTradesList().reverse().map(t => {
 					return {
 						tradePrice: t.getTradePrice(),
 						tradeQuantity: t.getTradeQuantity(),
@@ -81,14 +83,16 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 
 			askDepthDiff.forEach((volume, price) => {
 				if (!oldAskDepth[price]) oldAskDepth[price] = 0;
-				if (volume == 0) delete oldAskDepth[price];
-				else 			 oldAskDepth[price] += volume;
+				oldAskDepth[price] += volume;
+				if (volume <= 0)
+					delete oldAskDepth[price];
 			});
 
 			bidDepthDiff.forEach((volume, price) => {
 				if (!oldBidDepth[price]) oldBidDepth[price] = 0;
-				if (volume == 0) delete oldBidDepth[price];
-				else 			 oldBidDepth[price] += volume;
+				oldBidDepth[price] += volume;
+				if (volume <= 0)
+					delete oldBidDepth[price];
 			});
 
 			for (const t of latestTradesDiff) {
