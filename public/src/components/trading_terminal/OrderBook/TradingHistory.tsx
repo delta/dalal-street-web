@@ -12,27 +12,23 @@ export interface TradingHistoryProps {
 	latestTrades: Trade[],
 }
 
+function formatTime(time: string) {
+	const d = new Date(time);
+	return d.toLocaleTimeString();
+}
+
 export class TradingHistory extends React.Component<TradingHistoryProps, {}> {
 	render() {
 		let latestTrades = this.props.latestTrades;
 		let history: any[] = [];
-		if (latestTrades.length) {
-			history.push(
-				<tr>
-					<td className="volume"><strong>{latestTrades[0].tradeQuantity}</strong></td>
-					<td className="profit"><strong>{latestTrades[0].tradePrice} ⬈</strong></td>
-					<td>{latestTrades[0].tradeTime}</td>
-				</tr>
-			);
-		}
 
 		let lastDiff: string = "profit";
-		for(let i=1; i < latestTrades.length; i++) {
+		for(let i=0; i < latestTrades.length - 1; i++) {
 			let diff: string;
-			if (latestTrades[i].tradePrice > latestTrades[i-1].tradePrice) {
+			if (latestTrades[i].tradePrice > latestTrades[i+1].tradePrice) {
 				diff = "profit";
 			}
-			else if (latestTrades[i].tradePrice < latestTrades[i-1].tradePrice) {
+			else if (latestTrades[i].tradePrice < latestTrades[i+1].tradePrice) {
 				diff = "loss";
 			}
 			else {
@@ -44,7 +40,17 @@ export class TradingHistory extends React.Component<TradingHistoryProps, {}> {
 				<tr>
 					<td className="volume"><strong>{latestTrades[i].tradeQuantity}</strong></td>
 					<td className={diff}><strong>{latestTrades[i].tradePrice} {diff == "profit" ? "⬈" : "⬊"}</strong></td>
-					<td>{latestTrades[i]}</td>
+					<td>{formatTime(latestTrades[i].tradeTime)}</td>
+				</tr>
+			);
+		}
+
+		if (latestTrades.length - 1 >= 0) {
+			history.push(
+				<tr>
+					<td className="volume"><strong>{latestTrades[latestTrades.length-1].tradeQuantity}</strong></td>
+					<td className="profit"><strong>{latestTrades[latestTrades.length-1].tradePrice} ⬈</strong></td>
+					<td>{formatTime(latestTrades[latestTrades.length-1].tradeTime)}</td>
 				</tr>
 			);
 		}
@@ -56,7 +62,7 @@ export class TradingHistory extends React.Component<TradingHistoryProps, {}> {
 						<tr>
 							<th>Volume</th>
 							<th>Price</th>
-							<th>Date</th>
+							<th>Time</th>
 						</tr>
 					</thead>
 					<tbody>
