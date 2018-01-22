@@ -2,12 +2,13 @@ import * as React from "react";
 import { MarketDepth } from "../OrderBook/MarketDepth";
 import { TradingHistory, Trade } from "./TradingHistory";
 import { Fragment } from "react";
-
 import { Metadata } from "grpc-web-client";
 import { DalalStreamService } from "../../../../proto_build/DalalMessage_pb_service";
-import { DataStreamType } from "../../../../proto_build/datastreams/Subscribe_pb";
+import { DataStreamType, SubscriptionId, SubscribeRequest } from "../../../../proto_build/datastreams/Subscribe_pb";
 import { MarketDepthUpdate } from "../../../../proto_build/datastreams/MarketDepth_pb";
-import { subscribe } from "../../../streamsutil";
+import { subscribe, unsubscribe} from "../../../streamsutil";
+
+import { }  from "../../../../proto_build/"
 
 declare var $: any;
 
@@ -19,7 +20,8 @@ export interface OrderBookProps {
 interface OrderBookState {
 	askDepth: { [index:number]: number },
 	bidDepth: { [index:number]: number },
-	latestTrades: Trade[]
+	latestTrades: Trade[],
+	subscriptionId: SubscriptionId,
 }
 
 export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
@@ -29,20 +31,31 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 			askDepth: {},
 			bidDepth: {},
 			latestTrades: [],
+			subscriptionId: new SubscriptionId,
 		}
 	}
 
-	componentDidMount() {
-		// alert("hi");
-		$("#orderbook-menu .item").tab();
-		this.handleMarketDepthStream();
+	async componentWillReceiveProps(nextProps: OrderBookProps) {
+		if (nextProps.stockId == this.props.stockId) {
+			return;
+		}
+
+		await unsubscribe(this.props.sessionMd, this.state.subscriptionId);
+		this.handleMarketDepthStream(this.props.sessionMd, nextProps.stockId);
 	}
 
-	handleMarketDepthStream = async () => {
-		const sessionMd = this.props.sessionMd;
-		const stockId = this.props.stockId;
+	componentDidMount() {
+		$("#orderbook-menu .item").tab();
+		this.handleMarketDepthStream(this.props.sessionMd, this.props.stockId);
+	}
 
+	handleMarketDepthStream = async (sessionMd:Metadata, stockId: number, ) => {
 		const subscriptionId = await subscribe(sessionMd, DataStreamType.MARKET_DEPTH, stockId + "");
+
+		this.setState({
+			subscriptionId: subscriptionId,
+		});
+
 		const stream = DalalStreamService.getMarketDepthUpdates(subscriptionId, sessionMd);
 
 		for await (const update of stream) {
@@ -108,7 +121,7 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 				bidDepth: oldBidDepth,
 				latestTrades: oldLatestTrades.slice(0, 20),
 			});
-
+	
 			console.log("Market Depth update", update.toObject());
 		}
 	};

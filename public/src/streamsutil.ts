@@ -1,6 +1,6 @@
 import {Metadata} from "grpc-web-client";
 import {DalalActionService, DalalStreamService} from "../proto_build/DalalMessage_pb_service";
-import {DataStreamType, SubscriptionId, SubscribeRequest, SubscribeResponse} from "../proto_build/datastreams/Subscribe_pb";
+import {DataStreamType, SubscriptionId, SubscribeRequest, SubscribeResponse, UnsubscribeRequest, UnsubscribeResponse} from "../proto_build/datastreams/Subscribe_pb";
 
 export async function subscribe(sessionMd: Metadata, dst: DataStreamType, dsId?: string) {
     const subreq = new SubscribeRequest();
@@ -15,5 +15,15 @@ export async function subscribe(sessionMd: Metadata, dst: DataStreamType, dsId?:
     }
 
     return subres.getSubscriptionId() as SubscriptionId;
+}
+
+export async function unsubscribe(sessionMd: Metadata, subscriptionId: SubscriptionId) {
+    const unsubreq = new UnsubscribeRequest();
+    unsubreq.setSubscriptionId(subscriptionId);
+
+    const unsubres = await DalalStreamService.unsubscribe(unsubreq, sessionMd);
+    if (unsubres.getStatusCode() != UnsubscribeResponse.StatusCode.OK) {
+        throw new Error("Unable to unsubscribe");
+    }
 }
 
