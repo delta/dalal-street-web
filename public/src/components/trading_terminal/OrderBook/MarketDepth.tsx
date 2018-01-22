@@ -29,6 +29,7 @@ export class MarketDepth extends React.Component<MarketDepthProps, {}> {
             isLoading: true
 		});
     }
+
 	render() {
         const buyRows: any[] = [];
         const askDepth = this.props.askDepth;
@@ -55,11 +56,19 @@ export class MarketDepth extends React.Component<MarketDepthProps, {}> {
             bidArray.push(tempDepth);
         }
 
+        askArray.sort((a:Depth, b:Depth) => {
+            return parseInt(a.price) - parseInt(b.price);
+        });
+
+        bidArray.sort((a:Depth, b:Depth) => {
+            return parseInt(b.price) - parseInt(a.price);
+        });
+
         let l = bidArray.length > askArray.length ? bidArray.length : askArray.length;
 
-        for (let i=0; i<l; i++) {
+        for (let i=0; i<13; i++) {
                 buyRows.push(
-                    <tr>
+                    <tr key={i}>
                         <td className="volume"><strong>{typeof(bidArray[i]) != "undefined" ? bidArray[i].volume : ''}</strong></td>
                         <td className="price green"><strong>{typeof(bidArray[i]) != "undefined" ? bidArray[i].price : ''}</strong></td>
                         <td className="volume"><strong>{typeof(askArray[i]) != "undefined" ? askArray[i].volume : ''}</strong></td>
