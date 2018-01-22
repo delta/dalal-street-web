@@ -28,8 +28,8 @@ interface AppState {
 export class App extends React.Component<{}, AppState> {
 	constructor(props: AppState) {
 		super(props);
-		DalalActionService.serviceURL = "https://139.59.85.232";
-		DalalStreamService.serviceURL = "https://139.59.85.232";
+		DalalActionService.serviceURL = "https://139.59.47.250";
+		DalalStreamService.serviceURL = "https://139.59.47.250";
 
 		this.state = {
 			isLoading: false,
