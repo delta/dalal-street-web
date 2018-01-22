@@ -26,4 +26,3 @@ export async function unsubscribe(sessionMd: Metadata, subscriptionId: Subscript
         throw new Error("Unable to unsubscribe");
     }
 }
-

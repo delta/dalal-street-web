@@ -198,13 +198,16 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 		const stockInfo = this.props.stockBriefInfoMap;
 		let orderElements: any[] = [];
 
+		// counter is used to set key
+		let counter = 0;
 		for (const askId in openAsks) {
 			const stockId = openAsks[askId].getStockId();
 			const orderType = orderTypeToStr(openAsks[askId].getOrderType());
 			const price = orderType == "Market" ? "N/A" : openAsks[askId].getPrice();
 
+			counter = counter + 1;
 			orderElements.push(
-				<tr>
+				<tr key={counter}>
 					<td className="red volume"><strong>{stockInfo[stockId].fullName}</strong></td>
 					<td className="red volume"><strong>Sell/{orderType}</strong></td>
 					<td className="red volume"><strong>{openAsks[askId].getStockQuantity()}</strong></td>
@@ -218,9 +221,10 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 			const stockId = openBids[bidId].getStockId();
 			const orderType = orderTypeToStr(openBids[bidId].getOrderType());
 			const price = orderType == "Market" ? "N/A" : openBids[bidId].getPrice();
-			
+
+			counter = counter + 1;
 			orderElements.push(
-				<tr>
+				<tr key={counter}>
 					<td className="green volume"><strong>{stockInfo[stockId].fullName}</strong></td>
 					<td className="green volume"><strong>Buy/{orderTypeToStr(openBids[bidId].getOrderType())}</strong></td>
 					<td className="green volume"><strong>{openBids[bidId].getStockQuantity()}</strong></td>
@@ -229,7 +233,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 				</tr>
 			);
 		}
-		
+
 		return (
 			<Fragment>
 				<div className="ui pointing secondary menu">

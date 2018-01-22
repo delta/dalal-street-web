@@ -8,8 +8,6 @@ import { DataStreamType, SubscriptionId, SubscribeRequest } from "../../../../pr
 import { MarketDepthUpdate } from "../../../../proto_build/datastreams/MarketDepth_pb";
 import { subscribe, unsubscribe} from "../../../streamsutil";
 
-import { }  from "../../../../proto_build/"
-
 declare var $: any;
 
 export interface OrderBookProps {
@@ -40,7 +38,7 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 			return;
 		}
 
-		await unsubscribe(this.props.sessionMd, this.state.subscriptionId);
+		unsubscribe(this.props.sessionMd, this.state.subscriptionId);
 		this.handleMarketDepthStream(this.props.sessionMd, nextProps.stockId);
 	}
 
@@ -49,7 +47,7 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 		this.handleMarketDepthStream(this.props.sessionMd, this.props.stockId);
 	}
 
-	handleMarketDepthStream = async (sessionMd:Metadata, stockId: number, ) => {
+	handleMarketDepthStream = async (sessionMd: Metadata, stockId: number) => {
 		const subscriptionId = await subscribe(sessionMd, DataStreamType.MARKET_DEPTH, stockId + "");
 
 		this.setState({
@@ -57,13 +55,12 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 		});
 
 		const stream = DalalStreamService.getMarketDepthUpdates(subscriptionId, sessionMd);
-
+		let isFirstUpdate = true;
 		for await (const update of stream) {
-			console.log("got market depth update", update);
+			console.log("got market depth update", update.toObject());
 			// is it the first update?
-			if (update.getAskDepthMap().toArray().length ||
-				update.getBidDepthMap().toArray().length ||
-				update.getLatestTradesList().length) {
+			if (isFirstUpdate) {
+				isFirstUpdate = false;
 				const askDepth: { [index:string]: number } = {};
 				const bidDepth: { [index:string]: number } = {};
 
