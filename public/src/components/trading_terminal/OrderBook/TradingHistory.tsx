@@ -38,6 +38,9 @@ export class TradingHistory extends React.Component<TradingHistoryProps, {}> {
 				}
 				lastDiff = diff;
 			}
+			else if (i == latestTrades.length - 1) {
+				diff = "profit";
+			}
 
 			let tradePrice = typeof(latestTrades[i]) == "undefined" ? "" : latestTrades[i].tradePrice;
 			let tradePriceDiff = (diff == "profit" ? "⬈" : diff == "loss" ? "⬊" : "");
@@ -61,7 +64,6 @@ export class TradingHistory extends React.Component<TradingHistoryProps, {}> {
 		// 	);
 		// }
 
-		console.log("hi");
 		console.log(this.props.latestTrades);
 
 

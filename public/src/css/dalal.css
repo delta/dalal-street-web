@@ -292,10 +292,54 @@ h3.panel-header {
 #market-depth table thead:first-child th:first-child,
 #market-depth table thead:nth-child(2) th:nth-child(2),
 #market-depth table td:nth-child(2) {
-	border-right: 1px solid white !important;
+	border-right: 1px solid grey !important;
 }
 
 #current-price-container {
 	line-height: 50px;
 	margin: 0 30px;
+}
+
+.leaderboard-pagination {
+    display: inline-block;
+	margin: 0 auto;
+	list-style: none;
+	background-color: #444;
+	text-align: center;
+	padding: 0;
+}
+
+.leaderboard-pagination li {
+	display: inline-block;
+	cursor: pointer;
+	line-height: 40px;
+	height: 40px;
+	width: 40px;
+}
+
+.leaderboard-pagination a {
+	text-decoration: none;
+	color: #fff;
+	display: block;
+	transition: .3s background-color;
+}
+
+.leaderboard-pagination a:not(.break-me):hover {
+	background-color: #fff;
+	color: #444;
+}
+
+.leaderboard-pagination a.active-leaderboard-page {
+	background-color: #fff;
+	color: #444;
+	cursor: default;
+}
+
+.leaderboard-pagination .break a {
+    cursor: default;
+}
+
+#leaderboard-container table tr th, #leaderboard-container table tr td {
+	height: 2.5em;
+	font-size: 1.1em;
 }
