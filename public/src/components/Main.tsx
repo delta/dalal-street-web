@@ -5,6 +5,8 @@ import { TradingTerminal, StockBriefInfo } from "./trading_terminal/TradingTermi
 import { SearchBar } from "./trading_terminal/SearchBar"
 import { NotFound } from "./NotFound";
 
+import { Leaderboard } from "./leaderboard/Leaderboard";
+
 import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService } from "../../proto_build/DalalMessage_pb_service";
 import { GetNotificationsRequest } from "../../proto_build/actions/GetNotifications_pb";
@@ -170,11 +172,22 @@ export class Main extends React.Component<MainProps, MainState> {
 		);
 	}
 
+	getWrappedLeaderboard = () => {
+		return (
+			<Leaderboard
+				sessionMd={this.props.sessionMd}
+				leaderboardCount={this.props.constantsMap['LEADERBOARD_COUNT']}
+				notifications={this.state.notifications}
+			/>
+		);
+	}
+
 	render() {
 		return (
 				<Switch>
 					<Route exact path="/trade" render={this.getWrappedTradingTerminal} />
 					{/* <Route exact path="/portfolio" component={Portfolio} /> */}
+					<Route exact path="/leaderboard" render={this.getWrappedLeaderboard} />
 					<Route component={NotFound} />
 				</Switch>
 		);
