@@ -40,7 +40,7 @@ export class Candlestick extends React.Component<CandlestickProps, CandlestickSt
 	componentDidMount() {
 		const cvs = document.getElementById("candles-chart") as HTMLCanvasElement;
 		const ctx = cvs!.getContext('2d')!;
-		const data = this.state.data;
+		const data = this.props.data;
 
 		this.chartElem = new Chart(ctx, {
 			type: 'candlestick',

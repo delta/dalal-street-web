@@ -3,7 +3,7 @@ import { MarketDepth } from "../OrderBook/MarketDepth";
 import { TradingHistory, Trade } from "./TradingHistory";
 import { Fragment } from "react";
 import { Metadata } from "grpc-web-client";
-import { DalalStreamService } from "../../../../proto_build/DalalMessage_pb_service";
+import { DalalStreamService} from "../../../../proto_build/DalalMessage_pb_service";
 import { DataStreamType, SubscriptionId, SubscribeRequest } from "../../../../proto_build/datastreams/Subscribe_pb";
 import { MarketDepthUpdate } from "../../../../proto_build/datastreams/MarketDepth_pb";
 import { subscribe, unsubscribe} from "../../../streamsutil";

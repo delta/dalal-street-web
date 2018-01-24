@@ -64,11 +64,7 @@ export class TradingHistory extends React.Component<TradingHistoryProps, {}> {
 		// 	);
 		// }
 
-		console.log(this.props.latestTrades);
-
-
 		return (
-
 			<div className="ui tab inverted" data-tab="trading-history" id="trading-history">
 				<table className="ui inverted table unstackable">
 					<thead>

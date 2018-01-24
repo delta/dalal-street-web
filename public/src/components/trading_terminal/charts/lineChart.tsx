@@ -34,12 +34,14 @@ export class LineChart extends React.Component<LineChartProps, LineChartState> {
     }
 
 	componentWillReceiveProps(nextProps: LineChartProps) {
-        // update the data and the chart, don't render the thing again pls
-        this.chartElem.data.datasets = [{
-			data: nextProps.data.map(this.ohlcToOnlyC),
-			fractionalDigitsCount: 2,
-		}];
-		this.chartElem.update();
+		// update the data and the chart, don't render the thing again pls
+		if (nextProps.data) {
+			this.chartElem.data.datasets = [{
+				data: nextProps.data.map(this.ohlcToOnlyC),
+				fractionalDigitsCount: 2,
+			}];
+			this.chartElem.update();
+		}
     }
 
 	componentDidMount() {

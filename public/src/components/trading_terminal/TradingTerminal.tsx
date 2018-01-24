@@ -48,7 +48,8 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 			currentPrice: this.props.stockPricesMap[currentStockId],
 			userCash: this.props.userCash,
 			stockPricesMap: this.props.stockPricesMap,
-        };
+		};
+		
 	}
 
 	// parent will update the stock prices or cash
@@ -97,7 +98,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					</div>
 
 					<div id="charts-container" className="ten wide column box">
-						<Charts stockId={this.state.currentStockId} />
+						<Charts stockId={this.state.currentStockId} sessionMd={this.props.sessionMd}/>
 					</div>
 
 					<div id="place-order-box-container" className="six wide column box">
