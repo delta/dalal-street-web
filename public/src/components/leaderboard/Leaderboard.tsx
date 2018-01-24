@@ -68,10 +68,9 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
             <tr key={index}>
                 <td><strong>{entry.getRank()}</strong></td>
                 <td><strong>{entry.getUserName()}</strong></td>
-                <td className="green"><strong>{entry.getCash()}</strong></td>
-                <td className="green"><strong>{entry.getStockWorth()}</strong></td>
-                <td className="red"><strong>{entry.getDebt()}</strong></td>
-                <td><strong>{entry.getTotalWorth()}</strong></td>                    
+                <td><strong>{entry.getCash()}</strong></td>
+                <td className={entry.getStockWorth() >= 0 ? "green" : "red"}><strong>{entry.getStockWorth()}</strong></td>
+                <td className="green"><strong>{entry.getTotalWorth()}</strong></td>                    
             </tr>
         ));
 
@@ -93,13 +92,13 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                         </div>
                     </h2>
                 </div>
-                <div className="row">
-                    <div id="my-rank" className="ui header inverted">
+                <div id="my-rank" className="row fourteen wide column">
+                    <div className="ui header inverted">
                         <i className="star icon"></i>
                         Your rank : {state.userRank}
                     </div>
                 </div>
-                <div className="row">
+                <div className="row fourteen wide column centered">
                     <table className="ui inverted table unstackable">
                         <thead>
                             <tr>
@@ -107,7 +106,6 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                                 <th>Username</th>
                                 <th>Cash (₹)</th>
                                 <th>StockWorth (₹)</th>
-                                <th>Debt (₹)</th>
                                 <th>Net Worth (₹)</th>
                             </tr>
                         </thead>
