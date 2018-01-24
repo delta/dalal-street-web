@@ -300,6 +300,12 @@ h3.panel-header {
 	margin: 0 30px;
 }
 
+/* Leaderboard styling starts */
+
+#leaderboard-container {
+	min-width: 600px;
+}
+
 .leaderboard-pagination {
     display: inline-block;
 	margin: 0 auto;
@@ -348,5 +354,10 @@ h3.panel-header {
 }
 
 #my-rank {
-	margin-left: 10px;
+	margin: 0 auto;
+	box-sizing: border-box;
+	padding-left: 10px;
+	padding-bottom: 5px;
 }
+
+/* Leaderboard styling ends */
