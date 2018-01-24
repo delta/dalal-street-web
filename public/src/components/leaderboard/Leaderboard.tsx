@@ -56,7 +56,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
 
     handlePageChange = (data: any) => {
         const startPage = data.selected as number;
-        const offset = (startPage - 1) * this.props.leaderboardCount + 1;
+        const offset = startPage * this.props.leaderboardCount + 1;
 
         this.getLeaderboard(offset);
     }
@@ -94,6 +94,12 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                     </h2>
                 </div>
                 <div className="row">
+                    <div id="my-rank" className="ui header inverted">
+                        <i className="star icon"></i>
+                        Your rank : {state.userRank}
+                    </div>
+                </div>
+                <div className="row">
                     <table className="ui inverted table unstackable">
                         <thead>
                             <tr>
@@ -109,6 +115,8 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                             {leaderboardEntries}
                         </tbody>
                     </table>
+                </div>
+                <div className="row">
                     <ReactPaginate
                         previousLabel={"<"}
                         nextLabel={">"}
