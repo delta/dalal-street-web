@@ -1,7 +1,8 @@
 import * as React from "react";
 
 export interface DashboardProps {
-
+    userCash: number,
+    userTotal: number,
 }
 
 interface DashboardState {
