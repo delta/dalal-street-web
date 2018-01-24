@@ -10,8 +10,8 @@ import { Leaderboard } from "./leaderboard/Leaderboard";
 import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService } from "../../proto_build/DalalMessage_pb_service";
 import { GetNotificationsRequest } from "../../proto_build/actions/GetNotifications_pb";
-import { DataStreamType } from "../../proto_build/datastreams/Subscribe_pb";
-import { subscribe } from "../streamsutil";
+import { DataStreamType, SubscriptionId } from "../../proto_build/datastreams/Subscribe_pb";
+import { subscribe, unsubscribe } from "../streamsutil";
 
 import { User as User_pb } from "../../proto_build/models/User_pb";
 import { Stock as Stock_pb } from "../../proto_build/models/Stock_pb";
@@ -39,6 +39,9 @@ interface MainState {
 	stockDetailsMap: { [index:number]: Stock_pb } // get stock detail for a given stockid
 
 	isMarketOpen: 				boolean
+
+	notifSubscriptionId: SubscriptionId
+	stockSubscriptionId: SubscriptionId
 }
 
 // We tried out a couple of ways to pass notification from main
@@ -54,6 +57,8 @@ export class Main extends React.Component<MainProps, MainState> {
 			stocksOwnedMap: this.props.stocksOwnedMap,
 			stockDetailsMap: this.props.stockDetailsMap,
 			isMarketOpen: this.props.isMarketOpen,
+			notifSubscriptionId: new SubscriptionId,
+			stockSubscriptionId: new SubscriptionId,
 		};
 
 		this.handleNotificationsStream();
@@ -95,6 +100,10 @@ export class Main extends React.Component<MainProps, MainState> {
 		const subscriptionId = await subscribe(sessionMd, DataStreamType.NOTIFICATIONS);
 		const stream = DalalStreamService.getNotificationUpdates(subscriptionId, sessionMd);
 
+		this.setState({
+			notifSubscriptionId: subscriptionId,
+		});
+
 		for await (const notifUpdate of stream) {
 			const notif = notifUpdate.getNotification()!;
 			const notifs = this.state.notifications.slice();
@@ -112,6 +121,10 @@ export class Main extends React.Component<MainProps, MainState> {
 
 		const subscriptionId = await subscribe(sessionMd, DataStreamType.STOCK_PRICES);
 		const stream = DalalStreamService.getStockPricesUpdates(subscriptionId, sessionMd);
+
+		this.setState({
+			stockSubscriptionId: subscriptionId,
+		});
 
 		for await (const stockPricesUpdate of stream) {
 			const map = stockPricesUpdate.getPricesMap();
@@ -141,6 +154,11 @@ export class Main extends React.Component<MainProps, MainState> {
 			console.log("Stock prices update", stockPricesUpdate.toObject());
 		}
 	};
+
+	componentWillUnmount() {
+		unsubscribe(this.props.sessionMd, this.state.notifSubscriptionId);
+		unsubscribe(this.props.sessionMd, this.state.stockSubscriptionId);
+	}
 
 	getWrappedTradingTerminal = () => {
 		const stockBriefInfoMap: { [index:number]: StockBriefInfo } = {};

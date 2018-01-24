@@ -47,6 +47,10 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 		this.handleMarketDepthStream(this.props.sessionMd, this.props.stockId);
 	}
 
+	componentWillUnmount() {
+		unsubscribe(this.props.sessionMd, this.state.subscriptionId);
+	}
+
 	handleMarketDepthStream = async (sessionMd: Metadata, stockId: number) => {
 		const subscriptionId = await subscribe(sessionMd, DataStreamType.MARKET_DEPTH, stockId + "");
 
