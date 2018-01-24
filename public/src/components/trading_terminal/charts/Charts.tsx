@@ -7,7 +7,7 @@ import { GetStockHistoryRequest, GetStockHistoryResponse, StockHistoryResolution
 import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService} from "../../../../proto_build/DalalMessage_pb_service";
 import { StockHistoryUpdate } from "../../../../proto_build/datastreams/StockHistory_pb"
-import { subscribe } from "../../../streamsutil";
+import { subscribe, unsubscribe } from "../../../streamsutil";
 import { DataStreamType, SubscriptionId, SubscribeRequest } from "../../../../proto_build/datastreams/Subscribe_pb";
 import * as models_StockHistory_pb from "../../../../proto_build/models/StockHistory_pb";
 
@@ -36,6 +36,7 @@ interface ChartsState {
 	chartType: chartType
 	interval: intervalType
 	data: ohlcPointType[]
+	subscriptionId: SubscriptionId
 }
 
 let intervalTypeToNo: { [index:string]: number} = {
@@ -55,6 +56,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 			chartType: "candlestick",
 			interval: "1min",
 			data: [],
+			subscriptionId: new SubscriptionId,
 		};
 
 		//this.getOldStockHistory();
@@ -86,27 +88,50 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 		})
 	}
 
-	componentWillReceiveProps(nextProps: ChartsProps) {
-		if (nextProps.stockId == this.props.stockId)
-			return;
+	getStockHistoryStream  = async (stockId: number) => {
 		
-		this.getOldStockHistory(nextProps.stockId);
-	} 
-
-	getStockHistoryStream  = async () => {
 		let historyReq = new GetStockHistoryRequest();
-		historyReq.setStockId(this.props.stockId);
+		historyReq.setStockId(stockId);
 		historyReq.setResolution(intervalTypeToNo[this.state.interval]);
 		
 		const subscriptionId = await subscribe(this.props.sessionMd, DataStreamType.STOCK_HISTORY, this.props.stockId + "");
+
+		this.setState({
+			subscriptionId: subscriptionId,
+		})
+
 		const historyStream = DalalStreamService.getStockHistoryUpdates(subscriptionId, this.props.sessionMd);
 
-		let streamIntervalData = this.state.data;
-
+		let streamIntervalData = this.state.data.slice();
+		let temp: ohlcPointType;
 		for await (const update of historyStream) {
-			console.log("got stock history update", update);
+			let newUpdate = update.getStockHistory()!;
+			streamIntervalData.push({
+				o: newUpdate.getOpen(),
+				h: newUpdate.getHigh(),
+				l: newUpdate.getLow(),
+				c: newUpdate.getClose(),
+				t: Date.parse(newUpdate.getCreatedAt()),
+			});
+
+			this.setState({
+				data: streamIntervalData,
+			});
 		}
 	};
+
+	componentWillReceiveProps(nextProps: ChartsProps) {
+		if (nextProps.stockId == this.props.stockId)
+			return;
+
+		unsubscribe(this.props.sessionMd, this.state.subscriptionId);
+		this.getOldStockHistory(nextProps.stockId);
+		this.getStockHistoryStream(nextProps.stockId);
+	}
+
+	componentWillUnmount() {
+		unsubscribe(this.props.sessionMd, this.state.subscriptionId);
+	}
 
 	async componentDidMount() {
 		const that = this;
@@ -124,6 +149,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 		}
 
 		this.getOldStockHistory(this.props.stockId);
+		this.getStockHistoryStream(this.props.stockId);
 	}
 
 	onIntervalChange = (value: intervalType) => {

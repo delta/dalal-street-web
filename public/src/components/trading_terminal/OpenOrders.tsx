@@ -3,8 +3,8 @@ import { Metadata } from "grpc-web-client";
 import { Fragment } from "react";
 import { OrderType } from "../../../proto_build/models/OrderType_pb";
 import { StockBriefInfo } from "./TradingTerminal";
-import { subscribe } from "../../streamsutil";
-import { DataStreamType } from "../../../proto_build/datastreams/Subscribe_pb";
+import { subscribe, unsubscribe } from "../../streamsutil";
+import { DataStreamType, SubscriptionId } from "../../../proto_build/datastreams/Subscribe_pb";
 import { DalalActionService, DalalStreamService } from "../../../proto_build/DalalMessage_pb_service";
 import { GetMyOpenOrdersRequest, GetMyOpenOrdersResponse } from "../../../proto_build/actions/GetMyOrders_pb";
 import { Ask as Ask_pb } from "../../../proto_build/models/Ask_pb";
@@ -31,7 +31,8 @@ export interface OpenOrdersProps {
 interface OpenOrdersState {
 	isLoading: boolean,
 	openAsks: { [index:number]: Ask_pb },
-	openBids: { [index:number]:  Bid_pb }
+	openBids: { [index:number]:  Bid_pb },
+	subscriptionId: SubscriptionId,
 }
 
 export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState> {
@@ -41,6 +42,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 			isLoading: false,
 			openAsks: {},
 			openBids: {},
+			subscriptionId: new SubscriptionId,
 		};
 	}
 
@@ -81,10 +83,18 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 		}
 	};
 
+	componentWillUnmount() {
+		unsubscribe(this.props.sessionMd, this.state.subscriptionId);
+	}
+
 	handleMyOrderUpdates = async () => {
 		const sessionMd = this.props.sessionMd;
 		const subscriptionId = await subscribe(sessionMd, DataStreamType.MY_ORDERS);
 		const stream = DalalStreamService.getMyOrderUpdates(subscriptionId, sessionMd);
+
+		this.setState({
+			subscriptionId: subscriptionId,
+		});
 
 		for await (const myOrderUpdate of stream) {
 			const orderId = myOrderUpdate.getId();
