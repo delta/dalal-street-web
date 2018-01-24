@@ -6,6 +6,7 @@ import { SearchBar } from "./trading_terminal/SearchBar"
 import { NotFound } from "./NotFound";
 
 import { Leaderboard } from "./leaderboard/Leaderboard";
+import { Portfolio } from "./portfolio/Portfolio";
 
 import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService } from "../../proto_build/DalalMessage_pb_service";
@@ -200,11 +201,23 @@ export class Main extends React.Component<MainProps, MainState> {
 		);
 	}
 
+	getWrappedPortfolio = () => {
+		return (
+			<Portfolio
+				sessionMd={this.props.sessionMd}
+				notifications={this.state.notifications}
+				userCash={this.state.userCash}
+				userTotal={this.state.userTotal}
+				transactionCount={this.props.constantsMap['GET_TRANSACTION_COUNT']}
+			/>
+		);
+	}
+
 	render() {
 		return (
 				<Switch>
 					<Route exact path="/trade" render={this.getWrappedTradingTerminal} />
-					{/* <Route exact path="/portfolio" component={Portfolio} /> */}
+					<Route exact path="/portfolio" component={this.getWrappedPortfolio} />
 					<Route exact path="/leaderboard" render={this.getWrappedLeaderboard} />
 					<Route component={NotFound} />
 				</Switch>
