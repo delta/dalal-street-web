@@ -324,14 +324,17 @@ h3.panel-header {
 	transition: .3s background-color;
 }
 
+.leaderboard-pagination li.active-leaderboard-page a {
+	color: #444;
+}
+
 .leaderboard-pagination a:not(.break-me):hover {
 	background-color: #fff;
 	color: #444;
 }
 
-.leaderboard-pagination a.active-leaderboard-page {
+.leaderboard-pagination li.active-leaderboard-page {
 	background-color: #fff;
-	color: #444;
 	cursor: default;
 }
 
@@ -342,4 +345,8 @@ h3.panel-header {
 #leaderboard-container table tr th, #leaderboard-container table tr td {
 	height: 2.5em;
 	font-size: 1.1em;
+}
+
+#my-rank {
+	margin-left: 10px;
 }
