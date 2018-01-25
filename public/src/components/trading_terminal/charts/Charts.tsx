@@ -23,7 +23,7 @@ export interface ChartsProps {
 export interface intervalData {
 	"1min" : ohlcPointType[],
 	"5min" : ohlcPointType[],
-	"10min" : ohlcPointType[],
+	"15min" : ohlcPointType[],
 	"30min": ohlcPointType[],
 	"60min" : ohlcPointType[],
 	"1d": ohlcPointType[],
@@ -42,7 +42,7 @@ interface ChartsState {
 let intervalTypeToNo: { [index:string]: number} = {
 	"1min": 0,
 	"5min": 1,
-	"10min": 2,
+	"15min": 2,
 	"30min": 3,
 	"60min": 4,
 	"1d": 5,
@@ -89,7 +89,6 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 	}
 
 	getStockHistoryStream  = async (stockId: number) => {
-		
 		let historyReq = new GetStockHistoryRequest();
 		historyReq.setStockId(stockId);
 		historyReq.setResolution(intervalTypeToNo[this.state.interval]);
@@ -177,7 +176,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 						<div className="menu">
 							<div className="item">1min</div>
 							<div className="item">5min</div>
-							<div className="item">10min</div>
+							<div className="item">15min</div>
 							<div className="item">30min</div>
 							<div className="item">60min</div>
 							<div className="item">1day</div>
