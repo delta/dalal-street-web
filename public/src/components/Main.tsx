@@ -202,12 +202,26 @@ export class Main extends React.Component<MainProps, MainState> {
 	}
 
 	getWrappedPortfolio = () => {
+		const stockBriefInfoMap: { [index:number]: StockBriefInfo } = {};
+		const stockPricesMap: { [index:number]: number } = {};
+		for (const stockId in this.state.stockDetailsMap) {
+			const stock = this.state.stockDetailsMap[stockId];
+
+			stockBriefInfoMap[stockId] = {
+				id: stock.getId(),
+				shortName: stock.getShortName(),
+				fullName: stock.getFullName(),
+			};
+
+			stockPricesMap[stockId] = stock.getCurrentPrice();
+		}
+
 		return (
 			<Portfolio
 				sessionMd={this.props.sessionMd}
 				notifications={this.state.notifications}
-				userCash={this.state.userCash}
-				userTotal={this.state.userTotal}
+				stockBriefInfoMap={stockBriefInfoMap}
+				stockPricesMap={stockPricesMap}
 				transactionCount={this.props.constantsMap['GET_TRANSACTION_COUNT']}
 			/>
 		);
