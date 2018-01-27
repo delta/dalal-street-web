@@ -235,7 +235,8 @@ export class Main extends React.Component<MainProps, MainState> {
     getWrappedMarket = () => {
 		return (
 			<Market sessionMd={this.props.sessionMd}
-					stockDetailsMap={this.props.stockDetailsMap}
+					stockDetailsMap={this.state.stockDetailsMap}
+					notifications={this.state.notifications}
 			/>
 		);
 	}

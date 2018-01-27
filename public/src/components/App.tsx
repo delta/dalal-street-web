@@ -90,8 +90,8 @@ export class App extends React.Component<{}, AppState> {
 
 	async login(): Promise<LoginResponse> {
 		const loginRequest = new LoginRequest();
-		loginRequest.setEmail("106115021@nitt.edu")
-		loginRequest.setPassword("dalalkeliye")
+		loginRequest.setEmail("106114062@nitt.edu")
+		loginRequest.setPassword("mahpasswordmahlife123")
 	
 		try {
 			const resp = await DalalActionService.login(loginRequest);
