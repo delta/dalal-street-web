@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Fragment } from "react";
 import { Metadata } from "grpc-web-client";
 
 import { subscribe, unsubscribe } from "../../streamsutil";
@@ -12,11 +11,15 @@ import { Transaction as Transaction_pb, TransactionType } from "../../../proto_b
 
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 
+// Moment will be exposed globally by the MomentJS script included in index.html
+declare var moment: any;
+
 const FROM_EXCHANGE_TRANSACTION = TransactionType.FROM_EXCHANGE_TRANSACTION;
 const ORDER_FILL_TRANSACTION = TransactionType.ORDER_FILL_TRANSACTION;
 const MORTGAGE_TRANSACTION = TransactionType.MORTGAGE_TRANSACTION;
 const DIVIDEND_TRANSACTION = TransactionType.DIVIDEND_TRANSACTION;
 
+// Utility function to convert TransactionType to a string
 const transactionTypeToStr = (trType: TransactionType): string => {
     switch(trType) {
 		case FROM_EXCHANGE_TRANSACTION : return "Exchange";
@@ -25,6 +28,14 @@ const transactionTypeToStr = (trType: TransactionType): string => {
 		case DIVIDEND_TRANSACTION : return "Dividend";
     }
     return "";
+}
+
+const transactionTime = (trTime: string): string => {
+    let hours = moment.duration(moment().diff(trTime)).asHours();
+    if (hours > 21) {
+        return moment(trTime).format("DD-MM-YY HH:mm");
+    }
+    return moment(trTime).fromNow();
 }
 
 export interface TransactionsProps {
@@ -88,7 +99,6 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
 
 		const stream = DalalStreamService.getTransactionUpdates(subscriptionId, props.sessionMd);
         for await (const update of stream) {
-            alert("bhai bhai naya transaction");
             const newTransaction = update.getTransaction()!;
             this.props.transactionUpdatesCallback(
                 newTransaction.getStockId(),
@@ -121,30 +131,28 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
                 <td className={transaction.getTotal() >= 0 ? "green" : "red"}>
                     <strong>{transaction.getTotal()}</strong>
                 </td>
-                <td><strong>{transaction.getCreatedAt()}</strong></td>
+                <td><strong>{transactionTime(transaction.getCreatedAt())}</strong></td>
             </tr>
         ));
         return (
-            <Fragment>
-                <table className="ui inverted table unstackable">
-                    <thead>
-                        <tr><th colSpan={6} className="ui white header">
-                            Your transactions
-                        </th></tr>
-                        <tr>
-                            <th>Company</th>
-                            <th>Type</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Total</th>
-                            <th>Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {transactionsContent}
-                    </tbody>
-                </table>
-            </Fragment>
-        )
+            <table className="ui inverted table unstackable">
+                <thead>
+                    <tr><th colSpan={6} className="ui white header">
+                        Your transactions
+                    </th></tr>
+                    <tr>
+                        <th>Company</th>
+                        <th>Type</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {transactionsContent}
+                </tbody>
+            </table>
+        );
     }
 }

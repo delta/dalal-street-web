@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Metadata } from "grpc-web-client";
 
-import { Dashboard } from "./Dashboard";
+import { Networth } from "./Networth";
+import { StockChart } from "./StockChart";
 import { Transactions } from "./Transactions";
 
 import { Notification } from "../common/Notification";
@@ -66,9 +67,17 @@ export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
             resp.getStocksOwnedMap().forEach((stocksOwned, stockId) => {
                 stocksOwnedMap[stockId] = stocksOwned;
             });
+
+            // calculate total as server does not update
+            // total of every user on stock price update
+            let total = user.getCash();
+            for (const stockId in stocksOwnedMap) {
+                total += stocksOwnedMap[stockId] * this.props.stockPricesMap[stockId];
+            }
+
             this.setState({
                 userCash: user.getCash(),
-                userTotal: user.getTotal(),
+                userTotal: total,
                 chartData: stocksOwnedMap,
             });
         }
@@ -87,7 +96,9 @@ export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
                 newChartData[stockId] = 0;
             }
             newChartData[stockId] += stockQuantity;
-            if (newChartData[stockId] <= 0) {
+
+            // not checking <= 0 because of negative sign may occur during short selling
+            if (newChartData[stockId] == 0) {
                 delete newChartData[stockId];
             }
             return {
@@ -105,15 +116,19 @@ export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
 						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
 					</div>
 				</div>
-                <div id="dashboard-container" className="row">
-                    <Dashboard
-                        userCash={this.state.userCash}
-                        userTotal={this.state.userTotal}
+                <div id="stockchart-container" className="row">
+                    <StockChart
                         stockBriefInfoMap={this.props.stockBriefInfoMap}
                         chartData={this.state.chartData}
                     />
                 </div>
-                <div id="transactions-container" className="row">
+                <div id="networth-container" className="row">
+                    <Networth
+                        userCash={this.state.userCash}
+                        userTotal={this.state.userTotal}
+                    />
+                </div>
+                <div id="transactions-container" className="row fifteen wide column centered">
                     <Transactions
                         sessionMd={this.props.sessionMd}
                         transactionCount={this.props.transactionCount}
