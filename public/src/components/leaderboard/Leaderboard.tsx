@@ -17,7 +17,7 @@ interface LeaderboardState {
     totalPages: number,
     leaderboardEntries: LeaderboardRow_pb[],
     userRank: number,
-}
+}   
 
 export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
     constructor(props: LeaderboardProps) {
