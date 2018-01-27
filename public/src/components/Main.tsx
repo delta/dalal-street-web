@@ -7,6 +7,7 @@ import { NotFound } from "./NotFound";
 
 import { Leaderboard } from "./leaderboard/Leaderboard";
 import { Portfolio } from "./portfolio/Portfolio";
+import { Market } from "./market/Market";
 
 import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService } from "../../proto_build/DalalMessage_pb_service";
@@ -18,6 +19,7 @@ import { User as User_pb } from "../../proto_build/models/User_pb";
 import { Stock as Stock_pb } from "../../proto_build/models/Stock_pb";
 import { Notification as Notification_pb } from "../../proto_build/models/Notification_pb";
 
+import * as jspb from "google-protobuf";
 export interface MainProps {
     sessionMd: 		Metadata
     user: 			User_pb
@@ -41,8 +43,10 @@ interface MainState {
 
     isMarketOpen: 				boolean
 
-    notifSubscriptionId: SubscriptionId
-    stockSubscriptionId: SubscriptionId
+	notifSubscriptionId: SubscriptionId
+	stockSubscriptionId: SubscriptionId
+
+	stockDetails: Stock_pb[]
 }
 
 // We tried out a couple of ways to pass notification from main
@@ -60,6 +64,7 @@ export class Main extends React.Component<MainProps, MainState> {
             isMarketOpen: this.props.isMarketOpen,
             notifSubscriptionId: new SubscriptionId,
             stockSubscriptionId: new SubscriptionId,
+            stockDetails: [],
         };
 
         this.handleNotificationsStream();
@@ -227,12 +232,21 @@ export class Main extends React.Component<MainProps, MainState> {
         );
     }
 
+    getWrappedMarket = () => {
+		return (
+			<Market sessionMd={this.props.sessionMd}
+					stockDetailsMap={this.props.stockDetailsMap}
+			/>
+		);
+	}
+
     render() {
         return (
                 <Switch>
                     <Route exact path="/trade" render={this.getWrappedTradingTerminal} />
-                    <Route exact path="/portfolio" component={this.getWrappedPortfolio} />
+                    <Route exact path="/portfolio" render={this.getWrappedPortfolio} />
                     <Route exact path="/leaderboard" render={this.getWrappedLeaderboard} />
+                    <Route exact path="/market" render={this.getWrappedMarket} />
                     <Route component={NotFound} />
                 </Switch>
         );

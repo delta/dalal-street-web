@@ -6,6 +6,7 @@
 	color:#FF6939 !important;
 }
 
+/* Open orders styling starts */
 #open-orders-container tbody {
 	display:block;
 	height:118px;
@@ -29,6 +30,7 @@
 	min-height: 135px;
 	background: #1B1C1D !important;
 }
+/* Open orders ends */
 
 .ui.pointing.secondary.menu > a.item{
 	color:#888e94 !important;
@@ -84,6 +86,7 @@ div.expected-cost {
 	margin: 5px 15px;
 }
 
+/* Notification styling starts */
 #notifbutton{
 	box-shadow: none !important;
 	font-size:20px;
@@ -131,6 +134,8 @@ div.expected-cost {
 .notif-item{
 	white-space:pre-wrap;
 }
+
+/* Notification styling ends */
 
 .profit{
 	font-size: 0.85em;
@@ -221,6 +226,7 @@ body {
 }
 
 .ticker-wrapper {
+	width: 100%;	
 	position: relative;
 }
 
@@ -376,7 +382,7 @@ h3.panel-header {
 #networth-container {
 	margin: 5px auto;
 }
-
+/* Chart styling starts */
 #chart-loader {
 	min-height: 310px;
 	background: #1B1C1D !important;
@@ -389,3 +395,33 @@ h3.panel-header {
 .hidden {
 	display: none;
 }
+/* Chart styling ends */
+
+/* Market styling  starts here */
+
+#market-top-row {
+	background: #1b1c1d;
+}
+
+.market-input {
+	text-align: center;
+	width:50px;
+	background-color: white !important;
+	color:gray !important;
+	border-radius: 5px;
+}
+
+.market-button {
+	width:60px;
+	background-color: rgba(33, 186, 69, 1);
+	color:white;
+	height:20px;
+	border:none;
+	border-radius: 3px;
+}
+
+/* Market styling ends here */
+
+/* TickerBar styling starts here */
+
+/* TickerBar styling ends here */

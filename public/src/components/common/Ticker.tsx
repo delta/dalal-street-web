@@ -1,9 +1,11 @@
 import * as React from "react";
 
 export interface TickerProps {
+    stockId: number,    
     companyName: string,
     currentPrice: number,
-    previousPrice: number
+    previousPrice: number,
+    stocksInExchange: number,
 }
 
 export class Ticker extends React.Component<TickerProps, {}> {
@@ -13,6 +15,8 @@ export class Ticker extends React.Component<TickerProps, {}> {
         let sign = '';
         if( difference > 0 )
             sign = '+';
+        let tempNumber = (difference)/this.props.previousPrice * 100;
+        tempNumber = parseFloat(tempNumber.toFixed(2));
 
         return (
         <div className="ticker_item">
@@ -25,7 +29,7 @@ export class Ticker extends React.Component<TickerProps, {}> {
             </span>
 
             <span className = { difference > 0 ? 'profit' : 'loss' }>
-                <strong>{ `${sign}${difference} (${sign}${(difference)/this.props.currentPrice * 100}%)`}</strong>
+                <strong>{ `${sign}${difference} (${sign}${tempNumber}%)`}</strong>
             </span>
         </div>
         );
