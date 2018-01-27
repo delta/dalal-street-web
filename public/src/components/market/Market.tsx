@@ -7,17 +7,19 @@ import { subscribe, unsubscribe } from "../../streamsutil";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { Stock as Stock_pb} from "../../../proto_build/models/Stock_pb";
 import { BuyStocksFromExchangeRequest } from "../../../proto_build/actions/BuyStocksFromExchange_pb";
+import { Notification } from "../common/Notification";
+import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb"
 
 export interface MarketProps {
     sessionMd: Metadata,
     stockDetailsMap: { [index:number]: Stock_pb },
+    notifications: Notification_pb[],   
 }
 
 export interface MarketState {
     stockData: TickerProps[],
     subscriptionId: SubscriptionId,
 }
-
 
 export class Market extends React.Component<MarketProps, MarketState> {
     constructor(props: MarketProps) {
@@ -49,24 +51,32 @@ export class Market extends React.Component<MarketProps, MarketState> {
 
     }
 
+    updateStockData = (props: MarketProps) => {
+        let newTickerStockData: TickerProps[] = [];
+        
+        for (const update in props['stockDetailsMap']) {
+            let objUpdate = props['stockDetailsMap'][update].toObject();
+            newTickerStockData.push({
+                stockId: objUpdate.id,
+                companyName: objUpdate.shortName,
+                currentPrice: objUpdate.currentPrice,
+                previousPrice: objUpdate.previousDayClose,
+                stocksInExchange: objUpdate.stocksInExchange,
+            }); 
+        }
+        
+        this.setState({
+            stockData: newTickerStockData,
+        });
+    }
+
+    componentDidMount() {
+        this.updateStockData(this.props);
+    }
+
     componentWillReceiveProps(newProps: MarketProps) {
         if (newProps){
-            let newTickerStockData: TickerProps[] = [];
-            
-            for (const update in newProps['stockDetailsMap']) {
-                let objUpdate = newProps['stockDetailsMap'][update].toObject();
-                newTickerStockData.push({
-                    stockId: objUpdate.id,
-                    companyName: objUpdate.shortName,
-                    currentPrice: objUpdate.currentPrice,
-                    previousPrice: objUpdate.previousDayClose,
-                    stocksInExchange: objUpdate.stocksInExchange,
-                }); 
-            }
-
-            this.setState({
-                stockData: newTickerStockData,
-            });
+            this.updateStockData(newProps);
         }
     }
 
@@ -98,6 +108,11 @@ export class Market extends React.Component<MarketProps, MarketState> {
 
         return (
             <div id="market-container" className="ui stackable grid pusher main-container">
+                <div className="row" id="top_bar">
+					<div id="notif-component">
+						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
+					</div>
+				</div>
                 <div className="row" id="market-top-row" >
                     <TickerBar stocks={this.state.stockData}/>
                </div> 
