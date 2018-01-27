@@ -363,8 +363,16 @@ h3.panel-header {
 /* Leaderboard styling ends */
 
 /* Transactions styling begins */
+#transactions-container {
+	margin: 5px auto;
+}
+
 #transactions-container table tr th, #transactions-container table tr td {
 	height: 2.5em;
 	font-size: 1.1em;
 }
 /* Transactions styling ends */
+
+#networth-container {
+	margin: 5px auto;
+}
