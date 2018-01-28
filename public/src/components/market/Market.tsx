@@ -10,6 +10,10 @@ import { BuyStocksFromExchangeRequest } from "../../../proto_build/actions/BuySt
 import { Notification } from "../common/Notification";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb"
 
+function isPositiveInteger(x: number): boolean {
+    return (!isNaN(x) && x % 1 === 0 && x > 0);
+}
+
 export interface MarketProps {
     sessionMd: Metadata,
     stockDetailsMap: { [index:number]: Stock_pb },
@@ -33,6 +37,10 @@ export class Market extends React.Component<MarketProps, MarketState> {
 
     purchaseFromExchange = async (stockId: number) => {
         let quantity = $("#input-"+stockId).val()!;
+        if (!isPositiveInteger(Number(quantity))) {
+            alert("Enter a positive integer!");
+            return;
+        }
         if (quantity) {
                 let myQuantity: number = parseInt(quantity.toString());
                 console.log("purchased stock of company " + stockId + " quantity " + myQuantity);   
@@ -83,22 +91,22 @@ export class Market extends React.Component<MarketProps, MarketState> {
     render() {
 
         let history: any[] = [];
-        let tempNumber: number;
+        let percentageIncrease: number;
         let diffClass: string;
         for (let i=0; i<this.state.stockData.length; i++) {
             diffClass = "red";
             let objUpdate = this.state.stockData[i];
-            tempNumber = (objUpdate.currentPrice - objUpdate.previousPrice)*100/(objUpdate.previousPrice+1);
-            if (tempNumber > 0) {
+            percentageIncrease = (objUpdate.currentPrice - objUpdate.previousPrice)*100/(objUpdate.previousPrice+1);
+            if (percentageIncrease >= 0) {
                 diffClass = "green";
             }
             
-            tempNumber = parseFloat(tempNumber.toFixed(2));
+            percentageIncrease = parseFloat(percentageIncrease.toFixed(2));
             history.push(
                 <tr key={objUpdate.stockId}>
                     <td className="volume"><strong>{objUpdate.companyName}</strong></td>
                     <td className="volume"><strong>{objUpdate.currentPrice}</strong></td>
-                    <td className={"volume " + diffClass}><strong>{tempNumber}{" %"}</strong></td>
+                    <td className={"volume " + diffClass}><strong>{percentageIncrease}{" %"}</strong></td>
                     <td className={"volume"} ><strong>{objUpdate.stocksInExchange}</strong></td>
                     <td className="volume"><strong><input id={"input-"+objUpdate.stockId} placeholder="0" className="market-input"/></strong></td>
                     <td className="volume"><strong><button className="market-button" onClick={() => {this.purchaseFromExchange(objUpdate.stockId)}}>Buy</button></strong></td>                        
@@ -113,10 +121,18 @@ export class Market extends React.Component<MarketProps, MarketState> {
 						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
 					</div>
 				</div>
-                <div className="row" id="market-top-row" >
-                    <TickerBar stocks={this.state.stockData}/>
-               </div> 
-               <div className="row" id="market-table">
+                <div className="row">
+                    <h2 className="ui center aligned icon header inverted">
+                        <i className="pie chart icon"></i>                        
+                        <div className="content">
+                            Primary Market
+                            <div className="grey sub header">
+                                Buy your way to glory
+                            </div>
+                        </div>
+                    </h2>
+                </div>
+               <div className="row fifteen wide column centered" id="market-table">
                <table className="ui inverted table unstackable">
 					<thead>
 						<tr>
