@@ -17,12 +17,6 @@ export class StockChart extends React.Component<StockChartProps, StockChartState
     chartElem: any;
     labels: string[] = [];
     numOfStocks: number;
-    colors: string[] = [
-        "#CD9FCC", "#F6CACA", "#84C318",
-        "#F0803C", "#EDF060", "#26A96C",
-        "#476C9B", "#17BEBB", "#92140C",
-        "#32DE8A"
-    ];
     constructor(props: StockChartProps) {
         super(props);
     }
@@ -50,7 +44,7 @@ export class StockChart extends React.Component<StockChartProps, StockChartState
 			data: {
 				datasets: [{
                     data: data,
-                    backgroundColor: this.colors,
+                    backgroundColor: "#617073",
                 }],
                 labels: this.labels
             },
@@ -79,7 +73,7 @@ export class StockChart extends React.Component<StockChartProps, StockChartState
             data.shift();
             this.chartElem.data.datasets = [{
                 data: data,
-                backgroundColor: this.colors,
+                backgroundColor: "#617073",
             }];
 			this.chartElem.update();
         }

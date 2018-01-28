@@ -144,7 +144,7 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
                         <th>Company</th>
                         <th>Type</th>
                         <th>Quantity</th>
-                        <th>Price</th>
+                        <th>Trade Price</th>
                         <th>Total</th>
                         <th>Time</th>
                     </tr>
