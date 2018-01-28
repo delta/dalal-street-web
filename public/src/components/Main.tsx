@@ -241,15 +241,18 @@ export class Main extends React.Component<MainProps, MainState> {
 		);
 	}
 
-    render() {
-        return (
-                <Switch>
-                    <Route exact path="/trade" render={this.getWrappedTradingTerminal} />
-                    <Route exact path="/portfolio" render={this.getWrappedPortfolio} />
-                    <Route exact path="/leaderboard" render={this.getWrappedLeaderboard} />
-                    <Route exact path="/market" render={this.getWrappedMarket} />
-                    <Route component={NotFound} />
-                </Switch>
-        );
-    }
+	render() {
+		switch (window.location.pathname) {
+			case "/trade":
+                return this.getWrappedTradingTerminal();
+            case "/portfolio":
+                return this.getWrappedPortfolio();
+            case "/market":
+                return this.getWrappedMarket();
+			case "/leaderboard":
+				return this.getWrappedLeaderboard();
+			default:
+				return <NotFound />;
+		}
+	}
 }
