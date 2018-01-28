@@ -16,7 +16,7 @@ export class Login extends React.Component<LoginProps, {}>{
                         <div className="fakecolumn column">
                             <h2 className="ui header inverted">
                                 <div className="content">
-                                    Log-in to your account
+                                    Login to your account
                             </div>
                             </h2>
                             <LoginForm loginHandler={this.props.loginHandler} error={this.props.error} />
