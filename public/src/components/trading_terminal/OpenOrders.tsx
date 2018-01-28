@@ -168,7 +168,6 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 	}
 
 	render() {
-
 		if (this.state.isLoading) {
 			return (
 				<Fragment>

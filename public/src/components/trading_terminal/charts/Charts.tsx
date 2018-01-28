@@ -32,6 +32,7 @@ export interface intervalData {
 type chartType = "candlestick" | "line";
 
 interface ChartsState {
+	isLoading: boolean
 	stockId: number
 	chartType: chartType
 	interval: intervalType
@@ -51,16 +52,14 @@ let intervalTypeToNo: { [index:string]: number} = {
 export class Charts extends React.Component<ChartsProps, ChartsState> {
 	constructor(props: ChartsProps) {
 		super(props);
-		this.state  = {
+		this.state = {
+			isLoading: false, // loading happens in componentDidMount()
 			stockId: props.stockId,
 			chartType: "candlestick",
 			interval: "1min",
 			data: [],
 			subscriptionId: new SubscriptionId,
 		};
-
-		//this.getOldStockHistory();
-		//this.getStockHistoryStream();
 	}
 
 	getOldStockHistory = async (stockId: number) => {
@@ -83,16 +82,17 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 			});
 		});
 
+
 		this.setState({
 			data: globalIntervalData,
 		})
 	}
 
-	getStockHistoryStream  = async (stockId: number) => {
+	getStockHistoryStream = async (stockId: number) => {
 		let historyReq = new GetStockHistoryRequest();
 		historyReq.setStockId(stockId);
 		historyReq.setResolution(intervalTypeToNo[this.state.interval]);
-		
+
 		const subscriptionId = await subscribe(this.props.sessionMd, DataStreamType.STOCK_HISTORY, this.props.stockId + "");
 
 		this.setState({
@@ -119,12 +119,14 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 		}
 	};
 
-	componentWillReceiveProps(nextProps: ChartsProps) {
+	async componentWillReceiveProps(nextProps: ChartsProps) {
 		if (nextProps.stockId == this.props.stockId)
 			return;
 
 		unsubscribe(this.props.sessionMd, this.state.subscriptionId);
-		this.getOldStockHistory(nextProps.stockId);
+		this.setState({isLoading: true});
+		await this.getOldStockHistory(nextProps.stockId);
+		this.setState({isLoading: false});
 		this.getStockHistoryStream(nextProps.stockId);
 	}
 
@@ -133,6 +135,10 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 	}
 
 	async componentDidMount() {
+		this.setState({
+			isLoading: true,
+		});
+
 		const that = this;
 		$('#chart-interval-dropdown').dropdown({
 			onChange: that.onIntervalChange,
@@ -147,14 +153,18 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 			$("#line-chart-container").addClass("active");
 		}
 
-		this.getOldStockHistory(this.props.stockId);
+		await this.getOldStockHistory(this.props.stockId);
+		this.setState({
+			isLoading: false,
+		});
 		this.getStockHistoryStream(this.props.stockId);
 	}
 
-	onIntervalChange = (value: intervalType) => {
+	onIntervalChange = async (value: intervalType) => {
 		console.log("onIntervalchange");
-		this.setState({interval: value});
-		this.getOldStockHistory(this.props.stockId);
+		this.setState({interval: value, isLoading: true});
+		await this.getOldStockHistory(this.props.stockId);
+		this.setState({ isLoading: false });
 	}
 
 	onChartTabChange = (tabPath: string) => {
@@ -185,8 +195,16 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 				</span>
 				<h3 className="panel-header right item">Price Chart</h3>
 			</div>
-			<Candlestick stockId={this.props.stockId} data={this.state.data} tabName={"candles-chart-container"} />
-			<LineChart stockId={this.props.stockId} data={this.state.data} tabName={"line-chart-container"} />
+			<div className={"ui segment " + (this.state.isLoading ? "" : "hidden")} id="chart-loader">
+				<div className="ui active dimmer">
+					<div className="ui medium text loader">Fetching chart data...</div>
+				</div>
+				<p></p>
+			</div>
+			<div className={!this.state.isLoading ? "" : "hidden"}>
+			<Candlestick stockId={this.props.stockId} data={this.state.data} tabName={"candles-chart-container"} interval={this.state.interval} />
+			<LineChart stockId={this.props.stockId} data={this.state.data} tabName={"line-chart-container"} interval={this.state.interval} />
+			</div>
 			</Fragment>
 		);
 	}

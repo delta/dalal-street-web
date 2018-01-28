@@ -1,31 +1,24 @@
 import * as React from "react";
 import { Fragment } from "react";
 
-import { ohlcPointType } from "./types";
+import { ohlcPointType, intervalType } from "./types";
+import { getUnit } from "./utils";
 
 export interface CandlestickProps {
 	stockId: number
 	tabName: string
 	data: ohlcPointType[]
-}
-
-export interface CandlestickState {
-	stockId: number
-	data: ohlcPointType[]
+	interval: intervalType
 }
 
 // Chart will be exposed globally by the ChartJS script included in index.html
 declare var Chart: any;
 declare var moment: any;
 
-export class Candlestick extends React.Component<CandlestickProps, CandlestickState> {
+export class Candlestick extends React.Component<CandlestickProps, {}> {
 	chartElem: any;
 	constructor(props: CandlestickProps) {
 		super(props);
-		this.state = {
-			stockId: props.stockId,
-			data: props.data
-		};
 	}
 
 	componentWillReceiveProps(nextProps: CandlestickProps) {
@@ -34,6 +27,7 @@ export class Candlestick extends React.Component<CandlestickProps, CandlestickSt
 			data: nextProps.data,
 			fractionalDigitsCount: 2,
 		}];
+		this.chartElem.options.scales.xAxes[0].time.unit = getUnit(this.props.interval);
 		this.chartElem.update()
 	}
 
@@ -53,10 +47,14 @@ export class Candlestick extends React.Component<CandlestickProps, CandlestickSt
 			options: {
 				scales: {
 					xAxes: [{
-						type: 'time',
+						time: {
+							unit: getUnit(this.props.interval),
+							tooltipFormat: "ddd MMM Do h:mm a",
+						},
 						ticks: {
 							autoSkip: true,
-							maxTicksLimit: 10
+							maxTicksLimit: 10,
+							maxRotation: 0,
 						}
 					}]
 				},
