@@ -22,10 +22,10 @@ const DIVIDEND_TRANSACTION = TransactionType.DIVIDEND_TRANSACTION;
 // Utility function to convert TransactionType to a string
 const transactionTypeToStr = (trType: TransactionType): string => {
     switch(trType) {
-		case FROM_EXCHANGE_TRANSACTION : return "Exchange";
-		case ORDER_FILL_TRANSACTION : return "OrderFill";
-		case MORTGAGE_TRANSACTION : return "Mortgage";
-		case DIVIDEND_TRANSACTION : return "Dividend";
+        case FROM_EXCHANGE_TRANSACTION : return "Exchange";
+        case ORDER_FILL_TRANSACTION : return "OrderFill";
+        case MORTGAGE_TRANSACTION : return "Mortgage";
+        case DIVIDEND_TRANSACTION : return "Dividend";
     }
     return "";
 }
@@ -85,7 +85,7 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
             this.handleTransactionsStream();
         } catch(e) {
             // error could be grpc error or Dalal error. Both handled in exception
-			console.log("Error happened! ", e.statusCode, e.statusMessage, e);
+            console.log("Error happened! ", e.statusCode, e.statusMessage, e);
         }
     }
 
@@ -93,11 +93,11 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
         const props = this.props;
         const subscriptionId = await subscribe(props.sessionMd, DataStreamType.TRANSACTIONS);
 
-		this.setState({
-			subscriptionId: subscriptionId,
-		});
+        this.setState({
+            subscriptionId: subscriptionId,
+        });
 
-		const stream = DalalStreamService.getTransactionUpdates(subscriptionId, props.sessionMd);
+        const stream = DalalStreamService.getTransactionUpdates(subscriptionId, props.sessionMd);
         for await (const update of stream) {
             const newTransaction = update.getTransaction()!;
             this.props.transactionUpdatesCallback(

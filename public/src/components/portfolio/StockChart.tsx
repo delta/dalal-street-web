@@ -22,8 +22,8 @@ export class StockChart extends React.Component<StockChartProps, StockChartState
     }
 
     componentDidMount() {
-		const cvs = document.getElementById("bar-chart") as HTMLCanvasElement;
-		const ctx = cvs!.getContext('2d')!;
+        const cvs = document.getElementById("bar-chart") as HTMLCanvasElement;
+        const ctx = cvs!.getContext('2d')!;
 
         this.numOfStocks = Object.keys(this.props.stockBriefInfoMap).length;
         let data = new Array(this.numOfStocks+1);
@@ -39,10 +39,10 @@ export class StockChart extends React.Component<StockChartProps, StockChartState
         }
 
 
-		this.chartElem = new Chart(ctx, {
-			type: 'bar',
-			data: {
-				datasets: [{
+        this.chartElem = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                datasets: [{
                     data: data,
                     backgroundColor: "#617073",
                 }],
@@ -75,7 +75,7 @@ export class StockChart extends React.Component<StockChartProps, StockChartState
                 data: data,
                 backgroundColor: "#617073",
             }];
-			this.chartElem.update();
+            this.chartElem.update();
         }
     }
 

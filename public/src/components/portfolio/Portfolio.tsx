@@ -83,7 +83,7 @@ export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
         }
         catch(e) {
             // error could be grpc error or Dalal error. Both handled in exception
-			console.log("Error happened! ", e.statusCode, e.statusMessage, e);
+            console.log("Error happened! ", e.statusCode, e.statusMessage, e);
         }
     }
 
@@ -111,11 +111,11 @@ export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
     render() {
         return (
             <div id="portfolio-container" className="main-container ui stackable grid pusher">
-				<div className="row" id="top_bar">
-					<div id="notif-component">
-						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
-					</div>
-				</div>
+                <div className="row" id="top_bar">
+                    <div id="notif-component">
+                        <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
+                    </div>
+                </div>
                 <div id="stockchart-container" className="row">
                     <StockChart
                         stockBriefInfoMap={this.props.stockBriefInfoMap}
