@@ -376,3 +376,16 @@ h3.panel-header {
 #networth-container {
 	margin: 5px auto;
 }
+
+#chart-loader {
+	min-height: 310px;
+	background: #1B1C1D !important;
+}
+
+#chart-loader .dimmer {
+	background: #1B1C1D !important;
+}
+
+.hidden {
+	display: none;
+}

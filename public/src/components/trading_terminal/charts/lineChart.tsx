@@ -1,12 +1,14 @@
 import * as React from "react";
 import { Fragment } from "react";
 
-import { ohlcPointType } from "./types";
+import { ohlcPointType, intervalType } from "./types";
+import { getUnit } from "./utils";
 
 export interface LineChartProps {
     stockId: number
     tabName: string
-    data: ohlcPointType[]
+	data: ohlcPointType[]
+	interval: intervalType
 }
 
 export interface LineChartState {
@@ -26,11 +28,13 @@ export class LineChart extends React.Component<LineChartProps, LineChartState> {
             stockId: props.stockId,
             data: props.data
 		};
-    }
+	}
 
     // convert ohlcPointType to { x: time, y: closePrice }
     ohlcToOnlyC(p: ohlcPointType) {
-        return { x: p.t, y: p.c };
+        const d = new Date();
+        d.setTime(p.t);
+        return { x: d, y: p.c };
     }
 
 	componentWillReceiveProps(nextProps: LineChartProps) {
@@ -40,6 +44,7 @@ export class LineChart extends React.Component<LineChartProps, LineChartState> {
 				data: nextProps.data.map(this.ohlcToOnlyC),
 				fractionalDigitsCount: 2,
 			}];
+			this.chartElem.options.scales.xAxes[0].time.unit = getUnit(this.props.interval);
 			this.chartElem.update();
 		}
     }
@@ -62,9 +67,14 @@ export class LineChart extends React.Component<LineChartProps, LineChartState> {
 				scales: {
 					xAxes: [{
 						type: 'time',
+						time: {
+							unit: getUnit(this.props.interval),
+							tooltipFormat: "ddd MMM Do h:mm a",
+						},
 						ticks: {
 							autoSkip: true,
-							maxTicksLimit: 20
+							maxTicksLimit: 20,
+							maxRotation: 0,
 						}
 					}]
 				},
