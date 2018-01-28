@@ -97,7 +97,7 @@ export class App extends React.Component<{}, AppState> {
 
 		}
 	}
-	async getUser(sessionMd: Metadata) {
+	getUser = async (sessionMd: Metadata) => {
 		const loginRequest = new LoginRequest()
 		try {
 			const resp = await this.getUserFromSession(loginRequest, sessionMd)
@@ -135,7 +135,7 @@ export class App extends React.Component<{}, AppState> {
 		}
 	}
 
-	async getUserFromSession(loginRequest: LoginRequest, sessionMd: Metadata): Promise<LoginResponse> {
+	getUserFromSession = async (loginRequest: LoginRequest, sessionMd: Metadata): Promise<LoginResponse> => {
 		try {
 			console.log(sessionMd)
 			const resp = await DalalActionService.login(loginRequest, sessionMd);
