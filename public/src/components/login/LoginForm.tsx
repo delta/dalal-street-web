@@ -3,14 +3,14 @@ import { LoginRequest, LoginResponse, } from "../../../proto_build/actions/Login
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 
 export interface LoginFormProps {
-    loginHandler: Function
-    error: String | null
+    loginSuccessHandler: (resp: LoginResponse) => void
 }
 
 export interface LoginFormState {
     email: string,
     password: string,
     disabled: boolean,
+    error: string | null,
 }
 
 export class LoginForm extends React.Component<LoginFormProps, LoginFormState>{
@@ -19,68 +19,47 @@ export class LoginForm extends React.Component<LoginFormProps, LoginFormState>{
         this.state = {
             password: "dalalkeliye",
             email: "106115021@nitt.edu",
-            disabled: false
-        }
-    }
-    log = () => {
-        this.handleLogin()
+            disabled: false,
+            error: null,
+        };
     }
 
     handleLogin = async () => {
-        try {
-            this.setState({
-                disabled: true,
-            });
-            const loginRequest = new LoginRequest();
-            loginRequest.setEmail(this.state.email);
-            loginRequest.setPassword(this.state.password);
-            const resp = await this.login(loginRequest);
-            this.setState({
-                disabled: false,
-            });
-            if (resp == null) {
-                this.props.loginHandler(null, "No response from server")
-                return
-            }
-            if (resp.getStatusCode() == LoginResponse.StatusCode.OK)
-                this.props.loginHandler(resp, null)
-            else {
-                this.props.loginHandler(null, resp.getStatusMessage())
-            }
-        } catch (e) {
-            this.props.loginHandler(null, e.statusMessage)
-            this.setState({
-                disabled: false,
-            });
-        }
-    }
+        this.setState({
+            disabled: true,
+        });
 
-    login = async (loginRequest: LoginRequest): Promise<LoginResponse> => {
+        const loginRequest = new LoginRequest();
+        loginRequest.setEmail(this.state.email);
+        loginRequest.setPassword(this.state.password);
+
         try {
             const resp = await DalalActionService.login(loginRequest);
-            console.log(resp.getStatusCode(), resp.toObject());
-            return resp
+            this.props.loginSuccessHandler(resp);
+        } catch (e) {
+            console.log(e);
+            this.setState({
+                error: e.statusMessage
+            });
         }
-        catch (e) {
-            // error could be grpc error or Dalal error. Both handled in exception
-            console.log("Error happened! ", e.statusCode, e.statusMessage);
-            throw e;
-        }
+
+        this.setState({
+            disabled: false,
+        });
     }
 
     handlePasswordChange = (event: React.FormEvent<HTMLInputElement>) => {
         this.setState({
-            email: this.state.email,
             password: event.currentTarget.value,
-        })
+        });
     }
 
     handleEmailChange = (event: React.FormEvent<HTMLInputElement>) => {
         this.setState({
             email: event.currentTarget.value,
-            password: this.state.password,
-        })
+        });
     }
+
     render() {
         return (
             <div>
@@ -99,14 +78,14 @@ export class LoginForm extends React.Component<LoginFormProps, LoginFormState>{
                             </div>
                         </div>
                         {this.state.disabled ?
-                            <div className="ui fluid large teal submit disabled button" onClick={this.log}>Login</div> :
-                            <div className="ui fluid large teal submit button" onClick={this.log}>Login</div>
+                            <div className="ui fluid large teal submit disabled button">Login</div> :
+                            <div className="ui fluid large teal submit button" onClick={this.handleLogin}>Login</div>
                         }
                     </div>
                 </form>
-                {this.props.error != null && <div className="ui negative bottom attached message">
-                    <i className="icon help"></i>
-                    {this.props.error}
+                {this.state.error != null && <div className="ui negative bottom attached message">
+                    <i className="icon error"></i>
+                    {this.state.error}
                 </div>}
             </div>
         );

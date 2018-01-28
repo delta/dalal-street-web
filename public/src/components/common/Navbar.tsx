@@ -1,54 +1,59 @@
 import * as React from "react";
 import * as $ from 'jquery';
-import { Link } from "react-router-dom";
+import { MouseEvent } from "react";
 
-export interface NavProps {}
+export interface NavProps {
+	handleUrlChange: () => void
+}
 
 export class Navbar extends React.Component<NavProps, {}> {
+	initialLink: string = window.location.pathname;
 	
-	handleClick(event: any) {
+	handleClick(event: any, newPath: string) {
 		$("#navbar a").removeClass("active");
 		event.target.className += " active";
+		window.history.pushState({}, "Dalal Street", newPath);
+		this.props.handleUrlChange();
 	}
 	
 	render(){
 
         return(
         <div id="navbar" className="ui sidebar inverted labeled icon left vertical menu uncover visible">
-		<Link to="/trade" className="item active" onClick={e => this.handleClick(e)}>
+		<a className={"item " + (this.initialLink == "/trade" ? "active" : "")} onClick={e => this.handleClick(e, "/trade")}>
 			<i className="rupee icon"></i>
 			Trade
-		</Link>
-		<Link to="/portfolio" className="item" onClick={e => this.handleClick(e)}>
+		</a>
+		<a className={"item " + (this.initialLink == "/portfolio" ? "active" : "")} onClick={e => this.handleClick(e, "/portfolio")}>
 			<i className="book icon"></i>
 			Portfolio
-		</Link>
-		<Link to="/market" className="item" onClick={e => this.handleClick(e)}>
+		</a>
+		<a className={"item " + (this.initialLink == "/market" ? "active" : "")} onClick={e => this.handleClick(e, "/market")}>
 			<i className="line chart icon"></i>
 			Market
-		</Link>
-		<Link to="/news" className="item" onClick={e => this.handleClick(e)}>
+		</a>
+		<a className={"item " + (this.initialLink == "/news" ? "active" : "")} onClick={e => this.handleClick(e, "/news")}>
 			<i className="newspaper icon"></i>
 			News
-		</Link>
-		<Link to="/leaderboard" className="item" onClick={e => this.handleClick(e)}>
+		</a>
+		<a className={"item " + (this.initialLink == "/leaderboard" ? "active" : "")} onClick={e => this.handleClick(e, "/leaderboard")}>
 			<i className="trophy icon"></i>
 			Leaderboard
-		</Link>
-		<Link to="/companies" className="item" onClick={e => this.handleClick(e)}>
+		</a>
+		<a className={"item " + (this.initialLink == "/companies" ? "active" : "")} onClick={e => this.handleClick(e, "/companies")}>
 			<i className="suitcase icon"></i>
 			Companies
-		</Link>
+		</a>
 		
-		<Link to="/help" className="item" onClick={e => this.handleClick(e)}>
+		<a className={"item " + (this.initialLink == "/help" ? "active" : "")} onClick={e => this.handleClick(e, "/help")}>
 			<i className="help circle icon"></i>
 			Help
-		</Link>
+		</a>
 		
-		<Link to="/logout" className="item" onClick={e => this.handleClick(e)}>
+		<a className={"item " + (this.initialLink == "/logout" ? "active" : "")} onClick={e => this.handleClick(e, "/logout")}>
 			<i className="window close icon"></i>
 			Logout
-		</Link>
+		</a>
 	</div>)  
     };
 }
