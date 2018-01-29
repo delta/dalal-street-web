@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Switch, Route } from "react-router-dom";
 import { Notification } from "./common/Notification";
 import { TradingTerminal, StockBriefInfo } from "./trading_terminal/TradingTerminal";
 import { SearchBar } from "./trading_terminal/SearchBar"
@@ -242,6 +241,10 @@ export class Main extends React.Component<MainProps, MainState> {
 	}
 
 	render() {
+		//Use window.location.pathname because react router is removed 
+		//and hence react's history wont be changing ie
+		//pushing to path in App cannot be retrieved by Route exact path
+		//because the history for react will not have those changes reflected
 		switch (window.location.pathname) {
 			case "/trade":
                 return this.getWrappedTradingTerminal();

@@ -28,15 +28,13 @@
     "@types/react": "^16.0.34",
     "@types/react-dom": "^16.0.3",
     "@types/react-paginate": "^4.3.1",
-    "@types/react-router-dom": "^4.2.3",
     "es6-promise": "^4.2.2",
     "google-protobuf": "^3.5.0",
     "grpc-web-client": "^0.3.1",
     "jquery": "^3.2.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-paginate": "^5.0.0",
-    "react-router-dom": "^4.2.2"
+    "react-paginate": "^5.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
