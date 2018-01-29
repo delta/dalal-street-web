@@ -12,12 +12,14 @@ export class Navbar extends React.Component<NavProps, {}> {
 	handleClick(event: any, newPath: string) {
 		$("#navbar a").removeClass("active");
 		event.target.className += " active";
+		//Setting new url
 		window.history.pushState({}, "Dalal Street", newPath);
+		//Rerender App and thereby changing appropriate component in Main
 		this.props.handleUrlChange();
 	}
 	
 	render(){
-
+		//If it was initially rendered with some path that should be set to active
         return(
         <div id="navbar" className="ui sidebar inverted labeled icon left vertical menu uncover visible">
 		<a className={"item " + (this.initialLink == "/trade" ? "active" : "")} onClick={e => this.handleClick(e, "/trade")}>

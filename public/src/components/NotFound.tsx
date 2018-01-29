@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
 
 export class NotFound extends React.Component<{}, {}> {
 	render() {
@@ -14,7 +13,6 @@ export class NotFound extends React.Component<{}, {}> {
 				<div className="ui large grey header">
 					The given link does not exist on the server <br />
 					{quotes[Math.floor(Math.random() * 4)]} <br />
-					Go back to <Link to="/trade">trading!</Link>
 				</div>
 			</div>
 		);

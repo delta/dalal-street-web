@@ -6,9 +6,11 @@ import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service
 import { LoginRequest, LoginResponse } from "../../../proto_build/actions/Login_pb";
 
 export interface LoginProps {
+    // Passes response back to app for setting state
     loginSuccessHandler: (resp: LoginResponse) => void
 }
-
+//All Error handling setting localstorage happens here
+//the only thing passed back is the resp
 export class Login extends React.Component<LoginProps, {}>{
 
     static getLoginResponseFromSession = async (): Promise<LoginResponse> => {

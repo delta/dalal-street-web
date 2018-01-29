@@ -13,8 +13,8 @@ import { Navbar } from "./common/Navbar";
 import { Main } from "./Main";
 
 interface AppState {
-	isLoading: boolean
-	isLoggedIn: boolean
+	isLoading: boolean // Waiting for response from login
+	isLoggedIn: boolean // To check if a successful login response has been handled
 	sessionMd: Metadata
 	user: User_pb
 
@@ -49,6 +49,10 @@ export class App extends React.Component<{}, AppState> {
 	}
 
 	async componentDidMount() {
+		//Initially when page loads no user info will be available
+		//Hence a request to login
+		//If it fails (throws an error) isLoggedin and isLoading is set to false
+		//So that Login Component renders
 		this.setState({
 			isLoading: true,
 			isLoggedIn: false,
@@ -114,19 +118,28 @@ export class App extends React.Component<{}, AppState> {
 					basically forceUpdate()ing whenever we change url. Have to do this because
 					react-router doesn't give a good way to redirect programmatically. It's horrible.
 					It's simply horrible.
-
+uo
 
 					It's really horrible.
 					- Parth.
 		*/
 
 		if (this.state.isLoggedIn) {
+			//Getting the path
 			const path = window.location.pathname;
+
+			//If it's logged in and is hitting "" or "/" or "/login" redirect to /trade by default
+			//Issues:If you hit /leaderboard say you'll be redirected to /login and then 
+			//be routed to /trade
 			const shouldRedirect = ["", "/", "/login"].indexOf(path) != -1;
 			if (shouldRedirect) {
 				window.history.replaceState({}, "Dalal Street", "/trade");
 				this.forceUpdate();
 			}
+			//Navbar has to have a function which force updates because 
+			//this render function handles the routing
+			//The route is changed when you click on anything there
+			//and Main has to accordingly switch 
 			return (
 				<Fragment>
 					<Navbar handleUrlChange={this.forceUpdate.bind(this)} />
@@ -143,11 +156,14 @@ export class App extends React.Component<{}, AppState> {
 				</Fragment>
 			);
 		}
-
+		//Waiting for login to return something 
 		if (this.state.isLoading) {
 			return <div>Loading screen</div>;
 		}
-
+		
+		//If render ever reaches here it means that login response was an error
+		//and it is loading hence has to be rerouted to /login and the login component 
+		//has to be rendered
 		window.history.replaceState({}, "Dalal Street | Login", "/login");
 
 		return <Login loginSuccessHandler={this.parseLoginResponse} />;
