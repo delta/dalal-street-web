@@ -89,7 +89,9 @@ export class App extends React.Component<{}, AppState> {
 		resp.getConstantsMap().forEach((value, name) => {
 			constantsMap[name] = value;
 		});
-
+		if(window.location.pathname=="/login"||window.location.pathname=="/"||window.location.pathname==""){
+			window.history.replaceState({}, "Dalal Street", "/trade");
+		}
 		this.setState({
 			isLoggedIn: true,
 			sessionMd: new Metadata({ "sessionid": resp.getSessionId() }),
@@ -101,6 +103,60 @@ export class App extends React.Component<{}, AppState> {
 			marketIsClosedHackyNotif: resp.getMarketIsClosedHackyNotif(),
 			isMarketOpen: resp.getIsMarketOpen()
 		});
+	}
+
+	handleUrlChange = () => {
+		if (window.location.pathname == "/logout") {
+			localStorage.removeItem("sessionid");
+
+			this.setState({
+				isLoading: false,
+				isLoggedIn: false,
+				sessionMd: new Metadata(),
+				user: new User_pb(),
+				stocksOwnedMap: {},
+				stockDetailsMap: {},
+				constantsMap: {},
+				marketIsClosedHackyNotif: "",
+				marketIsOpenHackyNotif: "",
+				isMarketOpen: false,
+			})
+			this.forceUpdate()
+		} else {
+			this.forceUpdate()
+		}
+	}
+	async componentWillMount() {
+		const path = window.location.pathname;
+		if (path == "/logout") {
+			localStorage.removeItem("sessionid");
+			window.history.replaceState({}, "Dalal Street", "/login");
+			this.setState({
+				isLoading: false,
+				isLoggedIn: false,
+				sessionMd: new Metadata(),
+				user: new User_pb(),
+				stocksOwnedMap: {},
+				stockDetailsMap: {},
+				constantsMap: {},
+				marketIsClosedHackyNotif: "",
+				marketIsOpenHackyNotif: "",
+				isMarketOpen: false,
+			})
+		}
+		if (this.state.isLoggedIn) {
+			console.log("wtf");
+			//Getting the path
+			const path = window.location.pathname;
+
+			//If it's logged in and is hitting "" or "/" or "/login" redirect to /trade by default
+			//Issues:If you hit /leaderboard say you'll be redirected to /login and then 
+			//be routed to /trade
+			const shouldRedirect = ["", "/", "/login"].indexOf(path) != -1;
+			if (shouldRedirect) {
+				window.history.replaceState({}, "Dalal Street", "/trade");
+			}
+		}
 	}
 
 	render() {
@@ -124,25 +180,27 @@ uo
 					- Parth.
 		*/
 
+		// Moved routing to will mount to handle routes before rendering
+
 		if (this.state.isLoggedIn) {
 			//Getting the path
-			const path = window.location.pathname;
+			// const path = window.location.pathname;
 
-			//If it's logged in and is hitting "" or "/" or "/login" redirect to /trade by default
-			//Issues:If you hit /leaderboard say you'll be redirected to /login and then 
-			//be routed to /trade
-			const shouldRedirect = ["", "/", "/login"].indexOf(path) != -1;
-			if (shouldRedirect) {
-				window.history.replaceState({}, "Dalal Street", "/trade");
-				this.forceUpdate();
-			}
+			// //If it's logged in and is hitting "" or "/" or "/login" redirect to /trade by default
+			// //Issues:If you hit /leaderboard say you'll be redirected to /login and then 
+			// //be routed to /trade
+			// const shouldRedirect = ["", "/", "/login"].indexOf(path) != -1;
+			// if (shouldRedirect) {
+			// 	window.history.replaceState({}, "Dalal Street", "/trade");
+			// 	this.forceUpdate();
+			// }
 			//Navbar has to have a function which force updates because 
 			//this render function handles the routing
 			//The route is changed when you click on anything there
 			//and Main has to accordingly switch 
 			return (
 				<Fragment>
-					<Navbar handleUrlChange={this.forceUpdate.bind(this)} />
+					<Navbar handleUrlChange={this.handleUrlChange} />
 					<Main
 						sessionMd={this.state.sessionMd!}
 						user={this.state.user!}
@@ -160,7 +218,7 @@ uo
 		if (this.state.isLoading) {
 			return <div>Loading screen</div>;
 		}
-		
+
 		//If render ever reaches here it means that login response was an error
 		//and it is loading hence has to be rerouted to /login and the login component 
 		//has to be rendered
