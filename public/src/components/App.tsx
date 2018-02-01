@@ -126,7 +126,8 @@ export class App extends React.Component<{}, AppState> {
 			this.forceUpdate()
 		}
 	}
-	async componentWillMount() {
+	
+	componentWillMount() {
 		const path = window.location.pathname;
 		if (path == "/logout") {
 			localStorage.removeItem("sessionid");
@@ -145,7 +146,6 @@ export class App extends React.Component<{}, AppState> {
 			})
 		}
 		if (this.state.isLoggedIn) {
-			console.log("wtf");
 			//Getting the path
 			const path = window.location.pathname;
 
