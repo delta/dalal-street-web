@@ -4,13 +4,20 @@ import { Fragment } from "react";
 import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService } from "../../proto_build/DalalMessage_pb_service";
 import { LoginResponse } from "../../proto_build/actions/Login_pb";
+import { LogoutRequest, LogoutResponse } from "../../proto_build/actions/Logout_pb";
 import { GetPortfolioRequest, GetPortfolioResponse } from "../../proto_build/actions/GetPortfolio_pb"
 import { User as User_pb } from "../../proto_build/models/User_pb";
 import { Stock as Stock_pb } from "../../proto_build/models/Stock_pb";
 import { Login } from "./login/Login"
-
+import { Register } from "./register/Register"
 import { Navbar } from "./common/Navbar";
 import { Main } from "./Main";
+
+const LOGIN = 1;
+const SIGNUP = 2;
+const MAIN = 3;
+const LOADING = 4;
+
 
 interface AppState {
 	isLoading: boolean // Waiting for response from login
@@ -72,6 +79,14 @@ export class App extends React.Component<{}, AppState> {
 			});
 		}
 	}
+	logOut = async () => {
+		const logoutRequest: LogoutRequest = new LogoutRequest()
+		try {
+			await DalalActionService.logout(logoutRequest);
+		} catch (e) {
+			//Cant do anything
+		}
+	}
 
 	parseLoginResponse = (resp: LoginResponse) => {
 		// map is weirdly constructed by grpc-web. Gotta convert it to regular map.
@@ -89,7 +104,7 @@ export class App extends React.Component<{}, AppState> {
 		resp.getConstantsMap().forEach((value, name) => {
 			constantsMap[name] = value;
 		});
-		if(window.location.pathname=="/login"||window.location.pathname=="/"||window.location.pathname==""){
+		if (window.location.pathname == "/login" || window.location.pathname == "/" || window.location.pathname == "") {
 			window.history.replaceState({}, "Dalal Street", "/trade");
 		}
 		this.setState({
@@ -106,9 +121,13 @@ export class App extends React.Component<{}, AppState> {
 	}
 
 	handleUrlChange = () => {
+		//Navbar has to have a function which force updates because 
+		//this render function handles the routing
+		//The route is changed when you click on anything there
+		//and Main has to accordingly switch 
 		if (window.location.pathname == "/logout") {
+			this.logOut()
 			localStorage.removeItem("sessionid");
-
 			this.setState({
 				isLoading: false,
 				isLoggedIn: false,
@@ -126,7 +145,36 @@ export class App extends React.Component<{}, AppState> {
 			this.forceUpdate()
 		}
 	}
-	
+	loginRedirect = () =>{
+		window.history.replaceState({}, "Dalal Street | Register", "/login");
+		this.forceUpdate()
+	}
+
+	signUpRedirect = () => {
+		window.history.replaceState({}, "Dalal Street | Register", "/register");
+		this.forceUpdate()
+	}
+	routeMe = () => {
+		const path = window.location.pathname
+		if (this.state.isLoggedIn) {
+			return MAIN;
+		}
+		if (path == "/register") {
+			return SIGNUP
+		}
+		if (this.state.isLoading) {
+			return LOADING;
+		}
+		//If render ever reaches here it means that login response was an error
+		//and it is loading hence has to be rerouted to /login and the login component 
+		//has to be rendered
+		window.history.replaceState({}, "Dalal Street | Login", "/login");
+		return LOGIN;
+	}
+	registerResponse = ()=>[
+		
+	]
+
 	componentWillMount() {
 		const path = window.location.pathname;
 		if (path == "/logout") {
@@ -148,7 +196,6 @@ export class App extends React.Component<{}, AppState> {
 		if (this.state.isLoggedIn) {
 			//Getting the path
 			const path = window.location.pathname;
-
 			//If it's logged in and is hitting "" or "/" or "/login" redirect to /trade by default
 			//Issues:If you hit /leaderboard say you'll be redirected to /login and then 
 			//be routed to /trade
@@ -174,56 +221,52 @@ export class App extends React.Component<{}, AppState> {
 					basically forceUpdate()ing whenever we change url. Have to do this because
 					react-router doesn't give a good way to redirect programmatically. It's horrible.
 					It's simply horrible.
-uo
-
 					It's really horrible.
 					- Parth.
 		*/
+		switch (this.routeMe()) {
+			case MAIN:
+				return (
+					<Fragment>
+						<Navbar handleUrlChange={this.handleUrlChange} />
+						<Main
+							sessionMd={this.state.sessionMd!}
+							user={this.state.user!}
+							stocksOwnedMap={this.state.stocksOwnedMap!}
+							stockDetailsMap={this.state.stockDetailsMap!}
+							constantsMap={this.state.constantsMap!}
+							marketIsOpenHackyNotif={this.state.marketIsOpenHackyNotif!}
+							marketIsClosedHackyNotif={this.state.marketIsClosedHackyNotif!}
+							isMarketOpen={this.state.isMarketOpen!}
+						/>
+					</Fragment>
+				);
+			case SIGNUP:
+				return <Register registerSuccessHander={this.registerResponse}
+					loginRedirect={this.loginRedirect}
+				/>
+			case LOGIN:
+				return <Login loginSuccessHandler={this.parseLoginResponse}
+					signUpRedirect={this.signUpRedirect}
+				/>;
+			case LOADING:
+				return <div>Loading screen</div>;
 
-		// Moved routing to will mount to handle routes before rendering
-
-		if (this.state.isLoggedIn) {
-			//Getting the path
-			// const path = window.location.pathname;
-
-			// //If it's logged in and is hitting "" or "/" or "/login" redirect to /trade by default
-			// //Issues:If you hit /leaderboard say you'll be redirected to /login and then 
-			// //be routed to /trade
-			// const shouldRedirect = ["", "/", "/login"].indexOf(path) != -1;
-			// if (shouldRedirect) {
-			// 	window.history.replaceState({}, "Dalal Street", "/trade");
-			// 	this.forceUpdate();
-			// }
-			//Navbar has to have a function which force updates because 
-			//this render function handles the routing
-			//The route is changed when you click on anything there
-			//and Main has to accordingly switch 
-			return (
-				<Fragment>
-					<Navbar handleUrlChange={this.handleUrlChange} />
-					<Main
-						sessionMd={this.state.sessionMd!}
-						user={this.state.user!}
-						stocksOwnedMap={this.state.stocksOwnedMap!}
-						stockDetailsMap={this.state.stockDetailsMap!}
-						constantsMap={this.state.constantsMap!}
-						marketIsOpenHackyNotif={this.state.marketIsOpenHackyNotif!}
-						marketIsClosedHackyNotif={this.state.marketIsClosedHackyNotif!}
-						isMarketOpen={this.state.isMarketOpen!}
-					/>
-				</Fragment>
-			);
-		}
-		//Waiting for login to return something 
-		if (this.state.isLoading) {
-			return <div>Loading screen</div>;
 		}
 
-		//If render ever reaches here it means that login response was an error
-		//and it is loading hence has to be rerouted to /login and the login component 
-		//has to be rendered
-		window.history.replaceState({}, "Dalal Street | Login", "/login");
+		// if (this.state.isLoggedIn) {
 
-		return <Login loginSuccessHandler={this.parseLoginResponse} />;
+		//Getting the path
+		// const path = window.location.pathname;
+		// If anything breaks put this on top of render :)
+		// //If it's logged in and is hitting "" or "/" or "/login" redirect to /trade by default
+		// //Issues:If you hit /leaderboard say you'll be redirected to /login and then 
+		// //be routed to /trade
+		// const shouldRedirect = ["", "/", "/login"].indexOf(path) != -1;
+		// if (shouldRedirect) {
+		// 	window.history.replaceState({}, "Dalal Street", "/trade");
+		// 	this.forceUpdate();
+		// }
+		// }
 	}
 }
