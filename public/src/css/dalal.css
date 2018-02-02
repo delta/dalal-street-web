@@ -441,10 +441,29 @@ h3.panel-header {
 
 /* Market styling ends here */
 
-/* TickerBar styling starts here */
+/* CompanyDetails styling starts here */
 
-/* TickerBar styling ends here */
+#company-details table {
+	background: #1B1C1D;
+}
 
+#company-details table tr td {
+	height: 2.5em;
+	font-size: 1.3em;
+}
+
+#company-details table tr td:nth-child(1) {
+	border-right: 1px solid grey !important;
+}
+
+#company-info {
+	color: white;
+}
+
+/* CompanyDetails styling ends here */
+
+
+/* News styling starts here */
 .ui .card img {
 	-webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
 	filter: grayscale(100%);
@@ -455,3 +474,4 @@ h3.panel-header {
 	-webkit-filter: grayscale(0%); /* Safari 6.0 - 9.0 */
 	filter: grayscale(0%);
 }
+/* News styling ends here */

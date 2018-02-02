@@ -8,6 +8,7 @@ import { Leaderboard } from "./leaderboard/Leaderboard";
 import { Portfolio } from "./portfolio/Portfolio";
 import { Market } from "./market/Market";
 import { News } from "./news/News";
+import { Company } from "./companies/Companies";
 
 import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService } from "../../proto_build/DalalMessage_pb_service";
@@ -43,10 +44,10 @@ interface MainState {
 
     isMarketOpen: 				boolean
 
-	notifSubscriptionId: SubscriptionId
-	stockSubscriptionId: SubscriptionId
+    notifSubscriptionId: SubscriptionId
+    stockSubscriptionId: SubscriptionId
 
-	stockDetails: Stock_pb[]
+    stockDetails: Stock_pb[]
 }
 
 // We tried out a couple of ways to pass notification from main
@@ -233,41 +234,68 @@ export class Main extends React.Component<MainProps, MainState> {
     }
 
     getWrappedMarket = () => {
-		return (
-			<Market sessionMd={this.props.sessionMd}
-					stockDetailsMap={this.state.stockDetailsMap}
-					notifications={this.state.notifications}
-			/>
-		);
-    }
-    
-    getWrappedNews = () => {
         return (
-            <News   sessionMd={this.props.sessionMd}
-                    newsCount={this.props.constantsMap["MARKET_EVENT_COUNT"]}
+            <Market sessionMd={this.props.sessionMd}
+                    stockDetailsMap={this.state.stockDetailsMap}
                     notifications={this.state.notifications}
             />
         );
     }
+    
+    getWrappedNews = () => {
+        return (
+            <News
+                sessionMd={this.props.sessionMd}
+                newsCount={this.props.constantsMap["MARKET_EVENT_COUNT"]}
+                notifications={this.state.notifications}
+            />
+        );
+    }
 
-	render() {
-		//Use window.location.pathname because react router is removed 
-		//and hence react's history wont be changing ie
-		//pushing to path in App cannot be retrieved by Route exact path
-		//because the history for react will not have those changes reflected
-		switch (window.location.pathname) {
-			case "/trade":
+    getWrappedCompany = () => {
+        const stockBriefInfoMap: { [index:number]: StockBriefInfo } = {};
+        const stockPricesMap: { [index:number]: number } = {};
+        for (const stockId in this.state.stockDetailsMap) {
+            const stock = this.state.stockDetailsMap[stockId];
+
+            stockBriefInfoMap[stockId] = {
+                id: stock.getId(),
+                shortName: stock.getShortName(),
+                fullName: stock.getFullName(),
+            };
+
+            stockPricesMap[stockId] = stock.getCurrentPrice();
+        }
+        return (
+            <Company
+                sessionMd={this.props.sessionMd}
+                notifications={this.state.notifications}
+                stockBriefInfoMap={stockBriefInfoMap}
+                stockPricesMap={stockPricesMap}
+            />
+        );
+    }
+
+    render() {
+        //Use window.location.pathname because react router is removed 
+        //and hence react's history wont be changing ie
+        //pushing to path in App cannot be retrieved by Route exact path
+        //because the history for react will not have those changes reflected
+        switch (window.location.pathname) {
+            case "/trade":
                 return this.getWrappedTradingTerminal();
             case "/portfolio":
                 return this.getWrappedPortfolio();
             case "/market":
                 return this.getWrappedMarket();
-			case "/leaderboard":
+            case "/leaderboard":
                 return this.getWrappedLeaderboard();
             case "/news":
                 return this.getWrappedNews();
-			default:
-				return <NotFound />;
-		}
-	}
+            case "/companies":
+                return this.getWrappedCompany();
+            default:
+                return <NotFound />;
+        }
+    }
 }
