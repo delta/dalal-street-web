@@ -7,6 +7,7 @@ import { NotFound } from "./NotFound";
 import { Leaderboard } from "./leaderboard/Leaderboard";
 import { Portfolio } from "./portfolio/Portfolio";
 import { Market } from "./market/Market";
+import { News } from "./news/News";
 
 import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService } from "../../proto_build/DalalMessage_pb_service";
@@ -238,7 +239,16 @@ export class Main extends React.Component<MainProps, MainState> {
 					notifications={this.state.notifications}
 			/>
 		);
-	}
+    }
+    
+    getWrappedNews = () => {
+        return (
+            <News   sessionMd={this.props.sessionMd}
+                    newsCount={this.props.constantsMap["MARKET_EVENT_COUNT"]}
+                    notifications={this.state.notifications}
+            />
+        );
+    }
 
 	render() {
 		//Use window.location.pathname because react router is removed 
@@ -253,7 +263,9 @@ export class Main extends React.Component<MainProps, MainState> {
             case "/market":
                 return this.getWrappedMarket();
 			case "/leaderboard":
-				return this.getWrappedLeaderboard();
+                return this.getWrappedLeaderboard();
+            case "/news":
+                return this.getWrappedNews();
 			default:
 				return <NotFound />;
 		}
