@@ -8,6 +8,7 @@ import { LoginRequest, LoginResponse } from "../../../proto_build/actions/Login_
 export interface LoginProps {
     // Passes response back to app for setting state
     loginSuccessHandler: (resp: LoginResponse) => void
+    signUpRedirect: () => void
 }
 //All Error handling setting localstorage happens here
 //the only thing passed back is the resp
@@ -45,12 +46,11 @@ export class Login extends React.Component<LoginProps, {}>{
                             <h2 className="ui header inverted">
                                 <div className="content">
                                     Login to your account
-                            </div>
+                                </div>
                             </h2>
                             <LoginForm loginSuccessHandler={this.loginSuccessHandler} />
                             <div className="ui message">
-                                New to us?
-                            <a href="https://www.pragyan.org/18/home/+login&subaction=register">Register</a>
+                                New to us? <a className="register-hover" onClick={this.props.signUpRedirect} >Register</a>
                             </div>
                         </div>
                     </div>

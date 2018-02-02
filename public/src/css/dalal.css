@@ -328,6 +328,20 @@ h3.panel-header {
 }
 /* Login styling ends */
 
+.register-hover {
+    cursor: pointer;
+}
+
+.invert-me{
+	background: #404a52 !important;
+	color:#fff !important;
+}
+
+#country-selector .item{
+	background: #404a52 !important;
+	color : #fff !important;
+}
+
 /* Leaderboard styling starts */
 
 #leaderboard-container {
