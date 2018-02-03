@@ -152,7 +152,8 @@ div.expected-cost {
 }
 
 body {
-	background: #2f323d;		
+	background: #2f323d;
+	font-family: 'Open Sans', sans-serif;
 }
 
 .ui.input, .ui.button {
@@ -410,10 +411,11 @@ h3.panel-header {
 
 #load-older-transactions {
 	cursor: pointer;
+	color: rgb(78, 211, 245) !important;
 }
 
 #load-older-transactions:hover {
-	color: rgb(78, 211, 245) !important;
+	color: rgb(60, 226, 162) !important;
 }
 /* Transactions styling ends */
 
