@@ -50,13 +50,21 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 
         try {
             const resp = await DalalActionService.placeOrder(orderRequest, this.props.sessionMd);
+            this.showModal("Order placed successfully!");
             console.log(resp.getStatusCode(), resp.toObject());
         }
         catch(e) {
             // error could be grpc error or Dalal error. Both handled in exception
             console.log("Error happened! ", e.statusCode, e.statusMessage, e);
+            this.showModal("Error occured while placing order");
         }
     };
+
+
+    showModal = (msg: string) => {
+        $("#place-order-modal-content").html("<p>" + msg + "</p>");
+        $("#place-order-modal").modal('show');
+    }
 
     handleOrder = (event: any, orderType: OrderType, orderAction: string) => {
         const orderTypeString = orderTypeToStr(orderType);
@@ -67,7 +75,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
         let orderPrice = Number(orderType ==  MARKET ? 0 : priceInputField.value);
 
         if (!(isPositiveInteger(stockCount) && (orderType ==  MARKET || isPositiveInteger(orderPrice)))) {
-            alert("Please enter a positive integer");
+            this.showModal("Please enter a positive integer");
             return;
         }
 
@@ -105,6 +113,20 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
     render() {
         return (
             <Fragment>
+                <div id="place-order-modal" className="ui tiny modal">
+                <div className="ui centered aligned header">
+                    We've got a message for you
+                </div>
+                    <div id="place-order-modal-content" className="content centered">
+                        
+                    </div>
+                    <div className="actions">
+                        <div className="ui red basic cancel button">
+                        <i className="remove icon"></i>
+                        Close
+                        </div>
+                    </div>
+                </div>
                 <div className="ui pointing secondary menu place-order-box-menu">
                     <a className="item active" data-tab="market">Market</a>
                     <a className="item" data-tab="limit">Limit</a>

@@ -30,6 +30,10 @@
 	min-height: 135px;
 	background: #1B1C1D !important;
 }
+
+#open-orders-container td.cancel-order-button {
+	cursor: pointer;
+}
 /* Open orders ends */
 
 .ui.pointing.secondary.menu > a.item{
