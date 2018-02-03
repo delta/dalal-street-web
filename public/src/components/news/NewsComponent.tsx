@@ -1,7 +1,5 @@
 import * as React from "react";
-
 import { MarketEvent } from "../../../proto_build/models/MarketEvent_pb";
-import { Fragment } from "react";
 
 declare var $:any;
 
@@ -29,7 +27,7 @@ export class NewsComponent extends React.Component<NewsComponentProps,{}> {
         const newsDetails = this.props.newsDetail;
 
         return(
-            <Fragment>
+            <div className="four wide column box">
                 <div id={"ui_card_"+newsDetails.getId()} onClick={this.showModal} className="ui card">
                     <div className="image">
                         <img src="https://placeimg.com/350/350/animals"/>
@@ -64,7 +62,7 @@ export class NewsComponent extends React.Component<NewsComponentProps,{}> {
                         </div>
                     </div>
                 </div>
-            </Fragment>
+            </div>
         );
     }
 }
