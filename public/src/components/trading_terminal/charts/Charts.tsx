@@ -38,6 +38,7 @@ interface ChartsState {
 	interval: intervalType
 	data: ohlcPointType[]
 	subscriptionId: SubscriptionId
+	textDesc: string
 }
 
 let intervalTypeToNo: { [index:string]: number} = {
@@ -59,6 +60,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 			interval: "1min",
 			data: [],
 			subscriptionId: new SubscriptionId,
+			textDesc: 'Fetching chart data',
 		};
 	}
 
@@ -66,26 +68,38 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 		let globalIntervalData: ohlcPointType[] = [];
 
 		let historyReq = new GetStockHistoryRequest();
-
 		historyReq.setStockId(stockId);
 		historyReq.setResolution(intervalTypeToNo[this.state.interval]);
-
-		let historyResp = await DalalActionService.getStockHistory(historyReq, this.props.sessionMd);
-
-		historyResp.getStockHistoryMapMap().forEach((history: models_StockHistory_pb.StockHistory, key: string) => {
-			globalIntervalData.push({
-				o: history.getOpen(),
-				h: history.getHigh(),
-				l: history.getLow(),
-				c: history.getClose(),
-				t: Date.parse(history.getCreatedAt()),
-			});
+		
+		this.setState({
+			isLoading: true,
 		});
 
+		try {
+			let historyResp = await DalalActionService.getStockHistory(historyReq, this.props.sessionMd);
 
-		this.setState({
-			data: globalIntervalData,
-		})
+			historyResp.getStockHistoryMapMap().forEach((history: models_StockHistory_pb.StockHistory, key: string) => {
+				globalIntervalData.push({
+					o: history.getOpen(),
+					h: history.getHigh(),
+					l: history.getLow(),
+					c: history.getClose(),
+					t: Date.parse(history.getCreatedAt()),
+				});
+			});
+
+			this.setState({
+				data: globalIntervalData,
+				isLoading: false,
+			})
+		}
+
+		catch(e) {
+			this.setState({
+				isLoading: false,
+				textDesc:e.statusMessage,
+			});	
+		}
 	}
 
 	getStockHistoryStream = async (stockId: number) => {
@@ -122,11 +136,9 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 	async componentWillReceiveProps(nextProps: ChartsProps) {
 		if (nextProps.stockId == this.props.stockId)
 			return;
-
 		unsubscribe(this.props.sessionMd, this.state.subscriptionId);
-		this.setState({isLoading: true});
-		await this.getOldStockHistory(nextProps.stockId);
-		this.setState({isLoading: false});
+
+		this.getOldStockHistory(nextProps.stockId);
 		this.getStockHistoryStream(nextProps.stockId);
 	}
 
@@ -153,18 +165,14 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 			$("#line-chart-container").addClass("active");
 		}
 
-		await this.getOldStockHistory(this.props.stockId);
-		this.setState({
-			isLoading: false,
-		});
+		this.getOldStockHistory(this.props.stockId);
 		this.getStockHistoryStream(this.props.stockId);
 	}
 
 	onIntervalChange = async (value: intervalType) => {
 		console.log("onIntervalchange");
-		this.setState({interval: value, isLoading: true});
-		await this.getOldStockHistory(this.props.stockId);
-		this.setState({ isLoading: false });
+		this.setState({interval: value});
+		this.getOldStockHistory(this.props.stockId);
 	}
 
 	onChartTabChange = (tabPath: string) => {
@@ -197,7 +205,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 			</div>
 			<div className={"ui segment " + (this.state.isLoading ? "" : "hidden")} id="chart-loader">
 				<div className="ui active dimmer">
-					<div className="ui medium text loader">Fetching chart data...</div>
+					<div className="ui medium text loader">{this.state.textDesc}</div>
 				</div>
 				<p></p>
 			</div>

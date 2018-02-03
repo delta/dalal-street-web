@@ -14,6 +14,8 @@ function isPositiveInteger(x: number): boolean {
     return (!isNaN(x) && x % 1 === 0 && x > 0);
 }
 
+declare var $:any;
+
 export interface MarketProps {
     sessionMd: Metadata,
     stockDetailsMap: { [index:number]: Stock_pb },
@@ -35,25 +37,31 @@ export class Market extends React.Component<MarketProps, MarketState> {
         }
     }
 
+    showModal = (msg: string) => {
+        $("#market-modal-content").html("<p>" + msg + "</p>");
+        $("#market-modal").modal('show');
+    }
+
     purchaseFromExchange = async (stockId: number) => {
         let quantity = $("#input-"+stockId).val()!;
         if (!isPositiveInteger(Number(quantity))) {
-            alert("Enter a positive integer!");
+            this.showModal("Enter a positive integer!");
             return;
         }
         if (quantity) {
                 let myQuantity: number = parseInt(quantity.toString());
-                console.log("purchased stock of company " + stockId + " quantity " + myQuantity);   
-            
+                console.log("purchased stock of company " + stockId + " quantity " + myQuantity);
 
             try {
                 const request = new BuyStocksFromExchangeRequest();
                 request.setStockId(stockId);
                 request.setStockQuantity(myQuantity);
                 const resp = await DalalActionService.buyStocksFromExchange(request, this.props.sessionMd);
+                this.showModal("Order successful!");
                 console.log(resp.getStatusCode(), resp.toObject());
             } catch(e) {
-                console.log("Error happened while placing order! ", e.statusCode, e.statusMessage, e);                
+                console.log("Error happened while placing order! ", e.statusCode, e.statusMessage, e);
+                this.showModal("Oops! Something went wrong! " + e.statusMessage);
             }
         }
 
@@ -72,7 +80,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
                 stocksInExchange: objUpdate.stocksInExchange,
             }); 
         }
-        
+
         this.setState({
             stockData: newTickerStockData,
         });
@@ -100,7 +108,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
             if (percentageIncrease >= 0) {
                 diffClass = "green";
             }
-            
+
             percentageIncrease = parseFloat(percentageIncrease.toFixed(2));
             history.push(
                 <tr key={objUpdate.stockId}>
@@ -116,6 +124,19 @@ export class Market extends React.Component<MarketProps, MarketState> {
 
         return (
             <div id="market-container" className="ui stackable grid pusher main-container">
+                <div id="market-modal" className="ui tiny modal">
+                    <div className="ui centered aligned header">
+                        We've got a message for you
+                    </div>
+                    <div id="market-modal-content" className="content centered">    
+                    </div>
+                    <div className="actions">
+                        <div className="ui red basic cancel button">
+                        <i className="remove icon"></i>
+                        Close
+                        </div>
+                    </div>
+                </div>
                 <div className="row" id="top_bar">
 					<div id="notif-component">
 						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
@@ -123,7 +144,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
 				</div>
                 <div className="row">
                     <h2 className="ui center aligned icon header inverted">
-                        <i className="pie chart icon"></i>                        
+                        <i className="pie chart icon"></i>
                         <div className="content">
                             Primary Market
                             <div className="grey sub header">
