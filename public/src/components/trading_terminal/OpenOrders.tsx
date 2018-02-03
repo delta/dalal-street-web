@@ -7,6 +7,7 @@ import { subscribe, unsubscribe } from "../../streamsutil";
 import { DataStreamType, SubscriptionId } from "../../../proto_build/datastreams/Subscribe_pb";
 import { DalalActionService, DalalStreamService } from "../../../proto_build/DalalMessage_pb_service";
 import { GetMyOpenOrdersRequest, GetMyOpenOrdersResponse } from "../../../proto_build/actions/GetMyOrders_pb";
+import { CancelOrderRequest } from "../../../proto_build/actions/CancelOrder_pb";
 import { Ask as Ask_pb } from "../../../proto_build/models/Ask_pb";
 import { Bid as Bid_pb } from "../../../proto_build/models/Bid_pb";
 
@@ -167,6 +168,37 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 		}
 	}
 
+	handleCancelOrder = async (orderId: string, isAsk: boolean) => {
+		const cancelOrderRequest = new CancelOrderRequest();
+		cancelOrderRequest.setOrderId(Number(orderId));
+		cancelOrderRequest.setIsAsk(isAsk);
+
+		try {
+			const resp = await DalalActionService.cancelOrder(cancelOrderRequest, this.props.sessionMd);
+			console.log(resp.getStatusCode(), resp.toObject());
+
+			if (isAsk) {
+				let currOpenAsks = this.state.openAsks;
+				delete currOpenAsks[Number(orderId)];
+
+				this.setState({
+					openAsks: currOpenAsks
+				});
+			}
+			else {
+				let currOpenBids = this.state.openBids;
+				delete currOpenBids[Number(orderId)];
+
+				this.setState({
+					openBids: currOpenBids
+				});
+			}
+		} catch(e) {
+			// error could be grpc error or Dalal error. Both handled in exception
+			console.log("Error happened! ", e.statusCode, e.statusMessage, e);
+		}
+	}
+
 	render() {
 		if (this.state.isLoading) {
 			return (
@@ -222,6 +254,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 					<td className="red volume"><strong>{openAsks[askId].getStockQuantity()}</strong></td>
 					<td className="red volume"><strong>{openAsks[askId].getStockQuantityFulfilled()}</strong></td>
 					<td className="red volume"><strong>{price}</strong></td>
+					<td onClick={e => this.handleCancelOrder(askId,true)} className="red cancel-order-button">❌</td>
 				</tr>
 			);
 		}
@@ -239,6 +272,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 					<td className="green volume"><strong>{openBids[bidId].getStockQuantity()}</strong></td>
 					<td className="green volume"><strong>{openBids[bidId].getStockQuantityFulfilled()}</strong></td>
 					<td className="green volume"><strong>{price}</strong></td>
+					<td onClick={e => this.handleCancelOrder(bidId,false)} className="red cancel-order-button">❌</td>
 				</tr>
 			);
 		}
@@ -256,6 +290,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 							<th>Volume</th>
 							<th>Filled</th>
 							<th>Price</th>
+							<th>Cancel</th>
 						</tr>
 					</thead>
 					<tbody>
