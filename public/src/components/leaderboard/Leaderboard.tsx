@@ -17,6 +17,7 @@ interface LeaderboardState {
     totalPages: number,
     leaderboardEntries: LeaderboardRow_pb[],
     userRank: number,
+    isLoading: boolean,
 }   
 
 export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
@@ -27,6 +28,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
             totalPages: 1,
             leaderboardEntries: [],
             userRank: 0,
+            isLoading: false,
         };
     }
 
@@ -35,6 +37,9 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
     }
 
     getLeaderboard = async (offset: number) => {
+        this.setState({
+            isLoading: true,
+        });
         const leaderboardRequest = new GetLeaderboardRequest();
         leaderboardRequest.setStartingId(offset);
         leaderboardRequest.setCount(this.props.leaderboardCount);
@@ -46,11 +51,15 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                 totalPages: Math.ceil(resp.getTotalUsers() / this.props.leaderboardCount),
                 leaderboardEntries: resp.getRankListList(),
                 userRank: resp.getMyRank(),
+                isLoading: false,
             });
         }
         catch(e) {
             // error could be grpc error or Dalal error. Both handled in exception
             console.log("Error happened! ", e.statusCode, e.statusMessage, e);
+            this.setState({
+                isLoading: false,
+            });
         }
     };
 
@@ -62,6 +71,36 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
     }
 
     render() {
+        if (this.state.isLoading) {
+            return (
+                <div id="leaderboard-container" className="ui stackable grid pusher main-container">
+                    <div className="row" id="top_bar">
+                        <div id="notif-component">
+                            <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <h2 className="ui center aligned icon header inverted">
+                            <i className="trophy icon"></i>
+                            <div className="content">
+                                Leaderboard
+                                <div className="grey sub header">
+                                    This is what it all comes down to
+                                </div>
+                            </div>
+                        </h2>
+                    </div>
+                    <div className="row fourteen wide column centered">
+                        <div className="ui segment">
+                            <div className="ui active dimmer">
+                                <div className="ui medium text loader">Fetching leaderboard...</div>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
         const state = this.state;
         
         const leaderboardEntries = state.leaderboardEntries.map((entry, index) => (

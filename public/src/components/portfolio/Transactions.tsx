@@ -10,9 +10,11 @@ import { TransactionUpdate } from "../../../proto_build/datastreams/Transactions
 import { Transaction as Transaction_pb, TransactionType } from "../../../proto_build/models/Transaction_pb";
 
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
+import { Fragment } from "react";
 
 // Moment will be exposed globally by the MomentJS script included in index.html
 declare var moment: any;
+declare var $:any;
 
 const FROM_EXCHANGE_TRANSACTION = TransactionType.FROM_EXCHANGE_TRANSACTION;
 const ORDER_FILL_TRANSACTION = TransactionType.ORDER_FILL_TRANSACTION;
@@ -48,6 +50,8 @@ export interface TransactionsProps {
 interface TransactionsState {
     subscriptionId: SubscriptionId,
     transactions: Transaction_pb[],
+    lastFetchedTransactionId: number,
+    moreExists: boolean,
 }
 
 export class Transactions extends React.Component<TransactionsProps, TransactionsState> {
@@ -57,35 +61,52 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
         this.state = {
             subscriptionId: new SubscriptionId,
             transactions: [],
+            lastFetchedTransactionId: 0,
+            moreExists: true,
         };
     }
 
     componentDidMount() {
         this.getOldTransactions();
+        this.handleTransactionsStream();
     }
 
     componentWillUnmount() {
         unsubscribe(this.props.sessionMd, this.state.subscriptionId);
     }
 
+    showModal = (msg: string) => {
+        $("#transactions-modal-content").html("<p>" + msg + "</p>");
+        $("#transactions-modal").modal('show');
+    }
+
     getOldTransactions = async () => {
-        const transactionsRequest = new GetTransactionsRequest();
+        if (this.state.moreExists) {
+            console.log("getting old transactions with id ", this.state.lastFetchedTransactionId);
+            const transactionsRequest = new GetTransactionsRequest();
 
-        // lastTransactionId = 0 fetches the latest transactions
-        transactionsRequest.setLastTransactionId(0);
-        transactionsRequest.setCount(this.props.transactionCount); 
+            // lastTransactionId = 0 fetches the latest transactions
+            transactionsRequest.setLastTransactionId(this.state.lastFetchedTransactionId);
+            transactionsRequest.setCount(this.props.transactionCount);
 
-        try {
-            const resp = await DalalActionService.getTransactions(transactionsRequest, this.props.sessionMd);
-            console.log(resp.getStatusCode(), resp.toObject());
-            this.setState({
-                transactions: resp.getTransactionsList()
-            });
-
-            this.handleTransactionsStream();
-        } catch(e) {
-            // error could be grpc error or Dalal error. Both handled in exception
-            console.log("Error happened! ", e.statusCode, e.statusMessage, e);
+            try {
+                const resp = await DalalActionService.getTransactions(transactionsRequest, this.props.sessionMd);
+                const nextId = resp.getTransactionsList().slice(-1)[0].getId() - 1;
+                let transactions = this.state.transactions.slice();
+                transactions.push(...resp.getTransactionsList());
+                console.log("lulwa", resp.getStatusCode(), resp.toObject());
+                this.setState({
+                    transactions: transactions,
+                    moreExists: resp.getMoreExists(),
+                    lastFetchedTransactionId: nextId
+                });
+            } catch(e) {
+                // error could be grpc error or Dalal error. Both handled in exception
+                console.log("Error happened! ", e.statusCode, e.statusMessage, e);
+            }
+        }
+        else {
+            this.showModal("Reached end of transactions");
         }
     }
 
@@ -135,24 +156,45 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
             </tr>
         ));
         return (
-            <table className="ui inverted table unstackable">
-                <thead>
-                    <tr><th colSpan={6} className="ui white header">
-                        Your transactions
-                    </th></tr>
-                    <tr>
-                        <th>Company</th>
-                        <th>Type</th>
-                        <th>Quantity</th>
-                        <th>Trade Price</th>
-                        <th>Total</th>
-                        <th>Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {transactionsContent}
-                </tbody>
-            </table>
+            <Fragment>
+                <div id="transactions-modal" className="ui tiny modal">
+                        <div className="ui centered aligned header">
+                            We've got a message for you
+                        </div>
+                        <div id="transactions-modal-content" className="content centered">
+ 
+                        </div>
+                        <div className="actions">
+                            <div className="ui red basic cancel button">
+                            <i className="remove icon"></i>
+                            Close
+                            </div>
+                        </div>
+                    </div>
+                <table className="ui inverted table unstackable">
+                    <thead>
+                        <tr>
+                            <th colSpan={5} className="ui white header">
+                                Your transactions
+                            </th>
+                            <th id="load-older-transactions" onClick={this.getOldTransactions}>
+                                <i>Load older transactions ↻</i>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>Company</th>
+                            <th>Type</th>
+                            <th>Quantity</th>
+                            <th>Trade Price</th>
+                            <th>Total</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {transactionsContent}
+                    </tbody>
+                </table>
+            </Fragment>
         );
     }
 }

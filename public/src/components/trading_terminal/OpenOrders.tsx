@@ -36,6 +36,8 @@ interface OpenOrdersState {
 	subscriptionId: SubscriptionId,
 }
 
+declare var $:any;
+
 export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState> {
 	constructor(props: OpenOrdersProps) {
 		super(props);
@@ -87,6 +89,11 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 	componentWillUnmount() {
 		unsubscribe(this.props.sessionMd, this.state.subscriptionId);
 	}
+
+	showModal = (msg: string) => {
+        $("#open-orders-modal-content").html("<p>" + msg + "</p>");
+        $("#open-orders-modal").modal('show');
+    }
 
 	handleMyOrderUpdates = async () => {
 		const sessionMd = this.props.sessionMd;
@@ -193,9 +200,11 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 					openBids: currOpenBids
 				});
 			}
+			this.showModal("Order cancelled successfully!");
 		} catch(e) {
 			// error could be grpc error or Dalal error. Both handled in exception
 			console.log("Error happened! ", e.statusCode, e.statusMessage, e);
+			this.showModal("Error cancelling order!");
 		}
 	}
 
@@ -282,6 +291,20 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 				<div className="ui pointing secondary menu">
 					<h3 className="panel-header right item">Open Orders</h3>
 				</div>
+				<div id="open-orders-modal" className="ui tiny modal">
+					<div className="ui centered aligned header">
+						We've got a message for you
+					</div>
+                    <div id="open-orders-modal-content" className="content centered">
+
+                    </div>
+                    <div className="actions">
+                        <div className="ui red basic cancel button">
+                        <i className="remove icon"></i>
+                        Close
+                        </div>
+                    </div>
+                </div>
 				<table className="ui inverted table unstackable">
 					<thead>
 						<tr>
