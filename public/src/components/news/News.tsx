@@ -43,10 +43,6 @@ export class News extends React.Component<NewsProps, NewsState> {
     }
 
     getNewNews = async () => {
-        const req = new GetMarketEventsRequest()
-        req.setLastEventId(0);
-        req.setCount(this.props.newsCount);
-
         const subscriptionId = await subscribe(this.props.sessionMd, 5);
 
         this.setState({

@@ -385,6 +385,11 @@ h3.panel-header {
 	padding-bottom: 5px;
 }
 
+#leaderboard-container .dimmer, #leaderboard-container .segment {
+	min-height: 135px;
+	background: #1B1C1D !important;
+}
+
 /* Leaderboard styling ends */
 
 /* Transactions styling begins */
@@ -392,9 +397,23 @@ h3.panel-header {
 	margin: 5px auto;
 }
 
+#transactions-container table tbody {
+	display:block;
+	height: 325px;
+	overflow:auto;
+}
+
 #transactions-container table tr th, #transactions-container table tr td {
 	height: 2.5em;
 	font-size: 1.1em;
+}
+
+#load-older-transactions {
+	cursor: pointer;
+}
+
+#load-older-transactions:hover {
+	color: rgb(78, 211, 245) !important;
 }
 /* Transactions styling ends */
 
