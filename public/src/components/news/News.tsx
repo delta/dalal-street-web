@@ -9,6 +9,8 @@ import { subscribe, unsubscribe } from "../../../src/streamsutil";
 import { SubscriptionId } from "../../../proto_build/datastreams/Subscribe_pb";
 import { NewsComponent } from "./NewsComponent";
 
+declare var $: any;
+
 export interface NewsProps {
     sessionMd: Metadata,
     newsCount: number,
@@ -18,6 +20,8 @@ export interface NewsProps {
 export interface NewsState {
     newsArray: MarketEvent[],
     subscriptionId: SubscriptionId,
+    lastFetchedNewsId: number,
+    moreExists: boolean,
 }
 
 export class News extends React.Component<NewsProps, NewsState> {
@@ -27,19 +31,39 @@ export class News extends React.Component<NewsProps, NewsState> {
         this.state = {
             newsArray: [],
             subscriptionId: new SubscriptionId,
+            lastFetchedNewsId: 0,
+            moreExists: true,
         };
     }
 
+    showModal = (msg: string) => {
+        $("#news-modal-content").html("<p>" + msg + "</p>");
+        $("#news-modal").modal('show');
+    }
+
     getOldNews = async () => {
-        const req = new GetMarketEventsRequest();
-        req.setLastEventId(0);
-        req.setCount(this.props.newsCount);
-                
-        let newsResp = await DalalActionService.getMarketEvents(req, this.props.sessionMd);
-        
-        this.setState({
-            newsArray: newsResp.getMarketEventsList(),
-        });
+        if (this.state.moreExists) {
+            const req = new GetMarketEventsRequest();
+            req.setLastEventId(this.state.lastFetchedNewsId);
+            req.setCount(this.props.newsCount);
+            try {
+                let resp = await DalalActionService.getMarketEvents(req, this.props.sessionMd);
+                const nextId = resp.getMarketEventsList().slice(-1)[0].getId() - 1;
+                let updatedNews = this.state.newsArray.slice();
+                updatedNews.push(...resp.getMarketEventsList());
+                this.setState({
+                    newsArray: updatedNews,
+                    moreExists: resp.getMoreExists(),
+                    lastFetchedNewsId: nextId,
+                });
+            } catch(e) {
+                // error could be grpc error or Dalal error. Both handled in exception
+                console.log("Error happened! ", e.statusCode, e.statusMessage, e);
+            }
+        }
+        else {
+            this.showModal("No further news. You're all caught up!");
+        }
     }
 
     getNewNews = async () => {
@@ -83,6 +107,20 @@ export class News extends React.Component<NewsProps, NewsState> {
 
         return (
             <div id="news-container" className="ui stackable grid pusher main-container">
+                <div id="news-modal" className="ui tiny modal">
+                    <div className="ui centered aligned header">
+                        We've got a message for you
+                    </div>
+                    <div id="news-modal-content" className="content centered">
+
+                    </div>
+                    <div className="actions">
+                        <div className="ui red basic cancel button">
+                        <i className="remove icon"></i>
+                        Close
+                        </div>
+                    </div>
+                </div>
                 <div className="row" id="top_bar">
                      <div id="notif-component">
                          <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
@@ -98,6 +136,11 @@ export class News extends React.Component<NewsProps, NewsState> {
                             </div>
                         </div>
                     </h2>
+                </div>
+                <div className="row">
+                    <span id="load-older-news" onClick={this.getOldNews}>
+                        <i>Load older news ↻</i>
+                    </span>
                 </div>
                 <div className="row">
                     {news} 

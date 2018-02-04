@@ -625,7 +625,16 @@ h1 {
 	transform: translate(5px, -50%);
 	opacity: 1;
 }
-
 .ui .card {
 	width: 97% !important;
 }
+#load-older-news {
+	cursor: pointer;
+	color: rgb(78, 211, 245) !important;
+	margin-left: 18px;
+}
+
+#load-older-news:hover {
+	color: rgb(60, 226, 162) !important;
+}
+/* News styling ends here */
