@@ -501,6 +501,20 @@ h1 {
 	font-family: "Open Sans", sans-serif;
 	font-weight: 300;
 }
+
+.no-padding {
+	padding-left:0px !important;
+	padding-right:0px !important;
+}
+
+.no-padding:nth-child(4n+1) {
+	padding-left: 10px !important;
+}
+
+.no-padding:nth-child(4n) {
+	padding-right: 10px !important;
+}
+
 .news-card {
 	float: left;
 	padding: 0 1.7rem;
@@ -526,7 +540,7 @@ h1 {
 }
 .news-card .news-wrapper {
 	background-color: #fff;
-	height: 360px;
+	height: 260px;
 	width: 100%;
 	position: relative;
 	overflow: hidden;
@@ -589,7 +603,7 @@ h1 {
 }
 .news-element .button {
 	display: block;
-	width: 100px;
+	width: 100% !important;
 	margin: 2em auto 1em;
 	text-align: center;
 	font-size: 12px;
@@ -610,4 +624,8 @@ h1 {
 .news-element .button:hover::after {
 	transform: translate(5px, -50%);
 	opacity: 1;
+}
+
+.ui .card {
+	width: 97% !important;
 }

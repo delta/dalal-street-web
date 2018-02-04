@@ -76,7 +76,7 @@ export class News extends React.Component<NewsProps, NewsState> {
     render() {
         const newsArray = this.state.newsArray;
         const news = newsArray.map((entry,index) => (
-            <div className="four wide column box">
+            <div className="four wide column box no-padding">
                 <NewsComponent key={index} newsDetail={entry} />
             </div>
         ));
