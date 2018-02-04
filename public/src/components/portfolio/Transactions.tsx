@@ -94,7 +94,6 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
                 const nextId = resp.getTransactionsList().slice(-1)[0].getId() - 1;
                 let transactions = this.state.transactions.slice();
                 transactions.push(...resp.getTransactionsList());
-                console.log("lulwa", resp.getStatusCode(), resp.toObject());
                 this.setState({
                     transactions: transactions,
                     moreExists: resp.getMoreExists(),
@@ -158,19 +157,19 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
         return (
             <Fragment>
                 <div id="transactions-modal" className="ui tiny modal">
-                        <div className="ui centered aligned header">
-                            We've got a message for you
-                        </div>
-                        <div id="transactions-modal-content" className="content centered">
- 
-                        </div>
-                        <div className="actions">
-                            <div className="ui red basic cancel button">
-                            <i className="remove icon"></i>
-                            Close
-                            </div>
+                    <div className="ui centered aligned header">
+                        We've got a message for you
+                    </div>
+                    <div id="transactions-modal-content" className="content centered">
+
+                    </div>
+                    <div className="actions">
+                        <div className="ui red basic cancel button">
+                        <i className="remove icon"></i>
+                        Close
                         </div>
                     </div>
+                </div>
                 <table className="ui inverted table unstackable">
                     <thead>
                         <tr>
