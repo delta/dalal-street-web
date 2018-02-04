@@ -1,5 +1,6 @@
 import * as React from "react";
 import { MarketEvent } from "../../../proto_build/models/MarketEvent_pb";
+import { Fragment } from "react";
 
 declare var $:any;
 
@@ -25,17 +26,31 @@ export class NewsComponent extends React.Component<NewsComponentProps,{}> {
     render() {
 
         const newsDetails = this.props.newsDetail;
-
+        const divStyle = {
+            background: "url(http://www.valuewalk.com/wp-content/uploads/2018/01/bitcoin_1516197589.jpg) center/cover no-repeat" 
+        }
         return(
-            <div className="four wide column box">
-                <div id={"ui_card_"+newsDetails.getId()} onClick={this.showModal} className="ui card">
-                    <div className="image">
-                        <img src="https://placeimg.com/350/350/animals"/>
-                    </div>
-                    <div className="content">
-                        <a className="header">{newsDetails.getHeadline()}</a>
-                        <div className="meta">
-                        <span className="date">{newsDetails.getCreatedAt()}</span>
+            <Fragment>
+                <div id={"ui_card_"+newsDetails.getId()} onClick={this.showModal} className="news-element news-card ui card">
+                    <div className="news-wrapper" style={divStyle}>
+                        <div className="header">
+                            <div className="date">
+                                <span className="day">12</span>
+                                <span className="month">Aug</span>
+                                <span className="year">2016</span>
+                            </div>
+                            <ul className="menu-content">
+                                <li>
+                                    <a href="#" className="fa fa-bookmark-o"></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div className="news-data">
+                            <div className="content">
+                                <h1 className="title"><a href="#">{newsDetails.getHeadline()}</a></h1>
+                                <p className="text"></p>
+                                <a href="#" className="button">Read more</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -62,7 +77,8 @@ export class NewsComponent extends React.Component<NewsComponentProps,{}> {
                         </div>
                     </div>
                 </div>
-            </div>
+            </Fragment>
+        
         );
     }
 }
