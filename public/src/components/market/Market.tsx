@@ -115,9 +115,9 @@ export class Market extends React.Component<MarketProps, MarketState> {
                     <td className="volume"><strong>{objUpdate.companyName}</strong></td>
                     <td className="volume"><strong>{objUpdate.currentPrice}</strong></td>
                     <td className={"volume " + diffClass}><strong>{percentageIncrease}{" %"}</strong></td>
-                    <td className={"volume"} ><strong>{objUpdate.stocksInExchange}</strong></td>
+                    <td className="volume"><strong>{objUpdate.stocksInExchange}</strong></td>
                     <td className="volume"><strong><input id={"input-"+objUpdate.stockId} placeholder="0" className="market-input"/></strong></td>
-                    <td className="volume"><strong><button className="market-button" onClick={() => {this.purchaseFromExchange(objUpdate.stockId)}}>Buy</button></strong></td>                        
+                    <td className="volume"><strong><button className="ui inverted green button" onClick={() => {this.purchaseFromExchange(objUpdate.stockId)}}>Buy</button></strong></td>                        
                 </tr>
             );
         }
