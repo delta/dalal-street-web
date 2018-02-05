@@ -35,6 +35,10 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
     }
 
     getLeaderboard = async (offset: number) => {
+        // No idea why this is required but react-paginate breaks if you change state while it's state change is happening
+        // this.setState({
+        //     isLoading: true,
+        // });
         const leaderboardRequest = new GetLeaderboardRequest();
         leaderboardRequest.setStartingId(offset);
         leaderboardRequest.setCount(this.props.leaderboardCount);
