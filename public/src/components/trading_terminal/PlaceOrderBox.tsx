@@ -113,25 +113,26 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
     render() {
         return (
             <Fragment>
-                <div id="place-order-modal" className="ui tiny modal">
-                <div className="ui centered aligned header">
-                    We've got a message for you
-                </div>
-                    <div id="place-order-modal-content" className="content centered">
-                        
-                    </div>
-                    <div className="actions">
-                        <div className="ui red basic cancel button">
-                        <i className="remove icon"></i>
-                        Close
-                        </div>
-                    </div>
-                </div>
                 <div className="ui pointing secondary menu place-order-box-menu">
                     <a className="item active" data-tab="market">Market</a>
                     <a className="item" data-tab="limit">Limit</a>
                     <a className="item" data-tab="stoploss">Stoploss</a>
                     <h3 className="panel-header item right">Place Order</h3>
+                </div>
+                {/* have to insert modal after menu because semantic does weird things otherwise */}
+                <div id="place-order-modal" className="ui tiny modal">
+                    <div className="ui centered aligned header">
+                        We've got a message for you
+                    </div>
+                    <div id="place-order-modal-content" className="content centered">
+
+                    </div>
+                    <div className="actions">
+                        <div className="ui red basic cancel button">
+                            <i className="remove icon"></i>
+                            Close
+                        </div>
+                    </div>
                 </div>
                 <div className="ui tab inverted active" data-tab="market">
                     <div className="ui top attached tabular menu inverted place-order-box-menu">
