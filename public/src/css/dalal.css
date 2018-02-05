@@ -310,7 +310,7 @@ h3.panel-header {
 	line-height: 50px;
 	margin: 0 30px;
 }
-
+/* Login styling starts */
 #login-container {
 	position: absolute;
 	top: 50%;
@@ -326,6 +326,8 @@ h3.panel-header {
 	max-width: 450px;
 	min-width: 450px;
 }
+/* Login styling ends */
+
 /* Leaderboard styling starts */
 
 #leaderboard-container {
@@ -437,7 +439,7 @@ h3.panel-header {
 }
 /* Chart styling ends */
 
-/* Market styling  starts here */
+/* Market styling starts here */
 
 #market-top-row {
 	background: #1b1c1d;
@@ -445,7 +447,8 @@ h3.panel-header {
 
 .market-input {
 	text-align: center;
-	width:50px;
+	width:60px;
+	height: 30px;
 	background-color: white !important;
 	color:gray !important;
 	border-radius: 5px;
@@ -455,13 +458,12 @@ h3.panel-header {
 }
 
 .market-button {
-	width:60px;
-	background-color: rgba(33, 186, 69, 1);
-	color:white;
-	height:20px;
-	border:none;
-	border-radius: 3px;
-	cursor: pointer;
+	height:30px;
+}
+
+#market-container table thead th {
+	height: 2.5em;
+	font-size: 1.1em;
 }
 
 /* Market styling ends here */
