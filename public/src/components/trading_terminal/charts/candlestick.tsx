@@ -54,6 +54,7 @@ export class Candlestick extends React.Component<CandlestickProps, {}> {
 						ticks: {
 							autoSkip: true,
 							maxTicksLimit: 10,
+							stepSize: 1,
 							maxRotation: 0,
 						}
 					}]

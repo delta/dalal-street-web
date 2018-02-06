@@ -41,7 +41,7 @@ interface ChartsState {
 	textDesc: string
 }
 
-let intervalTypeToNo: { [index:string]: number} = {
+const intervalTypeToResolutionProto: { [index:string]: number} = {
 	"1min": 0,
 	"5min": 1,
 	"15min": 2,
@@ -49,6 +49,15 @@ let intervalTypeToNo: { [index:string]: number} = {
 	"60min": 4,
 	"1d": 5,
 };
+
+const intervalToIntervalType: { [index:number]: intervalType} = {
+	1: "1min",
+	5: "5min",
+	15: "15min",
+	30: "30min",
+	60: "60min",
+	1440: "1d",
+}
 
 export class Charts extends React.Component<ChartsProps, ChartsState> {
 	constructor(props: ChartsProps) {
@@ -69,7 +78,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 
 		let historyReq = new GetStockHistoryRequest();
 		historyReq.setStockId(stockId);
-		historyReq.setResolution(intervalTypeToNo[this.state.interval]);
+		historyReq.setResolution(intervalTypeToResolutionProto[this.state.interval]);
 		
 		this.setState({
 			isLoading: true,
@@ -103,9 +112,9 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 	}
 
 	getStockHistoryStream = async (stockId: number) => {
-		let historyReq = new GetStockHistoryRequest();
+		const historyReq = new GetStockHistoryRequest();
 		historyReq.setStockId(stockId);
-		historyReq.setResolution(intervalTypeToNo[this.state.interval]);
+		historyReq.setResolution(intervalTypeToResolutionProto[this.state.interval]);
 
 		const subscriptionId = await subscribe(this.props.sessionMd, DataStreamType.STOCK_HISTORY, this.props.stockId + "");
 
@@ -115,10 +124,13 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 
 		const historyStream = DalalStreamService.getStockHistoryUpdates(subscriptionId, this.props.sessionMd);
 
-		let streamIntervalData = this.state.data.slice();
-		let temp: ohlcPointType;
+		const streamIntervalData = this.state.data.slice();
 		for await (const update of historyStream) {
-			let newUpdate = update.getStockHistory()!;
+			const newUpdate = update.getStockHistory()!;
+			const myIntervalType = intervalToIntervalType[newUpdate.getInterval()];
+			if (myIntervalType != this.state.interval) {
+				continue;
+			}
 			streamIntervalData.push({
 				o: newUpdate.getOpen(),
 				h: newUpdate.getHigh(),
