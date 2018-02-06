@@ -11,3 +11,7 @@ build/
 
 # Log files
 *.log
+
+# protoc-gen
+protobuf
+protoc-3.2.0rc2-linux-x86_64.zip*
