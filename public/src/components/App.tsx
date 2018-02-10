@@ -10,14 +10,17 @@ import { User as User_pb } from "../../proto_build/models/User_pb";
 import { Stock as Stock_pb } from "../../proto_build/models/Stock_pb";
 import { Login } from "./login/Login"
 import { Register } from "./register/Register"
+import { IntroScreen } from "./intro/IntroScreen";
+
 import { Navbar } from "./common/Navbar";
 import { Main } from "./Main";
+import { RegisterResponse } from "../../proto_build/actions/Register_pb";
 
 const LOGIN = 1;
 const SIGNUP = 2;
 const MAIN = 3;
 const LOADING = 4;
-
+const SPLASH = 5;
 
 interface AppState {
 	isLoading: boolean // Waiting for response from login
@@ -104,7 +107,8 @@ export class App extends React.Component<{}, AppState> {
 		resp.getConstantsMap().forEach((value, name) => {
 			constantsMap[name] = value;
 		});
-		if (window.location.pathname == "/login" || window.location.pathname == "/" || window.location.pathname == "") {
+		const shouldRedirect = ["", "/", "/login", "/register", "/home"].indexOf(window.location.pathname) != -1;
+		if (shouldRedirect) {
 			window.history.replaceState({}, "Dalal Street", "/trade");
 		}
 		this.setState({
@@ -145,7 +149,7 @@ export class App extends React.Component<{}, AppState> {
 			this.forceUpdate()
 		}
 	}
-	loginRedirect = () =>{
+	loginRedirect = () => {
 		window.history.replaceState({}, "Dalal Street | Register", "/login");
 		this.forceUpdate()
 	}
@@ -156,24 +160,32 @@ export class App extends React.Component<{}, AppState> {
 	}
 	routeMe = () => {
 		const path = window.location.pathname
+		if (this.state.isLoading) {
+			return LOADING;
+		}
 		if (this.state.isLoggedIn) {
+			console.log("yes");
 			return MAIN;
 		}
 		if (path == "/register") {
 			return SIGNUP
 		}
-		if (this.state.isLoading) {
-			return LOADING;
+		if (path == "/login") {
+			return LOGIN;
 		}
 		//If render ever reaches here it means that login response was an error
 		//and it is loading hence has to be rerouted to /login and the login component 
 		//has to be rendered
-		window.history.replaceState({}, "Dalal Street | Login", "/login");
-		return LOGIN;
+		window.history.replaceState({}, "Dalal Street | Login", "/home");
+		return SPLASH;
 	}
-	registerResponse = ()=>[
-		
-	]
+	registerResponse = (resp: RegisterResponse) => {
+		if (resp.getStatusCode() == RegisterResponse.StatusCode.OK) {
+			window.location.pathname = "/login";
+			this.forceUpdate();
+		}
+	}
+
 
 	componentWillMount() {
 		const path = window.location.pathname;
@@ -199,7 +211,7 @@ export class App extends React.Component<{}, AppState> {
 			//If it's logged in and is hitting "" or "/" or "/login" redirect to /trade by default
 			//Issues:If you hit /leaderboard say you'll be redirected to /login and then 
 			//be routed to /trade
-			const shouldRedirect = ["", "/", "/login"].indexOf(path) != -1;
+			const shouldRedirect = ["", "/", "/login", "/register", "/home"].indexOf(path) != -1;
 			if (shouldRedirect) {
 				window.history.replaceState({}, "Dalal Street", "/trade");
 			}
@@ -207,6 +219,7 @@ export class App extends React.Component<{}, AppState> {
 	}
 
 	render() {
+
 		/*
 			page loads:
 				=> make bg req get loginresponse
@@ -251,6 +264,8 @@ export class App extends React.Component<{}, AppState> {
 				/>;
 			case LOADING:
 				return <div>Loading screen</div>;
+			case SPLASH:
+				return <IntroScreen />;
 
 		}
 
