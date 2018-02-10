@@ -9,6 +9,7 @@ import { Portfolio } from "./portfolio/Portfolio";
 import { Market } from "./market/Market";
 import { News } from "./news/News";
 import { Company } from "./companies/Companies";
+import { IntroScreen } from "./intro/IntroScreen";
 
 import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService } from "../../proto_build/DalalMessage_pb_service";
