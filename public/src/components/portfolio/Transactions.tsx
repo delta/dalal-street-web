@@ -91,14 +91,16 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
 
             try {
                 const resp = await DalalActionService.getTransactions(transactionsRequest, this.props.sessionMd);
-                const nextId = resp.getTransactionsList().slice(-1)[0].getId() - 1;
-                let transactions = this.state.transactions.slice();
-                transactions.push(...resp.getTransactionsList());
-                this.setState({
-                    transactions: transactions,
-                    moreExists: resp.getMoreExists(),
-                    lastFetchedTransactionId: nextId
-                });
+                if (resp.getTransactionsList().length > 0 ) {
+                    const nextId = resp.getTransactionsList().slice(-1)[0].getId() - 1;
+                    let transactions = this.state.transactions.slice();
+                    transactions.push(...resp.getTransactionsList());
+                    this.setState({
+                        transactions: transactions,
+                        moreExists: resp.getMoreExists(),
+                        lastFetchedTransactionId: nextId
+                    });
+                }
             } catch(e) {
                 // error could be grpc error or Dalal error. Both handled in exception
                 console.log("Error happened! ", e.statusCode, e.statusMessage, e);
