@@ -179,13 +179,6 @@ export class App extends React.Component<{}, AppState> {
 		window.history.replaceState({}, "Dalal Street | Login", "/home");
 		return SPLASH;
 	}
-	registerResponse = (resp: RegisterResponse) => {
-		if (resp.getStatusCode() == RegisterResponse.StatusCode.OK) {
-			window.location.pathname = "/login";
-			this.forceUpdate();
-		}
-	}
-
 
 	componentWillMount() {
 		const path = window.location.pathname;
@@ -253,10 +246,10 @@ export class App extends React.Component<{}, AppState> {
 							isMarketOpen={this.state.isMarketOpen!}
 						/>
 					</Fragment>
+
 				);
 			case SIGNUP:
-				return <Register registerSuccessHander={this.registerResponse}
-					loginRedirect={this.loginRedirect}
+				return <Register loginRedirect={this.loginRedirect}
 				/>
 			case LOGIN:
 				return <Login loginSuccessHandler={this.parseLoginResponse}

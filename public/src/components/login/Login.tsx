@@ -43,7 +43,7 @@ export class Login extends React.Component<LoginProps, {}>{
                 <div id="login-container">
                     <div className="ui middle aligned center aligned grid custom-checker ">
                         <div className="fakecolumn column">
-                            <h2 className="ui header inverted">
+                            <h2 className="ui inverted header">
                                 <div className="content">
                                     Login to your account
                                 </div>
@@ -51,6 +51,11 @@ export class Login extends React.Component<LoginProps, {}>{
                             <LoginForm loginSuccessHandler={this.loginSuccessHandler} />
                             <div className="ui message">
                                 New to us? <a className="register-hover" onClick={this.props.signUpRedirect} >Register</a>
+                            </div>
+                            <div className="ui message warning">
+                                <div className="content">
+                                    Already registered on Pragyan or NITT Webmail? You can use the same credentials to login.
+                                </div>
                             </div>
                         </div>
                     </div>

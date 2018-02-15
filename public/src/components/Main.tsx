@@ -282,6 +282,9 @@ export class Main extends React.Component<MainProps, MainState> {
         //and hence react's history wont be changing ie
         //pushing to path in App cannot be retrieved by Route exact path
         //because the history for react will not have those changes reflected
+        if(!this.props.isMarketOpen){
+            $('*').click(function(e){e.preventDefault();});
+        }
         switch (window.location.pathname) {
             case "/trade":
                 return this.getWrappedTradingTerminal();

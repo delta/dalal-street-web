@@ -2,7 +2,6 @@ import * as React from "react";
 import { Fragment } from "react";
 
 export class IntroScreen extends React.Component<{}, {}> {
-
     render() {
         return (
             <Fragment>
@@ -28,7 +27,7 @@ export class IntroScreen extends React.Component<{}, {}> {
         
                         <div className="box alt container">
                             <section className="feature left">
-                                <a href="#" className="image"><img src="./public/src/images/pic01.png" alt="" /></a>
+                                <a className="image"><img src="./public/src/images/pic01.png" alt="" /></a>
                                 <div className="content">
                                     <h3>Getting you started</h3>
                                     <p>
