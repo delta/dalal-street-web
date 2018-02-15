@@ -23,6 +23,7 @@ import { Notification as Notification_pb } from "../../proto_build/models/Notifi
 import * as jspb from "google-protobuf";
 
 declare var $: any;
+declare var PNotify: any;
 export interface MainProps {
     sessionMd: 		Metadata
     user: 			User_pb
@@ -115,15 +116,26 @@ export class Main extends React.Component<MainProps, MainState> {
 
         for await (const notifUpdate of stream) {
             const notif = notifUpdate.getNotification()!;
-
+            let isMarketClosedNotif = false;
             // checking for market close
-            let isMarketOpen: boolean = false;
+            let isMarketOpen: boolean = true;
             if (notif.getText() == this.props.marketIsClosedHackyNotif) {
+                console.log("closing");
                 isMarketOpen = false;
+                isMarketClosedNotif = true;
             }
 
-            if (notif.getText() == this.props.marketIsOpenHackyNotif) {
-                isMarketOpen = true;
+            if (! isMarketClosedNotif) {
+                let pnotifyNotif = PNotify.notice({
+                    title: 'You have a notification',
+                    text: notif.getText(),
+                    addClass: "pnotify-style",
+                    modules: {
+                        NonBlock: {
+                            nonblock: true
+                        }
+                    },
+                });
             }
 
             const notifs = this.state.notifications.slice();
