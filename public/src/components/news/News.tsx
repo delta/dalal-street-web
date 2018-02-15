@@ -80,13 +80,13 @@ export class News extends React.Component<NewsProps, NewsState> {
         for await (const update of newsRequest) {
             let newsUpdate = update.getMarketEvent()!;
             newsData.push(newsUpdate);
+            
 
             this.setState({
                 newsArray: newsData,
             });
         }
     }
-
 
     componentDidMount() {
         this.getOldNews();

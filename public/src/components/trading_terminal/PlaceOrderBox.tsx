@@ -56,7 +56,17 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
         catch(e) {
             // error could be grpc error or Dalal error. Both handled in exception
             console.log("Error happened! ", e.statusCode, e.statusMessage, e);
-            this.showModal("Error occured while placing order");
+            let errorMessage = "OOPS! Something went wrong! Please notify administrator";
+
+            if (e.statusCode == 1)
+                errorMessage = "Seems like the market is closed. Try again later";
+            if (e.statusCode == 3)
+                errorMessage = "You can't make a transaction with more than 50 stocks at a time";
+            if (e.statusCode == 4)
+                errorMessage = "Seems like there isn't enough stocks available.";
+            if (e.statusMessage == 5)
+                errorMessage="You don't seem to have enough cash at the moment.";
+            this.showModal(errorMessage);
         }
     };
 
@@ -119,18 +129,21 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                     <a className="item" data-tab="stoploss">Stoploss</a>
                     <h3 className="panel-header item right">Place Order</h3>
                 </div>
-                {/* have to insert modal after menu because semantic does weird things otherwise */}
-                <div id="place-order-modal" className="ui tiny modal">
-                    <div className="ui centered aligned header">
-                        We've got a message for you
-                    </div>
-                    <div id="place-order-modal-content" className="content centered">
+                {/* using external libraries like jQuery to modify your DOM structure makes the virtual dom and 
+                the real dom out of sync so react breaks. You can only modify the content and hence the extra divs below */}
+                <div>
+                    <div id="place-order-modal" className="ui tiny modal">
+                        <div className="ui centered aligned header">
+                            We've got a message for you
+                        </div>
+                        <div id="place-order-modal-content" className="content centered">
 
-                    </div>
-                    <div className="actions">
-                        <div className="ui red basic cancel button">
-                            <i className="remove icon"></i>
-                            Close
+                        </div>
+                        <div className="actions">
+                            <div className="ui red basic cancel button">
+                                <i className="remove icon"></i>
+                                Close
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -93,7 +93,21 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 	showModal = (msg: string) => {
         $("#open-orders-modal-content").html("<p>" + msg + "</p>");
         $("#open-orders-modal").modal('show');
-    }
+	}
+	
+	confirmCancelModal = (that: any, orderId: string, isAsk: boolean) => {
+		$("#open-orders-confirm-modal")
+		.modal({
+		  closable  : false,
+		  onDeny    : function(){
+		  },
+		  onApprove : function() {
+			that.handleCancelOrder(orderId, isAsk);
+		  }
+		})
+		.modal('show')
+	  ;
+	}
 
 	handleMyOrderUpdates = async () => {
 		const sessionMd = this.props.sessionMd;
@@ -176,6 +190,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 	}
 
 	handleCancelOrder = async (orderId: string, isAsk: boolean) => {
+
 		const cancelOrderRequest = new CancelOrderRequest();
 		cancelOrderRequest.setOrderId(Number(orderId));
 		cancelOrderRequest.setIsAsk(isAsk);
@@ -263,7 +278,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 					<td className="red volume"><strong>{openAsks[askId].getStockQuantity()}</strong></td>
 					<td className="red volume"><strong>{openAsks[askId].getStockQuantityFulfilled()}</strong></td>
 					<td className="red volume"><strong>{price}</strong></td>
-					<td onClick={e => this.handleCancelOrder(askId,true)} className="red cancel-order-button">❌</td>
+					<td onClick={e => this.confirmCancelModal(this,askId,true)} className="red cancel-order-button">❌</td>
 				</tr>
 			);
 		}
@@ -281,7 +296,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 					<td className="green volume"><strong>{openBids[bidId].getStockQuantity()}</strong></td>
 					<td className="green volume"><strong>{openBids[bidId].getStockQuantityFulfilled()}</strong></td>
 					<td className="green volume"><strong>{price}</strong></td>
-					<td onClick={e => this.handleCancelOrder(bidId,false)} className="red cancel-order-button">❌</td>
+					<td onClick={e => this.confirmCancelModal(this,bidId,false)} className="red cancel-order-button">❌</td>
 				</tr>
 			);
 		}
@@ -291,20 +306,40 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 				<div className="ui pointing secondary menu">
 					<h3 className="panel-header right item">Open Orders</h3>
 				</div>
-				<div id="open-orders-modal" className="ui tiny modal">
-					<div className="ui centered aligned header">
-						We've got a message for you
-					</div>
-                    <div id="open-orders-modal-content" className="content centered">
+				<div>
+					<div id="open-orders-modal" className="ui tiny modal">
+						<div className="ui centered aligned header">
+							We've got a message for you
+						</div>
+						<div id="open-orders-modal-content" className="content centered">
 
-                    </div>
-                    <div className="actions">
-                        <div className="ui red basic cancel button">
-                        <i className="remove icon"></i>
-                        Close
-                        </div>
-                    </div>
-                </div>
+						</div>
+						<div className="actions">
+							<div className="ui red basic cancel button">
+							<i className="remove icon"></i>
+							Close
+							</div>
+						</div>
+					</div>
+				</div>
+				<div>
+					<div id="open-orders-confirm-modal" className="ui tiny modal">
+						<div className="header">Confirmation</div>
+						<div className="content">
+							<p>Are you really sure about this?</p>
+						</div>
+						<div className="actions">
+							<div className="ui approve green basic button">
+							<i className="checkmark icon"/>
+							Yes
+							</div>
+							<div className="ui cancel red basic button">
+							<i className="remove icon"></i>
+							No
+							</div>
+						</div>
+					</div>
+				</div>
 				<table className="ui inverted table unstackable">
 					<thead>
 						<tr>
