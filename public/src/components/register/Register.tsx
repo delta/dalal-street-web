@@ -7,16 +7,11 @@ import { RegisterResponse } from "../../../proto_build/actions/Register_pb";
 
 export interface RegisterProps {
     // Passes response back to app for setting state
-    registerSuccessHander: (resp: RegisterResponse) => void
     loginRedirect: () => void
 }
 //All Error handling setting localstorage happens here
 //the only thing passed back is the resp
 export class Register extends React.Component<RegisterProps, {}>{
-
-    loginSuccessHandler = (resp: RegisterResponse) => {
-        this.props.registerSuccessHander(resp!);
-    }
 
     render() {
         return (
@@ -29,7 +24,7 @@ export class Register extends React.Component<RegisterProps, {}>{
                                    Register
                             </div>
                             </h2>
-                            <RegisterForm registerSuccessHander={this.loginSuccessHandler} />
+                            <RegisterForm />
                             <div className="ui message">
                                 Already a member? <a className="register-hover" onClick={this.props.loginRedirect}>Login</a>
                             </div>

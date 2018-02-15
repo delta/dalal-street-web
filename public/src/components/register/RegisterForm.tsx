@@ -5,7 +5,6 @@ import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service
 declare var $: any;
 
 export interface RegisterFormProps {
-    registerSuccessHander: (resp: RegisterResponse) => void;
 }
 
 export interface RegisterFormState {
@@ -66,6 +65,16 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
                 disabled: false,
             })
             return;
+        } else {
+            let regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+            regexp.test(this.state.email);
+            if (!regexp.test(this.state.email)) {
+                this.setState({
+                    error: "Enter a valid email",
+                    disabled: false,
+                })
+                return;
+            }
         }
         if (this.state.password.length == 0) {
             this.setState({
@@ -106,7 +115,9 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
     registerUser = async (registerRequest: RegisterRequest) => {
         try {
             const resp = await DalalActionService.register(registerRequest);
-            this.props.registerSuccessHander(resp);
+            this.setState({
+                error:"Registration Successful, Please proceed to Login",
+            })
         } catch (e) {
             console.log(e);
             this.setState({
@@ -148,7 +159,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
                         <div id="country-selector" className="ui fluid selection dropdown field invert-me" >
                             <input name="country" id="war" type="hidden" />
                             <i className="dropdown icon"></i>
-                            <div className="default text">Select Country</div>
+                            <div className="default text"><i className="in flag"></i>India</div>
                             <div className="menu" id="country-selector">
                                 <div className="item" data-value="India"><i className="in flag"></i>India</div>
                                 <div className="item" data-value="Afghanistan"><i className="af flag"></i>Afghanistan</div>
