@@ -9,7 +9,6 @@ import { Portfolio } from "./portfolio/Portfolio";
 import { Market } from "./market/Market";
 import { News } from "./news/News";
 import { Company } from "./companies/Companies";
-import { IntroScreen } from "./intro/IntroScreen";
 
 import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService } from "../../proto_build/DalalMessage_pb_service";
@@ -22,6 +21,8 @@ import { Stock as Stock_pb } from "../../proto_build/models/Stock_pb";
 import { Notification as Notification_pb } from "../../proto_build/models/Notification_pb";
 
 import * as jspb from "google-protobuf";
+
+declare var $: any;
 export interface MainProps {
     sessionMd: 		Metadata
     user: 			User_pb
@@ -114,10 +115,22 @@ export class Main extends React.Component<MainProps, MainState> {
 
         for await (const notifUpdate of stream) {
             const notif = notifUpdate.getNotification()!;
+
+            // checking for market close
+            let isMarketOpen: boolean = false;
+            if (notif.getText() == this.props.marketIsClosedHackyNotif) {
+                isMarketOpen = false;
+            }
+
+            if (notif.getText() == this.props.marketIsOpenHackyNotif) {
+                isMarketOpen = true;
+            }
+
             const notifs = this.state.notifications.slice();
             notifs.unshift(notif);
 
             this.setState({
+                isMarketOpen: isMarketOpen,
                 notifications: notifs,
             });
             console.log("Notification update", notif.toObject());
@@ -282,11 +295,17 @@ export class Main extends React.Component<MainProps, MainState> {
         //and hence react's history wont be changing ie
         //pushing to path in App cannot be retrieved by Route exact path
         //because the history for react will not have those changes reflected
-        if(!this.props.isMarketOpen){
-            $('*').click(function(e){
-                e.preventDefault();
-            });
+
+        if (! this.state.isMarketOpen) {
+            $("#market-close-modal").modal({
+                closable:false,
+            }).modal("show");
         }
+
+        else {
+            $("#market-close-modal").modal("hide");
+        }
+
         switch (window.location.pathname) {
             case "/trade":
                 return this.getWrappedTradingTerminal();
