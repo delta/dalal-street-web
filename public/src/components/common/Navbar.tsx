@@ -19,41 +19,41 @@ export class Navbar extends React.Component<NavProps, {}> {
 	}
 	
 	render(){
-		let initialLink: string = window.location.pathname;
+		let currentLink: string = window.location.pathname;
 		//If it was initially rendered with some path that should be set to active
         return(
         <div id="navbar" className="ui sidebar inverted labeled icon left vertical menu uncover visible">
-		<a className={"item " + (initialLink == "/trade" ? "active" : "")} onClick={e => this.handleClick(e, "/trade")}>
+		<a className={"item " + (currentLink == "/trade" ? "active" : "")} onClick={e => this.handleClick(e, "/trade")}>
 			<i className="rupee icon"></i>
 			Trade
 		</a>
-		<a className={"item " + (initialLink == "/portfolio" ? "active" : "")} onClick={e => this.handleClick(e, "/portfolio")}>
+		<a className={"item " + (currentLink == "/portfolio" ? "active" : "")} onClick={e => this.handleClick(e, "/portfolio")}>
 			<i className="book icon"></i>
 			Portfolio
 		</a>
-		<a className={"item " + (initialLink == "/market" ? "active" : "")} onClick={e => this.handleClick(e, "/market")}>
+		<a className={"item " + (currentLink == "/market" ? "active" : "")} onClick={e => this.handleClick(e, "/market")}>
 			<i className="line chart icon"></i>
 			Market
 		</a>
-		<a className={"item " + (initialLink == "/news" ? "active" : "")} onClick={e => this.handleClick(e, "/news")}>
+		<a className={"item " + (currentLink == "/news" ? "active" : "")} onClick={e => this.handleClick(e, "/news")}>
 			<i className="newspaper icon"></i>
 			News
 		</a>
-		<a className={"item " + (initialLink == "/leaderboard" ? "active" : "")} onClick={e => this.handleClick(e, "/leaderboard")}>
+		<a className={"item " + (currentLink == "/leaderboard" ? "active" : "")} onClick={e => this.handleClick(e, "/leaderboard")}>
 			<i className="trophy icon"></i>
 			Leaderboard
 		</a>
-		<a className={"item " + (initialLink == "/companies" ? "active" : "")} onClick={e => this.handleClick(e, "/companies")}>
+		<a className={"item " + (currentLink == "/companies" ? "active" : "")} onClick={e => this.handleClick(e, "/companies")}>
 			<i className="suitcase icon"></i>
 			Companies
 		</a>
 		
-		<a className={"item " + (initialLink == "/help" ? "active" : "")} onClick={e => this.handleClick(e, "/help")}>
+		<a className={"item " + (currentLink == "/help" ? "active" : "")} onClick={e => this.handleClick(e, "/help")}>
 			<i className="help circle icon"></i>
 			Help
 		</a>
 		
-		<a className={"item " + (initialLink == "/logout" ? "active" : "")} onClick={e => this.handleClick(e, "/logout")}>
+		<a className={"item " + (currentLink == "/logout" ? "active" : "")} onClick={e => this.handleClick(e, "/logout")}>
 			<i className="window close icon"></i>
 			Logout
 		</a>
