@@ -27,7 +27,7 @@ export class NewsComponent extends React.Component<NewsComponentProps,{}> {
 
         const newsDetails = this.props.newsDetail;
         const divStyle = {
-            background: "url(http://www.valuewalk.com/wp-content/uploads/2018/01/bitcoin_1516197589.jpg) center/cover no-repeat" 
+            background: "./public/src/images/news/" + newsDetails.getImagePath()
         }
         return(
             <Fragment>
