@@ -54,57 +54,55 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
             fullName: e.currentTarget.value
         });
     }
+
+    validateInput = (): string => {
+        let errorMsg: string = "";
+
+        // Email check
+        let regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+        if (this.state.email.length == 0 || !regexp.test(this.state.email)) {
+            errorMsg = "Enter a valid email";
+        }
+        else if (this.state.password.length == 0) {
+            // Non-empty password check
+            errorMsg = "Enter a valid password";
+        }
+        else if (this.state.fullName.length == 0) {
+            // Full name check
+            errorMsg = "Enter a valid full name";
+        }
+        else if (this.state.userName.length == 0) {
+            // Username check
+            errorMsg = "Enter a valid username";
+        }
+
+        return errorMsg;
+    }
+
     handleRegister = async () => {
         this.setState({
             disabled: true,
             country: (document.getElementById("country-selector") as HTMLDivElement)!!.innerText,
         });
-        if (this.state.email.length == 0) {
+
+        let error = this.validateInput();
+
+        if (error.length > 0) {
             this.setState({
-                error: "Enter a valid email",
+                error: error,
                 disabled: false,
-            })
-            return;
-        } else {
-            let regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-            regexp.test(this.state.email);
-            if (!regexp.test(this.state.email)) {
-                this.setState({
-                    error: "Enter a valid email",
-                    disabled: false,
-                })
-                return;
-            }
-        }
-        if (this.state.password.length == 0) {
-            this.setState({
-                error: "Enter a valid password",
-                disabled: false,
-            })
+            });
             return;
         }
-        if (this.state.fullName.length == 0) {
-            this.setState({
-                error: "Enter a valid full name",
-                disabled: false,
-            })
-            return;
-        }
-        if (this.state.userName.length == 0) {
-            this.setState({
-                error: "Enter a valid user name",
-                disabled: false,
-            })
-            return;
-        }
+
         if (this.state.country != "Select Country") {
             let registerRequest = new RegisterRequest();
-            registerRequest.setEmail(this.state.email)
-            registerRequest.setPassword(this.state.password)
-            registerRequest.setUserName(this.state.userName)
-            registerRequest.setFullName(this.state.fullName)
-            registerRequest.setCountry(this.state.country)
-            this.registerUser(registerRequest)
+            registerRequest.setEmail(this.state.email);
+            registerRequest.setPassword(this.state.password);
+            registerRequest.setUserName(this.state.userName);
+            registerRequest.setFullName(this.state.fullName);
+            registerRequest.setCountry(this.state.country);
+            this.registerUser(registerRequest);
         }
         this.setState({
             disabled: false,
@@ -117,7 +115,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
             const resp = await DalalActionService.register(registerRequest);
             this.setState({
                 error:"Registration Successful, Please proceed to Login",
-            })
+            });
         } catch (e) {
             console.log(e);
             this.setState({

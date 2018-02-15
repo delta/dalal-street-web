@@ -19,10 +19,10 @@ export class IntroScreen extends React.Component<{}, {}> {
                     <div id="main">
         
                         <header className="major container 75%">
-                            <h2>Are you a stock market
-                            <br />
-                            enthusiast?
-                            </h2>
+                            <h3>If stock market experts were so expert,<br/>
+                                they would be buying stock, not selling advice.<br/>
+                                - Norman Ralph Augustine
+                            </h3>
                         </header>
         
                         <div className="box alt container">
