@@ -11,7 +11,9 @@ export class IntroScreen extends React.Component<{}, {}> {
                                 <a href="/login" className="intro-button intro">Login</a>
                                 <a href="/register" className="intro-button intro">Sign Up</a>
                         </div>
-                        <span className="logo icon fa-area-chart"></span>
+                        <span id="pragyan-logo">
+                            <img className="image" src="./public/src/images/pragyanlogo.png" />
+                        </span>
                         <h1>Dalal Street</h1>
                         <p>The stock market gaming engine</p>
                     </div>
