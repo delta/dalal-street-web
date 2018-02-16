@@ -19,6 +19,7 @@ export interface PortfolioProps {
     transactionCount: number,
     stockBriefInfoMap: { [index:number]: StockBriefInfo },
     stockPricesMap: { [index:number]: number },
+    disclaimerElement: JSX.Element
 }
 
 interface PortfolioState {
@@ -136,6 +137,7 @@ export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
                         transactionUpdatesCallback={this.transactionUpdatesCallback}
                     />
                 </div>
+                {this.props.disclaimerElement}
             </div>
         );
     }

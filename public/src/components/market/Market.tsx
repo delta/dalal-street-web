@@ -19,7 +19,8 @@ declare var $:any;
 export interface MarketProps {
     sessionMd: Metadata,
     stockDetailsMap: { [index:number]: Stock_pb },
-    notifications: Notification_pb[],   
+    notifications: Notification_pb[],
+    disclaimerElement: JSX.Element  
 }
 
 export interface MarketState {
@@ -170,6 +171,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
 					</tbody>
 				</table>
                </div>
+               {this.props.disclaimerElement}
             </div>
         );
     }

@@ -11,6 +11,7 @@ export interface CompanyProps {
     notifications: Notification_pb[],
     stockBriefInfoMap: { [index:number]: StockBriefInfo },
     stockPricesMap: { [index:number]: number },
+    disclaimerElement: JSX.Element
 }
 
 interface CompanyState {
@@ -66,6 +67,7 @@ export class Company extends React.Component<CompanyProps, CompanyState> {
                     currentStockId={this.state.currentStockId}
                     currentPrice={this.state.currentPrice}
                 />
+                {this.props.disclaimerElement}
             </div>
         );
     }

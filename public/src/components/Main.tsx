@@ -24,6 +24,7 @@ import * as jspb from "google-protobuf";
 
 declare var $: any;
 declare var PNotify: any;
+
 export interface MainProps {
     sessionMd: 		Metadata
     user: 			User_pb
@@ -74,6 +75,12 @@ export class Main extends React.Component<MainProps, MainState> {
         this.handleNotificationsStream();
         this.handleStockPricesStream();
     }
+
+    disclaimerElement = (
+        <div className="row disclaimer-footer">
+            Disclaimer : Stock prices and news articles released in this game are entirely fictitious and in no way related to the real world.
+        </div>
+    );
 
     getStockPrices(stockDetailsMap: { [index:number]: Stock_pb }) {
         const stockPrices: { [index:number]: number } = {};
@@ -219,6 +226,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 stockPricesMap={stockPricesMap}
                 constantsMap={this.props.constantsMap}
                 isMarketOpen={this.state.isMarketOpen}
+                disclaimerElement={this.disclaimerElement}
             />
         );
     }
@@ -229,6 +237,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 sessionMd={this.props.sessionMd}
                 leaderboardCount={this.props.constantsMap['LEADERBOARD_COUNT']}
                 notifications={this.state.notifications}
+                disclaimerElement={this.disclaimerElement}
             />
         );
     }
@@ -255,6 +264,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 stockBriefInfoMap={stockBriefInfoMap}
                 stockPricesMap={stockPricesMap}
                 transactionCount={this.props.constantsMap['GET_TRANSACTION_COUNT']}
+                disclaimerElement={this.disclaimerElement}
             />
         );
     }
@@ -264,6 +274,7 @@ export class Main extends React.Component<MainProps, MainState> {
             <Market sessionMd={this.props.sessionMd}
                     stockDetailsMap={this.state.stockDetailsMap}
                     notifications={this.state.notifications}
+                    disclaimerElement={this.disclaimerElement}
             />
         );
     }
@@ -274,6 +285,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 sessionMd={this.props.sessionMd}
                 newsCount={this.props.constantsMap["MARKET_EVENT_COUNT"]}
                 notifications={this.state.notifications}
+                disclaimerElement={this.disclaimerElement}
             />
         );
     }
@@ -298,6 +310,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 notifications={this.state.notifications}
                 stockBriefInfoMap={stockBriefInfoMap}
                 stockPricesMap={stockPricesMap}
+                disclaimerElement={this.disclaimerElement}
             />
         );
     }

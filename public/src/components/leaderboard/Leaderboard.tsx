@@ -10,7 +10,8 @@ import { LeaderboardRow as LeaderboardRow_pb } from "../../../proto_build/models
 export interface LeaderboardProps {
     sessionMd: Metadata,
     leaderboardCount: number,
-    notifications: Notification_pb[]
+    notifications: Notification_pb[],
+    disclaimerElement: JSX.Element
 }
 
 interface LeaderboardState {
@@ -132,6 +133,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                         activeClassName={"active-leaderboard-page"} 
                     />
                 </div>
+                {this.props.disclaimerElement}
             </div>
         );
     }

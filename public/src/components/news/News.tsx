@@ -15,6 +15,7 @@ export interface NewsProps {
     sessionMd: Metadata,
     newsCount: number,
     notifications: Notification_pb[],
+    disclaimerElement: JSX.Element
 }
 
 export interface NewsState {
@@ -145,6 +146,7 @@ export class News extends React.Component<NewsProps, NewsState> {
                 <div className="row">
                     {news} 
                 </div>
+                {this.props.disclaimerElement}
             </div>
         )
     }
