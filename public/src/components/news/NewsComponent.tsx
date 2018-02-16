@@ -3,6 +3,7 @@ import { MarketEvent } from "../../../proto_build/models/MarketEvent_pb";
 import { Fragment } from "react";
 
 declare var $:any;
+declare var moment: any;
 
 export interface NewsComponentProps {
     newsDetail: MarketEvent,
@@ -26,18 +27,20 @@ export class NewsComponent extends React.Component<NewsComponentProps,{}> {
     render() {
 
         const newsDetails = this.props.newsDetail;
+        const url = "url(./public/src/images/news/" + newsDetails.getImagePath() + ") center/cover no-repeat";
         const divStyle = {
-            background: "./public/src/images/news/" + newsDetails.getImagePath()
+            background: url
         }
+        const newsTime = moment(newsDetails.getCreatedAt())
         return(
             <Fragment>
                 <div id={"ui_card_"+newsDetails.getId()} onClick={this.showModal} className="news-element news-card ui card">
                     <div className="news-wrapper" style={divStyle}>
                         <div className="header">
                             <div className="date">
-                                <span className="day">12</span>
-                                <span className="month">Aug</span>
-                                <span className="year">2016</span>
+                                <span className="day">{newsTime.date()} </span>
+                                <span className="month">{newsTime.format('MMMM')} </span>
+                                <span className="year">{newsTime.year()}</span>
                             </div>
                             <ul className="menu-content">
                                 <li>
@@ -62,7 +65,7 @@ export class NewsComponent extends React.Component<NewsComponentProps,{}> {
                     </div>
                     <div className="image content">
                         <div className="ui medium image">
-                            <img src="https://placeimg.com/350/350/animals"/>
+                            <img src={"./public/src/images/news/" + newsDetails.getImagePath()}/>
                         </div>
 
                         <div className="description">
