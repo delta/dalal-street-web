@@ -29,6 +29,8 @@ export interface TradingTerminalProps {
 	constantsMap:      { [index:string]: number } // various constants. Documentation found in server/actionservice/Login method
 
 	isMarketOpen: boolean
+
+	disclaimerElement: JSX.Element
 }
 
 interface TradingTerminalState {
@@ -113,6 +115,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 						<OpenOrders sessionMd={this.props.sessionMd} stockBriefInfoMap={this.props.stockBriefInfoMap} />
 					</div>
 				</div>
+				{this.props.disclaimerElement}
 			</div>
         );
     }

@@ -11,6 +11,7 @@ import { Stock as Stock_pb } from "../../proto_build/models/Stock_pb";
 import { Login } from "./login/Login"
 import { Register } from "./register/Register"
 import { IntroScreen } from "./intro/IntroScreen";
+import { LoadingScreen } from "./common/LoadingScreen";
 
 import { Navbar } from "./common/Navbar";
 import { Main } from "./Main";
@@ -246,7 +247,6 @@ export class App extends React.Component<{}, AppState> {
 							isMarketOpen={this.state.isMarketOpen!}
 						/>
 					</Fragment>
-
 				);
 			case SIGNUP:
 				return <Register loginRedirect={this.loginRedirect}
@@ -256,10 +256,9 @@ export class App extends React.Component<{}, AppState> {
 					signUpRedirect={this.signUpRedirect}
 				/>;
 			case LOADING:
-				return <div>Loading screen</div>;
+				return <LoadingScreen />;
 			case SPLASH:
 				return <IntroScreen />;
-
 		}
 
 		// if (this.state.isLoggedIn) {
