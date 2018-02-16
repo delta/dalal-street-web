@@ -97,6 +97,13 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 				});
 			});
 
+			// this is a beautification thing. Our charts work nicely with 61 entries.
+			// this will get removed after the first minute
+			
+			let dummy_data = $.extend(true, {}, globalIntervalData[0])
+			dummy_data.t = dummy_data.t - 60000;
+			globalIntervalData.unshift(dummy_data);
+
 			this.setState({
 				data: globalIntervalData,
 				isLoading: false,
@@ -123,7 +130,6 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 		})
 
 		const historyStream = DalalStreamService.getStockHistoryUpdates(subscriptionId, this.props.sessionMd);
-
 		const streamIntervalData = this.state.data.slice();
 		for await (const update of historyStream) {
 			const newUpdate = update.getStockHistory()!;
@@ -138,6 +144,12 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 				c: newUpdate.getClose(),
 				t: Date.parse(newUpdate.getCreatedAt()),
 			});
+
+			// for some reason, the charts component requires a length of 61
+			// to load perfectly
+			if (streamIntervalData.length > 61) {
+				streamIntervalData.shift();
+			}
 
 			this.setState({
 				data: streamIntervalData,
