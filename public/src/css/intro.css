@@ -783,3 +783,7 @@
   position: relative;
   left: -10px;
 }
+
+.p-text {
+	font-size: 1.2em !important;
+}
