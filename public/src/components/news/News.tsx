@@ -10,6 +10,7 @@ import { SubscriptionId } from "../../../proto_build/datastreams/Subscribe_pb";
 import { NewsComponent } from "./NewsComponent";
 
 declare var $: any;
+declare var PNotify: any;
 
 export interface NewsProps {
     sessionMd: Metadata,
@@ -38,8 +39,16 @@ export class News extends React.Component<NewsProps, NewsState> {
     }
 
     showModal = (msg: string) => {
-        $("#news-modal-content").html("<p>" + msg + "</p>");
-        $("#news-modal").modal('show');
+        let pnotifyNotif = PNotify.notice({
+            title: 'You have a notification',
+            text: msg,
+            addClass: "pnotify-style",
+            modules: {
+                NonBlock: {
+                    nonblock: true
+                }
+            },
+        });
     }
 
     getOldNews = async () => {
@@ -108,20 +117,6 @@ export class News extends React.Component<NewsProps, NewsState> {
 
         return (
             <div id="news-container" className="ui stackable grid pusher main-container">
-                <div id="news-modal" className="ui tiny modal">
-                    <div className="ui centered aligned header">
-                        We've got a message for you
-                    </div>
-                    <div id="news-modal-content" className="content centered">
-
-                    </div>
-                    <div className="actions">
-                        <div className="ui red basic cancel button">
-                        <i className="remove icon"></i>
-                        Close
-                        </div>
-                    </div>
-                </div>
                 <div className="row" id="top_bar">
                      <div id="notif-component">
                          <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
