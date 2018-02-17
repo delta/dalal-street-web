@@ -318,7 +318,10 @@ export class Main extends React.Component<MainProps, MainState> {
 
     getWrappedHelp = () => {
         return (
-            <Help notifications={this.state.notifications} /> 
+            <Help
+                notifications={this.state.notifications}
+                disclaimerElement={this.disclaimerElement}
+            /> 
         );
     }
 

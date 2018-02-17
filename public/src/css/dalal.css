@@ -15,6 +15,10 @@
 	color:#FF6939 !important;
 }
 
+.cyan {
+	color: rgb(60, 231, 231) !important;
+}
+
 /* Open orders styling starts */
 #open-orders-container tbody {
 	display:block;
@@ -682,16 +686,42 @@ h1 {
 	margin: auto;
 }
 
-#help-container .subtopic {
-	color: white;
+#help-container {
+	color: white !important;
 }
 
-#help-container .topic {
-	color: white;
+#help-container table tr th, #help-container table tr td {
+	height: 1.2em;
+	font-size: 1.1em;
 }
 
-#help-container .answer {
-	color: white;
+#help-container .image-wrapper {
+	display: inline-block;
+	text-align: center;
+}
+
+#help-container img {
+	width: 70%;
+	border: 1px solid white;
+}
+
+#help-content .segment {
+	font-size: 1.1em;
+	background-color: #2b2c2d !important;
+}
+
+#help-tab {
+	border: none !important;
+}
+
+#help-tab .active {
+	border: none !important;
+	background-color: #2b2c2d;
+}
+
+#help-tab .item {
+	color: white !important;
+	font-size: 1.2em;
 }
 
 /* Help styling ends here */
