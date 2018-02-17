@@ -15,6 +15,8 @@ const LIMIT = OrderType.LIMIT;
 const MARKET = OrderType.MARKET;
 const STOPLOSS = OrderType.STOPLOSS;
 
+declare var PNotify: any;
+
 const orderTypeToStr = (ot: OrderType): string => {
 	switch(ot) {
 		case LIMIT: return "Limit";
@@ -91,8 +93,16 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 	}
 
 	showModal = (msg: string) => {
-        $("#open-orders-modal-content").html("<p>" + msg + "</p>");
-        $("#open-orders-modal").modal('show');
+        let pnotifyNotif = PNotify.notice({
+			title: 'You have a notification',
+			text: msg,
+			addClass: "pnotify-style",
+			modules: {
+				NonBlock: {
+					nonblock: true
+				}
+			},
+		});
 	}
 	
 	confirmCancelModal = (that: any, orderId: string, isAsk: boolean) => {
@@ -305,22 +315,6 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 			<Fragment>
 				<div className="ui pointing secondary menu">
 					<h3 className="panel-header right item">Open Orders</h3>
-				</div>
-				<div>
-					<div id="open-orders-modal" className="ui tiny modal">
-						<div className="ui centered aligned header">
-							We've got a message for you
-						</div>
-						<div id="open-orders-modal-content" className="content centered">
-
-						</div>
-						<div className="actions">
-							<div className="ui red basic cancel button">
-							<i className="remove icon"></i>
-							Close
-							</div>
-						</div>
-					</div>
 				</div>
 				<div>
 					<div id="open-orders-confirm-modal" className="ui tiny modal">

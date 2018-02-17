@@ -5,6 +5,8 @@ import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service
 import { Metadata } from "grpc-web-client";
 import { Fragment } from "react";
 
+declare var PNotify: any;
+
 const LIMIT = OrderType.LIMIT;
 const MARKET = OrderType.MARKET;
 const STOPLOSS = OrderType.STOPLOSS;
@@ -72,8 +74,16 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 
 
     showModal = (msg: string) => {
-        $("#place-order-modal-content").html("<p>" + msg + "</p>");
-        $("#place-order-modal").modal('show');
+        let pnotifyNotif = PNotify.notice({
+            title: 'You have a notification',
+            text: msg,
+            addClass: "pnotify-style",
+            modules: {
+                NonBlock: {
+                    nonblock: true
+                }
+            },
+        });
     }
 
     handleOrder = (event: any, orderType: OrderType, orderAction: string) => {
@@ -128,24 +138,6 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                     <a className="item" data-tab="limit">Limit</a>
                     <a className="item" data-tab="stoploss">Stoploss</a>
                     <h3 className="panel-header item right">Place Order</h3>
-                </div>
-                {/* using external libraries like jQuery to modify your DOM structure makes the virtual dom and 
-                the real dom out of sync so react breaks. You can only modify the content and hence the extra divs below */}
-                <div>
-                    <div id="place-order-modal" className="ui tiny modal">
-                        <div className="ui centered aligned header">
-                            We've got a message for you
-                        </div>
-                        <div id="place-order-modal-content" className="content centered">
-
-                        </div>
-                        <div className="actions">
-                            <div className="ui red basic cancel button">
-                                <i className="remove icon"></i>
-                                Close
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div className="ui tab inverted active" data-tab="market">
                     <div className="ui top attached tabular menu inverted place-order-box-menu">

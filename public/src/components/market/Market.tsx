@@ -15,6 +15,7 @@ function isPositiveInteger(x: number): boolean {
 }
 
 declare var $:any;
+declare var PNotify: any;
 
 export interface MarketProps {
     sessionMd: Metadata,
@@ -39,8 +40,16 @@ export class Market extends React.Component<MarketProps, MarketState> {
     }
 
     showModal = (msg: string) => {
-        $("#market-modal-content").html("<p>" + msg + "</p>");
-        $("#market-modal").modal('show');
+        let pnotifyNotif = PNotify.notice({
+            title: 'You have a notification',
+            text: msg,
+            addClass: "pnotify-style",
+            modules: {
+                NonBlock: {
+                    nonblock: true
+                }
+            },
+        });
     }
 
     purchaseFromExchange = async (stockId: number) => {
@@ -125,19 +134,6 @@ export class Market extends React.Component<MarketProps, MarketState> {
 
         return (
             <div id="market-container" className="ui stackable grid pusher main-container">
-                <div id="market-modal" className="ui tiny modal">
-                    <div className="ui centered aligned header">
-                        We've got a message for you
-                    </div>
-                    <div id="market-modal-content" className="content centered">    
-                    </div>
-                    <div className="actions">
-                        <div className="ui red basic cancel button">
-                        <i className="remove icon"></i>
-                        Close
-                        </div>
-                    </div>
-                </div>
                 <div className="row" id="top_bar">
 					<div id="notif-component">
 						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />

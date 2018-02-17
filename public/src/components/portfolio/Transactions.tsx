@@ -15,6 +15,7 @@ import { Fragment } from "react";
 // Moment will be exposed globally by the MomentJS script included in index.html
 declare var moment: any;
 declare var $:any;
+declare var PNotify: any;
 
 const FROM_EXCHANGE_TRANSACTION = TransactionType.FROM_EXCHANGE_TRANSACTION;
 const ORDER_FILL_TRANSACTION = TransactionType.ORDER_FILL_TRANSACTION;
@@ -76,8 +77,16 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
     }
 
     showModal = (msg: string) => {
-        $("#transactions-modal-content").html("<p>" + msg + "</p>");
-        $("#transactions-modal").modal('show');
+        let pnotifyNotif = PNotify.notice({
+            title: 'You have a notification',
+            text: msg,
+            addClass: "pnotify-style",
+            modules: {
+                NonBlock: {
+                    nonblock: true
+                }
+            },
+        });
     }
 
     getOldTransactions = async () => {
@@ -158,20 +167,6 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
         ));
         return (
             <Fragment>
-                <div id="transactions-modal" className="ui tiny modal">
-                    <div className="ui centered aligned header">
-                        We've got a message for you
-                    </div>
-                    <div id="transactions-modal-content" className="content centered">
-
-                    </div>
-                    <div className="actions">
-                        <div className="ui red basic cancel button">
-                        <i className="remove icon"></i>
-                        Close
-                        </div>
-                    </div>
-                </div>
                 <table className="ui inverted table unstackable">
                     <thead>
                         <tr>

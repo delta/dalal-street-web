@@ -3,12 +3,13 @@
 }
 
 .pnotify-style{
-	background: rgb(93, 168, 184) !important;
+	background: #2b2c2d !important;
 	box-shadow: 0px 6px 28px 0px rgba(0,0,0,0.1);
+	color:white;
 }
 
 .pnotify-style:hover {
-	background: rgb(115, 199, 216) !important;
+	opacity: 0.5 !important;
 }
 
 .red{
