@@ -63,9 +63,9 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
         if (this.state.email.length == 0 || !regexp.test(this.state.email)) {
             errorMsg = "Enter a valid email";
         }
-        else if (this.state.password.length == 0) {
+        else if (this.state.password.length <= 5) {
             // Non-empty password check
-            errorMsg = "Enter a valid password";
+            errorMsg = "Password should atleast be 6 characters long";
         }
         else if (this.state.fullName.length == 0) {
             // Full name check
