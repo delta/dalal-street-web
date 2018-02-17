@@ -713,6 +713,15 @@ h1 {
 	background-color: #2b2c2d !important;
 }
 
+#help-content .accordion {
+	background-color: #2b2c2d !important;
+}
+
+#help-content .faq-questions {
+	color: white !important;
+	font-size: 1.5em !important;
+}
+
 #help-tab {
 	border: none !important;
 }
@@ -733,6 +742,7 @@ h1 {
 
 #help-container p  {
 	margin-left: 40px;
+	font-size: 1.2em;
 }
 
 /* Help styling ends here */
