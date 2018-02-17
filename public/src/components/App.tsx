@@ -249,8 +249,8 @@ export class App extends React.Component<{}, AppState> {
 					</Fragment>
 				);
 			case SIGNUP:
-				return <Register loginRedirect={this.loginRedirect}
-				/>
+				return <Register loginRedirect={this.loginRedirect}/>
+
 			case LOGIN:
 				return <Login loginSuccessHandler={this.parseLoginResponse}
 					signUpRedirect={this.signUpRedirect}
@@ -258,7 +258,7 @@ export class App extends React.Component<{}, AppState> {
 			case LOADING:
 				return <LoadingScreen />;
 			case SPLASH:
-				return <IntroScreen />;
+				return <div id="intro-div"><IntroScreen /></div>;
 		}
 
 		// if (this.state.isLoggedIn) {
