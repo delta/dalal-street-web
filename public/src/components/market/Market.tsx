@@ -54,6 +54,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
 
     purchaseFromExchange = async (stockId: number) => {
         let quantity = $("#input-"+stockId).val()!;
+        $("#input-" + stockId).val("");
         if (!isPositiveInteger(Number(quantity))) {
             this.showModal("Enter a positive integer!");
             return;
