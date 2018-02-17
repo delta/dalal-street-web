@@ -33,7 +33,7 @@ export class Navbar extends React.Component<NavProps, {}> {
 		</a>
 		<a className={"item " + (currentLink == "/market" ? "active" : "")} onClick={e => this.handleClick(e, "/market")}>
 			<i className="line chart icon"></i>
-			Market
+			Exchange
 		</a>
 		<a className={"item " + (currentLink == "/news" ? "active" : "")} onClick={e => this.handleClick(e, "/news")}>
 			<i className="newspaper icon"></i>
