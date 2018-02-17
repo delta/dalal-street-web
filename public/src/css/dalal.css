@@ -742,13 +742,18 @@ h1 {
 	margin-bottom: 30px;
 }
 
-#help-container p, #help-container ol  {
+#help-container p {
 	margin-left: 40px;
-	/* font-size: 1.2em; */
+}
+
+#help-container ol {
+	margin-left: 40px;
+	margin-top: 25px;
+	margin-bottom: 10px;
 }
 
 #help-container strong {
-	/* color:#7DEA63 !important; */
+	color:#7DEA63 !important;
 }
 
 /* Help styling ends here */
