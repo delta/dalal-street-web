@@ -159,7 +159,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted green button" onClick={e => this.handleOrder(e,  MARKET, "buy")}>BUY</button>
 
                         <div className="expected-cost">
-                            You will lose approximately ₹ <span id="market-buy-estimation">0.00</span>
+                            You will lose approximately ₹ <span id="market-buy-estimation">0.00</span> in cash
                         </div>
                     </div>
                     <div className="ui bottom attached tab segment inverted" data-tab="market/sell">
@@ -169,7 +169,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted red button" onClick={e => this.handleOrder(e, MARKET,"sell")}>SELL</button>
 
                         <div className="expected-cost">
-                            You will gain approximately ₹ <span id="market-sell-estimation">0.00</span>
+                            You will gain approximately ₹ <span id="market-sell-estimation">0.00</span> in cash
                         </div>
                     </div>
                 </div>
@@ -188,7 +188,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted green button" onClick={e => this.handleOrder(e, LIMIT,"buy")}>BUY</button>
 
                         <div className="expected-cost">
-                            You will lose atmost ₹ <span id="limit-buy-estimation">0.00</span>
+                            You will lose atmost ₹ <span id="limit-buy-estimation">0.00</span> in cash
                         </div>
                     </div>
                     <div className="ui bottom attached tab segment inverted" data-tab="limit/sell">
@@ -201,7 +201,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted red button" onClick={e => this.handleOrder(e, LIMIT,"sell")}>SELL</button>
 
                         <div className="expected-cost">
-                            You will gain atleast ₹ <span id="limit-sell-estimation">0.00</span>
+                            You will gain atleast ₹ <span id="limit-sell-estimation">0.00</span> in cash
                         </div>
                     </div>
                 </div>
@@ -220,7 +220,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted green button" onClick={e => this.handleOrder(e, STOPLOSS,"buy")}>BUY</button>
 
                         <div className="expected-cost">
-                            You will lose approximately ₹ <span id="stoploss-buy-estimation">0.00</span>
+                            You will lose approximately ₹ <span id="stoploss-buy-estimation">0.00</span> in cash
                         </div>
                     </div>
                     <div className="ui bottom attached tab segment inverted" data-tab="stoploss/sell">
@@ -233,7 +233,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted red button" onClick={e => this.handleOrder(e, STOPLOSS,"sell")}>SELL</button>
 
                         <div className="expected-cost">
-                            You will gain approximately ₹ <span id="stoploss-sell-estimation">0.00</span>
+                            You will gain approximately ₹ <span id="stoploss-sell-estimation">0.00</span> in cash
                         </div>
                     </div>
                 </div>
