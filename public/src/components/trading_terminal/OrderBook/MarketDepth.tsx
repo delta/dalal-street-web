@@ -46,7 +46,7 @@ export class MarketDepth extends React.Component<MarketDepthProps, {}> {
 
             askArray.push(tempDepth);
         }
-        
+
         for (let bidKey in bidDepth){
             let tempDepth = {
                 price: bidKey,

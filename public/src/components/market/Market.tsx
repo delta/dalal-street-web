@@ -60,8 +60,8 @@ export class Market extends React.Component<MarketProps, MarketState> {
             return;
         }
         if (quantity) {
-                let myQuantity: number = parseInt(quantity.toString());
-                console.log("purchased stock of company " + stockId + " quantity " + myQuantity);
+            let myQuantity: number = parseInt(quantity.toString());
+            console.log("purchased stock of company " + stockId + " quantity " + myQuantity);
 
             try {
                 const request = new BuyStocksFromExchangeRequest();

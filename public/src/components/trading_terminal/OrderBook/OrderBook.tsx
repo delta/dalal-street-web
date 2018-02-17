@@ -98,14 +98,14 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 			askDepthDiff.forEach((volume, price) => {
 				if (!oldAskDepth[price]) oldAskDepth[price] = 0;
 				oldAskDepth[price] += volume;
-				if (volume <= 0)
+				if (oldAskDepth[price] <= 0)
 					delete oldAskDepth[price];
 			});
 
 			bidDepthDiff.forEach((volume, price) => {
 				if (!oldBidDepth[price]) oldBidDepth[price] = 0;
 				oldBidDepth[price] += volume;
-				if (volume <= 0)
+				if (oldBidDepth[price] <= 0)
 					delete oldBidDepth[price];
 			});
 
