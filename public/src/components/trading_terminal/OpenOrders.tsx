@@ -283,7 +283,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 			counter = counter + 1;
 			orderElements.push(
 				<tr key={counter}>
-					<td className="red volume"><strong>{stockInfo[stockId].fullName}</strong></td>
+					<td className="red volume"><strong>{stockInfo[stockId].shortName}</strong></td>
 					<td className="red volume"><strong>Sell/{orderType}</strong></td>
 					<td className="red volume"><strong>{openAsks[askId].getStockQuantity()}</strong></td>
 					<td className="red volume"><strong>{openAsks[askId].getStockQuantityFulfilled()}</strong></td>
@@ -301,7 +301,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 			counter = counter + 1;
 			orderElements.push(
 				<tr key={counter}>
-					<td className="green volume"><strong>{stockInfo[stockId].fullName}</strong></td>
+					<td className="green volume"><strong>{stockInfo[stockId].shortName}</strong></td>
 					<td className="green volume"><strong>Buy/{orderTypeToStr(openBids[bidId].getOrderType())}</strong></td>
 					<td className="green volume"><strong>{openBids[bidId].getStockQuantity()}</strong></td>
 					<td className="green volume"><strong>{openBids[bidId].getStockQuantityFulfilled()}</strong></td>

@@ -151,7 +151,7 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
             <tr key={transaction.getId()}>
                 <td>
                     <strong>
-                        {this.props.stockBriefInfoMap[transaction.getStockId()].fullName}
+                        {this.props.stockBriefInfoMap[transaction.getStockId()].shortName}
                     </strong>
                 </td>
                 <td><strong>{transactionTypeToStr(transaction.getType())}</strong></td>
