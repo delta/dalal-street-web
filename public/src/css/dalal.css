@@ -692,6 +692,7 @@ h1 {
 	color: white !important;
 	font-family: Roboto;
 	font-size: 13px;
+	font-weight: lighter !important;
 }
 
 #help-container table tr th, #help-container table tr td {
@@ -722,6 +723,7 @@ h1 {
 #help-content .faq-questions {
 	color: white !important;
 	font-size: 1.5em !important;
+	font-weight: lighter;
 }
 
 #help-tab {
@@ -754,6 +756,10 @@ h1 {
 
 #help-container strong {
 	color:#7DEA63 !important;
+}
+
+#help-container .lighter {
+	font-weight: lighter;
 }
 
 /* Help styling ends here */

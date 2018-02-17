@@ -36,20 +36,20 @@ export class Help extends React.Component<HelpProps, {}> {
                 <div className="row">
                     <div className="one wide column"></div>
                     <div id="help-content" className="fourteen wide column">
-                        <h2 className="ui header inverted">Welcome to Dalal Street! We know that there’s a lot to take in, so we’ve prepared this help page to get you started and to answer some FAQ as well. Happy Trading!</h2>
+                        <h2 className="ui header inverted lighter">Welcome to Dalal Street! We know that there’s a lot to take in, so we’ve prepared this help page to get you started and to answer some FAQ as well. Happy Trading!</h2>
                         <br />
                         <div id="help-tab" className="ui top attached tabular menu">
                             <a className="active item" data-tab="gettingstarted">Getting Started</a>
                             <a className="item" data-tab="faqs">FAQ</a>
                         </div>
                         <div className="ui bottom attached active tab segment" data-tab="gettingstarted">
-                            <h2 className="ui header inverted">Getting Started</h2>
+                            <h2 className="ui header inverted lighter">Getting Started</h2>
                            
                             <div className="ui styled fluid accordion">
 
                                 <div className="title">
                                     <i className="dropdown icon inverted"></i>
-                                    <span className="faq-questions">The Objective</span>
+                                    <span className="faq-questions lighter">The Objective</span>
                                 </div>
                                 <div className="content">
                                     <p>Each player begins the game with ₹20,000. Your objective is to use this money to maximise your profit at the end of 7 days.</p>
@@ -57,7 +57,7 @@ export class Help extends React.Component<HelpProps, {}> {
 
                                 <div className="title">
                                     <i className="dropdown icon inverted"></i>
-                                    <span className="faq-questions">How do I make money?</span>
+                                    <span className="faq-questions lighter">How do I make money?</span>
                                 </div>
                                 <div className="content">
                                     <p>These are the two ways to make money :-</p>
@@ -71,7 +71,7 @@ export class Help extends React.Component<HelpProps, {}> {
 
                                 <div className="title">
                                     <i className="dropdown icon inverted"></i>
-                                    <span className="faq-questions">The Basics</span>
+                                    <span className="faq-questions lighter">The Basics</span>
                                 </div>
                                 <div className="content">
                                     <p>There are a total of 5 companies trading publicly on the Dalal Street Exchange. To know more about each company, check out the <strong>Companies Page</strong>, which is shown in the image below. On this page, you’ll find a short description about each company as well as its latest stock price information.</p>
@@ -85,7 +85,7 @@ export class Help extends React.Component<HelpProps, {}> {
 
                                 <div className="title">
                                     <i className="dropdown icon inverted"></i>
-                                    <span className="faq-questions">Buying and Selling Stocks</span>
+                                    <span className="faq-questions lighter">Buying and Selling Stocks</span>
                                 </div>
                                 <div className="content">
                                     <p>All trading related tasks are performed on the <strong>Trading Page</strong>, which is shown in the image below.</p>
@@ -103,7 +103,7 @@ export class Help extends React.Component<HelpProps, {}> {
                             </div>
                         </div>
                         <div className="ui bottom attached tab segment" data-tab="faqs">
-                            <h2 className="ui header inverted">FAQ</h2>
+                            <h2 className="ui header inverted lighter">FAQ</h2>
                             <div className="ui styled fluid accordion">
                                 <div className="title">
                                     <i className="dropdown icon inverted"></i>
