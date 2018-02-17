@@ -60,18 +60,14 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
             console.log("Error happened! ", e.statusCode, e.statusMessage, e);
             let errorMessage = "OOPS! Something went wrong! Please notify administrator";
 
-            if (e.statusCode == 1)
-                errorMessage = "Seems like the market is closed. Try again later";
-            if (e.statusCode == 3)
-                errorMessage = "You can't make a transaction with more than 50 stocks at a time";
-            if (e.statusCode == 4)
-                errorMessage = "Seems like there isn't enough stocks available.";
-            if (e.statusMessage == 5)
-                errorMessage="You don't seem to have enough cash at the moment.";
+            if (e.isGrpcError) {
+                errorMessage = "Oops! Unable to reach server. Please check your internet connection."
+            } else {
+                errorMessage = e.statusMessage || "Oops! Something went wrong. Please notify administrator";
+            }
             this.showModal(errorMessage);
         }
     };
-
 
     showModal = (msg: string) => {
         let pnotifyNotif = PNotify.notice({

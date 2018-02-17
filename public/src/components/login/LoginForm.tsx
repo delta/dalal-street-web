@@ -39,7 +39,7 @@ export class LoginForm extends React.Component<LoginFormProps, LoginFormState>{
         } catch (e) {
             console.log(e);
             this.setState({
-                error: e.statusMessage
+                error: e.IsGrpcError ? "Unable to reach server. Please check your internet connection." : e.statusMessage,
             });
         }
 

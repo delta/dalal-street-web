@@ -72,7 +72,11 @@ export class Market extends React.Component<MarketProps, MarketState> {
                 console.log(resp.getStatusCode(), resp.toObject());
             } catch(e) {
                 console.log("Error happened while placing order! ", e.statusCode, e.statusMessage, e);
-                this.showModal("Oops! Something went wrong! " + e.statusMessage);
+                if (e.IsGrpcError) {
+                    this.showModal("Oops! Unable to reach server. Please check your internet connection!");
+                } else {
+                    this.showModal("Oops! Something went wrong! " + e.statusMessage);
+                }
             }
         }
 
