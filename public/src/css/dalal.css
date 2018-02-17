@@ -754,6 +754,10 @@ h1 {
 	margin-bottom: 10px;
 }
 
+#help-container ul {
+	margin-left: 40px;
+}
+
 #help-container strong {
 	color:#7DEA63 !important;
 }
@@ -765,4 +769,7 @@ h1 {
 	margin: 0px;
 }
 
+#help-container .content {
+	color: #DDDDDD;
+}
 /* Help styling ends here */
