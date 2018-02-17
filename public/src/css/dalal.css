@@ -688,6 +688,8 @@ h1 {
 
 #help-container {
 	color: white !important;
+	font-family: Roboto;
+	font-size: 12px;
 }
 
 #help-container table tr th, #help-container table tr td {
@@ -698,6 +700,7 @@ h1 {
 #help-container .image-wrapper {
 	display: inline-block;
 	text-align: center;
+	margin-left: 0px !important;
 }
 
 #help-container img {
@@ -722,6 +725,14 @@ h1 {
 #help-tab .item {
 	color: white !important;
 	font-size: 1.2em;
+}
+
+#help-container h1, #help-container h2, #help-container h3 {
+	margin-bottom: 30px;
+}
+
+#help-container p  {
+	margin-left: 40px;
 }
 
 /* Help styling ends here */
