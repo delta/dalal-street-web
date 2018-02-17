@@ -722,7 +722,7 @@ h1 {
 
 #help-content .faq-questions {
 	color: white !important;
-	font-size: 1.5em !important;
+	font-size: 1.2em !important;
 	font-weight: lighter;
 }
 
@@ -760,6 +760,9 @@ h1 {
 
 #help-container .lighter {
 	font-weight: lighter;
+	font-size: 17px;
+	text-align: center;
+	margin: 0px;
 }
 
 /* Help styling ends here */
