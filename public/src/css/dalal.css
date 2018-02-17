@@ -676,3 +676,22 @@ h1 {
 	height: 100vh;
 	border: none !important;
 }
+/* Help styling starts here */
+
+#help-container .center {
+	margin: auto;
+}
+
+#help-container .subtopic {
+	color: white;
+}
+
+#help-container .topic {
+	color: white;
+}
+
+#help-container .answer {
+	color: white;
+}
+
+/* Help styling ends here */
