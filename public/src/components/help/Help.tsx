@@ -36,9 +36,7 @@ export class Help extends React.Component<HelpProps, {}> {
                 <div className="row">
                     <div className="one wide column"></div>
                     <div id="help-content" className="fourteen wide column">
-                        <h2 className="ui header inverted">Welcome to Dalal Street!<br/>
-                        We know that there’s a lot to take in, so we’ve prepared this help page
-                        to get you started and to answer some FAQ as well.</h2>
+                        <h2 className="ui header inverted">Welcome to Dalal Street! We know that there’s a lot to take in, so we’ve prepared this help page to get you started and to answer some FAQ as well. Happy Trading!</h2>
                         <br />
                         <div id="help-tab" className="ui top attached tabular menu">
                             <a className="active item" data-tab="gettingstarted">Getting Started</a>
@@ -112,12 +110,12 @@ export class Help extends React.Component<HelpProps, {}> {
                                     <span className="faq-questions">What is this short selling you speak of?</span>
                                 </div>
                                 <div className="content">
-                                    <p className="transition hidden">
+                                    <div className="transition hidden">
                                         <p>While you will <em>buy</em> a company’s stock if you expect its price to go up, you can <em>short sell</em> a company’s stock if you expect its price to go down. In a nutshell, short selling means to sell stocks that you don’t own.</p>
                                         <p>As an example, short selling 5 shares of company XYZ is mathematically equivalent to buying -5 shares of XYZ. As a result, your <em>Cash In Hand</em> will increase and your <em>Stock Worth</em> will accordingly decrease such that your <strong><em>Net Worth</em> remains the same</strong> <em>(Remember: Net Worth = Cash In Hand + Stock Worth)</em>.</p>
                                         <p>After you short sell a company, if the stock price dips below the price you sold it for, then you will have made a profit and vice-versa.</p>
                                         <p><em>Note : You can only short sell a maximum of 50 stocks per company</em></p>
-                                    </p>
+                                    </div>
                                 </div>
 
                                 <div className="title">
