@@ -9,6 +9,7 @@ import { Portfolio } from "./portfolio/Portfolio";
 import { Market } from "./market/Market";
 import { News } from "./news/News";
 import { Company } from "./companies/Companies";
+import { Help } from "./help/Help";
 
 import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService } from "../../proto_build/DalalMessage_pb_service";
@@ -315,6 +316,12 @@ export class Main extends React.Component<MainProps, MainState> {
         );
     }
 
+    getWrappedHelp = () => {
+        return (
+            <Help notifications={this.state.notifications} /> 
+        );
+    }
+
     render() {
         //Use window.location.pathname because react router is removed 
         //and hence react's history wont be changing ie
@@ -344,6 +351,8 @@ export class Main extends React.Component<MainProps, MainState> {
                 return this.getWrappedNews();
             case "/companies":
                 return this.getWrappedCompany();
+            case "/help":
+                return this.getWrappedHelp();
             default:
                 return <NotFound />;
         }
