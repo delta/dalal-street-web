@@ -31,7 +31,7 @@ export class IntroScreen extends React.Component<{}, {}> {
                                 <a className="image"><img src="./public/src/images/pic01.png" alt="" /></a>
                                 <div className="content">
                                     <h3>Getting you started</h3>
-                                    <p>
+                                    <p className="p-text">
                                     The game will be spread over a period of 7 days.<br/>
                                     Players accumulate maximum net worth by trading.<br/>
                                     Net Worth = Cash + Stock Worth.<br/>
@@ -45,7 +45,7 @@ export class IntroScreen extends React.Component<{}, {}> {
         
                         <footer className="major container 75%">
                             <h3>New to stock markets?</h3>
-                            <p>Don't worry. We've got a list of resouces to get you
+                            <p className="p-text">Don't worry. We've got a list of resouces to get you
                             started, along with documentation on how to play the game.
                             So grit your teeth, take calculated risks under pressure and
                             become the richest man on the market</p>
