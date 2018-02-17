@@ -36,14 +36,14 @@ export class Help extends React.Component<HelpProps, {}> {
                 <div className="row">
                     <div className="one wide column"></div>
                     <div id="help-content" className="fourteen wide column">
-                        <h2 className="ui header inverted lighter">Welcome to Dalal Street! We know that there’s a lot to take in, so we’ve prepared this help page to get you started and to answer some FAQ as well. Happy Trading!</h2>
+                        <h2 className="ui header inverted lighter">Welcome to Dalal Street's official Help Page!</h2>
+                        <h2 className="ui header inverted lighter">Please read our Getting Started section before playing the game.</h2>
                         <br />
                         <div id="help-tab" className="ui top attached tabular menu">
                             <a className="active item" data-tab="gettingstarted">Getting Started</a>
                             <a className="item" data-tab="faqs">FAQ</a>
                         </div>
                         <div className="ui bottom attached active tab segment" data-tab="gettingstarted">
-                            <h2 className="ui header inverted lighter">Getting Started</h2>
                            
                             <div className="ui styled fluid accordion">
 
@@ -103,7 +103,6 @@ export class Help extends React.Component<HelpProps, {}> {
                             </div>
                         </div>
                         <div className="ui bottom attached tab segment" data-tab="faqs">
-                            <h2 className="ui header inverted lighter">FAQ</h2>
                             <div className="ui styled fluid accordion">
                                 <div className="title">
                                     <i className="dropdown icon inverted"></i>
