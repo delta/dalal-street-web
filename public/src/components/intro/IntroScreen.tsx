@@ -5,7 +5,6 @@ export class IntroScreen extends React.Component<{}, {}> {
     render() {
         return (
             <Fragment>
-                    <link rel="stylesheet" type="text/css" href="./public/src/css/intro.css"/>
                     <div id="header">
                         <div className="row button-row">
                                 <a href="/login" className="intro-button intro">Login</a>
