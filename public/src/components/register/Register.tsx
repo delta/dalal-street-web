@@ -26,7 +26,7 @@ export class Register extends React.Component<RegisterProps, {}>{
                             </h2>
                             <RegisterForm />
                             <div className="ui message">
-                                Already a member? <a className="register-hover" onClick={this.props.loginRedirect}>Login</a>
+                                Already a member? <a className="register-hover" onClick={this.props.loginRedirect}>Login</a><br />
                             </div>
                         </div>
                     </div>

@@ -9,12 +9,13 @@ export interface RegisterFormProps {
 
 export interface RegisterFormState {
     email: string,
-    password: string,
     fullName: string,
-    userName: string,
+    password: string,
+    confirmPassword: string,
     country: string,
     disabled: boolean,
     error: string | null,
+    successful: boolean,
 }
 export class RegisterForm extends React.Component<RegisterFormProps, RegisterFormState>{
     constructor(props: RegisterFormProps) {
@@ -22,11 +23,12 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
         this.state = {
             email: "",
             password: "",
-            userName: "",
+            confirmPassword: "",
             fullName: "",
             country: "",
             disabled: false,
             error: null,
+            successful: false
         };
     }
     componentDidMount() {
@@ -37,11 +39,10 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
         this.setState({
             email: e.currentTarget.value
         });
-
     }
-    handleUserNameChange = (e: React.FormEvent<HTMLInputElement>) => {
+    handleConfirmPasswordChange = (e: React.FormEvent<HTMLInputElement>) => {
         this.setState({
-            userName: e.currentTarget.value
+            confirmPassword: e.currentTarget.value
         })
     }
     handlePasswordChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -63,17 +64,17 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
         if (this.state.email.length == 0 || !regexp.test(this.state.email)) {
             errorMsg = "Enter a valid email";
         }
-        else if (this.state.password.trim().length < 6) {
-            // Non-empty password check
-            errorMsg = "Password should be at least 6 characters excluding leading or trailing whitespaces";
-        }
         else if (this.state.fullName.length == 0) {
             // Full name check
             errorMsg = "Enter a valid full name";
         }
-        else if (this.state.userName.length == 0) {
-            // Username check
-            errorMsg = "Enter a valid username";
+        else if (this.state.password.length < 6) {
+            // Non-empty password check
+            errorMsg = "Password should be at least 6 characters excluding leading or trailing whitespaces";
+        }
+        else if (this.state.password != this.state.confirmPassword) {
+            // confirm password check
+            errorMsg = "Passwords doesn't match";
         }
 
         return errorMsg;
@@ -90,6 +91,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
         if (error.length > 0) {
             this.setState({
                 error: error,
+                successful: false,
                 disabled: false,
             });
             return;
@@ -99,7 +101,6 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
             let registerRequest = new RegisterRequest();
             registerRequest.setEmail(this.state.email);
             registerRequest.setPassword(this.state.password);
-            registerRequest.setUserName(this.state.userName);
             registerRequest.setFullName(this.state.fullName);
             registerRequest.setCountry(this.state.country);
             this.registerUser(registerRequest);
@@ -115,15 +116,17 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
             const resp = await DalalActionService.register(registerRequest);
             this.setState({
                 error:"Registration Successful, Please proceed to Login",
+                successful: true,
             });
         } catch (e) {
             console.log(e);
             this.setState({
-                error: e.statusMessage
+                error: e.IsGrpcError ? "Unable to connect to the server. Please check your internet connection." : e.statusMessage,
+                successful: false,
             });
         }
         // try{
-        // let registerResponse= await DalalActionService.register(registerRequest)    
+        // let registerResponse= await DalalActionService.register(registerRequest)
         // }catch(e){
         //     console.log("Error Happened");
 
@@ -146,12 +149,6 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
                             <div className="ui left icon input">
                                 <i className="user icon"></i>
                                 <input type="text" name="name" placeholder="Full Name" onChange={this.handleFullNameChange} value={this.state.fullName} />
-                            </div>
-                        </div>
-                        <div className="field">
-                            <div className="ui left icon input">
-                                <i className="game icon"></i>
-                                <input type="text" name="name" placeholder="User Name" onChange={this.handleUserNameChange} value={this.state.userName} />
                             </div>
                         </div>
                         <div id="country-selector" className="ui fluid selection dropdown field invert-me" >
@@ -405,14 +402,24 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
                                 <input type="password" name="password" placeholder="Password" onChange={this.handlePasswordChange} value={this.state.password} />
                             </div>
                         </div>
+                        <div className="field">
+                            <div className="ui left icon input">
+                            <i className="lock icon"></i>
+                                <input type="password" name="name" placeholder="Confirm Password" onChange={this.handleConfirmPasswordChange} value={this.state.confirmPassword} />
+                            </div>
+                        </div>
                         {this.state.disabled ?
                             <div className="ui fluid large teal submit disabled button">Register</div> :
                             <div className="ui fluid large teal submit button" onClick={this.handleRegister}>Register</div>
                         }
                     </div>
                 </form>
-                {this.state.error != null && <div className="ui negative bottom attached message">
+                {this.state.error != null && !this.state.successful && <div className="ui negative bottom attached message">
                     <i className="icon error"></i>
+                    {this.state.error}
+                </div>}
+                {this.state.error != null && this.state.successful && <div className="ui positive bottom attached message">
+                    <i className="icon success"></i>
                     {this.state.error}
                 </div>}
             </div>
