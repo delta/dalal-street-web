@@ -477,10 +477,10 @@ h3.panel-header {
 	width:60px;
 	height: 30px;
 	background-color: white !important;
-	color:gray !important;
+	color:#242323 !important;
 	border-radius: 5px;
 	outline: none;
-	border: 1px solid black;
+	border: 1px solid #242323;
 	padding: 3px;
 }
 

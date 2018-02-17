@@ -147,7 +147,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
                     <h2 className="ui center aligned icon header inverted">
                         <i className="pie chart icon"></i>
                         <div className="content">
-                            Primary Market
+                            Exchange
                             <div className="grey sub header">
                                 Buy your way to glory
                             </div>
