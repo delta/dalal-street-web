@@ -42,6 +42,7 @@ export class Help extends React.Component<HelpProps, {}> {
                         <div id="help-tab" className="ui top attached tabular menu">
                             <a className="active item" data-tab="gettingstarted">Getting Started</a>
                             <a className="item" data-tab="faqs">FAQ</a>
+                            <a className="item" data-tab="forum">Forum</a>
                         </div>
                         <div className="ui bottom attached active tab segment" data-tab="gettingstarted">
                            
@@ -214,6 +215,12 @@ export class Help extends React.Component<HelpProps, {}> {
                                     <p>If you still have any queries, please feel free to ask it on our <a target="_blank" href="https://www.allanswered.com/community/s/dalal-street/">Official Forum</a> and we'll try to get back to you as soon as possible. Happy Trading!</p>
                                 </div>
                             </div>
+                        </div>
+                        <div className="ui bottom attached tab segment" data-tab="forum">
+                            For further queries, feel free to post your doubts on the 
+                            <a href="https://www.allanswered.com/community/s/dalal-street/" target="_blank">
+                                &nbsp;forum
+                            </a>
                         </div>
                     </div>
                     <div className="one wide column"></div>

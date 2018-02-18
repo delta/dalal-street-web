@@ -63,10 +63,10 @@ export class IntroScreen extends React.Component<{}, {}> {
                                 <h2>Questions or comments?</h2>
                             </header>
         
-                            <p>Reach out to us on <a href="https://pragyan.org">Pragyan</a></p>
+                            <p>Reach out to us on <a href="https://www.allanswered.com/community/s/dalal-street/">the Dalal Forum</a></p>
         
                             <ul className="copyright">
-                                <li>&copy; Made with &hearts; by <a href="https://delta.nitt.edu">Delta Force</a></li>
+                                <li>&copy; Made with <span className="red">&hearts;</span> by <a href="https://delta.nitt.edu">Delta Force</a></li>
                             </ul>
         
                         </div>
