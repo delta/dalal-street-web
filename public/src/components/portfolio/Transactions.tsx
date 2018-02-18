@@ -12,10 +12,11 @@ import { Transaction as Transaction_pb, TransactionType } from "../../../proto_b
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { Fragment } from "react";
 
+import { showNotif } from "../../utils";
+
 // Moment will be exposed globally by the MomentJS script included in index.html
 declare var moment: any;
 declare var $:any;
-declare var PNotify: any;
 
 const FROM_EXCHANGE_TRANSACTION = TransactionType.FROM_EXCHANGE_TRANSACTION;
 const ORDER_FILL_TRANSACTION = TransactionType.ORDER_FILL_TRANSACTION;
@@ -83,19 +84,6 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
         }
     }
 
-    showModal = (msg: string) => {
-        let pnotifyNotif = PNotify.notice({
-            title: 'You have a notification',
-            text: msg,
-            addClass: "pnotify-style",
-            modules: {
-                NonBlock: {
-                    nonblock: true
-                }
-            },
-        });
-    }
-
     getOldTransactions = async () => {
         if (this.state.moreExists) {
             console.log("getting old transactions with id ", this.state.lastFetchedTransactionId);
@@ -120,10 +108,11 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
             } catch(e) {
                 // error could be grpc error or Dalal error. Both handled in exception
                 console.log("Error happened! ", e.statusCode, e.statusMessage, e);
+                showNotif("Error fetching transactions. Try refreshing.")
             }
         }
         else {
-            this.showModal("Reached end of transactions");
+            showNotif("Reached end of transactions");
         }
     }
 

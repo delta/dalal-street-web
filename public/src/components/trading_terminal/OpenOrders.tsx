@@ -10,12 +10,11 @@ import { GetMyOpenOrdersRequest, GetMyOpenOrdersResponse } from "../../../proto_
 import { CancelOrderRequest } from "../../../proto_build/actions/CancelOrder_pb";
 import { Ask as Ask_pb } from "../../../proto_build/models/Ask_pb";
 import { Bid as Bid_pb } from "../../../proto_build/models/Bid_pb";
+import { showNotif } from "../../utils";
 
 const LIMIT = OrderType.LIMIT;
 const MARKET = OrderType.MARKET;
 const STOPLOSS = OrderType.STOPLOSS;
-
-declare var PNotify: any;
 
 const orderTypeToStr = (ot: OrderType): string => {
 	switch(ot) {
@@ -90,19 +89,6 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 
 	componentWillUnmount() {
 		unsubscribe(this.props.sessionMd, this.state.subscriptionId);
-	}
-
-	showModal = (msg: string) => {
-        let pnotifyNotif = PNotify.notice({
-			title: 'You have a notification',
-			text: msg,
-			addClass: "pnotify-style",
-			modules: {
-				NonBlock: {
-					nonblock: true
-				}
-			},
-		});
 	}
 	
 	confirmCancelModal = (that: any, orderId: string, isAsk: boolean) => {
@@ -225,11 +211,11 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 					openBids: currOpenBids
 				});
 			}
-			this.showModal("Order cancelled successfully!");
+			showNotif("Order cancelled successfully!");
 		} catch(e) {
 			// error could be grpc error or Dalal error. Both handled in exception
 			console.log("Error happened! ", e.statusCode, e.statusMessage, e);
-			this.showModal("Error cancelling order!");
+			showNotif("Error cancelling order!");
 		}
 	}
 

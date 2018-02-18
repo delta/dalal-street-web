@@ -8,9 +8,9 @@ import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { Notification } from "../common/Notification";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
 import { Transaction as Transaction_pb, TransactionType } from "../../../proto_build/models/Transaction_pb";
+import { showNotif } from "../../utils";
 
 declare var $:any;
-declare var PNotify: any;
 
 const isPositiveInteger = (x: number): boolean => {
     return (!isNaN(x) && x % 1 === 0 && x > 0);
@@ -64,19 +64,6 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         }
     }
 
-    showModal = (msg: string) => {
-        let pnotifyNotif = PNotify.notice({
-            title: 'You have a notification',
-            text: msg,
-            addClass: "pnotify-style",
-            modules: {
-                NonBlock: {
-                    nonblock: true
-                }
-            },
-        });
-    }
-
     getMortgageCount = (stockId: number): number => {
         if (stockId in this.state.mortgageDetails) {
             return this.state.mortgageDetails[stockId];
@@ -104,7 +91,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
             });
         } catch(e) {
             console.log("Error happened while getting mortgages! ", e.statusCode, e.statusMessage, e);
-            this.showModal("Something went wrong! " + e.statusMessage);
+            showNotif("Something went wrong! " + e.statusMessage);
         }
     }
 
@@ -112,11 +99,11 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         const stockQuantity = $("#mortgageinput-"+stockId).val() as number;
         $("#mortgageinput-"+stockId).val("");
         if (!isPositiveInteger(stockQuantity)) {
-            this.showModal("Enter a positive integer");
+            showNotif("Enter a positive integer");
             return;
         }
         if (stockQuantity > this.props.stocksOwnedMap[stockId]) {
-            this.showModal("You own only " + this.props.stocksOwnedMap[stockId] + " stocks");
+            showNotif("You own only " + this.props.stocksOwnedMap[stockId] + " stocks");
             return;
         }
         const mortgageStocksRequest = new MortgageStocksRequest();
@@ -126,10 +113,10 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
 
             const resp = await DalalActionService.mortgageStocks(mortgageStocksRequest, this.props.sessionMd);
             console.log(resp.getStatusCode(), resp.toObject());
-            this.showModal("Stocks mortgaged successfully");
+            showNotif("Stocks mortgaged successfully");
         } catch(e) {
             console.log("Error happened while mortgaging stocks! ", e.statusCode, e.statusMessage, e);
-            this.showModal("Something went wrong! " + e.statusMessage);
+            showNotif("Something went wrong! " + e.statusMessage);
         }
     }
 
@@ -137,11 +124,11 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         const stockQuantity = $("#retrieveinput-"+stockId).val() as number;
         $("#retrieveinput-"+stockId).val("");
         if (!isPositiveInteger(stockQuantity)) {
-            this.showModal("Enter a positive integer");
+            showNotif("Enter a positive integer");
             return;
         }
         if (stockQuantity > this.getMortgageCount(stockId)) {
-            this.showModal("You have only " + this.getMortgageCount(stockId) + " stocks mortgaged");
+            showNotif("You have only " + this.getMortgageCount(stockId) + " stocks mortgaged");
             return;
         }
         const retrieveStocksRequest = new RetrieveMortgageStocksRequest();
@@ -151,10 +138,10 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
 
             const resp = await DalalActionService.retrieveMortgageStocks(retrieveStocksRequest, this.props.sessionMd);
             console.log(resp.getStatusCode(), resp.toObject());
-            this.showModal("Stocks retrieved successfully");
+            showNotif("Stocks retrieved successfully");
         } catch(e) {
             console.log("Error happened while retrieving stocks! ", e.statusCode, e.statusMessage, e);
-            this.showModal("Something went wrong! " + e.statusMessage);
+            showNotif("Something went wrong! " + e.statusMessage);
         }
     }
 

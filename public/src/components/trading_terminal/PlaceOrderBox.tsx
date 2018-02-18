@@ -5,7 +5,7 @@ import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service
 import { Metadata } from "grpc-web-client";
 import { Fragment } from "react";
 
-declare var PNotify: any;
+import { showNotif } from "../../utils";
 
 const LIMIT = OrderType.LIMIT;
 const MARKET = OrderType.MARKET;
@@ -52,7 +52,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 
         try {
             const resp = await DalalActionService.placeOrder(orderRequest, this.props.sessionMd);
-            this.showModal("Order placed successfully!");
+            showNotif("Order placed successfully!");
             console.log(resp.getStatusCode(), resp.toObject());
         }
         catch(e) {
@@ -65,22 +65,9 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
             } else {
                 errorMessage = e.statusMessage || "Oops! Something went wrong. Please notify administrator";
             }
-            this.showModal(errorMessage);
+            showNotif(errorMessage);
         }
     };
-
-    showModal = (msg: string) => {
-        let pnotifyNotif = PNotify.notice({
-            title: 'You have a notification',
-            text: msg,
-            addClass: "pnotify-style",
-            modules: {
-                NonBlock: {
-                    nonblock: true
-                }
-            },
-        });
-    }
 
     handleOrder = (event: any, orderType: OrderType, orderAction: string) => {
         const orderTypeString = orderTypeToStr(orderType);
@@ -91,7 +78,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
         let orderPrice = Number(orderType ==  MARKET ? 0 : priceInputField.value);
 
         if (!(isPositiveInteger(stockCount) && (orderType ==  MARKET || isPositiveInteger(orderPrice)))) {
-            this.showModal("Please enter a positive integer");
+            showNotif("Please enter a positive integer");
             return;
         }
 

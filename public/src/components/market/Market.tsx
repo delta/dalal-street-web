@@ -11,12 +11,13 @@ import { Notification } from "../common/Notification";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
 import { StockExchangeDataPoint } from "../../../proto_build/datastreams/StockExchange_pb";
 
+import { showNotif } from "../../utils";
+
 function isPositiveInteger(x: number): boolean {
     return (!isNaN(x) && x % 1 === 0 && x > 0);
 }
 
 declare var $:any;
-declare var PNotify: any;
 
 export interface MarketProps {
     sessionMd: Metadata,
@@ -38,19 +39,6 @@ export class Market extends React.Component<MarketProps, MarketState> {
             stockData: props.stockDetailsMap,
             subscriptionId: new SubscriptionId,
         }
-    }
-
-    showModal = (msg: string) => {
-        let pnotifyNotif = PNotify.notice({
-            title: 'You have a notification',
-            text: msg,
-            addClass: "pnotify-style",
-            modules: {
-                NonBlock: {
-                    nonblock: true
-                }
-            },
-        });
     }
 
     getStockExchangeStream = async () => {
@@ -80,7 +68,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
         let quantity = $("#input-"+stockId).val()!;
         $("#input-" + stockId).val("");
         if (!isPositiveInteger(Number(quantity))) {
-            this.showModal("Enter a positive integer!");
+            showNotif("Enter a positive integer!");
             return;
         }
         if (quantity) {
@@ -92,14 +80,14 @@ export class Market extends React.Component<MarketProps, MarketState> {
                 request.setStockId(stockId);
                 request.setStockQuantity(myQuantity);
                 const resp = await DalalActionService.buyStocksFromExchange(request, this.props.sessionMd);
-                this.showModal("Order successful!");
+                showNotif("Order successful!");
                 console.log(resp.getStatusCode(), resp.toObject());
             } catch(e) {
                 console.log("Error happened while placing order! ", e.statusCode, e.statusMessage, e);
                 if (e.IsGrpcError) {
-                    this.showModal("Oops! Unable to reach server. Please check your internet connection!");
+                    showNotif("Oops! Unable to reach server. Please check your internet connection!");
                 } else {
-                    this.showModal("Oops! Something went wrong! " + e.statusMessage);
+                    showNotif("Oops! Something went wrong! " + e.statusMessage);
                 }
             }
         }

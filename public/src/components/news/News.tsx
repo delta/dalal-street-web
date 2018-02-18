@@ -8,9 +8,9 @@ import { MarketEvent } from "../../../proto_build/models/MarketEvent_pb";
 import { subscribe, unsubscribe } from "../../../src/streamsutil";
 import { SubscriptionId } from "../../../proto_build/datastreams/Subscribe_pb";
 import { NewsComponent } from "./NewsComponent";
+import { showNotif } from "../../utils";
 
 declare var $: any;
-declare var PNotify: any;
 
 export interface NewsProps {
     sessionMd: Metadata,
@@ -38,19 +38,6 @@ export class News extends React.Component<NewsProps, NewsState> {
         };
     }
 
-    showModal = (msg: string) => {
-        let pnotifyNotif = PNotify.notice({
-            title: 'You have a notification',
-            text: msg,
-            addClass: "pnotify-style",
-            modules: {
-                NonBlock: {
-                    nonblock: true
-                }
-            },
-        });
-    }
-
     getOldNews = async () => {
         if (this.state.moreExists) {
             const req = new GetMarketEventsRequest();
@@ -72,7 +59,7 @@ export class News extends React.Component<NewsProps, NewsState> {
             }
         }
         else {
-            this.showModal("No further news. You're all caught up!");
+            showNotif("No further news. You're all caught up!");
         }
     }
 
