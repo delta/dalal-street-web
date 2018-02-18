@@ -6,6 +6,7 @@ import { RetrieveMortgageStocksRequest } from "../../../proto_build/actions/Retr
 import { GetMortgageDetailsRequest } from "../../../proto_build/actions/GetMortgageDetails_pb";
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { Notification } from "../common/Notification";
+import { TinyNetworth } from "../common/TinyNetworth";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
 import { Transaction as Transaction_pb, TransactionType } from "../../../proto_build/models/Transaction_pb";
 import { showNotif } from "../../utils";
@@ -26,6 +27,8 @@ export interface MortgageProps {
     retrieveRate: number,
     latestTransaction: Transaction_pb,
     disclaimerElement: JSX.Element,
+    userCash: number,
+    userTotal: number,
 }
 
 interface MortgageState {
@@ -183,6 +186,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         return (
             <div id="mortgage-container" className="ui stackable grid pusher main-container">
                 <div className="row" id="top_bar">
+                    <TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} />
 					<div id="notif-component">
 						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
 					</div>

@@ -3,11 +3,14 @@ import { Metadata } from "grpc-web-client";
 import * as ReactPaginate from "react-paginate";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { Notification } from "../common/Notification";
+import { TinyNetworth } from "../common/TinyNetworth";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
 import { GetLeaderboardRequest, GetLeaderboardResponse } from "../../../proto_build/actions/GetLeaderboard_pb";
 import { LeaderboardRow as LeaderboardRow_pb } from "../../../proto_build/models/LeaderboardRow_pb";
 
 export interface LeaderboardProps {
+    userCash: number,
+    userTotal: number,
     sessionMd: Metadata,
     leaderboardCount: number,
     notifications: Notification_pb[],
@@ -82,6 +85,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
         return (
             <div id="leaderboard-container" className="ui stackable grid pusher main-container">
                <div className="row" id="top_bar">
+                    <TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} />
 					<div id="notif-component">
 						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
 					</div>

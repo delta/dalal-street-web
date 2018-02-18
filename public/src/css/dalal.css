@@ -102,19 +102,36 @@ div.expected-cost {
 
 #search-container {
 	margin: 5px 15px;
+	width: 350px;
+}
+#search-container .row {
+	padding-left: 0 !important;
+	padding-right: 5px !important;
 }
 #search-container div.text {
 	width: 100%;
+	position: relative;
+}
+#search-container div.text * {
+	display: inline-block;
+}
+#search-container div.text .companyName {
+	width: 60%;
+}
+#search-container div.text .search-bar-current-price {
+	width: 18.5%;
+}
+#search-container div.text .search-bar-price-diff {
+	width: 18.5%;
 }
 .search-bar-current-price {
-	float: right;
 	font-weight: bold;
 }
 .search-bar-price-diff {
-	float: right;
 	font-size: small;
 	margin-top: 1px;
 	margin-left: 3px;
+	text-align: right;
 }
 .search-bar-current-price.profit {
 	color: rgb(0, 146, 0);
@@ -145,17 +162,6 @@ div.expected-cost {
 	left: 0;
 	right: 0;
 	bottom: 0;
-}
-
-#top_bar:before {
-	position: absolute;
-	content: "This is the Trial round!";
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	text-decoration: underline;
-	font-weight: bold;
-	color: #1B1C1D;
 }
 
 #notifbuttontext {
@@ -233,6 +239,48 @@ body {
 .main-container #top_bar {
 	box-shadow: 2px -3px 2px 0px inset rgba(0,0,0,0.97) !important
 }
+
+#top_bar:after {
+	position: absolute;
+	content: "This is the Trial round!";
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-decoration: underline;
+	font-weight: bold;
+	color: #1B1C1D;
+}
+
+#tiny-networth {
+	position: absolute;
+	right: 130px;
+	height: 47px;
+	top: 0px;
+}
+
+#tiny-networth:not(:first-child) {
+	top: -14px;
+}
+
+#tiny-networth div.box {
+	margin: 5px 2px;
+	padding: 15px 10px !important;
+	font-size: 1.1em !important;
+	height: 100%;
+}
+
+#tiny-networth h3.green {
+	color: rgb(0, 146, 0) !important;
+}
+
+#tiny-networth h3.red {
+	color: rgb(158, 0, 0) !important;
+}
+
+#tiny-networth i.icon {
+	font-size: 0.75em;
+}
+
 #navbar {
 	box-shadow: 0px 0 2px 1px #000 !important;
 }

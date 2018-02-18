@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Notification } from "../common/Notification";
+import { TinyNetworth } from "../common/TinyNetworth";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
-import { Metadata } from "grpc-web-client"; 
+import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService } from "../../../proto_build/DalalMessage_pb_service";
 import { GetMarketEventsRequest, GetMarketEventsResponse } from "../../../proto_build/actions/GetMarketEvents_pb";
 import { MarketEvent } from "../../../proto_build/models/MarketEvent_pb";
@@ -13,6 +14,8 @@ import { showNotif } from "../../utils";
 declare var $: any;
 
 export interface NewsProps {
+    userCash: number,
+    userTotal: number,
     sessionMd: Metadata,
     newsCount: number,
     notifications: Notification_pb[],
@@ -105,6 +108,7 @@ export class News extends React.Component<NewsProps, NewsState> {
         return (
             <div id="news-container" className="ui stackable grid pusher main-container">
                 <div className="row" id="top_bar">
+                    <TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} />
                      <div id="notif-component">
                          <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>

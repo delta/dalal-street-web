@@ -54,17 +54,18 @@ export class SearchBar extends React.Component<SearchBarProps, {}> {
 				diffClass = "loss ";
 			}
 
-			diff = Math.round(10000 * (prices[stockId] / stockInfo.previousDayClose - 1)) / 100 + "%";
+			const priceIncrease = prices[stockId] - stockInfo.previousDayClose;
+			const percentageIncrease = (priceIncrease * 100 / (stockInfo.previousDayClose+1)).toFixed(2);
+			diff = percentageIncrease + "%";
 
 			options.push(
-				<div key={stockId} className="item" data-value={stockId}>
-					{/* <i className={stockInfo.fullName.toLowerCase() + " icon"}></i> */}
-					{stockInfo.shortName}
+				<div key={stockId} className="item row" data-value={stockId}>
+					<div className="companyName nine wide column">{stockInfo.fullName}</div>
 
-					<span className={priceClass + " " + diffClass}>
-						{prices[stockId]}
-						<span className={"search-bar-price-diff " + diffClass}>{diff}</span>
-					</span>
+					<div className={priceClass + " three wide column " + diffClass}>
+					₹ {prices[stockId]}
+					</div>
+					<div className={"three wide column search-bar-price-diff " + diffClass}>{diff}</div>
 				</div>
 			);
 		}
@@ -73,7 +74,7 @@ export class SearchBar extends React.Component<SearchBarProps, {}> {
 				<input name="stock" type="hidden" value={this.props.defaultStock}/>
 				<i className="dropdown icon"></i>
 				<div className="default text">Select Stock</div>
-				<div className="menu">
+				<div className="menu ui grid">
 					{options}
 				</div>
 			</div>
