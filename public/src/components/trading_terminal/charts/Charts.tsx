@@ -221,7 +221,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 							<div className="item">15min</div>
 							<div className="item">30min</div>
 							<div className="item">60min</div>
-							<div className="item">1day</div>
+							{/* <div className="item">1day</div> */}
 						</div>
 					</div>
 				</span>
