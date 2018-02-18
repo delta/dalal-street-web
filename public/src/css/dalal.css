@@ -758,6 +758,15 @@ h1 {
 	margin-left: 40px;
 }
 
+#help-container ol ul {
+	margin-left: 0px;
+	margin-top: 10px;
+}
+
+#help-container ol p {
+	margin-left: 0px;
+}
+
 #help-container strong {
 	color:#7DEA63 !important;
 }
