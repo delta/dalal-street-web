@@ -13,6 +13,14 @@
 	<!-- Dalal Stylesheet -->
 	<link rel="stylesheet" type="text/css" href="./public/src/css/dalal.css">
 	<link rel="stylesheet" type="text/css" href="./public/src/css/intro.css"/>
+
+	<script>
+		let ua = navigator.userAgent.toLowerCase();
+		let isAndroid = ua.indexOf("android") > -1;
+		if(isAndroid) {
+			window.location.href = "https://play.google.com/store/apps/details?id=org.pragyan.dalal18";
+		}
+	</script>
 </head>
 <body>
 	<div id="root"></div>
