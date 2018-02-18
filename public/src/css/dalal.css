@@ -498,7 +498,7 @@ h3.panel-header {
 	background: #1b1c1d;
 }
 
-.market-input {
+.market-input, .mortgage-input {
 	text-align: center;
 	width:60px;
 	height: 30px;
@@ -807,3 +807,26 @@ h1 {
 	color: #DDDDDD;
 }
 /* Help styling ends here */
+
+/* Mortgage styling starts here */
+
+#mortgage-container .segment {
+	font-size: 1.1em;
+	background-color: #2b2c2d !important;
+}
+
+#mortgage-tab {
+	border: none !important;
+}
+
+#mortgage-tab .active {
+	border: none !important;
+	background-color: #2b2c2d;
+}
+
+#mortgage-tab .item {
+	color: white !important;
+	font-size: 1.2em;
+}
+
+/* Mortgage styling ends here */

@@ -52,6 +52,11 @@ export class Navbar extends React.Component<NavProps, {}> {
 			<i className="help circle icon"></i>
 			Help
 		</a>
+
+		<a className={"item " + (currentLink == "/mortgage" ? "active" : "")} onClick={e => this.handleClick(e, "/mortgage")}>
+			<i className="university icon"></i>
+			Mortgage
+		</a>
 		
 		<a className="item" href="https://www.allanswered.com/community/s/dalal-street/" target="_blank">
 			<i className="users icon"></i>
