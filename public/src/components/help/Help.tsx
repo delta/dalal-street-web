@@ -52,7 +52,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                     <span className="faq-questions lighter">The Objective</span>
                                 </div>
                                 <div className="content">
-                                    <p>Each player begins the game with ₹20,000. Your objective is to use this money to maximise your profit at the end of 7 days.</p>
+                                    <p>Each player begins the game with ₹2,00,000. Your objective is to use this money to maximise your profit at the end of 7 days.</p>
                                 </div>
 
                                 <div className="title">
