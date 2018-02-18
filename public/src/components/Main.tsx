@@ -44,15 +44,14 @@ interface MainState {
     userCash:		number
     userTotal:		number
 
-    stocksOwnedMap:  { [index:number]: number } // stocks owned by user for a given stockid
-    stockDetailsMap: { [index:number]: Stock_pb } // get stock detail for a given stockid
+    stocksOwnedMap:    { [index:number]: number } // stocks owned by user for a given stockid
+    stockDetailsMap:   { [index:number]: Stock_pb } // get stock detail for a given stockid
+    stockBriefInfoMap: { [index:number]: StockBriefInfo }
 
-    isMarketOpen: 				boolean
+    isMarketOpen: 	boolean
 
     notifSubscriptionId: SubscriptionId
     stockSubscriptionId: SubscriptionId
-
-    stockDetails: Stock_pb[]
 }
 
 // We tried out a couple of ways to pass notification from main
@@ -61,16 +60,29 @@ export class Main extends React.Component<MainProps, MainState> {
     constructor(props: MainProps) {
         super(props);
 
+        const stockBriefInfoMap : { [index:number]: StockBriefInfo } = {};
+        for (const stockId in this.props.stockDetailsMap) {
+            const stock = this.props.stockDetailsMap[stockId];
+
+            stockBriefInfoMap[stockId] = {
+                id: stock.getId(),
+                shortName: stock.getShortName(),
+                fullName: stock.getFullName(),
+                previousDayClose: stock.getPreviousDayClose(),
+            };
+
+        }
+
         this.state = {
             notifications: [],
             userCash: this.props.user.getCash(),
             userTotal: this.calculateTotal(this.props.user.getCash(), this.props.stocksOwnedMap, this.props.stockDetailsMap),
             stocksOwnedMap: this.props.stocksOwnedMap,
             stockDetailsMap: this.props.stockDetailsMap,
+            stockBriefInfoMap: stockBriefInfoMap,
             isMarketOpen: this.props.isMarketOpen,
             notifSubscriptionId: new SubscriptionId,
             stockSubscriptionId: new SubscriptionId,
-            stockDetails: [],
         };
 
         this.handleNotificationsStream();
@@ -124,27 +136,25 @@ export class Main extends React.Component<MainProps, MainState> {
 
         for await (const notifUpdate of stream) {
             const notif = notifUpdate.getNotification()!;
-            let isMarketClosedNotif = false;
             // checking for market close
-            let isMarketOpen: boolean = true;
+            let isMarketOpen: boolean = this.state.isMarketOpen;
             if (notif.getText() == this.props.marketIsClosedHackyNotif) {
                 console.log("closing");
                 isMarketOpen = false;
-                isMarketClosedNotif = true;
+            } else if (notif.getText() == this.props.marketIsOpenHackyNotif) {
+                isMarketOpen = true;
             }
 
-            if (! isMarketClosedNotif) {
-                let pnotifyNotif = PNotify.notice({
-                    title: 'You have a notification',
-                    text: notif.getText(),
-                    addClass: "pnotify-style",
-                    modules: {
-                        NonBlock: {
-                            nonblock: true
-                        }
-                    },
-                });
-            }
+            let pnotifyNotif = PNotify.notice({
+                title: 'You have a notification',
+                text: notif.getText(),
+                addClass: "pnotify-style",
+                modules: {
+                    NonBlock: {
+                        nonblock: true
+                    }
+                },
+            });
 
             const notifs = this.state.notifications.slice();
             notifs.unshift(notif);
@@ -201,161 +211,77 @@ export class Main extends React.Component<MainProps, MainState> {
         unsubscribe(this.props.sessionMd, this.state.stockSubscriptionId);
     }
 
-    getWrappedTradingTerminal = () => {
-        const stockBriefInfoMap: { [index:number]: StockBriefInfo } = {};
-        const stockPricesMap: { [index:number]: number } = {};
-        for (const stockId in this.state.stockDetailsMap) {
-            const stock = this.state.stockDetailsMap[stockId];
-
-            stockBriefInfoMap[stockId] = {
-                id: stock.getId(),
-                shortName: stock.getShortName(),
-                fullName: stock.getFullName(),
-            };
-
-            stockPricesMap[stockId] = stock.getCurrentPrice();
-        }
-
-        return (
-            <TradingTerminal
-                sessionMd={this.props.sessionMd}
-                notifications={this.state.notifications}
-                userName={this.props.user.getName()}
-                userCash={this.state.userCash}
-                stocksOwnedMap={this.state.stocksOwnedMap}
-                stockBriefInfoMap={stockBriefInfoMap}
-                stockPricesMap={stockPricesMap}
-                constantsMap={this.props.constantsMap}
-                isMarketOpen={this.state.isMarketOpen}
-                disclaimerElement={this.disclaimerElement}
-            />
-        );
-    }
-
-    getWrappedLeaderboard = () => {
-        return (
-            <Leaderboard
-                sessionMd={this.props.sessionMd}
-                leaderboardCount={this.props.constantsMap['LEADERBOARD_COUNT']}
-                notifications={this.state.notifications}
-                disclaimerElement={this.disclaimerElement}
-            />
-        );
-    }
-
-    getWrappedPortfolio = () => {
-        const stockBriefInfoMap: { [index:number]: StockBriefInfo } = {};
-        const stockPricesMap: { [index:number]: number } = {};
-        for (const stockId in this.state.stockDetailsMap) {
-            const stock = this.state.stockDetailsMap[stockId];
-
-            stockBriefInfoMap[stockId] = {
-                id: stock.getId(),
-                shortName: stock.getShortName(),
-                fullName: stock.getFullName(),
-            };
-
-            stockPricesMap[stockId] = stock.getCurrentPrice();
-        }
-
-        return (
-            <Portfolio
-                sessionMd={this.props.sessionMd}
-                notifications={this.state.notifications}
-                stockBriefInfoMap={stockBriefInfoMap}
-                stockPricesMap={stockPricesMap}
-                transactionCount={this.props.constantsMap['GET_TRANSACTION_COUNT']}
-                disclaimerElement={this.disclaimerElement}
-            />
-        );
-    }
-
-    getWrappedMarket = () => {
-        return (
-            <Market sessionMd={this.props.sessionMd}
-                    stockDetailsMap={this.state.stockDetailsMap}
-                    notifications={this.state.notifications}
-                    disclaimerElement={this.disclaimerElement}
-            />
-        );
-    }
-    
-    getWrappedNews = () => {
-        return (
-            <News
-                sessionMd={this.props.sessionMd}
-                newsCount={this.props.constantsMap["MARKET_EVENT_COUNT"]}
-                notifications={this.state.notifications}
-                disclaimerElement={this.disclaimerElement}
-            />
-        );
-    }
-
-    getWrappedCompany = () => {
-        const stockBriefInfoMap: { [index:number]: StockBriefInfo } = {};
-        const stockPricesMap: { [index:number]: number } = {};
-        for (const stockId in this.state.stockDetailsMap) {
-            const stock = this.state.stockDetailsMap[stockId];
-
-            stockBriefInfoMap[stockId] = {
-                id: stock.getId(),
-                shortName: stock.getShortName(),
-                fullName: stock.getFullName(),
-            };
-
-            stockPricesMap[stockId] = stock.getCurrentPrice();
-        }
-        return (
-            <Company
-                sessionMd={this.props.sessionMd}
-                notifications={this.state.notifications}
-                stockBriefInfoMap={stockBriefInfoMap}
-                stockPricesMap={stockPricesMap}
-                disclaimerElement={this.disclaimerElement}
-            />
-        );
-    }
-
-    getWrappedHelp = () => {
-        return (
-            <Help
-                notifications={this.state.notifications}
-                disclaimerElement={this.disclaimerElement}
-            /> 
-        );
-    }
-
     render() {
         //Use window.location.pathname because react router is removed 
         //and hence react's history wont be changing ie
         //pushing to path in App cannot be retrieved by Route exact path
         //because the history for react will not have those changes reflected
 
-        if (! this.state.isMarketOpen) {
+        if (!this.state.isMarketOpen) {
             $("#market-close-modal").modal({
                 closable:false,
             }).modal("show");
         }
-
         else {
             $("#market-close-modal").modal("hide");
         }
 
         switch (window.location.pathname) {
             case "/trade":
-                return this.getWrappedTradingTerminal();
+                return <TradingTerminal
+                    sessionMd={this.props.sessionMd}
+                    notifications={this.state.notifications}
+                    userName={this.props.user.getName()}
+                    userCash={this.state.userCash}
+                    stocksOwnedMap={this.state.stocksOwnedMap}
+                    stockBriefInfoMap={this.state.stockBriefInfoMap}
+                    stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
+                    constantsMap={this.props.constantsMap}
+                    isMarketOpen={this.state.isMarketOpen}
+                    disclaimerElement={this.disclaimerElement}
+                />
             case "/portfolio":
-                return this.getWrappedPortfolio();
+                return <Portfolio
+                    sessionMd={this.props.sessionMd}
+                    notifications={this.state.notifications}
+                    stockBriefInfoMap={this.state.stockBriefInfoMap}
+                    stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
+                    transactionCount={this.props.constantsMap['GET_TRANSACTION_COUNT']}
+                    disclaimerElement={this.disclaimerElement}
+                />;
             case "/market":
-                return this.getWrappedMarket();
+                return <Market sessionMd={this.props.sessionMd}
+                    stockDetailsMap={this.state.stockDetailsMap}
+                    notifications={this.state.notifications}
+                    disclaimerElement={this.disclaimerElement}
+                />;
             case "/leaderboard":
-                return this.getWrappedLeaderboard();
+                return <Leaderboard
+                    sessionMd={this.props.sessionMd}
+                    leaderboardCount={this.props.constantsMap['LEADERBOARD_COUNT']}
+                    notifications={this.state.notifications}
+                    disclaimerElement={this.disclaimerElement}
+                />;
             case "/news":
-                return this.getWrappedNews();
+                return <News
+                    sessionMd={this.props.sessionMd}
+                    newsCount={this.props.constantsMap["MARKET_EVENT_COUNT"]}
+                    notifications={this.state.notifications}
+                    disclaimerElement={this.disclaimerElement}
+                />;
             case "/companies":
-                return this.getWrappedCompany();
+                return <Company
+                    sessionMd={this.props.sessionMd}
+                    notifications={this.state.notifications}
+                    stockBriefInfoMap={this.state.stockBriefInfoMap}
+                    stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
+                    disclaimerElement={this.disclaimerElement}
+                />
             case "/help":
-                return this.getWrappedHelp();
+                return <Help
+                    notifications={this.state.notifications}
+                    disclaimerElement={this.disclaimerElement}
+                />;
             default:
                 return <NotFound />;
         }
