@@ -17,8 +17,8 @@ export class LoginForm extends React.Component<LoginFormProps, LoginFormState>{
     constructor(props: LoginFormProps) {
         super(props)
         this.state = {
-            password: "dalalkeliye",
-            email: "106115021@nitt.edu",
+            password: "",
+            email: "",
             disabled: false,
             error: null,
         };
