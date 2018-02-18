@@ -635,6 +635,7 @@ h1 {
 	padding: 1em;
 	position: relative;
 	z-index: 1;
+	background-color: rgba(0, 0, 0, 0.5);
 }
 .news-card .author {
 	font-size: 12px;
