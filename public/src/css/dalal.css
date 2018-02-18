@@ -103,6 +103,31 @@ div.expected-cost {
 #search-container {
 	margin: 5px 15px;
 }
+#search-container div.text {
+	width: 100%;
+}
+.search-bar-current-price {
+	float: right;
+	font-weight: bold;
+}
+.search-bar-price-diff {
+	float: right;
+	font-size: small;
+	margin-top: 1px;
+	margin-left: 3px;
+}
+.search-bar-current-price.profit {
+	color: green;
+}
+.search-bar-price-diff.profit:after {
+	content: "↑";
+}
+.search-bar-current-price.loss {
+	color: red;
+}
+.search-bar-price-diff.loss:after {
+	content: "↓";
+}
 
 /* Notification styling starts */
 #notifbutton{

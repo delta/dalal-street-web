@@ -14,6 +14,7 @@ export type StockBriefInfo = {
 	id: number
 	shortName: string
 	fullName: string
+	previousDayClose: number
 }
 
 export interface TradingTerminalProps {
@@ -51,7 +52,6 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 			userCash: this.props.userCash,
 			stockPricesMap: this.props.stockPricesMap,
 		};
-		
 	}
 
 	// parent will update the stock prices or cash
@@ -85,9 +85,6 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 							stockPricesMap={this.state.stockPricesMap}
 							handleStockIdCallback={this.handleStockIdChange}
 							defaultStock={this.state.currentStockId} />
-					</div>
-					<div id="current-price-container" className="left floated">
-						<b>Current price: {this.state.currentPrice}</b>
 					</div>
 
 					<div id="notif-component">
