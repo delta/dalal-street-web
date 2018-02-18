@@ -72,12 +72,6 @@ export class NewsComponent extends React.Component<NewsComponentProps,{}> {
                             <div className="ui header">{newsDetails.getText()}
                             </div>
                         </div>
-                
-                        <div className="actions">
-                            <div className="ui black deny button">
-                                Close
-                            </div>
-                        </div>
                     </div>
                 </div>
             </Fragment>
