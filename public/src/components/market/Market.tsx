@@ -4,11 +4,12 @@ import { TickerBar } from "./../common/TickerBar";
 import { TickerProps, Ticker } from "./../common/Ticker";
 import { DataStreamType, SubscriptionId, SubscribeRequest, } from "../../../proto_build/datastreams/Subscribe_pb"
 import { subscribe, unsubscribe } from "../../streamsutil";
-import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
+import { DalalActionService, DalalStreamService} from "../../../proto_build/DalalMessage_pb_service";
 import { Stock as Stock_pb} from "../../../proto_build/models/Stock_pb";
 import { BuyStocksFromExchangeRequest } from "../../../proto_build/actions/BuyStocksFromExchange_pb";
 import { Notification } from "../common/Notification";
-import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb"
+import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
+import { StockExchangeDataPoint } from "../../../proto_build/datastreams/StockExchange_pb";
 
 function isPositiveInteger(x: number): boolean {
     return (!isNaN(x) && x % 1 === 0 && x > 0);
@@ -25,7 +26,7 @@ export interface MarketProps {
 }
 
 export interface MarketState {
-    stockData: TickerProps[],
+    stockData: { [index: number]: Stock_pb},
     subscriptionId: SubscriptionId,
 }
 
@@ -34,7 +35,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
         super(props);
 
         this.state = {
-            stockData: [],
+            stockData: props.stockDetailsMap,
             subscriptionId: new SubscriptionId,
         }
     }
@@ -50,6 +51,29 @@ export class Market extends React.Component<MarketProps, MarketState> {
                 }
             },
         });
+    }
+
+    getStockExchangeStream = async () => {
+        const subscribeId = await subscribe(this.props.sessionMd, DataStreamType.STOCK_EXCHANGE);
+        const exchangeStream = DalalStreamService.getStockExchangeUpdates(subscribeId, this.props.sessionMd);
+        this.setState({
+            subscriptionId: subscribeId,
+        });
+
+        for await (const update of exchangeStream) {
+            console.log(update);
+            console.log(update.toObject());
+            const exchangeMap = update.getStocksInExchangeMap();
+            let currentStockData = this.state.stockData;
+            exchangeMap.forEach((dataPoint, stockId) => {
+                currentStockData[stockId].setStocksInExchange(dataPoint.getStocksInExchange());
+            })
+
+            this.setState({
+                stockData: currentStockData,
+            });
+        }
+
     }
 
     purchaseFromExchange = async (stockId: number) => {
@@ -79,36 +103,15 @@ export class Market extends React.Component<MarketProps, MarketState> {
                 }
             }
         }
-
-    }
-
-    updateStockData = (props: MarketProps) => {
-        let newTickerStockData: TickerProps[] = [];
-        
-        for (const update in props['stockDetailsMap']) {
-            let objUpdate = props['stockDetailsMap'][update].toObject();
-            newTickerStockData.push({
-                stockId: objUpdate.id,
-                companyName: objUpdate.shortName,
-                currentPrice: objUpdate.currentPrice,
-                previousPrice: objUpdate.previousDayClose,
-                stocksInExchange: objUpdate.stocksInExchange,
-            }); 
-        }
-
-        this.setState({
-            stockData: newTickerStockData,
-        });
     }
 
     componentDidMount() {
-        this.updateStockData(this.props);
+        this.getStockExchangeStream();
+
     }
 
-    componentWillReceiveProps(newProps: MarketProps) {
-        if (newProps){
-            this.updateStockData(newProps);
-        }
+    componentWillUnmount() {
+        unsubscribe(this.props.sessionMd, this.state.subscriptionId);
     }
 
     render() {
@@ -116,23 +119,24 @@ export class Market extends React.Component<MarketProps, MarketState> {
         let history: any[] = [];
         let percentageIncrease: number;
         let diffClass: string;
-        for (let i=0; i<this.state.stockData.length; i++) {
+        const stockDetailsMap = this.props.stockDetailsMap;
+        for (const stockId in stockDetailsMap) {
             diffClass = "red";
-            let objUpdate = this.state.stockData[i];
-            percentageIncrease = (objUpdate.currentPrice - objUpdate.previousPrice)*100/(objUpdate.previousPrice+1);
+            let currentStock = stockDetailsMap[stockId];
+            percentageIncrease = (currentStock.getCurrentPrice() - currentStock.getPreviousDayClose())*100/(currentStock.getPreviousDayClose()+1);
             if (percentageIncrease >= 0) {
                 diffClass = "green";
             }
 
             percentageIncrease = parseFloat(percentageIncrease.toFixed(2));
             history.push(
-                <tr key={objUpdate.stockId}>
-                    <td className="volume"><strong>{objUpdate.companyName}</strong></td>
-                    <td className="volume"><strong>{objUpdate.currentPrice}</strong></td>
+                <tr key={currentStock.getId()}>
+                    <td className="volume"><strong>{currentStock.getShortName()}</strong></td>
+                    <td className="volume"><strong>{currentStock.getCurrentPrice()}</strong></td>
                     <td className={"volume " + diffClass}><strong>{percentageIncrease}{" %"}</strong></td>
-                    <td className="volume"><strong>{objUpdate.stocksInExchange}</strong></td>
-                    <td className="volume"><strong><input id={"input-"+objUpdate.stockId} placeholder="0" className="market-input"/></strong></td>
-                    <td className="volume"><strong><button className="ui inverted green button" onClick={() => {this.purchaseFromExchange(objUpdate.stockId)}}>Buy</button></strong></td>                        
+                    <td className="volume"><strong>{currentStock.getStocksInExchange()}</strong></td>
+                    <td className="volume"><strong><input id={"input-"+currentStock.getId()} placeholder="0" className="market-input"/></strong></td>
+                    <td className="volume"><strong><button className="ui inverted green button" onClick={() => {this.purchaseFromExchange(currentStock.getId())}}>Buy</button></strong></td>
                 </tr>
             );
         }
