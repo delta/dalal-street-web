@@ -49,9 +49,15 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
     componentWillReceiveProps(newProps: MortgageProps) {
         if (newProps && newProps.latestTransaction && newProps.latestTransaction.getType() == TransactionType.MORTGAGE_TRANSACTION) {
             let mortgageDetails = this.state.mortgageDetails;
-
-            // subtract because delta(mortgaged stocks) = delta(stocksOwned)
-            mortgageDetails[newProps.latestTransaction.getStockId()] -= newProps.latestTransaction.getStockQuantity();
+            const stockId = newProps.latestTransaction.getStockId()
+            
+            // subtract because delta(mortgaged stocks) = -delta(stocksOwned)
+            if (stockId in mortgageDetails) {
+                mortgageDetails[stockId] -= newProps.latestTransaction.getStockQuantity();
+            }
+            else {
+                mortgageDetails[stockId] = -newProps.latestTransaction.getStockQuantity();
+            }
             this.setState({
                 mortgageDetails: mortgageDetails,
             });
