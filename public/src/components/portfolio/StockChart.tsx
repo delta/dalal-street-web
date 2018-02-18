@@ -16,28 +16,32 @@ interface StockChartState {
 export class StockChart extends React.Component<StockChartProps, StockChartState> {
     chartElem: any;
     labels: string[] = [];
-    numOfStocks: number;
     constructor(props: StockChartProps) {
         super(props);
+    }
+
+    getStocksOwned = (chartData: { [index:number]: number }): number[] => {
+        let data: number[] = [];
+        for (const stockId in this.props.stockBriefInfoMap) {
+            if (stockId in chartData) {
+                data.push(chartData[stockId]);
+            }
+            else {
+                data.push(0);
+            }
+        }
+        return data;
     }
 
     componentDidMount() {
         const cvs = document.getElementById("bar-chart") as HTMLCanvasElement;
         const ctx = cvs!.getContext('2d')!;
 
-        this.numOfStocks = Object.keys(this.props.stockBriefInfoMap).length;
-        let data = new Array(this.numOfStocks+1);
-
-        for (const stockId in this.props.chartData) {
-            data[stockId] = this.props.chartData[stockId];
-        }
-
-        data.shift();
+        let data = this.getStocksOwned(this.props.chartData);
 
         for (const stockId in this.props.stockBriefInfoMap) {
             this.labels.push(this.props.stockBriefInfoMap[stockId].fullName);
         }
-
 
         this.chartElem = new Chart(ctx, {
             type: 'bar',
@@ -63,14 +67,9 @@ export class StockChart extends React.Component<StockChartProps, StockChartState
     }
 
     componentWillReceiveProps(nextProps: StockChartProps) {
-        if (nextProps.chartData) {
-            let data = new Array(this.numOfStocks+1);
+        if (nextProps && nextProps.chartData) {
+            let data = this.getStocksOwned(nextProps.chartData);
 
-            for (const stockId in nextProps.chartData) {
-                data[stockId] = nextProps.chartData[stockId];
-            }
-
-            data.shift();
             this.chartElem.data.datasets = [{
                 data: data,
                 backgroundColor: "#617073",

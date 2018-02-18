@@ -55,6 +55,7 @@ interface TransactionsState {
 }
 
 export class Transactions extends React.Component<TransactionsProps, TransactionsState> {
+    latestTransactionId: number;
     constructor(props: TransactionsProps) {
         super(props);
 
@@ -71,11 +72,14 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
 
     componentWillReceiveProps(newProps: TransactionsProps) {
         if (newProps && newProps.latestTransaction && newProps.latestTransaction.getStockId() > 0) {
-            let transactions = this.state.transactions.slice();
-            transactions.unshift(newProps.latestTransaction);
-            this.setState({
-                transactions: transactions,
-            });
+            if (newProps.latestTransaction.getId() != this.latestTransactionId) {
+                this.latestTransactionId = newProps.latestTransaction.getId();
+                let transactions = this.state.transactions.slice();
+                transactions.unshift(newProps.latestTransaction);
+                this.setState({
+                    transactions: transactions,
+                });
+            }
         }
     }
 
