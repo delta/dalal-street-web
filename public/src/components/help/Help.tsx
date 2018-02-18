@@ -1,10 +1,13 @@
 import * as React from "react";
 import { Notification } from "../common/Notification";
+import { TinyNetworth } from "../common/TinyNetworth";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
 
 declare var $: any;
 
 export interface HelpProps {
+    userCash: number,
+    userTotal: number,
     notifications: Notification_pb[],
     disclaimerElement: JSX.Element,
 }
@@ -18,6 +21,7 @@ export class Help extends React.Component<HelpProps, {}> {
         return (
             <div id="help-container" className="ui stackable grid pusher main-container">
                 <div className="row" id="top_bar">
+                    <TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} />
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>

@@ -77,7 +77,6 @@ export class Main extends React.Component<MainProps, MainState> {
                 fullName: stock.getFullName(),
                 previousDayClose: stock.getPreviousDayClose(),
             };
-
         }
 
         this.state = {
@@ -278,6 +277,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     notifications={this.state.notifications}
                     userName={this.props.user.getName()}
                     userCash={this.state.userCash}
+                    userTotal={this.state.userTotal}
                     stocksOwnedMap={this.state.stocksOwnedMap}
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
@@ -301,6 +301,8 @@ export class Main extends React.Component<MainProps, MainState> {
             case "/market":
                 return <Market sessionMd={this.props.sessionMd}
                     stockDetailsMap={this.state.stockDetailsMap}
+                    userCash={this.state.userCash}
+                    userTotal={this.state.userTotal}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
@@ -308,6 +310,8 @@ export class Main extends React.Component<MainProps, MainState> {
                 return <Leaderboard
                     sessionMd={this.props.sessionMd}
                     leaderboardCount={this.props.constantsMap['LEADERBOARD_COUNT']}
+                    userCash={this.state.userCash}
+                    userTotal={this.state.userTotal}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
@@ -315,6 +319,8 @@ export class Main extends React.Component<MainProps, MainState> {
                 return <News
                     sessionMd={this.props.sessionMd}
                     newsCount={this.props.constantsMap["MARKET_EVENT_COUNT"]}
+                    userCash={this.state.userCash}
+                    userTotal={this.state.userTotal}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
@@ -323,6 +329,8 @@ export class Main extends React.Component<MainProps, MainState> {
                     sessionMd={this.props.sessionMd}
                     notifications={this.state.notifications}
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
+                    userCash={this.state.userCash}
+                    userTotal={this.state.userTotal}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     disclaimerElement={this.disclaimerElement}
                 />
@@ -334,6 +342,8 @@ export class Main extends React.Component<MainProps, MainState> {
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     stocksOwnedMap={this.state.stocksOwnedMap}
+                    userCash={this.state.userCash}
+                    userTotal={this.state.userTotal}
                     depositRate={this.props.constantsMap['MORTGAGE_DEPOSIT_RATE']}
                     retrieveRate={this.props.constantsMap['MORTGAGE_RETRIEVE_RATE']}
                     latestTransaction={this.state.latestTransaction}
@@ -342,6 +352,8 @@ export class Main extends React.Component<MainProps, MainState> {
 
             case "/help":
                 return <Help
+                    userCash={this.state.userCash}
+                    userTotal={this.state.userTotal}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;

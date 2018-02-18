@@ -2,11 +2,14 @@ import * as React from "react";
 import { Metadata } from "grpc-web-client";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
 import { Notification } from "../common/Notification";
+import { TinyNetworth } from "../common/TinyNetworth";
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { SearchBar } from "../trading_terminal/SearchBar";
 import { CompanyDetails } from "./CompanyDetails";
 
 export interface CompanyProps {
+    userCash: number,
+    userTotal: number,
     sessionMd: Metadata,
     notifications: Notification_pb[],
     stockBriefInfoMap: { [index:number]: StockBriefInfo },
@@ -54,6 +57,7 @@ export class Company extends React.Component<CompanyProps, CompanyState> {
                             defaultStock={this.state.currentStockId} />
                     </div>
 
+                    <TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} />
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>

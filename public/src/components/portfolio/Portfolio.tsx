@@ -6,6 +6,7 @@ import { StockChart } from "./StockChart";
 import { Transactions } from "./Transactions";
 
 import { Notification } from "../common/Notification";
+import { TinyNetworth } from "../common/TinyNetworth";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
 import { Transaction as Transaction_pb } from "../../../proto_build/models/Transaction_pb";
 
@@ -36,14 +37,11 @@ export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
         super(props);
     }
 
-    componentDidMount() {
-        
-    }
-
     render() {
         return (
             <div id="portfolio-container" className="main-container ui stackable grid pusher">
                 <div className="row" id="top_bar">
+                    <TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} />
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>

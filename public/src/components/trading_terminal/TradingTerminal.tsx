@@ -7,6 +7,7 @@ import { OrderBook } from "./OrderBook/OrderBook";
 import { OpenOrders } from "./OpenOrders";
 import { SearchBar } from "./SearchBar";
 import { Notification } from "../common/Notification";
+import { TinyNetworth } from "../common/TinyNetworth";
 import { PlaceOrderBox } from "./PlaceOrderBox";
 import { Charts } from "./charts/Charts";
 
@@ -17,16 +18,19 @@ export type StockBriefInfo = {
 	previousDayClose: number
 }
 
+type NumNumMap = { [index:number]: number };
+
 export interface TradingTerminalProps {
 	sessionMd: Metadata,
 	notifications: Notification_pb[]
 
 	userName: string
 	userCash: number
+	userTotal: number
 
-	stocksOwnedMap:    { [index:number]: number } // stocks owned by user for a given stockid
+	stocksOwnedMap:    NumNumMap // stocks owned by user for a given stockid
 	stockBriefInfoMap: { [index:number]: StockBriefInfo } // get stock detail for a given stockid
-	stockPricesMap:    { [index:number]: number }
+	stockPricesMap:    NumNumMap
 	constantsMap:      { [index:string]: number } // various constants. Documentation found in server/actionservice/Login method
 
 	isMarketOpen: boolean
@@ -37,19 +41,17 @@ export interface TradingTerminalProps {
 interface TradingTerminalState {
 	currentStockId: number
 	currentPrice: number
-	userCash: number
-	stockPricesMap: { [index:number]: number }
+	stockPricesMap: NumNumMap
 }
 
 export class TradingTerminal extends React.Component<TradingTerminalProps, TradingTerminalState> {
     constructor(props: TradingTerminalProps) {
 		super(props);
 
-		const currentStockId = Number(Object.keys(this.props.stockBriefInfoMap).sort()[0])
+		const currentStockId = Number(Object.keys(this.props.stockBriefInfoMap).sort()[0]);
         this.state = {
 			currentStockId: currentStockId,
 			currentPrice: this.props.stockPricesMap[currentStockId],
-			userCash: this.props.userCash,
 			stockPricesMap: this.props.stockPricesMap,
 		};
 	}
@@ -58,11 +60,18 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 	componentWillReceiveProps(nextProps: TradingTerminalProps) {
 		this.setState(prevState => {
 			return {
-				userCash: nextProps.userCash,
 				currentPrice: nextProps.stockPricesMap[prevState.currentStockId],
 				stockPricesMap: nextProps.stockPricesMap,
 			};
 		});
+	}
+
+	computeNetWorth(cash: number, stockPricesMap: NumNumMap, stocksOwnedMap: NumNumMap) {
+		let worth = 0;
+		for (let stockId in stockPricesMap) {
+			worth += stockPricesMap[stockId] * stocksOwnedMap[stockId];
+		}
+		return cash + worth;
 	}
 
 	// child will affect the current stock id
@@ -87,6 +96,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 							defaultStock={this.state.currentStockId} />
 					</div>
 
+					<TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} />
 					<div id="notif-component">
 						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
 					</div>
