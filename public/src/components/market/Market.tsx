@@ -12,11 +12,7 @@ import { TinyNetworth } from "../common/TinyNetworth";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
 import { StockExchangeDataPoint } from "../../../proto_build/datastreams/StockExchange_pb";
 
-import { showNotif } from "../../utils";
-
-function isPositiveInteger(x: number): boolean {
-    return (!isNaN(x) && x % 1 === 0 && x > 0);
-}
+import { showNotif, isPositiveInteger } from "../../utils";
 
 declare var $:any;
 
@@ -67,31 +63,28 @@ export class Market extends React.Component<MarketProps, MarketState> {
 
     }
 
-    purchaseFromExchange = async (stockId: number) => {
-        let quantity = $("#input-"+stockId).val()!;
+    purchaseFromExchange = async (event: any, stockId: number) => {
+        let stockQuantity = $("#input-"+stockId).val() as number;
         $("#input-" + stockId).val("");
-        if (!isPositiveInteger(Number(quantity))) {
+        if (!isPositiveInteger(stockQuantity)) {
             showNotif("Enter a positive integer!");
             return;
         }
-        if (quantity) {
-            let myQuantity: number = parseInt(quantity.toString());
-            console.log("purchased stock of company " + stockId + " quantity " + myQuantity);
+        
+        console.log("purchased stock of company " + stockId + " quantity " + stockQuantity);
 
-            try {
-                const request = new BuyStocksFromExchangeRequest();
-                request.setStockId(stockId);
-                request.setStockQuantity(myQuantity);
-                const resp = await DalalActionService.buyStocksFromExchange(request, this.props.sessionMd);
-                showNotif("Order successful!");
-                console.log(resp.getStatusCode(), resp.toObject());
-            } catch(e) {
-                console.log("Error happened while placing order! ", e.statusCode, e.statusMessage, e);
-                if (e.IsGrpcError) {
-                    showNotif("Oops! Unable to reach server. Please check your internet connection!");
-                } else {
-                    showNotif("Oops! Something went wrong! " + e.statusMessage);
-                }
+        const request = new BuyStocksFromExchangeRequest();
+        try {
+            request.setStockId(stockId);
+            request.setStockQuantity(stockQuantity);
+            const resp = await DalalActionService.buyStocksFromExchange(request, this.props.sessionMd);
+            showNotif("Order successful!");
+        } catch(e) {
+            console.log("Error happened while placing order! ", e.statusCode, e.statusMessage, e);
+            if (e.IsGrpcError) {
+                showNotif("Oops! Unable to reach server. Please check your internet connection!");
+            } else {
+                showNotif("Oops! Something went wrong! " + e.statusMessage);
             }
         }
     }
@@ -127,7 +120,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
                     <td className={"volume " + diffClass}><strong>{percentageIncrease}{" %"}</strong></td>
                     <td className="volume"><strong>{currentStock.getStocksInExchange()}</strong></td>
                     <td className="volume"><strong><input id={"input-"+currentStock.getId()} placeholder="0" className="market-input"/></strong></td>
-                    <td className="volume"><strong><button className="ui inverted green button" onClick={() => {this.purchaseFromExchange(currentStock.getId())}}>Buy</button></strong></td>
+                    <td className="volume"><strong><button className="ui inverted green button" onClick={(e) => {this.purchaseFromExchange(e, currentStock.getId())}}>Buy</button></strong></td>
                 </tr>
             );
         }

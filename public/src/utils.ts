@@ -12,3 +12,7 @@ export function showNotif(msg: string, title = "New notification") {
         },
     });
 }
+
+export function isPositiveInteger(x: number): boolean {
+    return (!isNaN(x) && x % 1 === 0 && x > 0);
+}

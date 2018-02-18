@@ -5,7 +5,7 @@ import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service
 import { Metadata } from "grpc-web-client";
 import { Fragment } from "react";
 
-import { showNotif } from "../../utils";
+import { showNotif, isPositiveInteger } from "../../utils";
 
 const LIMIT = OrderType.LIMIT;
 const MARKET = OrderType.MARKET;
@@ -18,10 +18,6 @@ const orderTypeToStr = (ot: OrderType): string => {
         case STOPLOSS: return "stoploss";
     }
     return "";
-}
-
-function isPositiveInteger(x: number): boolean {
-    return (!isNaN(x) && x % 1 === 0 && x > 0);
 }
 
 export interface PlaceOrderBoxProps{
@@ -69,10 +65,12 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
         }
     };
 
-    handleOrder = (event: any, orderType: OrderType, orderAction: string) => {
+    handleOrder = async (event: any, orderType: OrderType, orderAction: string) => {
         const orderTypeString = orderTypeToStr(orderType);
         let stockInputField = document.getElementById(orderTypeString+"-"+orderAction+"-count") as HTMLInputElement;
         let priceInputField = document.getElementById(orderTypeString+"-"+orderAction+"-price") as HTMLInputElement;
+
+        console.log(event.currentTarget);
 
         let stockCount = Number(stockInputField.value);
         let orderPrice = Number(orderType ==  MARKET ? 0 : priceInputField.value);
@@ -84,7 +82,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 
         console.log("Received",orderType,orderAction,"order with stockCount =", stockCount,"orderPrice =", orderPrice);
 
-        this.placeOrder(orderAction == "sell", orderType,  orderPrice, stockCount);
+        await this.placeOrder(orderAction == "sell", orderType,  orderPrice, stockCount);
         stockInputField.value = "";
         if (priceInputField) {
             priceInputField.value = "";

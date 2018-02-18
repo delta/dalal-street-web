@@ -9,13 +9,9 @@ import { Notification } from "../common/Notification";
 import { TinyNetworth } from "../common/TinyNetworth";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
 import { Transaction as Transaction_pb, TransactionType } from "../../../proto_build/models/Transaction_pb";
-import { showNotif } from "../../utils";
+import { showNotif, isPositiveInteger } from "../../utils";
 
 declare var $:any;
-
-const isPositiveInteger = (x: number): boolean => {
-    return (!isNaN(x) && x % 1 === 0 && x > 0);
-}
 
 export interface MortgageProps {
     sessionMd: Metadata,
