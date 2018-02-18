@@ -47,7 +47,7 @@ export class SearchBar extends React.Component<SearchBarProps, {}> {
 			let priceClass = "search-bar-current-price ";
 			let diffClass = "";
 			let diff;
-			if (prices[stockId] > stockInfo.previousDayClose) {
+			if (prices[stockId] >= stockInfo.previousDayClose) {
 				diffClass = "profit ";
 			}
 			else {

@@ -84,6 +84,13 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         return 0;
     }
 
+    getStockCount = (stockId: number): number => {
+        if (stockId in this.props.stocksOwnedMap) {
+            return this.props.stocksOwnedMap[stockId];
+        }
+        return 0;
+    }
+
     getMyMortgages = async () => {
         const getMortgagesRequest = new GetMortgageDetailsRequest();
         try {
@@ -163,7 +170,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
             mortgageTable.push(
                 <tr key={stockId}>
                     <td><strong>{stockBriefInfoMap[stockId].shortName}</strong></td>
-                    <td><strong>{stocksOwnedMap[stockId]}</strong></td>
+                    <td><strong>{this.getStockCount(Number(stockId))}</strong></td>
                     <td><strong>{stockPricesMap[stockId]}</strong></td>
                     <td><strong>{this.props.depositRate + "%"}</strong></td>
                     <td className="green"><strong>{(stockPricesMap[stockId] * this.props.depositRate) / 100}</strong></td>
