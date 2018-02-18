@@ -45,11 +45,10 @@ export interface TransactionsProps {
     sessionMd: Metadata,
     transactionCount: number,
     stockBriefInfoMap: { [index:number]: StockBriefInfo },
-    transactionUpdatesCallback: (stockId: number, stockQuantity: number, total: number) => void,
+    latestTransaction: Transaction_pb,
 }
 
 interface TransactionsState {
-    subscriptionId: SubscriptionId,
     transactions: Transaction_pb[],
     lastFetchedTransactionId: number,
     moreExists: boolean,
@@ -60,7 +59,6 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
         super(props);
 
         this.state = {
-            subscriptionId: new SubscriptionId,
             transactions: [],
             lastFetchedTransactionId: 0,
             moreExists: true,
@@ -69,11 +67,16 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
 
     componentDidMount() {
         this.getOldTransactions();
-        this.handleTransactionsStream();
     }
 
-    componentWillUnmount() {
-        unsubscribe(this.props.sessionMd, this.state.subscriptionId);
+    componentWillReceiveProps(newProps: TransactionsProps) {
+        if (newProps && newProps.latestTransaction && newProps.latestTransaction.getStockId() > 0) {
+            let transactions = this.state.transactions.slice();
+            transactions.unshift(newProps.latestTransaction);
+            this.setState({
+                transactions: transactions,
+            });
+        }
     }
 
     showModal = (msg: string) => {
@@ -120,31 +123,6 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
         }
     }
 
-    handleTransactionsStream = async () => {
-        const props = this.props;
-        const subscriptionId = await subscribe(props.sessionMd, DataStreamType.TRANSACTIONS);
-
-        this.setState({
-            subscriptionId: subscriptionId,
-        });
-
-        const stream = DalalStreamService.getTransactionUpdates(subscriptionId, props.sessionMd);
-        for await (const update of stream) {
-            const newTransaction = update.getTransaction()!;
-            this.props.transactionUpdatesCallback(
-                newTransaction.getStockId(),
-                newTransaction.getStockQuantity(),
-                newTransaction.getTotal());
-
-            let updatedTransactions = this.state.transactions.slice();
-            updatedTransactions.unshift(newTransaction);
-
-            this.setState({
-                transactions: updatedTransactions,
-            });
-        }
-    }
-
     render() {
         const currentTransactions = this.state.transactions;
         let transactionsContent = currentTransactions.map((transaction) => (
@@ -158,7 +136,7 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
                 <td className={transaction.getStockQuantity() >= 0 ? "green" : "red"}>
                     <strong>{transaction.getStockQuantity()}</strong>
                 </td>
-                <td><strong>{transaction.getPrice()}</strong></td>
+                <td><strong>{transaction.getPrice() == 0 ? "-" : transaction.getPrice()}</strong></td>
                 <td className={transaction.getTotal() >= 0 ? "green" : "red"}>
                     <strong>{transaction.getTotal()}</strong>
                 </td>

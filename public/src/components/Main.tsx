@@ -9,6 +9,7 @@ import { Portfolio } from "./portfolio/Portfolio";
 import { Market } from "./market/Market";
 import { News } from "./news/News";
 import { Company } from "./companies/Companies";
+import { Mortgage } from "./mortgage/Mortgage";
 import { Help } from "./help/Help";
 
 import { Metadata } from "grpc-web-client";
@@ -20,6 +21,7 @@ import { subscribe, unsubscribe } from "../streamsutil";
 import { User as User_pb } from "../../proto_build/models/User_pb";
 import { Stock as Stock_pb } from "../../proto_build/models/Stock_pb";
 import { Notification as Notification_pb } from "../../proto_build/models/Notification_pb";
+import { Transaction as Transaction_pb } from "../../proto_build/models/Transaction_pb";
 
 import * as jspb from "google-protobuf";
 
@@ -52,6 +54,11 @@ interface MainState {
 
     notifSubscriptionId: SubscriptionId
     stockSubscriptionId: SubscriptionId
+    transactionSubcriptionId: SubscriptionId
+
+    stockDetails: Stock_pb[]
+
+    latestTransaction: Transaction_pb
 }
 
 // We tried out a couple of ways to pass notification from main
@@ -83,10 +90,14 @@ export class Main extends React.Component<MainProps, MainState> {
             isMarketOpen: this.props.isMarketOpen,
             notifSubscriptionId: new SubscriptionId,
             stockSubscriptionId: new SubscriptionId,
+            transactionSubcriptionId: new SubscriptionId,
+            stockDetails: [],
+            latestTransaction: new Transaction_pb,
         };
 
         this.handleNotificationsStream();
         this.handleStockPricesStream();
+        this.handleTransactionsStream();
     }
 
     disclaimerElement = (
@@ -122,7 +133,6 @@ export class Main extends React.Component<MainProps, MainState> {
                 notifications: notifs.getNotificationsList()
             });
         } catch(e) {
-            alert("error getting notifs");
             console.log(e);
         }
 
@@ -206,9 +216,39 @@ export class Main extends React.Component<MainProps, MainState> {
         }
     };
 
+    handleTransactionsStream = async () => {
+        const props = this.props;
+        const subscriptionId = await subscribe(props.sessionMd, DataStreamType.TRANSACTIONS);
+
+        this.setState({
+            transactionSubcriptionId: subscriptionId,
+        });
+
+        const stream = DalalStreamService.getTransactionUpdates(subscriptionId, props.sessionMd);
+        
+        // Getting copy of stocksOwnedMap
+        // To be updated by transactions stream
+        let stocksOwnedMap = this.state.stocksOwnedMap;
+
+        for await (const update of stream) {
+            const newTransaction = update.getTransaction()!;
+            stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
+            this.setState((prevState) => {
+                const newCash = prevState.userCash + newTransaction.getTotal(); 
+                return {
+                    stocksOwnedMap: stocksOwnedMap,
+                    userCash: newCash,
+                    userTotal: this.calculateTotal(newCash, stocksOwnedMap, this.state.stockDetailsMap),
+                    latestTransaction: newTransaction,
+                };
+            });
+        }
+    }
+
     componentWillUnmount() {
         unsubscribe(this.props.sessionMd, this.state.notifSubscriptionId);
         unsubscribe(this.props.sessionMd, this.state.stockSubscriptionId);
+        unsubscribe(this.props.sessionMd, this.state.transactionSubcriptionId);
     }
 
     render() {
@@ -244,9 +284,13 @@ export class Main extends React.Component<MainProps, MainState> {
                 return <Portfolio
                     sessionMd={this.props.sessionMd}
                     notifications={this.state.notifications}
+                    userCash={this.state.userCash}
+                    userTotal={this.state.userTotal}
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
+                    stocksOwnedMap={this.state.stocksOwnedMap}
                     transactionCount={this.props.constantsMap['GET_TRANSACTION_COUNT']}
+                    latestTransaction={this.state.latestTransaction}
                     disclaimerElement={this.disclaimerElement}
                 />;
             case "/market":
@@ -277,6 +321,20 @@ export class Main extends React.Component<MainProps, MainState> {
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     disclaimerElement={this.disclaimerElement}
                 />
+
+            case "/mortgage":
+                return <Mortgage
+                    sessionMd={this.props.sessionMd}
+                    notifications={this.state.notifications}
+                    stockBriefInfoMap={this.state.stockBriefInfoMap}
+                    stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
+                    stocksOwnedMap={this.state.stocksOwnedMap}
+                    depositRate={this.props.constantsMap['MORTGAGE_DEPOSIT_RATE']}
+                    retrieveRate={this.props.constantsMap['MORTGAGE_RETRIEVE_RATE']}
+                    latestTransaction={this.state.latestTransaction}
+                    disclaimerElement={this.disclaimerElement}
+                />
+
             case "/help":
                 return <Help
                     notifications={this.state.notifications}

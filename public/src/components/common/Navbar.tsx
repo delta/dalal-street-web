@@ -27,14 +27,27 @@ export class Navbar extends React.Component<NavProps, {}> {
 			<i className="rupee icon"></i>
 			Trade
 		</a>
+
 		<a className={"item " + (currentLink == "/portfolio" ? "active" : "")} onClick={e => this.handleClick(e, "/portfolio")}>
 			<i className="book icon"></i>
 			Portfolio
 		</a>
+
 		<a className={"item " + (currentLink == "/market" ? "active" : "")} onClick={e => this.handleClick(e, "/market")}>
 			<i className="line chart icon"></i>
 			Exchange
 		</a>
+
+		<a className={"item " + (currentLink == "/mortgage" ? "active" : "")} onClick={e => this.handleClick(e, "/mortgage")}>
+			<i className="university icon"></i>
+			Mortgage
+		</a>
+
+		<a className={"item " + (currentLink == "/companies" ? "active" : "")} onClick={e => this.handleClick(e, "/companies")}>
+			<i className="suitcase icon"></i>
+			Companies
+		</a>
+
 		<a className={"item " + (currentLink == "/news" ? "active" : "")} onClick={e => this.handleClick(e, "/news")}>
 			<i className="newspaper icon"></i>
 			News
@@ -43,10 +56,7 @@ export class Navbar extends React.Component<NavProps, {}> {
 			<i className="trophy icon"></i>
 			Leaderboard
 		</a>
-		<a className={"item " + (currentLink == "/companies" ? "active" : "")} onClick={e => this.handleClick(e, "/companies")}>
-			<i className="suitcase icon"></i>
-			Companies
-		</a>
+		
 		
 		<a className={"item " + (currentLink == "/help" ? "active" : "")} onClick={e => this.handleClick(e, "/help")}>
 			<i className="help circle icon"></i>

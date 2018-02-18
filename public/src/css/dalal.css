@@ -117,13 +117,19 @@ div.expected-cost {
 	margin-left: 3px;
 }
 .search-bar-current-price.profit {
-	color: green;
+	color: rgb(0, 146, 0);
+}
+.search-bar-price-diff.profit {
+	color: rgb(0, 80, 0);
 }
 .search-bar-price-diff.profit:after {
 	content: "↑";
 }
 .search-bar-current-price.loss {
-	color: red;
+	color: rgb(218, 0, 0);
+}
+.search-bar-price-diff.loss {
+	color: rgb(158, 0, 0);
 }
 .search-bar-price-diff.loss:after {
 	content: "↓";
@@ -498,7 +504,7 @@ h3.panel-header {
 	background: #1b1c1d;
 }
 
-.market-input {
+.market-input, .mortgage-input {
 	text-align: center;
 	width:60px;
 	height: 30px;
@@ -807,3 +813,26 @@ h1 {
 	color: #DDDDDD;
 }
 /* Help styling ends here */
+
+/* Mortgage styling starts here */
+
+#mortgage-container .segment {
+	font-size: 1.1em;
+	background-color: #2b2c2d !important;
+}
+
+#mortgage-tab {
+	border: none !important;
+}
+
+#mortgage-tab .active {
+	border: none !important;
+	background-color: #2b2c2d;
+}
+
+#mortgage-tab .item {
+	color: white !important;
+	font-size: 1.2em;
+}
+
+/* Mortgage styling ends here */
