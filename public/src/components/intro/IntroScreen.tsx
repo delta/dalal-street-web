@@ -30,13 +30,13 @@ export class IntroScreen extends React.Component<{}, {}> {
                             <section className="feature left">
                                 <a className="image"><img src="./public/src/images/pic01.png" alt="" /></a>
                                 <div className="content">
-                                    <h3>Getting you started</h3>
+                                    <h3>About The Game</h3>
                                     <p className="p-text">
-                                    The game will be spread over a period of 7 days.<br/>
-                                    Players accumulate maximum net worth by trading.<br/>
-                                    Net Worth = Cash + Stock Worth.<br/>
-                                    Players need to predict the market by the constant news feed.
-                                    Bots will be competing along with humans.
+                                    Dalal Street is an online virtual stock exchange.
+                                    The game will run for 7 days and your goal is to
+                                    maximise your profit. Once you login, please read our 
+                                    <strong> Getting Started </strong> section on the Help Page
+                                    before playing the game.
                                     </p>
                                 </div>
                             </section>
