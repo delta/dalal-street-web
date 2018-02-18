@@ -117,13 +117,19 @@ div.expected-cost {
 	margin-left: 3px;
 }
 .search-bar-current-price.profit {
-	color: green;
+	color: rgb(0, 146, 0);
+}
+.search-bar-price-diff.profit {
+	color: rgb(0, 80, 0);
 }
 .search-bar-price-diff.profit:after {
 	content: "↑";
 }
 .search-bar-current-price.loss {
-	color: red;
+	color: rgb(218, 0, 0);
+}
+.search-bar-price-diff.loss {
+	color: rgb(158, 0, 0);
 }
 .search-bar-price-diff.loss:after {
 	content: "↓";
