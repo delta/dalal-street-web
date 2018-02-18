@@ -232,7 +232,12 @@ export class Main extends React.Component<MainProps, MainState> {
 
         for await (const update of stream) {
             const newTransaction = update.getTransaction()!;
-            stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
+            if (newTransaction.getStockId() in stocksOwnedMap) {
+                stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
+            }
+            else {
+                stocksOwnedMap[newTransaction.getStockId()] = newTransaction.getStockQuantity();
+            }
             this.setState((prevState) => {
                 const newCash = prevState.userCash + newTransaction.getTotal(); 
                 return {
