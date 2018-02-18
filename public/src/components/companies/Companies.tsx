@@ -53,9 +53,6 @@ export class Company extends React.Component<CompanyProps, CompanyState> {
                             handleStockIdCallback={this.handleStockIdChange}
                             defaultStock={this.state.currentStockId} />
                     </div>
-                    <div id="current-price-container" className="left floated">
-                        <b>Current price: {this.state.currentPrice}</b>
-                    </div>
 
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
