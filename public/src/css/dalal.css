@@ -112,7 +112,7 @@ div.expected-cost {
 
 #search-container {
 	margin: 5px 15px;
-	width: 350px;
+	width: 385px;
 }
 #search-container .row {
 	padding-left: 0 !important;
@@ -129,10 +129,10 @@ div.expected-cost {
 	width: 60%;
 }
 #search-container div.text .search-bar-current-price {
-	width: 18.5%;
+	width: 19.5%;
 }
 #search-container div.text .search-bar-price-diff {
-	width: 18.5%;
+	width: 19.5%;
 }
 .search-bar-current-price {
 	font-weight: bold;
