@@ -141,7 +141,14 @@ export class CompanyDetails extends React.Component<CompanyDetailsProps, Company
                             A Brief Description about {companyDetails.getFullName()}
                         </h2>
                         <br/>
-                        {companyDetails.getDescription()}
+                        <div className="ui grid">
+                            <div className="twelve wide column">
+                                {companyDetails.getDescription()}
+                            </div>
+                            <div className="four wide column">
+                                <img className="ui fluid image" src={`https://dalal.pragyan.org/public/src/images/companies/${companyDetails.getShortName().toUpperCase()}.png`} />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </Fragment>
