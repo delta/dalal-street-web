@@ -146,7 +146,7 @@ export class CompanyDetails extends React.Component<CompanyDetailsProps, Company
                                 {companyDetails.getDescription()}
                             </div>
                             <div className="four wide column">
-                                <img className="ui fluid image" src={`https://dalal.pragyan.org/public/src/images/companies/${companyDetails.getShortName().toUpperCase()}.png`} />
+                                <img className="ui fluid image" src={`public/src/images/companies/${companyDetails.getShortName().toUpperCase()}.png`} />
                             </div>
                         </div>
                     </div>
