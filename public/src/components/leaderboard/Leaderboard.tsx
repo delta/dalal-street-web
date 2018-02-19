@@ -108,14 +108,14 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                     
                     <div id="my-rank" className="row">
                         <div className="one wide column"></div>
-                        <div className="nine wide column">
+                        <div className="ten wide column">
                             <div className="ui header inverted">
                                 <i className="star icon"></i>
                                 Your rank : {state.userRank}
                             </div>
                         </div>
-                        <div className="five wide column">
-                            <div className="ui header inverted">
+                        <div className="four wide column">
+                            <div className="ui small header inverted">
                                 Leaderboard will be updated every 2 minutes
                             </div>
                         </div>
