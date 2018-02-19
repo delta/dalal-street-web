@@ -61,20 +61,31 @@ export class MarketDepth extends React.Component<MarketDepthProps, {}> {
         });
 
         bidArray.sort((a:Depth, b:Depth) => {
+            // handle market orders separately for bids.
+            if (parseInt(a.price) == 0)
+                return -1
+            if (parseInt(b.price) == 0)
+                return 1
             return parseInt(b.price) - parseInt(a.price);
         });
 
         let l = bidArray.length > askArray.length ? bidArray.length : askArray.length;
 
         for (let i=0; i<13; i++) {
-                buyRows.push(
-                    <tr key={i}>
-                        <td className="volume"><strong>{typeof(bidArray[i]) != "undefined" ? bidArray[i].volume : ''}</strong></td>
-                        <td className="price green"><strong>{typeof(bidArray[i]) != "undefined" ? bidArray[i].price : ''}</strong></td>
-                        <td className="volume"><strong>{typeof(askArray[i]) != "undefined" ? askArray[i].volume : ''}</strong></td>
-                        <td className="price red"><strong>{typeof(askArray[i]) != "undefined" ? askArray[i].price : ''}</strong></td>
-                    </tr>
-                );
+            if (askArray[i] && parseInt(askArray[i].price) == 0) {
+                askArray[i].price = "Market";
+            }
+            if (bidArray[i] && parseInt(bidArray[i].price) == 0) {
+                bidArray[i].price = "Market";
+            }
+            buyRows.push(
+                <tr key={i}>
+                    <td className="volume"><strong>{typeof(bidArray[i]) != "undefined" ? bidArray[i].volume : ''}</strong></td>
+                    <td className="price green"><strong>{typeof(bidArray[i]) != "undefined" ? bidArray[i].price : ''}</strong></td>
+                    <td className="volume"><strong>{typeof(askArray[i]) != "undefined" ? askArray[i].volume : ''}</strong></td>
+                    <td className="price red"><strong>{typeof(askArray[i]) != "undefined" ? askArray[i].price : ''}</strong></td>
+                </tr>
+            );
         }
 
 		return (
