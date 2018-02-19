@@ -24,7 +24,7 @@ export class TinyNetworth extends React.Component<TinyNetworthProps, {}> {
         return (
             <div id="tiny-networth" className="ui statistics">
                 <div className="ui six wide column box" data-content="Cash in hand">
-                    <h3 className={"ui center aligned " + stockWorthClass + " header inverted"}>
+                    <h3 className={"ui center aligned green header inverted"}>
                         <i className="fa fa-money"></i> &nbsp;&nbsp;
                         {addCommas(this.props.userCash)}
                     </h3>
