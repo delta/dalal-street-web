@@ -25,7 +25,7 @@ export class TinyNetworth extends React.Component<TinyNetworthProps, {}> {
                 <div className="ui six wide column box" data-content="Cash in hand">
                     <h3 className={"ui center aligned " + stockWorthClass + " header inverted"}>
                         <i className="fa fa-money"></i> &nbsp;&nbsp;
-                        {this.props.userTotal}
+                        {this.props.userCash}
                     </h3>
                 </div>
                 <div className="ui six wide column box" data-content="Worth of stocks owned by you">
