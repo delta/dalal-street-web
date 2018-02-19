@@ -169,6 +169,13 @@ export class Main extends React.Component<MainProps, MainState> {
         }
     };
 
+    componentDidMount() {
+        if (!localStorage.getItem('first_time_dalal')) {
+            showInfoNotif("Do checkout the help section before you start trading", "New notification");            
+            localStorage.setItem("first_time_dalal",  "yeah");
+        }
+    }
+
     handleStockPricesStream = async () => {
         const sessionMd = this.props.sessionMd;
 
