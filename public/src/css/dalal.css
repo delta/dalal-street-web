@@ -254,7 +254,6 @@ body {
 
 #top_bar:after {
 	position: absolute;
-	content: "This is the Trial round!";
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
