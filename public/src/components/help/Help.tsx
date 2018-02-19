@@ -87,7 +87,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <p className="image-wrapper"><img src="./public/src/images/help/Dalal_Market_Available.png" alt="Exchange Image" /></p>
                                         <p>We also recommend that you pay close attention to the <strong>News Page</strong>. This page will constantly be updated with articles about company news, scandals, rumours,
                                     or even political developments. Staying connected with these updates can give you an edge over other players as this is the best way to predict the future performance of a company.</p>
-                                        <p><em>Pro Tip</em>: If you’re using the Dalal Street Android App, you will receive a notification on your phone every time a new article is published.</p>
+                                        <p><em>Pro Tip</em>: If you’re using the <a target="_blank" href="https://play.google.com/store/apps/details?id=org.pragyan.dalal18">Dalal Street Android App</a>, you will receive a notification on your phone every time a new article is published.</p>
                                     </div>
 
                                     <div className="title">
@@ -217,7 +217,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <span className="faq-questions">Can I expect any new companies to pop up over the course of the game?</span>
                                     </div>
                                     <div className="content">
-                                        <p>While we don’t expect any more companies to go public over the course of this game, existing companies may release more shares in the middle. If this happens, then the number of <em>Stocks in Exchange</em> will increase, and you can buy these stocks from the <strong>Exchange Page</strong>. Stay tuned to the <strong>News Page</strong> or download the Dalal Street Android App to be the first to know when to expect more shares.</p>
+                                        <p>While we don’t expect any more companies to go public over the course of this game, existing companies may release more shares in the middle. If this happens, then the number of <em>Stocks in Exchange</em> will increase, and you can buy these stocks from the <strong>Exchange Page</strong>. Stay tuned to the <strong>News Page</strong> or download the <a target="_blank" href="https://play.google.com/store/apps/details?id=org.pragyan.dalal18">Dalal Street Android App</a> to be the first to know when to expect more shares.</p>
                                         <p>If you still have any queries, please feel free to ask it on our <a target="_blank" href="https://www.allanswered.com/community/s/dalal-street/">Official Forum</a> and we'll try to get back to you as soon as possible. Happy Trading!</p>
                                     </div>
                                 </div>
