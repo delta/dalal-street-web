@@ -9,7 +9,7 @@ import { Notification } from "../common/Notification";
 import { TinyNetworth } from "../common/TinyNetworth";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
 import { Transaction as Transaction_pb, TransactionType } from "../../../proto_build/models/Transaction_pb";
-import { showNotif, isPositiveInteger } from "../../utils";
+import { showNotif, showErrorNotif, isPositiveInteger } from "../../utils";
 
 declare var $:any;
 
@@ -98,11 +98,11 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         const stockQuantity = $("#mortgageinput-"+stockId).val() as number;
         $("#mortgageinput-"+stockId).val("");
         if (!isPositiveInteger(stockQuantity)) {
-            showNotif("Enter a positive integer");
+            showNotif("Enter a positive integer", "Invalid input");
             return;
         }
         if (stockQuantity > this.props.stocksOwnedMap[stockId]) {
-            showNotif("You own only " + this.props.stocksOwnedMap[stockId] + " stocks");
+            showNotif("You own only " + this.props.stocksOwnedMap[stockId] + " stocks", "Invalid input");
             return;
         }
         const mortgageStocksRequest = new MortgageStocksRequest();
@@ -112,10 +112,10 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
 
             const resp = await DalalActionService.mortgageStocks(mortgageStocksRequest, this.props.sessionMd);
             console.log(resp.getStatusCode(), resp.toObject());
-            showNotif("Stocks mortgaged successfully");
+            // notif will be shown by transacions stream
         } catch(e) {
             console.log("Error happened while mortgaging stocks! ", e.statusCode, e.statusMessage, e);
-            showNotif("Something went wrong! " + e.statusMessage);
+            showErrorNotif("Something went wrong! " + e.statusMessage);
         }
     }
 

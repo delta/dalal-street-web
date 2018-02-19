@@ -1,15 +1,34 @@
 declare var PNotify: any;
 
 export function showNotif(msg: string, title = "New notification") {
-    let pnotifyNotif = PNotify.notice({
+    PNotify.notice({
         title: title,
         text: msg,
         addClass: "pnotify-style",
-        modules: {
-            NonBlock: {
-                nonblock: true
-            }
-        },
+    });
+}
+
+export function showErrorNotif(msg: string, title = "Error!") {
+    PNotify.notice({
+        title: title,
+        text: msg,
+        addClass: "pnotify-style",
+    });
+}
+
+export function showSuccessNotif(msg: string, title = "Success") {
+    PNotify.success({
+        title: title,
+        text: msg,
+        addClass: "pnotify-style",
+    });
+}
+
+export function showInfoNotif(msg: string, title: string) {
+    PNotify.info({
+        title: title,
+        text: msg,
+        addClass: "pnotify-style",
     });
 }
 

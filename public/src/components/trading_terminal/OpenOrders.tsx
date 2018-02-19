@@ -10,7 +10,7 @@ import { GetMyOpenOrdersRequest, GetMyOpenOrdersResponse } from "../../../proto_
 import { CancelOrderRequest } from "../../../proto_build/actions/CancelOrder_pb";
 import { Ask as Ask_pb } from "../../../proto_build/models/Ask_pb";
 import { Bid as Bid_pb } from "../../../proto_build/models/Bid_pb";
-import { showNotif } from "../../utils";
+import { showNotif, showErrorNotif, showSuccessNotif } from "../../utils";
 
 const LIMIT = OrderType.LIMIT;
 const MARKET = OrderType.MARKET;
@@ -211,11 +211,17 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 					openBids: currOpenBids
 				});
 			}
-			showNotif("Order cancelled successfully!");
+			showSuccessNotif("Order cancelled successfully!");
 		} catch(e) {
 			// error could be grpc error or Dalal error. Both handled in exception
 			console.log("Error happened! ", e.statusCode, e.statusMessage, e);
-			showNotif("Error cancelling order!");
+			let errorMessage = "";
+			if (e.isGrpcError) {
+                errorMessage = "Oops! Unable to reach server. Please check your internet connection."
+            } else {
+                errorMessage = e.statusMessage || "Oops! Something went wrong. Please notify administrator";
+			}
+			showErrorNotif(errorMessage);
 		}
 	}
 

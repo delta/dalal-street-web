@@ -4,6 +4,8 @@ import { TradingTerminal, StockBriefInfo } from "./trading_terminal/TradingTermi
 import { SearchBar } from "./trading_terminal/SearchBar"
 import { NotFound } from "./NotFound";
 
+import { showNotif, showSuccessNotif, showErrorNotif, showInfoNotif, isPositiveInteger } from "../utils";
+
 import { Leaderboard } from "./leaderboard/Leaderboard";
 import { Portfolio } from "./portfolio/Portfolio";
 import { Market } from "./market/Market";
@@ -21,7 +23,7 @@ import { subscribe, unsubscribe } from "../streamsutil";
 import { User as User_pb } from "../../proto_build/models/User_pb";
 import { Stock as Stock_pb } from "../../proto_build/models/Stock_pb";
 import { Notification as Notification_pb } from "../../proto_build/models/Notification_pb";
-import { Transaction as Transaction_pb } from "../../proto_build/models/Transaction_pb";
+import { Transaction as Transaction_pb, TransactionType as TransactionType_pb, TransactionType } from "../../proto_build/models/Transaction_pb";
 
 import * as jspb from "google-protobuf";
 
@@ -154,16 +156,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 isMarketOpen = true;
             }
 
-            let pnotifyNotif = PNotify.notice({
-                title: 'You have a notification',
-                text: notif.getText(),
-                addClass: "pnotify-style",
-                modules: {
-                    NonBlock: {
-                        nonblock: true
-                    }
-                },
-            });
+            showInfoNotif(notif.getText(), "New Notification");
 
             const notifs = this.state.notifications.slice();
             notifs.unshift(notif);
@@ -237,8 +230,38 @@ export class Main extends React.Component<MainProps, MainState> {
             else {
                 stocksOwnedMap[newTransaction.getStockId()] = newTransaction.getStockQuantity();
             }
+
+            try {
+                let notif = "";
+                const stockName = this.state.stockDetailsMap[newTransaction.getStockId()].getShortName();
+                const stockQty = newTransaction.getStockQuantity();
+                const price = newTransaction.getPrice();
+                const total = newTransaction.getTotal();
+                const stockOrStocks = "stock" + (Math.abs(stockQty) > 1 ? "s" : "");
+                switch (newTransaction.getType()) {
+                    case TransactionType_pb.FROM_EXCHANGE_TRANSACTION:
+                        notif = `You have bought ${stockQty} ${stockOrStocks} of ${stockName} @ ₹ ${price} from Exchange`;
+                        break;
+                    case TransactionType_pb.MORTGAGE_TRANSACTION:
+                        notif = `You have ${total < 0 ? "retrieved" : "mortgaged"} ${Math.abs(stockQty)} ${stockOrStocks} of ${stockName} @ ₹ ${-total/stockQty}`
+                        break;
+                    case TransactionType_pb.ORDER_FILL_TRANSACTION:
+                        notif = `You have ${total < 0 ? "bought" : "sold"} ${Math.abs(stockQty)} ${stockOrStocks} of ${stockName} @ ₹ ${price} via an order`;
+                        break;
+                    default:
+                        console.error("Unexpected transaction type ", newTransaction.getType());
+                }
+
+                if (notif != "") {
+                    showSuccessNotif(notif, "New Transaction!");
+                }
+            }
+            catch (e) {
+                console.error("Unexpected error: ", e);
+            }
+
             this.setState((prevState) => {
-                const newCash = prevState.userCash + newTransaction.getTotal(); 
+                const newCash = prevState.userCash + newTransaction.getTotal();
                 return {
                     stocksOwnedMap: stocksOwnedMap,
                     userCash: newCash,
