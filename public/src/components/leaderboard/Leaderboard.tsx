@@ -8,7 +8,7 @@ import { Notification as Notification_pb } from "../../../proto_build/models/Not
 import { GetLeaderboardRequest, GetLeaderboardResponse } from "../../../proto_build/actions/GetLeaderboard_pb";
 import { LeaderboardRow as LeaderboardRow_pb } from "../../../proto_build/models/LeaderboardRow_pb";
 import { Fragment } from "react";
-import { addCommas } from "../../utils";
+import { addCommas, showErrorNotif } from "../../utils";
 
 export interface LeaderboardProps {
     userCash: number,
@@ -61,14 +61,15 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
         catch (e) {
             // error could be grpc error or Dalal error. Both handled in exception
             console.log("Error happened! ", e.statusCode, e.statusMessage, e);
+            showErrorNotif("Error fetching leaderboard. Try refreshing.");
         }
     };
 
-    handlePageChange = (data: any) => {
+    handlePageChange = async (data: any) => {
         const startPage = data.selected as number;
         const offset = startPage * this.props.leaderboardCount + 1;
 
-        this.getLeaderboard(offset);
+        await this.getLeaderboard(offset);
     }
 
     render() {
@@ -104,12 +105,23 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                             </div>
                         </h2>
                     </div>
-                    <div id="my-rank" className="row fourteen wide column">
-                        <div className="ui header inverted">
-                            <i className="star icon"></i>
-                            Your rank : {state.userRank}
+                    
+                    <div id="my-rank" className="row">
+                        <div className="one wide column"></div>
+                        <div className="nine wide column">
+                            <div className="ui header inverted">
+                                <i className="star icon"></i>
+                                Your rank : {state.userRank}
+                            </div>
                         </div>
+                        <div className="five wide column">
+                            <div className="ui header inverted">
+                                Leaderboard will be updated every 2 minutes
+                            </div>
+                        </div>
+                        <div className="one wide column"></div>
                     </div>
+
                     <div className="row fourteen wide column centered">
                         <table className="ui inverted table unstackable">
                             <thead>
@@ -126,6 +138,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                             </tbody>
                         </table>
                     </div>
+                    
                     <div className="row">
                         <ReactPaginate
                             previousLabel={"<"}
