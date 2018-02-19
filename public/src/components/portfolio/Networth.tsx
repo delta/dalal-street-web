@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Fragment } from "react";
+import { addCommas } from "../../utils";
 
 export interface NetworthProps {
     userCash: number,
@@ -26,19 +27,19 @@ export class Networth extends React.Component<NetworthProps, NetworthState> {
             <Fragment>
                 <div className="ui five wide column">
                     <h1 className="ui center aligned green header inverted">
-                        ₹ {this.props.userCash}
+                        ₹ {addCommas(this.props.userCash)}
                         <div className="sub header">Cash in Hand</div>
                     </h1>
                 </div>
                 <div className="ui six wide column">
                     <h1 className={"ui center aligned " + stockWorthClass + " header inverted"}>
-                        ₹ {stockWorth}
+                        ₹ {addCommas(stockWorth)}
                         <div className="sub header">Stock Worth</div>
                     </h1>
                 </div>
                 <div className="ui five wide column">
                     <h1 className="ui center aligned green header inverted">
-                        ₹ {this.props.userTotal}
+                        ₹ {addCommas(this.props.userTotal)}
                         <div className="sub header">Net Worth</div>
                     </h1>
                 </div>

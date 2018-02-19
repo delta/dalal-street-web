@@ -14,6 +14,7 @@ import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service
 
 import { GetPortfolioRequest } from "../../../proto_build/actions/GetPortfolio_pb";
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
+import { Fragment } from "react";
 
 export interface PortfolioProps {
     sessionMd: Metadata,
@@ -21,15 +22,15 @@ export interface PortfolioProps {
     transactionCount: number,
     userCash: number,
     userTotal: number,
-    stockBriefInfoMap: { [index:number]: StockBriefInfo },
-    stockPricesMap: { [index:number]: number },
-    stocksOwnedMap: { [index:number]: number },
+    stockBriefInfoMap: { [index: number]: StockBriefInfo },
+    stockPricesMap: { [index: number]: number },
+    stocksOwnedMap: { [index: number]: number },
     latestTransaction: Transaction_pb,
     disclaimerElement: JSX.Element
 }
 
 interface PortfolioState {
-   
+
 }
 
 export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
@@ -39,35 +40,37 @@ export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
 
     render() {
         return (
-            <div id="portfolio-container" className="main-container ui stackable grid pusher">
+            <Fragment>
                 <div className="row" id="top_bar">
                     <TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} />
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>
                 </div>
-                <div id="stockchart-container" className="row">
-                    <StockChart
-                        stockBriefInfoMap={this.props.stockBriefInfoMap}
-                        chartData={this.props.stocksOwnedMap}
-                    />
+                <div id="portfolio-container" className="main-container ui stackable grid pusher">
+                    <div id="stockchart-container" className="row">
+                        <StockChart
+                            stockBriefInfoMap={this.props.stockBriefInfoMap}
+                            chartData={this.props.stocksOwnedMap}
+                        />
+                    </div>
+                    <div id="networth-container" className="row">
+                        <Networth
+                            userCash={this.props.userCash}
+                            userTotal={this.props.userTotal}
+                        />
+                    </div>
+                    <div id="transactions-container" className="row fifteen wide column centered">
+                        <Transactions
+                            sessionMd={this.props.sessionMd}
+                            transactionCount={this.props.transactionCount}
+                            stockBriefInfoMap={this.props.stockBriefInfoMap}
+                            latestTransaction={this.props.latestTransaction}
+                        />
+                    </div>
+                    {this.props.disclaimerElement}
                 </div>
-                <div id="networth-container" className="row">
-                    <Networth
-                        userCash={this.props.userCash}
-                        userTotal={this.props.userTotal}
-                    />
-                </div>
-                <div id="transactions-container" className="row fifteen wide column centered">
-                    <Transactions
-                        sessionMd={this.props.sessionMd}
-                        transactionCount={this.props.transactionCount}
-                        stockBriefInfoMap={this.props.stockBriefInfoMap}
-                        latestTransaction={this.props.latestTransaction}
-                    />
-                </div>
-                {this.props.disclaimerElement}
-            </div>
+            </Fragment>
         );
     }
 }

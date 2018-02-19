@@ -10,15 +10,16 @@ import { TinyNetworth } from "../common/TinyNetworth";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
 import { Transaction as Transaction_pb, TransactionType } from "../../../proto_build/models/Transaction_pb";
 import { showNotif, showErrorNotif, isPositiveInteger } from "../../utils";
+import { Fragment } from "react";
 
-declare var $:any;
+declare var $: any;
 
 export interface MortgageProps {
     sessionMd: Metadata,
     notifications: Notification_pb[],
-    stockBriefInfoMap: { [index:number]: StockBriefInfo },
-    stockPricesMap: { [index:number]: number },
-    stocksOwnedMap: { [index:number]: number },
+    stockBriefInfoMap: { [index: number]: StockBriefInfo },
+    stockPricesMap: { [index: number]: number },
+    stocksOwnedMap: { [index: number]: number },
     depositRate: number,
     retrieveRate: number,
     latestTransaction: Transaction_pb,
@@ -28,7 +29,7 @@ export interface MortgageProps {
 }
 
 interface MortgageState {
-    mortgageDetails: { [index:number]: number },
+    mortgageDetails: { [index: number]: number },
 }
 
 export class Mortgage extends React.Component<MortgageProps, MortgageState> {
@@ -49,7 +50,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         if (newProps && newProps.latestTransaction && newProps.latestTransaction.getType() == TransactionType.MORTGAGE_TRANSACTION) {
             let mortgageDetails = this.state.mortgageDetails;
             const stockId = newProps.latestTransaction.getStockId()
-            
+
             // subtract because delta(mortgaged stocks) = -delta(stocksOwned)
             if (stockId in mortgageDetails) {
                 mortgageDetails[stockId] -= newProps.latestTransaction.getStockQuantity();
@@ -81,22 +82,22 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         const getMortgagesRequest = new GetMortgageDetailsRequest();
         try {
             const resp = await DalalActionService.getMortgageDetails(getMortgagesRequest, this.props.sessionMd);
-            let mortgageDetails: { [index:number]: number } = {};
+            let mortgageDetails: { [index: number]: number } = {};
             resp.getMortgageMapMap().forEach((stocksMortgaged, stockId) => {
                 mortgageDetails[stockId] = stocksMortgaged;
             });
             this.setState({
                 mortgageDetails: mortgageDetails,
             });
-        } catch(e) {
+        } catch (e) {
             console.log("Error happened while getting mortgages! ", e.statusCode, e.statusMessage, e);
             showNotif("Something went wrong! " + e.statusMessage);
         }
     }
 
     mortgageStocks = async (stockId: number) => {
-        const stockQuantity = $("#mortgageinput-"+stockId).val() as number;
-        $("#mortgageinput-"+stockId).val("");
+        const stockQuantity = $("#mortgageinput-" + stockId).val() as number;
+        $("#mortgageinput-" + stockId).val("");
         if (!isPositiveInteger(stockQuantity)) {
             showNotif("Enter a positive integer", "Invalid input");
             return;
@@ -113,15 +114,15 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
             const resp = await DalalActionService.mortgageStocks(mortgageStocksRequest, this.props.sessionMd);
             console.log(resp.getStatusCode(), resp.toObject());
             // notif will be shown by transacions stream
-        } catch(e) {
+        } catch (e) {
             console.log("Error happened while mortgaging stocks! ", e.statusCode, e.statusMessage, e);
             showErrorNotif("Something went wrong! " + e.statusMessage);
         }
     }
 
     retrieveStocks = async (stockId: number) => {
-        const stockQuantity = $("#retrieveinput-"+stockId).val() as number;
-        $("#retrieveinput-"+stockId).val("");
+        const stockQuantity = $("#retrieveinput-" + stockId).val() as number;
+        $("#retrieveinput-" + stockId).val("");
         if (!isPositiveInteger(stockQuantity)) {
             showNotif("Enter a positive integer");
             return;
@@ -138,7 +139,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
             const resp = await DalalActionService.retrieveMortgageStocks(retrieveStocksRequest, this.props.sessionMd);
             console.log(resp.getStatusCode(), resp.toObject());
             showNotif("Stocks retrieved successfully");
-        } catch(e) {
+        } catch (e) {
             console.log("Error happened while retrieving stocks! ", e.statusCode, e.statusMessage, e);
             showNotif("Something went wrong! " + e.statusMessage);
         }
@@ -160,8 +161,8 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
                     <td><strong>{stockPricesMap[stockId]}</strong></td>
                     <td><strong>{this.props.depositRate + "%"}</strong></td>
                     <td className="green"><strong>{(stockPricesMap[stockId] * this.props.depositRate) / 100}</strong></td>
-                    <td><strong><input id={"mortgageinput-"+stockId} placeholder="0" className="mortgage-input"/></strong></td>
-                    <td><strong><button className="ui inverted green button" onClick={() => {this.mortgageStocks(Number(stockId))}}>Mortgage</button></strong></td>                        
+                    <td><strong><input id={"mortgageinput-" + stockId} placeholder="0" className="mortgage-input" /></strong></td>
+                    <td><strong><button className="ui inverted green button" onClick={() => { this.mortgageStocks(Number(stockId)) }}>Mortgage</button></strong></td>
                 </tr>
             );
 
@@ -174,74 +175,76 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
                     <td><strong>{stockPricesMap[stockId]}</strong></td>
                     <td><strong>{this.props.retrieveRate + "%"}</strong></td>
                     <td className="green"><strong>{(stockPricesMap[stockId] * this.props.retrieveRate) / 100}</strong></td>
-                    <td><strong><input id={"retrieveinput-"+stockId} placeholder="0" className="mortgage-input"/></strong></td>
-                    <td><strong><button className="ui inverted green button" onClick={() => {this.retrieveStocks(Number(stockId))}}>Retrieve</button></strong></td>                        
+                    <td><strong><input id={"retrieveinput-" + stockId} placeholder="0" className="mortgage-input" /></strong></td>
+                    <td><strong><button className="ui inverted green button" onClick={() => { this.retrieveStocks(Number(stockId)) }}>Retrieve</button></strong></td>
                 </tr>
             );
         }
         return (
-            <div id="mortgage-container" className="ui stackable grid pusher main-container">
+            <Fragment>
                 <div className="row" id="top_bar">
                     <TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} />
-					<div id="notif-component">
-						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
-					</div>
-				</div>
-                <div className="row">
-                    <h2 className="ui center aligned icon header inverted">
-                        <i className="university icon"></i>
-                        <div className="content">
-                            Mortgage / Retrieve
+                    <div id="notif-component">
+                        <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
+                    </div>
+                </div>
+                <div id="mortgage-container" className="ui stackable grid pusher main-container">
+                    <div className="row">
+                        <h2 className="ui center aligned icon header inverted">
+                            <i className="university icon"></i>
+                            <div className="content">
+                                Mortgage / Retrieve
                             <div className="grey sub header">
-                                Take calculated risks
+                                    Take calculated risks
                             </div>
+                            </div>
+                        </h2>
+                    </div>
+                    <div className="row fifteen wide column centered">
+                        <div id="mortgage-tab" className="ui top attached tabular menu">
+                            <a className="active item" data-tab="mortgage">Mortgage</a>
+                            <a className="item" data-tab="retrieve">Retrieve</a>
                         </div>
-                    </h2>
+                        <div className="ui bottom attached active tab segment" data-tab="mortgage">
+                            <table className="ui inverted table unstackable">
+                                <thead>
+                                    <tr>
+                                        <th>Company</th>
+                                        <th>Stocks Owned</th>
+                                        <th>Current Price (₹)</th>
+                                        <th>Deposit Rate</th>
+                                        <th>Amount per Stock (₹)</th>
+                                        <th>Quantity</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {mortgageTable}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="ui bottom attached tab segment" data-tab="retrieve">
+                            <table className="ui inverted table unstackable">
+                                <thead>
+                                    <tr>
+                                        <th>Company</th>
+                                        <th>Stocks Mortgaged</th>
+                                        <th>Current Price (₹)</th>
+                                        <th>Retrieval Rate</th>
+                                        <th>Amount per Stock (₹)</th>
+                                        <th>Quantity</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {retrieveTable}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {this.props.disclaimerElement}
                 </div>
-                <div className="row fifteen wide column centered">
-                    <div id="mortgage-tab" className="ui top attached tabular menu">
-                        <a className="active item" data-tab="mortgage">Mortgage</a>
-                        <a className="item" data-tab="retrieve">Retrieve</a>
-                    </div>
-                    <div className="ui bottom attached active tab segment" data-tab="mortgage">
-                        <table className="ui inverted table unstackable">
-                            <thead>
-                                <tr>
-                                    <th>Company</th>
-                                    <th>Stocks Owned</th>
-                                    <th>Current Price (₹)</th>
-                                    <th>Deposit Rate</th>
-                                    <th>Amount per Stock (₹)</th>
-                                    <th>Quantity</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {mortgageTable}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className="ui bottom attached tab segment" data-tab="retrieve">
-                        <table className="ui inverted table unstackable">
-                            <thead>
-                                <tr>
-                                <th>Company</th>
-                                <th>Stocks Mortgaged</th>
-                                <th>Current Price (₹)</th>
-                                <th>Retrieval Rate</th>
-                                <th>Amount per Stock (₹)</th>
-                                <th>Quantity</th>
-                                <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {retrieveTable}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-               {this.props.disclaimerElement}
-            </div>
+            </Fragment>
         );
     }
 }
