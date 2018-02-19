@@ -80,7 +80,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <span className="faq-questions lighter">The Basics</span>
                                     </div>
                                     <div className="content">
-                                        <p>There are a total of 5 companies trading publicly on the Dalal Street Exchange. To know more about each company, check out the <strong>Companies Page</strong>, which is shown in the image below. On this page, you’ll find a short description about each company as well as its latest stock price information.</p>
+                                        <p>There are a total of 12 companies trading publicly on the Dalal Street Exchange. To know more about each company, check out the <strong>Companies Page</strong>, which is shown in the image below. On this page, you’ll find a short description about each company as well as its latest stock price information.</p>
                                         <p className="image-wrapper"><img src="./public/src/images/help/Dalal_Companies_Page.png" alt="Company Image" /></p>
                                         <p>Please note that the companies on the Dalal Street Exchange are <strong>in no way related to any real world companies</strong>. The stock prices and news articles released in this game are entirely fictitious and will NOT be affected by real world events.</p>
                                         <p>Before the game begins, all stocks will be held by the exchange. As soon as the market opens on Day 1, the stocks will be open for all of the players to buy. Buying stocks from the exchange can be done from the <strong>Exchange Page</strong>, as shown below.</p>
