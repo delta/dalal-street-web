@@ -12,7 +12,7 @@ import { TinyNetworth } from "../common/TinyNetworth";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
 import { StockExchangeDataPoint } from "../../../proto_build/datastreams/StockExchange_pb";
 
-import { showNotif, isPositiveInteger } from "../../utils";
+import { showNotif, showErrorNotif, isPositiveInteger } from "../../utils";
 
 declare var $:any;
 
@@ -78,20 +78,19 @@ export class Market extends React.Component<MarketProps, MarketState> {
             request.setStockId(stockId);
             request.setStockQuantity(stockQuantity);
             const resp = await DalalActionService.buyStocksFromExchange(request, this.props.sessionMd);
-            showNotif("Order successful!");
+            // no need to show notif. Transaction will show a notif for this.
         } catch(e) {
             console.log("Error happened while placing order! ", e.statusCode, e.statusMessage, e);
             if (e.IsGrpcError) {
-                showNotif("Oops! Unable to reach server. Please check your internet connection!");
+                showErrorNotif("Oops! Unable to reach server. Please check your internet connection!");
             } else {
-                showNotif("Oops! Something went wrong! " + e.statusMessage);
+                showErrorNotif("Oops! Something went wrong! " + e.statusMessage);
             }
         }
     }
 
     componentDidMount() {
         this.getStockExchangeStream();
-
     }
 
     componentWillUnmount() {
@@ -99,7 +98,6 @@ export class Market extends React.Component<MarketProps, MarketState> {
     }
 
     render() {
-
         let history: any[] = [];
         let percentageIncrease: number;
         let diffClass: string;
