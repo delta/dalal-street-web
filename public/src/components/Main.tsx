@@ -61,6 +61,10 @@ interface MainState {
     stockDetails: Stock_pb[]
 
     latestTransaction: Transaction_pb
+
+    networkTimeOut: number
+    networkTimeOutCounter: number // goes up to 3
+    successCounter: number // goes up to 3
 }
 
 // We tried out a couple of ways to pass notification from main
@@ -94,6 +98,9 @@ export class Main extends React.Component<MainProps, MainState> {
             transactionSubcriptionId: new SubscriptionId,
             stockDetails: [],
             latestTransaction: new Transaction_pb,
+            networkTimeOut: 1000,
+            networkTimeOutCounter: 0,
+            successCounter: 0,
         };
 
         this.handleNotificationsStream();
@@ -122,6 +129,39 @@ export class Main extends React.Component<MainProps, MainState> {
         return total;
     }
 
+    connectionSucceeded = () => {
+        if (this.state.successCounter == 2) {
+            showSuccessNotif("Connected to server", "Success");
+            this.setState({
+                networkTimeOut: 1000,
+                successCounter: 0,
+                networkTimeOutCounter: 0,
+            });
+        } else {
+            let sc = this.state.successCounter;
+            this.setState({
+                successCounter: sc+1,
+            });
+        }
+    }
+
+    retryStream = (func: Function) => {
+        let newcounter = this.state.networkTimeOutCounter;
+        let newTimeout = this.state.networkTimeOut + Math.floor(newcounter/3) * this.state.networkTimeOut;
+
+        if (newcounter == 2) {
+            const timeOut = this.state.networkTimeOut;
+            showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (timeOut/1000) + "s", "Network error");
+            setTimeout(func, timeOut);
+        }
+
+        newcounter = (newcounter+1)%3;
+        this.setState({
+            networkTimeOut: newTimeout,
+            networkTimeOutCounter: newcounter,
+        });
+    };
+
     handleNotificationsStream = async () => {
         const sessionMd = this.props.sessionMd;
 
@@ -135,37 +175,53 @@ export class Main extends React.Component<MainProps, MainState> {
             });
         } catch(e) {
             console.log(e);
+            return this.retryStream(this.handleNotificationsStream.bind(this));
         }
 
         // subscribe to the news ones
-        const subscriptionId = await subscribe(sessionMd, DataStreamType.NOTIFICATIONS);
-        const stream = DalalStreamService.getNotificationUpdates(subscriptionId, sessionMd);
-
-        this.setState({
-            notifSubscriptionId: subscriptionId,
-        });
-
-        for await (const notifUpdate of stream) {
-            const notif = notifUpdate.getNotification()!;
-            // checking for market close
-            let isMarketOpen: boolean = this.state.isMarketOpen;
-            if (notif.getText() == this.props.marketIsClosedHackyNotif) {
-                console.log("closing");
-                isMarketOpen = false;
-            } else if (notif.getText() == this.props.marketIsOpenHackyNotif) {
-                isMarketOpen = true;
-            }
-
-            showInfoNotif(notif.getText(), "New Notification");
-
-            const notifs = this.state.notifications.slice();
-            notifs.unshift(notif);
+        let subscriptionId, stream;
+        try {
+            subscriptionId = await subscribe(sessionMd, DataStreamType.NOTIFICATIONS);
+            stream = DalalStreamService.getNotificationUpdates(subscriptionId, sessionMd);
 
             this.setState({
-                isMarketOpen: isMarketOpen,
-                notifications: notifs,
+                notifSubscriptionId: subscriptionId,
             });
-            console.log("Notification update", notif.toObject());
+        }
+        catch(e) {
+            console.log(e);
+            return this.retryStream(this.handleNotificationsStream.bind(this));
+        }
+
+        this.connectionSucceeded();
+
+        try {
+            for await (const notifUpdate of stream) {
+                const notif = notifUpdate.getNotification()!;
+                // checking for market close
+                let isMarketOpen: boolean = this.state.isMarketOpen;
+                if (notif.getText() == this.props.marketIsClosedHackyNotif) {
+                    console.log("closing");
+                    isMarketOpen = false;
+                } else if (notif.getText() == this.props.marketIsOpenHackyNotif) {
+                    isMarketOpen = true;
+                }
+    
+                showInfoNotif(notif.getText(), "New Notification");
+    
+                const notifs = this.state.notifications.slice();
+                notifs.unshift(notif);
+    
+                this.setState({
+                    isMarketOpen: isMarketOpen,
+                    notifications: notifs,
+                });
+                console.log("Notification update", notif.toObject());
+            }
+        }
+        catch(e) {
+            console.log(e);
+            return this.retryStream(this.handleNotificationsStream.bind(this));
         }
     };
 
@@ -179,103 +235,133 @@ export class Main extends React.Component<MainProps, MainState> {
     handleStockPricesStream = async () => {
         const sessionMd = this.props.sessionMd;
 
-        const subscriptionId = await subscribe(sessionMd, DataStreamType.STOCK_PRICES);
-        const stream = DalalStreamService.getStockPricesUpdates(subscriptionId, sessionMd);
-
-        this.setState({
-            stockSubscriptionId: subscriptionId,
-        });
-
-        for await (const stockPricesUpdate of stream) {
-            const map = stockPricesUpdate.getPricesMap();
-            const stocks: { [index:number]: Stock_pb } = Object.assign({}, this.state.stockDetailsMap);
-            map.forEach((newPrice, stockId) => {
-                const stock = stocks[stockId];
-                const oldPrice = stock.getCurrentPrice();
-                stocks[stockId].setCurrentPrice(newPrice);
-
-                if (newPrice > stock.getAllTimeHigh()) {
-                    stock.setAllTimeHigh(newPrice);
-                } else if (newPrice > stock.getDayHigh()) {
-                    stock.setDayHigh(newPrice);
-                } else if (newPrice < stock.getDayLow()) {
-                    stock.setDayLow(newPrice);
-                } else if (newPrice < stock.getAllTimeLow()) {
-                    stock.setAllTimeLow(newPrice);
-                }
-
-                stock.setUpOrDown(stock.getPreviousDayClose() < newPrice);
-            });
+        let subscriptionId, stream;
+        try {
+            subscriptionId = await subscribe(sessionMd, DataStreamType.STOCK_PRICES);
+            stream = DalalStreamService.getStockPricesUpdates(subscriptionId, sessionMd);
 
             this.setState({
-                stockDetailsMap: stocks,
-                userTotal: this.calculateTotal(this.state.userCash, this.state.stocksOwnedMap, stocks),
+                stockSubscriptionId: subscriptionId,
             });
-            console.log("Stock prices update", stockPricesUpdate.toObject());
+        }
+        catch(e) {
+            console.log(e);
+            return this.retryStream(this.handleStockPricesStream.bind(this));
+        }
+
+        this.connectionSucceeded();
+
+        try {
+            for await (const stockPricesUpdate of stream) {
+                const map = stockPricesUpdate.getPricesMap();
+                const stocks: { [index:number]: Stock_pb } = Object.assign({}, this.state.stockDetailsMap);
+                map.forEach((newPrice, stockId) => {
+                    const stock = stocks[stockId];
+                    const oldPrice = stock.getCurrentPrice();
+                    stocks[stockId].setCurrentPrice(newPrice);
+    
+                    if (newPrice > stock.getAllTimeHigh()) {
+                        stock.setAllTimeHigh(newPrice);
+                    } else if (newPrice > stock.getDayHigh()) {
+                        stock.setDayHigh(newPrice);
+                    } else if (newPrice < stock.getDayLow()) {
+                        stock.setDayLow(newPrice);
+                    } else if (newPrice < stock.getAllTimeLow()) {
+                        stock.setAllTimeLow(newPrice);
+                    }
+    
+                    stock.setUpOrDown(stock.getPreviousDayClose() < newPrice);
+                });
+    
+                this.setState({
+                    stockDetailsMap: stocks,
+                    userTotal: this.calculateTotal(this.state.userCash, this.state.stocksOwnedMap, stocks),
+                });
+                console.log("Stock prices update", stockPricesUpdate.toObject());
+            }
+        }
+        catch(e) {
+            console.log(e);
+            return this.retryStream(this.handleStockPricesStream.bind(this));
         }
     };
 
     handleTransactionsStream = async () => {
         const props = this.props;
-        const subscriptionId = await subscribe(props.sessionMd, DataStreamType.TRANSACTIONS);
 
-        this.setState({
-            transactionSubcriptionId: subscriptionId,
-        });
+        let subscriptionId, stream;
+        try {
+            subscriptionId = await subscribe(props.sessionMd, DataStreamType.TRANSACTIONS);
+            stream = DalalStreamService.getTransactionUpdates(subscriptionId, props.sessionMd);
 
-        const stream = DalalStreamService.getTransactionUpdates(subscriptionId, props.sessionMd);
-        
+            this.setState({
+                transactionSubcriptionId: subscriptionId,
+            });
+        }
+        catch(e) {
+            console.log(e);
+            return this.retryStream(this.handleTransactionsStream.bind(this));
+        }
+
         // Getting copy of stocksOwnedMap
         // To be updated by transactions stream
         let stocksOwnedMap = this.state.stocksOwnedMap;
 
-        for await (const update of stream) {
-            const newTransaction = update.getTransaction()!;
-            if (newTransaction.getStockId() in stocksOwnedMap) {
-                stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
-            }
-            else {
-                stocksOwnedMap[newTransaction.getStockId()] = newTransaction.getStockQuantity();
-            }
+        this.connectionSucceeded();
 
-            try {
-                let notif = "";
-                const stockName = this.state.stockDetailsMap[newTransaction.getStockId()].getShortName();
-                const stockQty = newTransaction.getStockQuantity();
-                const price = newTransaction.getPrice();
-                const total = newTransaction.getTotal();
-                const stockOrStocks = "stock" + (Math.abs(stockQty) > 1 ? "s" : "");
-                switch (newTransaction.getType()) {
-                    case TransactionType_pb.FROM_EXCHANGE_TRANSACTION:
-                        notif = `You have bought ${stockQty} ${stockOrStocks} of ${stockName} @ ₹ ${price} from Exchange`;
-                        break;
-                    case TransactionType_pb.MORTGAGE_TRANSACTION:
-                        notif = `You have ${total < 0 ? "retrieved" : "mortgaged"} ${Math.abs(stockQty)} ${stockOrStocks} of ${stockName} @ ₹ ${-total/stockQty}`
-                        break;
-                    case TransactionType_pb.ORDER_FILL_TRANSACTION:
-                        notif = `You have ${total < 0 ? "bought" : "sold"} ${Math.abs(stockQty)} ${stockOrStocks} of ${stockName} @ ₹ ${price} via an order`;
-                        break;
-                    default:
-                        console.error("Unexpected transaction type ", newTransaction.getType());
+        try {
+            for await (const update of stream) {
+                const newTransaction = update.getTransaction()!;
+                if (newTransaction.getStockId() in stocksOwnedMap) {
+                    stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
                 }
-
-                if (notif != "") {
-                    showSuccessNotif(notif, "New Transaction!");
+                else {
+                    stocksOwnedMap[newTransaction.getStockId()] = newTransaction.getStockQuantity();
                 }
+    
+                try {
+                    let notif = "";
+                    const stockName = this.state.stockDetailsMap[newTransaction.getStockId()].getShortName();
+                    const stockQty = newTransaction.getStockQuantity();
+                    const price = newTransaction.getPrice();
+                    const total = newTransaction.getTotal();
+                    const stockOrStocks = "stock" + (Math.abs(stockQty) > 1 ? "s" : "");
+                    switch (newTransaction.getType()) {
+                        case TransactionType_pb.FROM_EXCHANGE_TRANSACTION:
+                            notif = `You have bought ${stockQty} ${stockOrStocks} of ${stockName} @ ₹ ${price} from Exchange`;
+                            break;
+                        case TransactionType_pb.MORTGAGE_TRANSACTION:
+                            notif = `You have ${total < 0 ? "retrieved" : "mortgaged"} ${Math.abs(stockQty)} ${stockOrStocks} of ${stockName} @ ₹ ${-total/stockQty}`
+                            break;
+                        case TransactionType_pb.ORDER_FILL_TRANSACTION:
+                            notif = `You have ${total < 0 ? "bought" : "sold"} ${Math.abs(stockQty)} ${stockOrStocks} of ${stockName} @ ₹ ${price} via an order`;
+                            break;
+                        default:
+                            console.error("Unexpected transaction type ", newTransaction.getType());
+                    }
+    
+                    if (notif != "") {
+                        showSuccessNotif(notif, "New Transaction!");
+                    }
+                }
+                catch (e) {
+                    console.error("Unexpected error: ", e);
+                }
+    
+                this.setState((prevState) => {
+                    const newCash = prevState.userCash + newTransaction.getTotal();
+                    return {
+                        stocksOwnedMap: stocksOwnedMap,
+                        userCash: newCash,
+                        userTotal: this.calculateTotal(newCash, stocksOwnedMap, this.state.stockDetailsMap),
+                        latestTransaction: newTransaction,
+                    };
+                });
             }
-            catch (e) {
-                console.error("Unexpected error: ", e);
-            }
-
-            this.setState((prevState) => {
-                const newCash = prevState.userCash + newTransaction.getTotal();
-                return {
-                    stocksOwnedMap: stocksOwnedMap,
-                    userCash: newCash,
-                    userTotal: this.calculateTotal(newCash, stocksOwnedMap, this.state.stockDetailsMap),
-                    latestTransaction: newTransaction,
-                };
-            });
+        }
+        catch (e) {
+            console.log(e);
+            return this.retryStream(this.handleTransactionsStream.bind(this));
         }
     }
 
