@@ -99,11 +99,15 @@ div.expected-cost {
 }
 
 #top_bar {
-	position: relative;
+	position: fixed;
+	top: 0;
+	left: 90px;
+	right: 0;
 	padding: 0 !important;
 	height: 50px;
 	background: #fff;
-	box-shadow: 0 0 5px 5px 1px #000 inset !important;
+	box-shadow: 2px -3px 2px 0px inset rgba(0,0,0,0.97) !important;
+	z-index: 2;
 }
 
 #search-container {
@@ -234,6 +238,8 @@ body {
 
 .main-container {
 	margin: 0 !important; /* celled grid adds margin at top & bottom, we don't want it */
+	margin-top: 50px !important;
+	z-index: 1;
 	width: auto; /* overflows without this */
 	min-height: 100%;
 }
@@ -288,6 +294,7 @@ body {
 }
 
 #navbar {
+	z-index: 3;
 	box-shadow: 0px 0 2px 1px #000 !important;
 }
 
@@ -398,7 +405,6 @@ h3.panel-header {
 	background: rgba(0,0,0,0.4) !important;
 	border-radius: 5px 5px 0 0 !important;
 }
-
 #trading-terminal table , #trading-terminal table {
 	margin: 0 !important;
 	background: #1B1C1D;
@@ -673,7 +679,6 @@ h1 {
 	position: relative;
 	overflow: hidden;
 	box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.2);
-	filter: grayscale(1);
 }
 .news-card .news-wrapper:hover .news-data {
 	transform: translateY(0);

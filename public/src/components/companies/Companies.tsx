@@ -6,14 +6,15 @@ import { TinyNetworth } from "../common/TinyNetworth";
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { SearchBar } from "../trading_terminal/SearchBar";
 import { CompanyDetails } from "./CompanyDetails";
+import { Fragment } from "react";
 
 export interface CompanyProps {
     userCash: number,
     userTotal: number,
     sessionMd: Metadata,
     notifications: Notification_pb[],
-    stockBriefInfoMap: { [index:number]: StockBriefInfo },
-    stockPricesMap: { [index:number]: number },
+    stockBriefInfoMap: { [index: number]: StockBriefInfo },
+    stockPricesMap: { [index: number]: number },
     disclaimerElement: JSX.Element
 }
 
@@ -45,9 +46,9 @@ export class Company extends React.Component<CompanyProps, CompanyState> {
         });
     };
 
-    render () {
+    render() {
         return (
-            <div id="company-details" className="main-container ui stackable grid pusher">
+            <Fragment>
                 <div className="row" id="top_bar">
                     <div id="search-bar">
                         <SearchBar
@@ -62,14 +63,15 @@ export class Company extends React.Component<CompanyProps, CompanyState> {
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>
                 </div>
-
-                <CompanyDetails
-                    sessionMd={this.props.sessionMd}
-                    currentStockId={this.state.currentStockId}
-                    currentPrice={this.state.currentPrice}
-                />
-                {this.props.disclaimerElement}
-            </div>
+                <div id="company-details" className="main-container ui stackable grid pusher">
+                    <CompanyDetails
+                        sessionMd={this.props.sessionMd}
+                        currentStockId={this.state.currentStockId}
+                        currentPrice={this.state.currentPrice}
+                    />
+                    {this.props.disclaimerElement}
+                </div>
+            </Fragment>
         );
     }
 }

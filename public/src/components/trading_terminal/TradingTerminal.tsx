@@ -10,6 +10,7 @@ import { Notification } from "../common/Notification";
 import { TinyNetworth } from "../common/TinyNetworth";
 import { PlaceOrderBox } from "./PlaceOrderBox";
 import { Charts } from "./charts/Charts";
+import { Fragment } from "react";
 
 export type StockBriefInfo = {
 	id: number
@@ -18,7 +19,7 @@ export type StockBriefInfo = {
 	previousDayClose: number
 }
 
-type NumNumMap = { [index:number]: number };
+type NumNumMap = { [index: number]: number };
 
 export interface TradingTerminalProps {
 	sessionMd: Metadata,
@@ -28,10 +29,10 @@ export interface TradingTerminalProps {
 	userCash: number
 	userTotal: number
 
-	stocksOwnedMap:    NumNumMap // stocks owned by user for a given stockid
-	stockBriefInfoMap: { [index:number]: StockBriefInfo } // get stock detail for a given stockid
-	stockPricesMap:    NumNumMap
-	constantsMap:      { [index:string]: number } // various constants. Documentation found in server/actionservice/Login method
+	stocksOwnedMap: NumNumMap // stocks owned by user for a given stockid
+	stockBriefInfoMap: { [index: number]: StockBriefInfo } // get stock detail for a given stockid
+	stockPricesMap: NumNumMap
+	constantsMap: { [index: string]: number } // various constants. Documentation found in server/actionservice/Login method
 
 	isMarketOpen: boolean
 
@@ -45,11 +46,11 @@ interface TradingTerminalState {
 }
 
 export class TradingTerminal extends React.Component<TradingTerminalProps, TradingTerminalState> {
-    constructor(props: TradingTerminalProps) {
+	constructor(props: TradingTerminalProps) {
 		super(props);
 
 		const currentStockId = Number(Object.keys(this.props.stockBriefInfoMap).sort()[0]);
-        this.state = {
+		this.state = {
 			currentStockId: currentStockId,
 			currentPrice: this.props.stockPricesMap[currentStockId],
 			stockPricesMap: this.props.stockPricesMap,
@@ -75,18 +76,18 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 	}
 
 	// child will affect the current stock id
-    handleStockIdChange = (newStockId: number) => {
-    	this.setState(prevState => {
+	handleStockIdChange = (newStockId: number) => {
+		this.setState(prevState => {
 			return {
 				currentStockId: newStockId,
 				currentPrice: prevState.stockPricesMap[newStockId],
 			}
 		});
-    };
+	};
 
-    render() {
-        return (
-			<div id="trading-terminal" className="main-container ui stackable grid pusher">
+	render() {
+		return (
+			<Fragment>
 				<div className="row" id="top_bar">
 					<div id="search-bar">
 						<SearchBar
@@ -101,29 +102,31 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
 					</div>
 				</div>
-				<div className="row">
-					<div id="order-book-container" className="six wide column box">
-						<OrderBook stockId={this.state.currentStockId} sessionMd={this.props.sessionMd} />
-					</div>
+				<div id="trading-terminal" className="main-container ui stackable grid pusher">
+					<div className="row">
+						<div id="order-book-container" className="six wide column box">
+							<OrderBook stockId={this.state.currentStockId} sessionMd={this.props.sessionMd} />
+						</div>
 
-					<div id="charts-container" className="ten wide column box">
-						<Charts stockId={this.state.currentStockId} sessionMd={this.props.sessionMd}/>
+						<div id="charts-container" className="ten wide column box">
+							<Charts stockId={this.state.currentStockId} sessionMd={this.props.sessionMd} />
+						</div>
 					</div>
-				</div>
-				<div className="row">
-					<div id="place-order-box-container" className="six wide column box">
-						<PlaceOrderBox
-							stockId={this.state.currentStockId}
-							currentPrice={this.state.currentPrice}
-							sessionMd={this.props.sessionMd} />
-					</div>
+					<div className="row">
+						<div id="place-order-box-container" className="six wide column box">
+							<PlaceOrderBox
+								stockId={this.state.currentStockId}
+								currentPrice={this.state.currentPrice}
+								sessionMd={this.props.sessionMd} />
+						</div>
 
-					<div id="open-orders-container" className="ten wide column box">
-						<OpenOrders sessionMd={this.props.sessionMd} stockBriefInfoMap={this.props.stockBriefInfoMap} />
+						<div id="open-orders-container" className="ten wide column box">
+							<OpenOrders sessionMd={this.props.sessionMd} stockBriefInfoMap={this.props.stockBriefInfoMap} />
+						</div>
 					</div>
+					{this.props.disclaimerElement}
 				</div>
-				{this.props.disclaimerElement}
-			</div>
-        );
-    }
+			</Fragment>
+		);
+	}
 }

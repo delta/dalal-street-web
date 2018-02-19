@@ -10,6 +10,7 @@ import { subscribe, unsubscribe } from "../../../src/streamsutil";
 import { SubscriptionId } from "../../../proto_build/datastreams/Subscribe_pb";
 import { NewsComponent } from "./NewsComponent";
 import { showNotif } from "../../utils";
+import { Fragment } from "react";
 
 declare var $: any;
 
@@ -56,7 +57,7 @@ export class News extends React.Component<NewsProps, NewsState> {
                     moreExists: resp.getMoreExists(),
                     lastFetchedNewsId: nextId,
                 });
-            } catch(e) {
+            } catch (e) {
                 // error could be grpc error or Dalal error. Both handled in exception
                 console.log("Error happened! ", e.statusCode, e.statusMessage, e);
             }
@@ -80,7 +81,7 @@ export class News extends React.Component<NewsProps, NewsState> {
         for await (const update of newsRequest) {
             let newsUpdate = update.getMarketEvent()!;
             newsData.unshift(newsUpdate);
-            
+
 
             this.setState({
                 newsArray: newsData,
@@ -99,41 +100,43 @@ export class News extends React.Component<NewsProps, NewsState> {
 
     render() {
         const newsArray = this.state.newsArray;
-        const news = newsArray.map((entry,index) => (
+        const news = newsArray.map((entry, index) => (
             <div className="four wide column box no-padding">
                 <NewsComponent key={index} newsDetail={entry} />
             </div>
         ));
 
         return (
-            <div id="news-container" className="ui stackable grid pusher main-container">
+            <Fragment>
                 <div className="row" id="top_bar">
                     <TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} />
-                     <div id="notif-component">
-                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
+                    <div id="notif-component">
+                        <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>
                 </div>
-                <div className="row">
-                    <h2 className="ui center aligned icon header inverted">
-                        <i className="newspaper icon"></i>                        
-                        <div className="content">
-                            News
+                <div id="news-container" className="ui stackable grid pusher main-container">
+                    <div className="row">
+                        <h2 className="ui center aligned icon header inverted">
+                            <i className="newspaper icon"></i>
+                            <div className="content">
+                                News
                             <div className="grey sub header">
-                                All your news requirement in one place
+                                    All your news requirement in one place
                             </div>
-                        </div>
-                    </h2>
+                            </div>
+                        </h2>
+                    </div>
+                    <div className="row">
+                        <span id="load-older-news" onClick={this.getOldNews}>
+                            <i>Load older news ↻</i>
+                        </span>
+                    </div>
+                    <div className="row">
+                        {news}
+                    </div>
+                    {this.props.disclaimerElement}
                 </div>
-                <div className="row">
-                    <span id="load-older-news" onClick={this.getOldNews}>
-                        <i>Load older news ↻</i>
-                    </span>
-                </div>
-                <div className="row">
-                    {news} 
-                </div>
-                {this.props.disclaimerElement}
-            </div>
+            </Fragment>
         )
     }
 }
