@@ -214,6 +214,23 @@ export class Help extends React.Component<HelpProps, {}> {
 
                                     <div className="title">
                                         <i className="dropdown icon inverted"></i>
+                                        <span className="faq-questions">How does mortgaging work?</span>
+                                    </div>
+                                    <div className="content">
+                                        <div className="transition hidden">
+                                            <p>Mortgaging is a great tactic to use if you are in need of cash but are not willing to sell your stocks to other players. It consists of 2 steps :-</p>
+                                            <ol>
+                                                <li><strong>Mortgage</strong> - In this step, you will be selling your stocks to the exchange at the Deposit Rate <em>(80% of the Current Stock Price).</em></li>
+                                                <br /><p className="image-wrapper"><img src="./public/src/images/help/Dalal_Mortgage.png" alt="Mortgage Image" /></p>
+                                                <li><strong>Retrieval</strong> - Here, you will be retrieving the stocks you initially mortgaged by paying the exchange at the Retrieval Rate <em>(90% of the Current Stock Price).</em></li>
+                                                <br /><p className="image-wrapper"><img src="./public/src/images/help/Dalal_Retrieve.png" alt="Retrieval Image" /></p>
+                                            </ol>
+                                            <p><em>Note</em> : After you mortgage a stock, it is no longer a part of your portfolio and hence, will not contribute to your stock worth (until you retrieve it).</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="title">
+                                        <i className="dropdown icon inverted"></i>
                                         <span className="faq-questions">Can I expect any new companies to pop up over the course of the game?</span>
                                     </div>
                                     <div className="content">
