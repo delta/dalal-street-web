@@ -1,3 +1,5 @@
+![CircleCI build status](https://circleci.com/gh/delta/dalal-street-web.png)
+
 # DalalStreet frontend (based on `grpc-web`)
 
 ## Prerequisites
