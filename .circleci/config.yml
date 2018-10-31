@@ -6,18 +6,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: update-npm 
-          command: 'sudo npm install -g npm@latest'
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: install-npm-wee
-          command: npm install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
-      - run:
           name: Update submodules
           command: |
             git submodule init
@@ -28,6 +16,9 @@ jobs:
             cd ts-protoc-gen
             npm install
             npm run build
+      - run:
+          name: Install npm dependencies
+          command: npm install
       - run:
           name: Setup protobuf
           command: |
