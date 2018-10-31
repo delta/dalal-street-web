@@ -1,6 +1,6 @@
 [submodule "proto"]
 	path = proto
-	url = git@github.com:thakkarparth007/dalal-street-proto.git
+	url = git@github.com:delta/dalal-street-proto.git
 [submodule "ts-protoc-gen"]
 	path = ts-protoc-gen
 	url = git@github.com:thakkarparth007/ts-protoc-gen
