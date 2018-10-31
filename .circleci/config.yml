@@ -1,0 +1,40 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:7.10.1
+    steps:
+      - checkout
+      - run:
+          name: update-npm 
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install-npm-wee
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Update submodules
+          command: |
+            git submodule init
+            git submodule update --recursive
+      - run:
+          name: Setup ts-protoc-gen
+          command: |
+            cd ts-protoc-gen
+            npm install
+            npm run build
+      - run:
+          name: Setup protobuf
+          command: |
+            wget -q https://github.com/google/protobuf/releases/download/v3.2.0rc2/protoc-3.2.0rc2-linux-x86_64.zip
+            unzip -qq protoc-3.2.0rc2-linux-x86_64.zip
+      - run:
+          name: Build proto files
+          command: |
+            export PATH=$PATH:$(pwd)/bin
+            npm run build:proto    
