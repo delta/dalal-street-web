@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/coderick14/dalal-street-web.git"
+    "url": "git+https://github.com/delta/dalal-street-web.git"
   },
   "keywords": [
     "stocks",
@@ -19,9 +19,9 @@
   "author": "Team Dalal",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/coderick14/dalal-street-web/issues"
+    "url": "https://github.com/delta/dalal-street-web/issues"
   },
-  "homepage": "https://github.com/coderick14/dalal-street-web#readme",
+  "homepage": "https://github.com/delta/dalal-street-web#readme",
   "dependencies": {
     "@types/google-protobuf": "^3.2.7",
     "@types/jquery": "^3.2.17",
