@@ -10,21 +10,21 @@
 ## Setup
 - Clone the repository
 ```
-git clone git@github.com:coderick14/dalal-street-web.git
+git clone git@github.com:delta/dalal-street-web.git
 ```
-- Update the *proto* submodule
+- Update the submodules
 ```
 git submodule update --init --recursive
-```
-- Install dependencies from `package.json`
-```
-npm install
 ```
 - Setup ts-protoc-gen (customized)
 ```
 cd ts-protoc-gen
 npm install
 npm run build
+```
+- Install dependencies from `package.json`
+```
+npm install
 ```
 - Build proto files
 ```
