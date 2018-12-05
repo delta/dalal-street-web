@@ -45,8 +45,8 @@ export class App extends React.Component<{}, AppState> {
 		// DalalActionService.serviceURL = "https://139.59.47.250";
 		// DalalStreamService.serviceURL = "https://139.59.47.250";
 
-		DalalActionService.serviceURL = "https://dalal.pragyan.org:9001";
-		DalalStreamService.serviceURL = "https://dalal.pragyan.org:9001";
+		DalalActionService.serviceURL = "https://0.0.0.0:8000";
+		DalalStreamService.serviceURL = "https://0.0.0.0:8000";
 
 		this.state = {
 			isLoading: true,
