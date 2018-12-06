@@ -4,8 +4,10 @@
 
 ## Prerequisites
 - Nodejs 7.x
-- npm
+- npm 4.x 
 - protoc (the protobuf compiler)
+
+If you want to keep your node and npm version isolated, feel free to use something like https://github.com/ekalinin/nodeenv/
 
 ## Setup
 - Clone the repository
