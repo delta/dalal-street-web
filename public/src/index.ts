@@ -40,10 +40,6 @@ async function handleStockPricesStream() {
 
     for await (const stockPricesUpdate of stream) {
         const update = stockPricesUpdate.getPricesMap();
-        console.log("Stock prices update");
-        update.forEach((newPrice, stockId) => {
-            console.log("StockId %d updated to %d", stockId, newPrice);
-        });
     }
 }
 

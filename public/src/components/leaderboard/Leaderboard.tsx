@@ -104,7 +104,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                             </div>
                         </h2>
                     </div>
-                    
+
                     <div id="my-rank" className="row">
                         <div className="one wide column"></div>
                         <div className="eight wide column">
@@ -137,7 +137,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                             </tbody>
                         </table>
                     </div>
-                    
+
                     <div className="row">
                         <ReactPaginate
                             previousLabel={"<"}

@@ -129,10 +129,10 @@ export class App extends React.Component<{}, AppState> {
 	}
 
 	handleUrlChange = () => {
-		//Navbar has to have a function which force updates because 
+		//Navbar has to have a function which force updates because
 		//this render function handles the routing
 		//The route is changed when you click on anything there
-		//and Main has to accordingly switch 
+		//and Main has to accordingly switch
 		if (window.location.pathname == "/logout") {
 			this.logOut()
 			localStorage.removeItem("sessionid");
@@ -177,7 +177,7 @@ export class App extends React.Component<{}, AppState> {
 			return LOGIN;
 		}
 		//If render ever reaches here it means that login response was an error
-		//and it is loading hence has to be rerouted to /login and the login component 
+		//and it is loading hence has to be rerouted to /login and the login component
 		//has to be rendered
 		window.history.replaceState({}, "Dalal Street | Login", "/home");
 		return SPLASH;
@@ -205,7 +205,7 @@ export class App extends React.Component<{}, AppState> {
 			//Getting the path
 			const path = window.location.pathname;
 			//If it's logged in and is hitting "" or "/" or "/login" redirect to /trade by default
-			//Issues:If you hit /leaderboard say you'll be redirected to /login and then 
+			//Issues:If you hit /leaderboard say you'll be redirected to /login and then
 			//be routed to /trade
 			const shouldRedirect = ["", "/", "/login", "/register", "/home"].indexOf(path) != -1;
 			if (shouldRedirect) {
@@ -269,7 +269,7 @@ export class App extends React.Component<{}, AppState> {
 		// const path = window.location.pathname;
 		// If anything breaks put this on top of render :)
 		// //If it's logged in and is hitting "" or "/" or "/login" redirect to /trade by default
-		// //Issues:If you hit /leaderboard say you'll be redirected to /login and then 
+		// //Issues:If you hit /leaderboard say you'll be redirected to /login and then
 		// //be routed to /trade
 		// const shouldRedirect = ["", "/", "/login"].indexOf(path) != -1;
 		// if (shouldRedirect) {

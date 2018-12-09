@@ -201,22 +201,20 @@ export class Main extends React.Component<MainProps, MainState> {
                 // checking for market close
                 let isMarketOpen: boolean = this.state.isMarketOpen;
                 if (notif.getText() == this.props.marketIsClosedHackyNotif) {
-                    console.log("closing");
                     isMarketOpen = false;
                 } else if (notif.getText() == this.props.marketIsOpenHackyNotif) {
                     isMarketOpen = true;
                 }
-    
+
                 showInfoNotif(notif.getText(), "New Notification");
-    
+
                 const notifs = this.state.notifications.slice();
                 notifs.unshift(notif);
-    
+
                 this.setState({
                     isMarketOpen: isMarketOpen,
                     notifications: notifs,
                 });
-                console.log("Notification update", notif.toObject());
             }
         }
         catch(e) {
@@ -227,7 +225,7 @@ export class Main extends React.Component<MainProps, MainState> {
 
     componentDidMount() {
         if (!localStorage.getItem('first_time_dalal')) {
-            showInfoNotif("Do checkout the help section before you start trading", "New notification");            
+            showInfoNotif("Do checkout the help section before you start trading", "New notification");
         }
     }
 
@@ -258,7 +256,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     const stock = stocks[stockId];
                     const oldPrice = stock.getCurrentPrice();
                     stocks[stockId].setCurrentPrice(newPrice);
-    
+
                     if (newPrice > stock.getAllTimeHigh()) {
                         stock.setAllTimeHigh(newPrice);
                     } else if (newPrice > stock.getDayHigh()) {
@@ -268,15 +266,14 @@ export class Main extends React.Component<MainProps, MainState> {
                     } else if (newPrice < stock.getAllTimeLow()) {
                         stock.setAllTimeLow(newPrice);
                     }
-    
+
                     stock.setUpOrDown(stock.getPreviousDayClose() < newPrice);
                 });
-    
+
                 this.setState({
                     stockDetailsMap: stocks,
                     userTotal: this.calculateTotal(this.state.userCash, this.state.stocksOwnedMap, stocks),
                 });
-                console.log("Stock prices update", stockPricesUpdate.toObject());
             }
         }
         catch(e) {
@@ -317,7 +314,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 else {
                     stocksOwnedMap[newTransaction.getStockId()] = newTransaction.getStockQuantity();
                 }
-    
+
                 try {
                     let notif = "";
                     const stockName = this.state.stockDetailsMap[newTransaction.getStockId()].getShortName();
@@ -338,7 +335,7 @@ export class Main extends React.Component<MainProps, MainState> {
                         default:
                             console.error("Unexpected transaction type ", newTransaction.getType());
                     }
-    
+
                     if (notif != "") {
                         showSuccessNotif(notif, "New Transaction!");
                     }
@@ -346,7 +343,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 catch (e) {
                     console.error("Unexpected error: ", e);
                 }
-    
+
                 this.setState((prevState) => {
                     const newCash = prevState.userCash + newTransaction.getTotal();
                     return {
@@ -371,7 +368,7 @@ export class Main extends React.Component<MainProps, MainState> {
     }
 
     render() {
-        //Use window.location.pathname because react router is removed 
+        //Use window.location.pathname because react router is removed
         //and hence react's history wont be changing ie
         //pushing to path in App cannot be retrieved by Route exact path
         //because the history for react will not have those changes reflected
