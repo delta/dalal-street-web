@@ -164,7 +164,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
                 </tr>
             );
 
-            // stocksOwned will change due to transactions stream in Main            
+            // stocksOwned will change due to transactions stream in Main
             // but mortgaged stocks count must be updated after retrieving
             retrieveTable.push(
                 <tr key={stockId}>
