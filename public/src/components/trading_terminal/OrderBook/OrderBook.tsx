@@ -54,6 +54,7 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 	handleMarketDepthStream = async (sessionMd: Metadata, stockId: number) => {
 		const subscriptionId = await subscribe(sessionMd, DataStreamType.MARKET_DEPTH, stockId + "");
 
+
 		this.setState({
 			subscriptionId: subscriptionId,
 		});
@@ -61,7 +62,6 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 		const stream = DalalStreamService.getMarketDepthUpdates(subscriptionId, sessionMd);
 		let isFirstUpdate = true;
 		for await (const update of stream) {
-			console.log("got market depth update", update.toObject());
 			// is it the first update?
 			if (isFirstUpdate) {
 				isFirstUpdate = false;
@@ -97,6 +97,19 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 
 			askDepthDiff.forEach((volume, price) => {
 				if (!oldAskDepth[price]) oldAskDepth[price] = 0;
+				if(volume<=0){
+					$(".price.red").each(function(index:number){
+						if(parseInt($(this).find('strong').html())===price)
+						{
+							$('#sell-volume'+index).addClass('animate');
+							$(this).addClass('animate');
+							$(this).on("webkitAnimationEnd oanimationend msAnimationEnd animationend",function() {
+					    $(this).removeClass("animate");
+					    $('#sell-volume'+index).removeClass('animate');
+		         });
+					}
+				});
+			}
 				oldAskDepth[price] += volume;
 				if (oldAskDepth[price] <= 0)
 					delete oldAskDepth[price];
@@ -104,6 +117,19 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 
 			bidDepthDiff.forEach((volume, price) => {
 				if (!oldBidDepth[price]) oldBidDepth[price] = 0;
+				if(volume<=0){
+					$(".price.green").each(function(index:number){
+						if(parseInt($(this).find('strong').html())===price)
+						{
+						$('#buy-volume'+index).addClass('animate');
+						$(this).addClass('animate');
+						$(this).on("webkitAnimationEnd oanimationend msAnimationEnd animationend",function() {
+				        $(this).removeClass("animate");
+								$('#buy-volume'+index).removeClass('animate');
+				    });
+					}
+				});
+			}
 				oldBidDepth[price] += volume;
 				if (oldBidDepth[price] <= 0)
 					delete oldBidDepth[price];
@@ -122,8 +148,6 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 				bidDepth: oldBidDepth,
 				latestTrades: oldLatestTrades.slice(0, 20),
 			});
-	
-			console.log("Market Depth update", update.toObject());
 		}
 	};
 
@@ -135,7 +159,7 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 					<a className="item" data-tab="trading-history">Trading History</a>
 					<h3 className="panel-header right item">Order Book</h3>
 				</div>
-				<MarketDepth stockId={this.props.stockId} askDepth={this.state.askDepth} bidDepth={this.state.bidDepth} />
+				<MarketDepth stockId={this.props.stockId} askDepth={this.state.askDepth} bidDepth={this.state.bidDepth}  />
 				<TradingHistory stockId={this.props.stockId} latestTrades={this.state.latestTrades} />
 			</Fragment>
 		);

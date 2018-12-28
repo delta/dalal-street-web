@@ -34,7 +34,6 @@ export class MarketDepth extends React.Component<MarketDepthProps, {}> {
         const buyRows: any[] = [];
         const askDepth = this.props.askDepth;
         const bidDepth = this.props.bidDepth;
-
         const askArray: Depth[] = [];
         const bidArray: Depth[] = [];
 
@@ -80,13 +79,13 @@ export class MarketDepth extends React.Component<MarketDepthProps, {}> {
             }
             buyRows.push(
                 <tr key={i}>
-                    <td className="volume"><strong>{typeof(bidArray[i]) != "undefined" ? bidArray[i].volume : ''}</strong></td>
-                    <td className="price green"><strong>{typeof(bidArray[i]) != "undefined" ? bidArray[i].price : ''}</strong></td>
-                    <td className="volume"><strong>{typeof(askArray[i]) != "undefined" ? askArray[i].volume : ''}</strong></td>
+                    <td className="volume buy" id={"buy-volume"+i}><strong>{typeof(bidArray[i]) != "undefined" ? bidArray[i].volume : ''}</strong></td>
+                    <td className="price green" >< strong>{typeof(bidArray[i]) != "undefined" ? bidArray[i].price : ''}</strong></td>
+                    <td className="volume sell"  id={"sell-volume"+i}><strong >{typeof(askArray[i]) != "undefined" ? askArray[i].volume : ''}</strong></td>
                     <td className="price red"><strong>{typeof(askArray[i]) != "undefined" ? askArray[i].price : ''}</strong></td>
                 </tr>
             );
-        }
+}
 
 		return (
 			<div className="ui tab inverted active" data-tab="market-depth" id="market-depth">
