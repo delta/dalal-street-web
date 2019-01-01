@@ -101,7 +101,7 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 				if(volume <= 0){
 					$(".price.red").each(function(index:number){
 						if(parseInt($(this).find('strong').html())===price ||$(this).find('strong').html()==='Market') {
-			                                let id = "#sell-volume".concat(String(index));
+			                                let id = `sell-volume${index}`;
 							$(id).addClass('animate');
 							$(this).addClass('animate');
 							$(this).on("webkitAnimationEnd oanimationend msAnimationEnd animationend",function() {
@@ -121,7 +121,7 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 				if(volume <= 0){
 					$(".price.green").each(function(index:number){
 					  	if(parseInt($(this).find('strong').html())=== price ||$(this).find('strong').html()==='Market'){
-							let id = "#buy-volume".concat(String(index));
+							let id = `buy-volume${index}`;
 							$(id).addClass('animate');
 							$(this).addClass('animate');
 							$(this).on("webkitAnimationEnd oanimationend msAnimationEnd animationend",function() {

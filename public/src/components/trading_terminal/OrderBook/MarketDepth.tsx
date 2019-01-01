@@ -79,9 +79,9 @@ export class MarketDepth extends React.Component<MarketDepthProps, {}> {
             }
             buyRows.push(
                 <tr key={i}>
-                    <td className="volume buy" id={("buy-volume").concat(String(i))}><strong>{typeof(bidArray[i]) != "undefined" ? bidArray[i].volume : ''}</strong></td>
+                    <td className="volume buy" id={`buy-volume${i}`}><strong>{typeof(bidArray[i]) != "undefined" ? bidArray[i].volume : ''}</strong></td>
                     <td className="price green" >< strong>{typeof(bidArray[i]) != "undefined" ? bidArray[i].price : ''}</strong></td>
-                    <td className="volume sell"  id={("sell-volume").concat(String(i))}><strong >{typeof(askArray[i]) != "undefined" ? askArray[i].volume : ''}</strong></td>
+                    <td className="volume sell"  id={`sell-volume${i}`}><strong >{typeof(askArray[i]) != "undefined" ? askArray[i].volume : ''}</strong></td>
                     <td className="price red"><strong>{typeof(askArray[i]) != "undefined" ? askArray[i].price : ''}</strong></td>
                 </tr>
             );
