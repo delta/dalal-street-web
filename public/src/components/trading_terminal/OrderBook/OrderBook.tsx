@@ -62,6 +62,7 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 		const stream = DalalStreamService.getMarketDepthUpdates(subscriptionId, sessionMd);
 		let isFirstUpdate = true;
 		for await (const update of stream) {
+			console.log("got market depth update", update.toObject());
 			// is it the first update?
 			if (isFirstUpdate) {
 				isFirstUpdate = false;
@@ -99,7 +100,7 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 				if (!oldAskDepth[price]) oldAskDepth[price] = 0;
 				if(volume<=0){
 					$(".price.red").each(function(index:number){
-						if(parseInt($(this).find('strong').html())===price)
+						if(parseInt($(this).find('strong').html())===price ||$(this).find('strong').html()==='Market')
 						{
 							$('#sell-volume'+index).addClass('animate');
 							$(this).addClass('animate');
@@ -109,6 +110,7 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 		         });
 					}
 				});
+
 			}
 				oldAskDepth[price] += volume;
 				if (oldAskDepth[price] <= 0)
@@ -119,7 +121,7 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 				if (!oldBidDepth[price]) oldBidDepth[price] = 0;
 				if(volume<=0){
 					$(".price.green").each(function(index:number){
-						if(parseInt($(this).find('strong').html())===price)
+						if(parseInt($(this).find('strong').html())===price ||$(this).find('strong').html()==='Market')
 						{
 						$('#buy-volume'+index).addClass('animate');
 						$(this).addClass('animate');
@@ -148,6 +150,7 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 				bidDepth: oldBidDepth,
 				latestTrades: oldLatestTrades.slice(0, 20),
 			});
+			console.log("Market Depth update", update.toObject());
 		}
 	};
 
