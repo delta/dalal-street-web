@@ -4,19 +4,18 @@
 
 /* styling for Blink */
 .animate {
-  -webkit-animation: background 1s cubic-bezier(1,0,0,1) 1;
-  animation: background 1s cubic-bezier(1,0,0,1) 1;
+	-webkit-animation: background 1s cubic-bezier(1,0,0,1) 1;
+	animation: background 1s cubic-bezier(1,0,0,1) 1;
 }
 
 @-webkit-keyframes background {
-  0%,49% { background-color: grey; }
-  50%,100% { background-color:  #1B1C1D; }
+ 	0%,49% { background-color: grey; }
+	50%,100% { background-color:  #1B1C1D; }
 }
 
 @keyframes background {
 	0%,49% { background-color: grey; }
 	50%,100% { background-color:  #1B1C1D; }
-
 }
 /*styling for Blink ends */
 .pnotify-style{
