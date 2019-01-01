@@ -97,21 +97,20 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 			const oldLatestTrades = this.state.latestTrades.slice();
 
 			askDepthDiff.forEach((volume, price) => {
-				if (!oldAskDepth[price]) oldAskDepth[price] = 0;
-				if(volume<=0){
+        if (!oldAskDepth[price]) oldAskDepth[price] = 0;
+				if(volume <= 0){
 					$(".price.red").each(function(index:number){
-						if(parseInt($(this).find('strong').html())===price ||$(this).find('strong').html()==='Market')
-						{
-							$('#sell-volume'+index).addClass('animate');
+						if(parseInt($(this).find('strong').html())===price ||$(this).find('strong').html()==='Market') {
+			        let id = "#sell-volume".concat(String(index));
+							$(id).addClass('animate');
 							$(this).addClass('animate');
 							$(this).on("webkitAnimationEnd oanimationend msAnimationEnd animationend",function() {
-					    $(this).removeClass("animate");
-					    $('#sell-volume'+index).removeClass('animate');
-		         });
-					}
-				});
-
-			}
+								$(this).removeClass('animate');
+								$(id).removeClass('animate');
+							});
+						}
+					});
+        }
 				oldAskDepth[price] += volume;
 				if (oldAskDepth[price] <= 0)
 					delete oldAskDepth[price];
@@ -119,19 +118,19 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 
 			bidDepthDiff.forEach((volume, price) => {
 				if (!oldBidDepth[price]) oldBidDepth[price] = 0;
-				if(volume<=0){
+				if(volume <= 0){
 					$(".price.green").each(function(index:number){
-						if(parseInt($(this).find('strong').html())===price ||$(this).find('strong').html()==='Market')
-						{
-						$('#buy-volume'+index).addClass('animate');
+						if(parseInt($(this).find('strong').html())=== price ||$(this).find('strong').html()==='Market'){
+						let id = "#buy-volume".concat(String(index));
+						$(id).addClass('animate');
 						$(this).addClass('animate');
 						$(this).on("webkitAnimationEnd oanimationend msAnimationEnd animationend",function() {
-				        $(this).removeClass("animate");
-								$('#buy-volume'+index).removeClass('animate');
-				    });
-					}
-				});
-			}
+				        $(this).removeClass('animate');
+								$(id).removeClass('animate');
+				     });
+					 }
+				 });
+			  }
 				oldBidDepth[price] += volume;
 				if (oldBidDepth[price] <= 0)
 					delete oldBidDepth[price];
