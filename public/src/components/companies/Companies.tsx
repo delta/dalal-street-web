@@ -11,6 +11,7 @@ import { Fragment } from "react";
 export interface CompanyProps {
     userCash: number,
     userTotal: number,
+    connectionStatus: boolean,
     sessionMd: Metadata,
     notifications: Notification_pb[],
     stockBriefInfoMap: { [index: number]: StockBriefInfo },
@@ -58,7 +59,7 @@ export class Company extends React.Component<CompanyProps, CompanyState> {
                             defaultStock={this.state.currentStockId} />
                     </div>
 
-                    <TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} />
+                    <TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} />
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>

@@ -62,6 +62,7 @@ interface MainState {
 
     latestTransaction: Transaction_pb
 
+    connectionStatus: boolean
     networkTimeOut: number
     networkTimeOutCounter: number // goes up to 3
     successCounter: number // goes up to 3
@@ -101,6 +102,7 @@ export class Main extends React.Component<MainProps, MainState> {
             networkTimeOut: 1000,
             networkTimeOutCounter: 0,
             successCounter: 0,
+            connectionStatus: true,
         };
 
         this.handleNotificationsStream();
@@ -136,6 +138,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 networkTimeOut: 1000,
                 successCounter: 0,
                 networkTimeOutCounter: 0,
+                connectionStatus: true,
             });
         } else {
             let sc = this.state.successCounter;
@@ -151,6 +154,9 @@ export class Main extends React.Component<MainProps, MainState> {
 
         if (newcounter == 2) {
             const timeOut = this.state.networkTimeOut;
+            this.setState({
+              connectionStatus: false,
+            });
             showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (timeOut/1000) + "s", "Network error");
             setTimeout(func, timeOut);
         }
@@ -390,6 +396,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userName={this.props.user.getName()}
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    connectionStatus={this.state.connectionStatus}
                     stocksOwnedMap={this.state.stocksOwnedMap}
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
@@ -403,6 +410,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     notifications={this.state.notifications}
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    connectionStatus={this.state.connectionStatus}
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     stocksOwnedMap={this.state.stocksOwnedMap}
@@ -415,6 +423,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     stockDetailsMap={this.state.stockDetailsMap}
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    connectionStatus={this.state.connectionStatus}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
@@ -424,6 +433,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     leaderboardCount={this.props.constantsMap['LEADERBOARD_COUNT']}
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    connectionStatus={this.state.connectionStatus}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
@@ -433,6 +443,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     newsCount={this.props.constantsMap["MARKET_EVENT_COUNT"]}
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    connectionStatus={this.state.connectionStatus}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
@@ -443,6 +454,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    connectionStatus={this.state.connectionStatus}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     disclaimerElement={this.disclaimerElement}
                 />
@@ -456,6 +468,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     stocksOwnedMap={this.state.stocksOwnedMap}
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    connectionStatus={this.state.connectionStatus}
                     depositRate={this.props.constantsMap['MORTGAGE_DEPOSIT_RATE']}
                     retrieveRate={this.props.constantsMap['MORTGAGE_RETRIEVE_RATE']}
                     latestTransaction={this.state.latestTransaction}
@@ -466,6 +479,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 return <Help
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    connectionStatus={this.state.connectionStatus}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;

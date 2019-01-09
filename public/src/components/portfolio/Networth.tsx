@@ -17,7 +17,7 @@ export class Networth extends React.Component<NetworthProps, NetworthState> {
     }
 
     componentDidMount() {
-		
+
     }
 
     render() {
