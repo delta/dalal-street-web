@@ -149,24 +149,33 @@ export class Main extends React.Component<MainProps, MainState> {
     }
 
     retryStream = (func: Function) => {
-        let newcounter = this.state.networkTimeOutCounter;
-        let newTimeout = this.state.networkTimeOut + Math.floor(newcounter/3) * this.state.networkTimeOut;
+      this.setState({
+        connectionStatus: false,
+      });
 
-        if (newcounter == 2) {
-            const timeOut = this.state.networkTimeOut;
-            this.setState({
-              connectionStatus: false,
-            });
-            showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (timeOut/1000) + "s", "Network error");
-            setTimeout(func, timeOut);
+      let newcounter = this.state.networkTimeOutCounter;
+      let newTimeout = this.state.networkTimeOut + Math.floor(newcounter/3) * this.state.networkTimeOut;
+      if (newcounter == 2) {
+        const timeOut = this.state.networkTimeOut;
+        showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (timeOut/1000) + "s", "Network error");
+        setTimeout(func, timeOut);
+
+        var id =  setInterval(function connect(){
+            if(navigator.onLine == true)
+            {
+              clearInterval(id);
+              window.location.reload(true);
+            }
+          },60000);
         }
 
-        newcounter = (newcounter+1)%3;
-        this.setState({
-            networkTimeOut: newTimeout,
-            networkTimeOutCounter: newcounter,
-        });
-    };
+          newcounter = (newcounter+1)%3;
+          this.setState({
+              networkTimeOut: newTimeout,
+              networkTimeOutCounter: newcounter,
+          });
+      }
+
 
     handleNotificationsStream = async () => {
         const sessionMd = this.props.sessionMd;
