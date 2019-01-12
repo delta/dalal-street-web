@@ -123,7 +123,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 		historyReq.setStockId(stockId);
 		historyReq.setResolution(intervalTypeToResolutionProto[this.state.interval]);
 
-		const subscriptionId = await subscribe(this.props.sessionMd, DataStreamType.STOCK_HISTORY, this.props.stockId + "");
+		const subscriptionId = await subscribe(this.props.sessionMd, DataStreamType.STOCK_HISTORY, stockId + "");
 
 		this.setState({
 			subscriptionId: subscriptionId,
