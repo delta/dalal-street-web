@@ -193,7 +193,6 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 
 		try {
 			const resp = await DalalActionService.cancelOrder(cancelOrderRequest, this.props.sessionMd);
-			console.log(resp.getStatusCode(), resp.toObject());
 
 			if (isAsk) {
 				let currOpenAsks = this.state.openAsks;

@@ -131,7 +131,6 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
         //     console.log("Error Happened");
 
         // }   
-        // console.log(registerResponse);
         // this.props.registerSuccessHander(registerResponse)
     }
     render() {

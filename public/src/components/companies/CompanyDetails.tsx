@@ -41,7 +41,6 @@ export class CompanyDetails extends React.Component<CompanyDetailsProps, Company
 
         try {
             const resp = await DalalActionService.getCompanyProfile(companyProfileRequest, this.props.sessionMd);
-            console.log(resp.getStatusCode(), resp.toObject());
             this.setState({
                 companyDetails: resp.getStockDetails()!
             });
