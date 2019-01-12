@@ -168,7 +168,6 @@ export class App extends React.Component<{}, AppState> {
 			return LOADING;
 		}
 		if (this.state.isLoggedIn) {
-			console.log("yes");
 			return MAIN;
 		}
 		if (path == "/register") {

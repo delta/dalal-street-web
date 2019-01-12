@@ -86,7 +86,6 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
 
     getOldTransactions = async () => {
         if (this.state.moreExists) {
-            console.log("getting old transactions with id ", this.state.lastFetchedTransactionId);
             const transactionsRequest = new GetTransactionsRequest();
 
             // lastTransactionId = 0 fetches the latest transactions

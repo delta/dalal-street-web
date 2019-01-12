@@ -49,7 +49,6 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
         try {
             const resp = await DalalActionService.placeOrder(orderRequest, this.props.sessionMd);
             showInfoNotif("Order placed successfully!", "");
-            console.log(resp.getStatusCode(), resp.toObject());
         }
         catch(e) {
             // error could be grpc error or Dalal error. Both handled in exception
@@ -70,8 +69,6 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
         let stockInputField = document.getElementById(orderTypeString+"-"+orderAction+"-count") as HTMLInputElement;
         let priceInputField = document.getElementById(orderTypeString+"-"+orderAction+"-price") as HTMLInputElement;
 
-        console.log(event.currentTarget);
-
         let stockCount = Number(stockInputField.value);
         let orderPrice = Number(orderType ==  MARKET ? 0 : priceInputField.value);
 
@@ -79,8 +76,6 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
             showNotif("Please enter a positive integer", "Invalid input");
             return;
         }
-
-        console.log("Received",orderType,orderAction,"order with stockCount =", stockCount,"orderPrice =", orderPrice);
 
         await this.placeOrder(orderAction == "sell", orderType,  orderPrice, stockCount);
         stockInputField.value = "";

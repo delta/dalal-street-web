@@ -112,7 +112,6 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
             mortgageStocksRequest.setStockQuantity(stockQuantity);
 
             const resp = await DalalActionService.mortgageStocks(mortgageStocksRequest, this.props.sessionMd);
-            console.log(resp.getStatusCode(), resp.toObject());
             // notif will be shown by transacions stream
         } catch (e) {
             console.log("Error happened while mortgaging stocks! ", e.statusCode, e.statusMessage, e);
@@ -137,7 +136,6 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
             retrieveStocksRequest.setStockQuantity(stockQuantity);
 
             const resp = await DalalActionService.retrieveMortgageStocks(retrieveStocksRequest, this.props.sessionMd);
-            console.log(resp.getStatusCode(), resp.toObject());
             showNotif("Stocks retrieved successfully");
         } catch (e) {
             console.log("Error happened while retrieving stocks! ", e.statusCode, e.statusMessage, e);

@@ -2,7 +2,6 @@ import * as React from "react";
 
 export class LoadingScreen extends React.Component<{},{}> {
     render() {
-        console.log("RENDERING LOADING");
         return (
             <div id="loading-screen" className="ui segment">
                 <div className="ui active dimmer">

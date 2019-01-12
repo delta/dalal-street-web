@@ -49,8 +49,6 @@ export class Market extends React.Component<MarketProps, MarketState> {
         });
 
         for await (const update of exchangeStream) {
-            console.log(update);
-            console.log(update.toObject());
             const exchangeMap = update.getStocksInExchangeMap();
             let currentStockData = this.state.stockData;
             exchangeMap.forEach((dataPoint, stockId) => {
@@ -71,8 +69,6 @@ export class Market extends React.Component<MarketProps, MarketState> {
             showNotif("Enter a positive integer!");
             return;
         }
-
-        console.log("purchased stock of company " + stockId + " quantity " + stockQuantity);
 
         const request = new BuyStocksFromExchangeRequest();
         try {

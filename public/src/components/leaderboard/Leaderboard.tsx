@@ -51,7 +51,6 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
 
         try {
             const resp = await DalalActionService.getLeaderboard(leaderboardRequest, this.props.sessionMd);
-            console.log(resp.getStatusCode(), resp.toObject());
             this.setState({
                 totalPages: Math.ceil(resp.getTotalUsers() / this.props.leaderboardCount),
                 leaderboardEntries: resp.getRankListList(),

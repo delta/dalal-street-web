@@ -31,7 +31,6 @@ async function handleNotificationsStream() {
 
     for await (const notifUpdate of stream) {
         const notif = notifUpdate.getNotification() as Notification; // important to make TS think it's not undefined
-        console.log("Notification update", notif.toObject());
     }
 }
 
@@ -55,8 +54,6 @@ async function login() {
 
     try {
         const resp = await DalalActionService.login(loginRequest);
-        console.log(resp.getStatusCode(), resp.toObject());
-
         sessionMd = new Metadata({"sessionid": resp.getSessionId()});
         handleNotificationsStream();
         handleStockPricesStream();

@@ -194,13 +194,11 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 	}
 
 	onIntervalChange = async (value: intervalType) => {
-		console.log("onIntervalchange");
 		this.setState({interval: value});
 		this.getOldStockHistory(this.props.stockId);
 	}
 
 	onChartTabChange = (tabPath: string) => {
-		//console.log("onchartabchange");
 		const chartType = tabPath.indexOf("candlestick") != -1 ? "candlestick" : "line";
 		this.setState({chartType: chartType});
 	}
