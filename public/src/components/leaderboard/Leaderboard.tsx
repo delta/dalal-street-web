@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Metadata } from "grpc-web-client";
-import * as ReactPaginate from "react-paginate";
+import ReactPaginate from "react-paginate";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { Notification } from "../common/Notification";
 import { TinyNetworth } from "../common/TinyNetworth";
