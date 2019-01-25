@@ -29,7 +29,9 @@ export interface MortgageProps {
 }
 
 interface MortgageState {
-    mortgageDetails: { [index: number]: number },
+    mortgageDetailsStockNumbers: { [index: number]: number},
+    mortgageDetailsMortgagePrice: {[index: number]: number},
+    mortgageDetailsStockId: {[index: number]: number},
 }
 
 export class Mortgage extends React.Component<MortgageProps, MortgageState> {
@@ -37,7 +39,10 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         super(props);
 
         this.state = {
-            mortgageDetails: {},
+            mortgageDetailsStockNumbers: {},
+            mortgageDetailsMortgagePrice: {},
+            mortgageDetailsStockId: {},
+
         };
     }
 
@@ -46,30 +51,30 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         this.getMyMortgages();
     }
 
-    componentWillReceiveProps(newProps: MortgageProps) {
+    componentDidUpdate(newProps: MortgageProps) {
         if (newProps && newProps.latestTransaction && newProps.latestTransaction.getType() == TransactionType.MORTGAGE_TRANSACTION) {
-            let mortgageDetails = this.state.mortgageDetails;
-            const stockId = newProps.latestTransaction.getStockId()
+            let mortgageDetailsStockNumbers = this.state.mortgageDetailsStockNumbers;
+            const id = newProps.latestTransaction.getId()
 
             // subtract because delta(mortgaged stocks) = -delta(stocksOwned)
-            if (stockId in mortgageDetails) {
-                mortgageDetails[stockId] -= newProps.latestTransaction.getStockQuantity();
+            if (id in mortgageDetailsStockNumbers) {
+                mortgageDetailsStockNumbers[id] -= newProps.latestTransaction.getStockQuantity();
             }
             else {
-                mortgageDetails[stockId] = -newProps.latestTransaction.getStockQuantity();
+                mortgageDetailsStockNumbers[id] = -newProps.latestTransaction.getStockQuantity();
             }
             this.setState({
-                mortgageDetails: mortgageDetails,
+                mortgageDetailsStockNumbers: mortgageDetailsStockNumbers,
             });
         }
     }
 
-    getMortgageCount = (stockId: number): number => {
-        if (stockId in this.state.mortgageDetails) {
-            return this.state.mortgageDetails[stockId];
+    getMortgageCount = (id: number): number => {
+        if (id in this.state.mortgageDetailsStockNumbers) {
+            return this.state.mortgageDetailsStockNumbers[id];
         }
         return 0;
-    }
+   }
 
     getStockCount = (stockId: number): number => {
         if (stockId in this.props.stocksOwnedMap) {
@@ -82,12 +87,23 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         const getMortgagesRequest = new GetMortgageDetailsRequest();
         try {
             const resp = await DalalActionService.getMortgageDetails(getMortgagesRequest, this.props.sessionMd);
-            let mortgageDetails: { [index: number]: number } = {};
-            resp.getMortgageMapMap().forEach((stocksMortgaged, stockId) => {
-                mortgageDetails[stockId] = stocksMortgaged;
+
+            let mortgageDetailsStockNumbers: { [index: number]: number } = {};
+            resp.getMortgageDetailsList().forEach((obj) => {
+                mortgageDetailsStockNumbers[obj.getId()] = obj.getStocksInBank();
             });
-            this.setState({
-                mortgageDetails: mortgageDetails,
+            let mortgageDetailsMortgagePrice: { [index: number]: number } = {};
+            resp.getMortgageDetailsList().forEach((obj) => {
+                mortgageDetailsMortgagePrice[obj.getId()] = obj.getMortgagePrice();
+            });
+            let mortgageDetailsStockId: { [index: number]: number } = {};
+            resp.getMortgageDetailsList().forEach((obj) => {
+                mortgageDetailsStockId[obj.getId()] = obj.getStockId();
+            });
+            await this.setState({
+                mortgageDetailsStockNumbers: mortgageDetailsStockNumbers,
+                mortgageDetailsMortgagePrice: mortgageDetailsMortgagePrice,
+                mortgageDetailsStockId: mortgageDetailsStockId,
             });
         } catch (e) {
             console.log("Error happened while getting mortgages! ", e.statusCode, e.statusMessage, e);
@@ -119,21 +135,23 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         }
     }
 
-    retrieveStocks = async (stockId: number) => {
-        const stockQuantity = $("#retrieveinput-" + stockId).val() as number;
-        $("#retrieveinput-" + stockId).val("");
+     retrieveStocks = async (id: number) => {
+        const stockId = this.state.mortgageDetailsStockId[id];
+        const stockQuantity = $("#retrieveinput-" + id).val() as number;
+        $("#retrieveinput-" + id).val("");
         if (!isPositiveInteger(stockQuantity)) {
             showNotif("Enter a positive integer");
             return;
         }
-        if (stockQuantity > this.getMortgageCount(stockId)) {
-            showNotif("You have only " + this.getMortgageCount(stockId) + " stocks mortgaged");
+        if (stockQuantity > this.getMortgageCount(id)) {
+            showNotif("You have only " + this.getMortgageCount(id) + " stocks mortgaged");
             return;
         }
         const retrieveStocksRequest = new RetrieveMortgageStocksRequest();
         try {
             retrieveStocksRequest.setStockId(stockId);
             retrieveStocksRequest.setStockQuantity(stockQuantity);
+            retrieveStocksRequest.setRetrievePrice(this.state.mortgageDetailsMortgagePrice[id]);
 
             const resp = await DalalActionService.retrieveMortgageStocks(retrieveStocksRequest, this.props.sessionMd);
             showNotif("Stocks retrieved successfully");
@@ -147,6 +165,8 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         const stockBriefInfoMap = this.props.stockBriefInfoMap;
         const stockPricesMap = this.props.stockPricesMap;
         const stocksOwnedMap = this.props.stocksOwnedMap;
+        const mortgageDetailsStockNumbers = this.state.mortgageDetailsStockNumbers;
+        const mortgageDetailsStockId = this.state.mortgageDetailsStockId;
 
         const mortgageTable: any[] = [];
         const retrieveTable: any[] = [];
@@ -163,21 +183,27 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
                     <td><strong><button className="ui inverted green button" onClick={() => { this.mortgageStocks(Number(stockId)) }}>Mortgage</button></strong></td>
                 </tr>
             );
+       }
 
-            // stocksOwned will change due to transactions stream in Main
-            // but mortgaged stocks count must be updated after retrieving
+          // stocksOwned will change due to transactions stream in Main
+          // but mortgaged stocks count must be updated after retrieving
+          for (const id in mortgageDetailsStockNumbers){
+            const stockId = mortgageDetailsStockId[id];
+            if(stockId != undefined){
             retrieveTable.push(
-                <tr key={stockId}>
+                <tr key={id}>
                     <td><strong>{stockBriefInfoMap[stockId].shortName}</strong></td>
-                    <td><strong>{this.getMortgageCount(Number(stockId))}</strong></td>
+                    <td><strong>{this.getMortgageCount(Number(id))}</strong></td>
                     <td><strong>{stockPricesMap[stockId]}</strong></td>
                     <td><strong>{this.props.retrieveRate + "%"}</strong></td>
                     <td className="green"><strong>{(stockPricesMap[stockId] * this.props.retrieveRate) / 100}</strong></td>
-                    <td><strong><input id={"retrieveinput-" + stockId} placeholder="0" className="mortgage-input" /></strong></td>
-                    <td><strong><button className="ui inverted green button" onClick={() => { this.retrieveStocks(Number(stockId)) }}>Retrieve</button></strong></td>
+                    <td><strong><input id={"retrieveinput-" + id} placeholder="0" className="mortgage-input" /></strong></td>
+                    <td><strong><button className="ui inverted green button" onClick={() => { this.retrieveStocks(Number(id)) }}>Retrieve</button></strong></td>
                 </tr>
             );
         }
+      }
+
         return (
             <Fragment>
                 <div className="row" id="top_bar">
@@ -245,4 +271,4 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
             </Fragment>
         );
     }
-}
+  }
