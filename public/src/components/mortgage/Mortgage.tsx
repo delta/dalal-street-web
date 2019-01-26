@@ -50,11 +50,14 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         $("#mortgage-tab .item").tab();
         this.getMyMortgages();
     }
+   ComponentWillUpdate(prevProps: MortgageProps, prevState: MortgageState, newProps: MortgageProps, newState: MortgageState){
+        this.getMyMortgages();
+  }
 
-    componentDidUpdate(newProps: MortgageProps) {
+    componentWillReceiveProps(newProps: MortgageProps) {
         if (newProps && newProps.latestTransaction && newProps.latestTransaction.getType() == TransactionType.MORTGAGE_TRANSACTION) {
             let mortgageDetailsStockNumbers = this.state.mortgageDetailsStockNumbers;
-            const id = newProps.latestTransaction.getId()
+            const id = newProps.latestTransaction.getId();
 
             // subtract because delta(mortgaged stocks) = -delta(stocksOwned)
             if (id in mortgageDetailsStockNumbers) {
@@ -89,16 +92,16 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
             const resp = await DalalActionService.getMortgageDetails(getMortgagesRequest, this.props.sessionMd);
 
             let mortgageDetailsStockNumbers: { [index: number]: number } = {};
-            resp.getMortgageDetailsList().forEach((obj) => {
-                mortgageDetailsStockNumbers[obj.getId()] = obj.getStocksInBank();
+            resp.getMortgageDetailsList().forEach((obj,index) => {
+                mortgageDetailsStockNumbers[index] = obj.getStocksInBank();
             });
             let mortgageDetailsMortgagePrice: { [index: number]: number } = {};
-            resp.getMortgageDetailsList().forEach((obj) => {
-                mortgageDetailsMortgagePrice[obj.getId()] = obj.getMortgagePrice();
+            resp.getMortgageDetailsList().forEach((obj,index) => {
+                mortgageDetailsMortgagePrice[index] = obj.getMortgagePrice();
             });
             let mortgageDetailsStockId: { [index: number]: number } = {};
-            resp.getMortgageDetailsList().forEach((obj) => {
-                mortgageDetailsStockId[obj.getId()] = obj.getStockId();
+            resp.getMortgageDetailsList().forEach((obj,index) => {
+                mortgageDetailsStockId[index] = obj.getStockId();
             });
             await this.setState({
                 mortgageDetailsStockNumbers: mortgageDetailsStockNumbers,
@@ -185,8 +188,8 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
             );
        }
 
-          // stocksOwned will change due to transactions stream in Main
-          // but mortgaged stocks count must be updated after retrieving
+            // stocksOwned will change due to transactions stream in Main
+            // but mortgaged stocks count must be updated after retrieving
           for (const id in mortgageDetailsStockNumbers){
             const stockId = mortgageDetailsStockId[id];
             if(stockId != undefined){
@@ -201,8 +204,8 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
                     <td><strong><button className="ui inverted green button" onClick={() => { this.retrieveStocks(Number(id)) }}>Retrieve</button></strong></td>
                 </tr>
             );
-        }
       }
+    }
 
         return (
             <Fragment>
