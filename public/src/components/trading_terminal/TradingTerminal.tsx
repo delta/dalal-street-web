@@ -117,7 +117,8 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 							<PlaceOrderBox
 								stockId={this.state.currentStockId}
 								currentPrice={this.state.currentPrice}
-								sessionMd={this.props.sessionMd} />
+								sessionMd={this.props.sessionMd}
+							  orderFeePercent={this.props.constantsMap['ORDER_FEE_PERCENT']} />
 						</div>
 
 						<div id="open-orders-container" className="ten wide column box">

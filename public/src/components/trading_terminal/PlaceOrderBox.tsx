@@ -24,6 +24,7 @@ export interface PlaceOrderBoxProps{
     stockId: number,
     currentPrice: number,
     sessionMd: Metadata,
+    orderFeePercent: number,// various constants. Documentation found in server/actionservice/Login method
 }
 
 declare var $: any;
@@ -93,21 +94,30 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
         const stockInputField = document.getElementById(orderType+"-"+orderAction+"-count") as HTMLInputElement;
         const stockCount = Number(stockInputField.value);
         const expectedCostField = document.getElementById(orderType+"-"+orderAction+"-estimation")!;
+        const orderFeeField = document.getElementById(orderType+"-"+orderAction+"-orderfee-estimation")!;
         if (isNaN(stockCount) || stockCount <= 0) {
             expectedCostField.innerHTML = "0.00";
+            orderFeeField.innerHTML = "0.00";
             return;
         }
         if (orderType == "market") {
-            expectedCostField.innerHTML = String(this.props.currentPrice * stockCount) + ".00";
+            const cost = this.props.currentPrice * stockCount;
+            const orderFee = Math.round(this.props.orderFeePercent * cost * stockCount /100);
+            expectedCostField.innerHTML = String(orderFee + cost) + ".00";
+            orderFeeField.innerHTML = String(orderFee) + ".00";
         }
         else {
             let priceInputField = document.getElementById(orderType+"-"+orderAction+"-price") as HTMLInputElement;
             let triggerPrice = Number(priceInputField.value);
             if (isNaN(triggerPrice) || triggerPrice <= 0) {
                 expectedCostField.innerHTML = "0.00";
+                orderFeeField.innerHTML = "0.00";
                 return;
             }
-            expectedCostField.innerHTML = String(triggerPrice * stockCount) + ".00";
+            const cost = triggerPrice * stockCount;
+            const orderFee  = Math.round(this.props.orderFeePercent * cost *stockCount /100);
+            expectedCostField.innerHTML = String(cost + orderFee) + ".00";
+            orderFeeField.innerHTML = String(orderFee) + ".00";
         }
     };
 
@@ -132,7 +142,8 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted green button" onClick={e => this.handleOrder(e,  MARKET, "buy")}>BUY</button>
 
                         <div className="expected-cost">
-                            You will lose approximately ₹ <span id="market-buy-estimation">0.00</span> in cash
+                            You will lose approximately ₹ <span id="market-buy-estimation">0.00</span> in cash<br></br>
+                            Order Fees: ₹ <span id="market-buy-orderfee-estimation">0.00</span> per stock<br></br>
                         </div>
                     </div>
                     <div className="ui bottom attached tab segment inverted" data-tab="market/sell">
@@ -142,7 +153,8 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted red button" onClick={e => this.handleOrder(e, MARKET,"sell")}>SELL</button>
 
                         <div className="expected-cost">
-                            You will gain approximately ₹ <span id="market-sell-estimation">0.00</span> in cash
+                            You will gain approximately ₹ <span id="market-sell-estimation">0.00</span> in cash<br></br>
+                            Order Fees: ₹ <span id="market-sell-orderfee-estimation">0.00</span> in cash
                         </div>
                     </div>
                 </div>
@@ -161,7 +173,8 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted green button" onClick={e => this.handleOrder(e, LIMIT,"buy")}>BUY</button>
 
                         <div className="expected-cost">
-                            You will lose atmost ₹ <span id="limit-buy-estimation">0.00</span> in cash
+                            You will lose atmost ₹ <span id="limit-buy-estimation">0.00</span> in cash<br></br>
+                            Order Fees: ₹ <span id="limit-buy-orderfee-estimation">0.00</span> in cash
                         </div>
                     </div>
                     <div className="ui bottom attached tab segment inverted" data-tab="limit/sell">
@@ -174,7 +187,8 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted red button" onClick={e => this.handleOrder(e, LIMIT,"sell")}>SELL</button>
 
                         <div className="expected-cost">
-                            You will gain atleast ₹ <span id="limit-sell-estimation">0.00</span> in cash
+                            You will gain atleast ₹ <span id="limit-sell-estimation">0.00</span> in cash<br></br>
+                              Order Fees: ₹ <span id="limit-sell-orderfee-estimation">0.00</span> in cash
                         </div>
                     </div>
                 </div>
@@ -193,7 +207,8 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted green button" onClick={e => this.handleOrder(e, STOPLOSS,"buy")}>BUY</button>
 
                         <div className="expected-cost">
-                            You will lose approximately ₹ <span id="stoploss-buy-estimation">0.00</span> in cash
+                            You will lose approximately ₹ <span id="stoploss-buy-estimation">0.00</span> in cash<br></br>
+                              Order Fees: ₹ <span id="stoploss-buy-orderfee-estimation">0.00</span> in cash
                         </div>
                     </div>
                     <div className="ui bottom attached tab segment inverted" data-tab="stoploss/sell">
@@ -206,7 +221,8 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted red button" onClick={e => this.handleOrder(e, STOPLOSS,"sell")}>SELL</button>
 
                         <div className="expected-cost">
-                            You will gain approximately ₹ <span id="stoploss-sell-estimation">0.00</span> in cash
+                            You will gain approximately ₹ <span id="stoploss-sell-estimation">0.00</span> in cash<br></br>
+                            Order Fees: ₹ <span id="stoploss-sell-orderfee-estimation">0.00</span> in cash
                         </div>
                     </div>
                 </div>
