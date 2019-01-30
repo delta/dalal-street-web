@@ -103,7 +103,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
             resp.getMortgageDetailsList().forEach((obj,index) => {
                 mortgageDetailsStockId[index] = obj.getStockId();
             });
-            await this.setState({
+            this.setState({
                 mortgageDetailsStockNumbers: mortgageDetailsStockNumbers,
                 mortgageDetailsMortgagePrice: mortgageDetailsMortgagePrice,
                 mortgageDetailsStockId: mortgageDetailsStockId,
@@ -198,10 +198,10 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
             retrieveTable.push(
                 <tr key={id}>
                     <td><strong>{stockBriefInfoMap[stockId].shortName}</strong></td>
-                    <td><strong>{this.getMortgageCount(Number(id))}</strong></td>
-                    <td><strong>{stockPricesMap[stockId]}</strong></td>
+                    <td><strong>{this.state.mortgageDetailsStockNumbers[id]}</strong></td>
+                    <td><strong>{this.state.mortgageDetailsMortgagePrice[id]}</strong></td>
                     <td><strong>{this.props.retrieveRate + "%"}</strong></td>
-                    <td className="green"><strong>{(stockPricesMap[stockId] * this.props.retrieveRate) / 100}</strong></td>
+                    <td className="green"><strong>{(this.state.mortgageDetailsMortgagePrice[id] * this.props.retrieveRate) / 100}</strong></td>
                     <td><strong><input id={"retrieveinput-" + id} placeholder="0" className="mortgage-input" /></strong></td>
                     <td><strong><button className="ui inverted green button" onClick={() => { this.retrieveStocks(Number(id)) }}>Retrieve</button></strong></td>
                 </tr>
