@@ -61,13 +61,13 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
              let samePriceFlag = 0;
              let newStockFlag = 1;
 
-             if(stockQuantity > 0) { //this means stock has been mortgaged, we need to check whether it has been mortgaged at same price as before or at new price or if it is a new stock mortgaged
+             if(stockQuantity < 0) { //this means stock has been mortgaged, we need to check whether it has been mortgaged at same price as before or at new price or if it is a new stock mortgaged
                for(const stockId in mortgageDetails){
                  if(Number(stockId) === id){ //this means that this stock was already mortgaged before and now it has been mortgaged at same or new price
                    mortgageDetails[stockId].forEach((stocksMortgaged,index) => {
                      if(stocksMortgaged.getStocksInBank() === stockQuantity && stocksMortgaged.getMortgagePrice() === price)//this is when it is mortgaged at same price
                         {   let MortgageDetailsArray :MortgageDetail[] = mortgageDetails[stockId];
-                            stocksMortgaged.setStocksInBank(stocksMortgaged.getStocksInBank() + stockQuantity);
+                            stocksMortgaged.setStocksInBank(stocksMortgaged.getStocksInBank() - stockQuantity);
                             MortgageDetailsArray[index] = stocksMortgaged;
                             mortgageDetails[stockId] = MortgageDetailsArray;
                             samePriceFlag =1;
@@ -76,9 +76,11 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
                   });
                   if(samePriceFlag === 0){// it is mortgaged at some different price
                    let MortgageDetailsArray :MortgageDetail[] = mortgageDetails[stockId];
-                   MortgageDetailsArray[MortgageDetailsArray.length] = new MortgageDetail();
-                   MortgageDetailsArray[MortgageDetailsArray.length].setStocksInBank(stockQuantity);
-                   MortgageDetailsArray[MortgageDetailsArray.length].setMortgagePrice(price);
+                   console.log("length"+MortgageDetailsArray.length);
+                   let stocksMortgaged = new MortgageDetail();
+                   stocksMortgaged.setStocksInBank(-stockQuantity);
+                   stocksMortgaged.setMortgagePrice(price);
+                   MortgageDetailsArray.push(stocksMortgaged);
                    mortgageDetails[stockId] = MortgageDetailsArray;
                    newStockFlag = 0;
                 }
@@ -98,13 +100,13 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
               mortgageDetails[id].forEach((stocksMortgaged,index) => {
               if(stocksMortgaged.getMortgagePrice() === price)
               {
-                if(stocksMortgaged.getStocksInBank() === -stockQuantity ){//delete this object
+                if(stocksMortgaged.getStocksInBank() === stockQuantity ){//delete this object
                    let MortgageDetailsArray : MortgageDetail[] = mortgageDetails[id];
                    delete MortgageDetailsArray[index];
                    mortgageDetails[id] = MortgageDetailsArray;
                 }else {
                   let MortgageDetailsArray :MortgageDetail[] = mortgageDetails[id];
-                  stocksMortgaged.setStocksInBank(stocksMortgaged.getStocksInBank() + stockQuantity);
+                  stocksMortgaged.setStocksInBank(stocksMortgaged.getStocksInBank() - stockQuantity);
                   MortgageDetailsArray[index] = stocksMortgaged;
                   mortgageDetails[id] = MortgageDetailsArray;
               }
@@ -186,9 +188,9 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         console.log(tableIndex);
         const id = "retrieveinput-"+tableIndex;
         console.log(id);
-        const stockQuantity = $("#"+id).val(); //as number;
+        const stockQuantity = $("#"+id).val() as number;
         console.log(stockQuantity);
-        //$(`#retrieveinput-${tableIndex}`).val("");
+        $(`#retrieveinput-${tableIndex}`).val("");
         if (!isPositiveInteger(stockQuantity)) {
             showNotif("Enter a positive integer");
             return;
@@ -242,18 +244,20 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
               const stockQuantity = stocksMortgaged.getStocksInBank();
               console.log(stockQuantity);
               const retrievePrice = stocksMortgaged.getMortgagePrice() * this.props.retrieveRate / 100;
+              const price = stocksMortgaged.getMortgagePrice();
               console.log(retrievePrice);
               const tableIndex = `id-${stockId}price-${retrievePrice}qty-${stockQuantity}`;
               console.log("index is"+tableIndex);
+              console.log($("#table"));
               retrieveTable.push(
                 <tr key={tableIndex}>
                     <td><strong>{stockBriefInfoMap[stockId].shortName}</strong></td>
                     <td><strong>{stockQuantity}</strong></td>
-                    <td><strong>{stocksMortgaged.getMortgagePrice()}</strong></td>
+                    <td><strong>{stockPricesMap[stockId]}</strong></td>
                     <td><strong>{this.props.retrieveRate + "%"}</strong></td>
                     <td className="green"><strong>{retrievePrice}</strong></td>
-                    <td><strong><input id={"retrieveinput-"+tableIndex} placeholder="0" className="mortgage-input" /></strong></td>
-                    <td><strong><button className="ui inverted green button" onClick={() => { this.retrieveStocks(Number(stockId),Number(retrievePrice),Number(stockQuantity),tableIndex) }}>Retrieve</button></strong></td>
+                    <td><strong><input name={"retrieveinput-"+tableIndex} placeholder="0" className="mortgage-input" /></strong></td>
+                    <td><strong><button className="ui inverted green button" onClick={() => { this.retrieveStocks(Number(stockId),Number(price),Number(stockQuantity),tableIndex) }}>Retrieve</button></strong></td>
                 </tr>
             );
           });
@@ -316,7 +320,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id ="table">
                                     {retrieveTable}
                                 </tbody>
                             </table>
