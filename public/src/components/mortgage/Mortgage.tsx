@@ -4,6 +4,7 @@ import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service
 import { MortgageStocksRequest } from "../../../proto_build/actions/MortgageStocks_pb";
 import { RetrieveMortgageStocksRequest } from "../../../proto_build/actions/RetrieveMortgageStocks_pb";
 import { GetMortgageDetailsRequest } from "../../../proto_build/actions/GetMortgageDetails_pb";
+import { MortgageDetail } from "../../../proto_build/models/MortgageDetail_pb";
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { Notification } from "../common/Notification";
 import { TinyNetworth } from "../common/TinyNetworth";
@@ -29,9 +30,8 @@ export interface MortgageProps {
 }
 
 interface MortgageState {
-    mortgageDetailsStockNumbers: { [index: number]: number},
-    mortgageDetailsMortgagePrice: {[index: number]: number},
-    mortgageDetailsStockId: {[index: number]: number},
+    mortgageDetails: { [index: number]: MortgageDetail[]},
+
 }
 
 export class Mortgage extends React.Component<MortgageProps, MortgageState> {
@@ -39,10 +39,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         super(props);
 
         this.state = {
-            mortgageDetailsStockNumbers: {},
-            mortgageDetailsMortgagePrice: {},
-            mortgageDetailsStockId: {},
-
+            mortgageDetails: {},
         };
     }
 
@@ -56,28 +53,66 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
 
     componentWillReceiveProps(newProps: MortgageProps) {
         if (newProps && newProps.latestTransaction && newProps.latestTransaction.getType() == TransactionType.MORTGAGE_TRANSACTION) {
-            let mortgageDetailsStockNumbers = this.state.mortgageDetailsStockNumbers;
-            const id = newProps.latestTransaction.getId();
+             let mortgageDetails = this.state.mortgageDetails;
+             const id = newProps.latestTransaction.getStockId();
+             const price = newProps.latestTransaction.getPrice();
+             const stockQuantity = newProps.latestTransaction.getStockQuantity();
+             console.log("id"+id+" "+price+" "+stockQuantity);
+             let samePriceFlag = 0;
+             let newStockFlag = 1;
 
-            // subtract because delta(mortgaged stocks) = -delta(stocksOwned)
-            if (id in mortgageDetailsStockNumbers) {
-                mortgageDetailsStockNumbers[id] -= newProps.latestTransaction.getStockQuantity();
+             if(stockQuantity > 0) { //this means stock has been mortgaged, we need to check whether it has been mortgaged at same price as before or at new price or if it is a new stock mortgaged
+               for(const stockId in mortgageDetails){
+                 if(Number(stockId) === id){ //this means that this stock was already mortgaged before and now it has been mortgaged at same or new price
+                   mortgageDetails[stockId].forEach((stocksMortgaged,index) => {
+                     if(stocksMortgaged.getStocksInBank() === stockQuantity && stocksMortgaged.getMortgagePrice() === price)//this is when it is mortgaged at same price
+                        {   let MortgageDetailsArray :MortgageDetail[] = mortgageDetails[stockId];
+                            stocksMortgaged.setStocksInBank(stocksMortgaged.getStocksInBank() + stockQuantity);
+                            MortgageDetailsArray[index] = stocksMortgaged;
+                            mortgageDetails[stockId] = MortgageDetailsArray;
+                            samePriceFlag =1;
+                            newStockFlag = 0;
+                    }
+                  });
+                  if(samePriceFlag === 0){// it is mortgaged at some different price
+                   let MortgageDetailsArray :MortgageDetail[] = mortgageDetails[stockId];
+                   MortgageDetailsArray[MortgageDetailsArray.length] = new MortgageDetail();
+                   MortgageDetailsArray[MortgageDetailsArray.length].setStocksInBank(stockQuantity);
+                   MortgageDetailsArray[MortgageDetailsArray.length].setMortgagePrice(price);
+                   mortgageDetails[stockId] = MortgageDetailsArray;
+                   newStockFlag = 0;
+                }
             }
-            else {
-                mortgageDetailsStockNumbers[id] = -newProps.latestTransaction.getStockQuantity();
-            }
-            this.setState({
-                mortgageDetailsStockNumbers: mortgageDetailsStockNumbers,
-            });
-        }
-    }
+          }
+            if(newStockFlag === 1){ //the stock has not been mortgaged before  ....add it to the list
+                  let MortgageDetailsArray :MortgageDetail[] = [];
+                  let stocksMortgaged = new MortgageDetail();
+                  stocksMortgaged.setStocksInBank(stockQuantity);
+                  stocksMortgaged.setMortgagePrice(price);
+                  MortgageDetailsArray.push(stocksMortgaged);
+                  mortgageDetails[id] = MortgageDetailsArray;
 
-    getMortgageCount = (id: number): number => {
-        if (id in this.state.mortgageDetailsStockNumbers) {
-            return this.state.mortgageDetailsStockNumbers[id];
+            }
+          }
+         else{// this means stock has been retrieved due to which either the row has to be deleted or no of stocks reduced
+              mortgageDetails[id].forEach((stocksMortgaged,index) => {
+              if(stocksMortgaged.getMortgagePrice() === price)
+              {
+                if(stocksMortgaged.getStocksInBank() === -stockQuantity ){//delete this object
+                   let MortgageDetailsArray : MortgageDetail[] = mortgageDetails[id];
+                   delete MortgageDetailsArray[index];
+                   mortgageDetails[id] = MortgageDetailsArray;
+                }else {
+                  let MortgageDetailsArray :MortgageDetail[] = mortgageDetails[id];
+                  stocksMortgaged.setStocksInBank(stocksMortgaged.getStocksInBank() + stockQuantity);
+                  MortgageDetailsArray[index] = stocksMortgaged;
+                  mortgageDetails[id] = MortgageDetailsArray;
+              }
+            }
+          });     //MortgageDetail = [];
         }
-        return 0;
-   }
+      }
+    }        //mortgageDetails[stockId] = MortgageDetail.push(stocksMortgaged)
 
     getStockCount = (stockId: number): number => {
         if (stockId in this.props.stocksOwnedMap) {
@@ -90,8 +125,8 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         const getMortgagesRequest = new GetMortgageDetailsRequest();
         try {
             const resp = await DalalActionService.getMortgageDetails(getMortgagesRequest, this.props.sessionMd);
-
-            let mortgageDetailsStockNumbers: { [index: number]: number } = {};
+            console.log("resp"+resp);
+            /*let mortgageDetailsStockNumbers: { [index: number]: number } = {};
             resp.getMortgageDetailsList().forEach((obj,index) => {
                 mortgageDetailsStockNumbers[index] = obj.getStocksInBank();
             });
@@ -102,12 +137,21 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
             let mortgageDetailsStockId: { [index: number]: number } = {};
             resp.getMortgageDetailsList().forEach((obj,index) => {
                 mortgageDetailsStockId[index] = obj.getStockId();
+            });*/
+            let MortgageDetailsArray : MortgageDetail[];
+            let mortgageDetails: { [index: number]: MortgageDetail[] } = {};
+            resp.getMortgageDetailsList().forEach((stocksMortgaged,_) => {
+                const stockId = stocksMortgaged.getStockId();
+                if(!mortgageDetails[stockId])
+                  MortgageDetailsArray  = [];
+                MortgageDetailsArray.push(stocksMortgaged);
+                mortgageDetails[stockId] = MortgageDetailsArray;
+                console.log(MortgageDetailsArray+"stockId"+stockId);
             });
             this.setState({
-                mortgageDetailsStockNumbers: mortgageDetailsStockNumbers,
-                mortgageDetailsMortgagePrice: mortgageDetailsMortgagePrice,
-                mortgageDetailsStockId: mortgageDetailsStockId,
+                mortgageDetails: mortgageDetails,
             });
+            console.log("mortgageDetails"+this.state.mortgageDetails);
         } catch (e) {
             console.log("Error happened while getting mortgages! ", e.statusCode, e.statusMessage, e);
             showNotif("Something went wrong! " + e.statusMessage);
@@ -132,34 +176,36 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
 
             const resp = await DalalActionService.mortgageStocks(mortgageStocksRequest, this.props.sessionMd);
             // notif will be shown by transacions stream
-            this.getMyMortgages();
         } catch (e) {
             console.log("Error happened while mortgaging stocks! ", e.statusCode, e.statusMessage, e);
             showErrorNotif("Something went wrong! " + e.statusMessage);
         }
     }
 
-     retrieveStocks = async (id: number) => {
-        const stockId = this.state.mortgageDetailsStockId[id];
-        const stockQuantity = $("#retrieveinput-" + id).val() as number;
-        $("#retrieveinput-" + id).val("");
+     retrieveStocks = async (stockId: number,price: number,quantity: number,tableIndex: string) => {
+        console.log(tableIndex);
+        const id = "retrieveinput-"+tableIndex;
+        console.log(id);
+        const stockQuantity = $("#"+id).val(); //as number;
+        console.log(stockQuantity);
+        //$(`#retrieveinput-${tableIndex}`).val("");
         if (!isPositiveInteger(stockQuantity)) {
             showNotif("Enter a positive integer");
             return;
         }
-        if (stockQuantity > this.getMortgageCount(id)) {
-            showNotif("You have only " + this.getMortgageCount(id) + " stocks mortgaged");
+        if (stockQuantity > quantity) {
+            showNotif("You have only " + quantity + " stocks mortgaged");
             return;
         }
         const retrieveStocksRequest = new RetrieveMortgageStocksRequest();
         try {
             retrieveStocksRequest.setStockId(stockId);
             retrieveStocksRequest.setStockQuantity(stockQuantity);
-            retrieveStocksRequest.setRetrievePrice(this.state.mortgageDetailsMortgagePrice[id]);
+            retrieveStocksRequest.setRetrievePrice(price);
 
             const resp = await DalalActionService.retrieveMortgageStocks(retrieveStocksRequest, this.props.sessionMd);
             showNotif("Stocks retrieved successfully");
-            this.getMyMortgages();
+            //this.getMyMortgages();
         } catch (e) {
             console.log("Error happened while retrieving stocks! ", e.statusCode, e.statusMessage, e);
             showNotif("Something went wrong! " + e.statusMessage);
@@ -170,8 +216,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         const stockBriefInfoMap = this.props.stockBriefInfoMap;
         const stockPricesMap = this.props.stockPricesMap;
         const stocksOwnedMap = this.props.stocksOwnedMap;
-        const mortgageDetailsStockNumbers = this.state.mortgageDetailsStockNumbers;
-        const mortgageDetailsStockId = this.state.mortgageDetailsStockId;
+        const mortgageDetails = this.state.mortgageDetails;
 
         const mortgageTable: any[] = [];
         const retrieveTable: any[] = [];
@@ -192,22 +237,28 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
 
             // stocksOwned will change due to transactions stream in Main
             // but mortgaged stocks count must be updated after retrieving
-          for (const id in mortgageDetailsStockNumbers){
-            const stockId = mortgageDetailsStockId[id];
-            if(stockId != undefined){
-            retrieveTable.push(
-                <tr key={id}>
+          for (const stockId in mortgageDetails){
+            mortgageDetails[stockId].forEach((stocksMortgaged, index) => {
+              const stockQuantity = stocksMortgaged.getStocksInBank();
+              console.log(stockQuantity);
+              const retrievePrice = stocksMortgaged.getMortgagePrice() * this.props.retrieveRate / 100;
+              console.log(retrievePrice);
+              const tableIndex = `id-${stockId}price-${retrievePrice}qty-${stockQuantity}`;
+              console.log("index is"+tableIndex);
+              retrieveTable.push(
+                <tr key={tableIndex}>
                     <td><strong>{stockBriefInfoMap[stockId].shortName}</strong></td>
-                    <td><strong>{this.state.mortgageDetailsStockNumbers[id]}</strong></td>
-                    <td><strong>{this.state.mortgageDetailsMortgagePrice[id]}</strong></td>
+                    <td><strong>{stockQuantity}</strong></td>
+                    <td><strong>{stocksMortgaged.getMortgagePrice()}</strong></td>
                     <td><strong>{this.props.retrieveRate + "%"}</strong></td>
-                    <td className="green"><strong>{(this.state.mortgageDetailsMortgagePrice[id] * this.props.retrieveRate) / 100}</strong></td>
-                    <td><strong><input id={"retrieveinput-" + id} placeholder="0" className="mortgage-input" /></strong></td>
-                    <td><strong><button className="ui inverted green button" onClick={() => { this.retrieveStocks(Number(id)) }}>Retrieve</button></strong></td>
+                    <td className="green"><strong>{retrievePrice}</strong></td>
+                    <td><strong><input id={"retrieveinput-"+tableIndex} placeholder="0" className="mortgage-input" /></strong></td>
+                    <td><strong><button className="ui inverted green button" onClick={() => { this.retrieveStocks(Number(stockId),Number(retrievePrice),Number(stockQuantity),tableIndex) }}>Retrieve</button></strong></td>
                 </tr>
             );
+          });
       }
-    }
+
 
         return (
             <Fragment>
