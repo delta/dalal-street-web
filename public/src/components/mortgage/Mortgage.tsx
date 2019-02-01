@@ -51,18 +51,31 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         if (newProps && newProps.latestTransaction && newProps.latestTransaction.getType() == TransactionType.MORTGAGE_TRANSACTION) {
             let mortgageDetails = this.state.mortgageDetails;
             const stockId = newProps.latestTransaction.getStockId()
-            const latestTransaction = newProps.latestTransaction;
+            const latestTransaction: Transaction_pb = newProps.latestTransaction;
 
             // If the latest transaction is negative, then it means we mortgaged something
             if (latestTransaction.getStockQuantity() < 0) {
-                let newMortgageDetail: MortgageDetail = new MortgageDetail;
-                newMortgageDetail.setUserId(latestTransaction.getUserId());
-                newMortgageDetail.setStocksInBank(latestTransaction.getStockQuantity() * -1);
-                newMortgageDetail.setStockId(latestTransaction.getStockId());
-                if (! mortgageDetails[stockId]) {
-                    mortgageDetails[stockId] = [];
+                let alreadyUpdated: boolean = false;
+                // Search if it already exists. If it does, update it
+                for (let i = 0; i < mortgageDetails[stockId].length; i++) {
+                    if (mortgageDetails[stockId][i].getMortgagePrice() == latestTransaction.getPrice()) {
+                        alreadyUpdated = true;
+                        const quantity = mortgageDetails[stockId][i].getStocksInBank()
+                        mortgageDetails[stockId][i].setStocksInBank(quantity + latestTransaction.getStockQuantity() * -1)
+                    }
                 }
-                mortgageDetails[stockId].push(newMortgageDetail);
+                // If it doesn't already exist with that price, create a new one.
+                if (! alreadyUpdated) {
+                    let newMortgageDetail: MortgageDetail = new MortgageDetail;
+                    newMortgageDetail.setUserId(latestTransaction.getUserId());
+                    newMortgageDetail.setStocksInBank(latestTransaction.getStockQuantity() * -1);
+                    newMortgageDetail.setStockId(latestTransaction.getStockId());
+                    newMortgageDetail.setMortgagePrice(latestTransaction.getPrice());
+                    if (! mortgageDetails[stockId]) {
+                        mortgageDetails[stockId] = [];
+                    }
+                    mortgageDetails[stockId].push(newMortgageDetail);
+                }
             }
             else {
                 let pastMortgagesForStock: MortgageDetail[] = mortgageDetails[stockId];
