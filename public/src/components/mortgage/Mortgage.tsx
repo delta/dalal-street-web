@@ -89,7 +89,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
             if(newStockFlag === 1){ //the stock has not been mortgaged before  ....add it to the list
                   let MortgageDetailsArray :MortgageDetail[] = [];
                   let stocksMortgaged = new MortgageDetail();
-                  stocksMortgaged.setStocksInBank(stockQuantity);
+                  stocksMortgaged.setStocksInBank(-stockQuantity);
                   stocksMortgaged.setMortgagePrice(price);
                   MortgageDetailsArray.push(stocksMortgaged);
                   mortgageDetails[id] = MortgageDetailsArray;
@@ -186,6 +186,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
 
      retrieveStocks = async (stockId: number,price: number,quantity: number,tableIndex: string) => {
         console.log(tableIndex);
+        console.log("table"+$("#table"));
         const id = "retrieveinput-"+tableIndex;
         console.log(id);
         const stockQuantity = $("#"+id).val() as number;
