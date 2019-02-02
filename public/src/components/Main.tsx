@@ -64,7 +64,9 @@ interface MainState {
 
     connectionStatus: boolean
     networkTimeOut: number
-    networkTimeOutCounter: number // goes up to 3
+    networkTimeOutCounterNotifs: number
+    networkTimeOutCounterTrans: number
+    networkTimeOutCounterPrices: number
     successCounter: number // goes up to 3
 }
 
@@ -100,7 +102,9 @@ export class Main extends React.Component<MainProps, MainState> {
             stockDetails: [],
             latestTransaction: new Transaction_pb,
             networkTimeOut: 1000,
-            networkTimeOutCounter: 0,
+            networkTimeOutCounterNotifs: 1,
+            networkTimeOutCounterTrans: 1,
+            networkTimeOutCounterPrices: 1,
             successCounter: 0,
             connectionStatus: true,
         };
@@ -137,7 +141,9 @@ export class Main extends React.Component<MainProps, MainState> {
             this.setState({
                 networkTimeOut: 1000,
                 successCounter: 0,
-                networkTimeOutCounter: 0,
+                networkTimeOutCounterNotifs: 1,
+                networkTimeOutCounterTrans: 1,
+                networkTimeOutCounterPrices: 1,
                 connectionStatus: true,
             });
         } else {
@@ -148,33 +154,56 @@ export class Main extends React.Component<MainProps, MainState> {
         }
     }
 
-    retryStream = (func: Function) => {
+    retryStreamNotifications = (func: Function) => {
+      this.setState({
+        connectionStatus: false,
+      });
+      if(this.state.networkTimeOutCounterNotifs<=1024)
+      {
+        this.setState({
+          networkTimeOutCounterNotifs: this.state.networkTimeOutCounterNotifs*2,
+        });
+        this.forErrorNotifs();
+        setTimeout(func,this.state.networkTimeOutCounterNotifs*this.state.networkTimeOut);
+      }
+    }
+
+    retryStreamTransactions = (func: Function) => {
         this.setState({
           connectionStatus: false,
         });
-
-        let newcounter = this.state.networkTimeOutCounter;
-        let newTimeout = this.state.networkTimeOut + Math.floor(newcounter/3) * this.state.networkTimeOut;
-        if (newcounter == 2) {
-          const timeOut = this.state.networkTimeOut;
-          showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (timeOut/1000) + "s", "Network error");
-          setTimeout(func, timeOut);
-
-          var id =  setInterval(function connect(){
-              if(navigator.onLine == true)
-              {
-                clearInterval(id);
-                window.location.reload(true);
-              }
-            },60000);
-          }
-
-          newcounter = (newcounter+1)%3;
+        if(this.state.networkTimeOutCounterTrans<=1024)
+        {
           this.setState({
-                networkTimeOut: newTimeout,
-                networkTimeOutCounter: newcounter,
-            });
+            networkTimeOutCounterTrans: this.state.networkTimeOutCounterTrans*2,
+          });
+          this.forErrorNotifs();
+          setTimeout(func,this.state.networkTimeOutCounterTrans*this.state.networkTimeOut);
         }
+    }
+
+    retryStreamStockPrices = (func: Function) => {
+          this.setState({
+            connectionStatus: false,
+          });
+          if(this.state.networkTimeOutCounterPrices<=1024)
+          {
+          this.setState({
+            networkTimeOutCounterPrices: this.state.networkTimeOutCounterPrices*2,
+          });
+            this.forErrorNotifs();
+            setTimeout(func,this.state.networkTimeOutCounterPrices*this.state.networkTimeOut);
+          }
+      }
+
+    forErrorNotifs = () => {
+      if(this.state.networkTimeOutCounterNotifs === this.state.networkTimeOutCounterTrans && this.state.networkTimeOutCounterNotifs=== this.state.networkTimeOutCounterPrices
+        && this.state.networkTimeOutCounterTrans === this.state.networkTimeOutCounterPrices)
+      {
+          PNotify.removeAll();
+          showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (this.state.networkTimeOutCounterNotifs) + "s", "Network error");
+       }
+    }
 
 
     handleNotificationsStream = async () => {
@@ -190,7 +219,7 @@ export class Main extends React.Component<MainProps, MainState> {
             });
         } catch(e) {
             console.log(e);
-            return this.retryStream(this.handleNotificationsStream.bind(this));
+            return this.retryStreamNotifications(this.handleNotificationsStream.bind(this));
         }
 
         // subscribe to the news ones
@@ -205,7 +234,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch(e) {
             console.log(e);
-            return this.retryStream(this.handleNotificationsStream.bind(this));
+            return this.retryStreamNotifications(this.handleNotificationsStream.bind(this));
         }
 
         this.connectionSucceeded();
@@ -234,7 +263,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch(e) {
             console.log(e);
-            return this.retryStream(this.handleNotificationsStream.bind(this));
+            return this.retryStreamNotifications(this.handleNotificationsStream.bind(this));
         }
     };
 
@@ -258,7 +287,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch(e) {
             console.log(e);
-            return this.retryStream(this.handleStockPricesStream.bind(this));
+            return this.retryStreamStockPrices(this.handleStockPricesStream.bind(this));
         }
 
         this.connectionSucceeded();
@@ -293,7 +322,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch(e) {
             console.log(e);
-            return this.retryStream(this.handleStockPricesStream.bind(this));
+            return this.retryStreamStockPrices(this.handleStockPricesStream.bind(this));
         }
     };
 
@@ -311,7 +340,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch(e) {
             console.log(e);
-            return this.retryStream(this.handleTransactionsStream.bind(this));
+            return this.retryStreamTransactions(this.handleTransactionsStream.bind(this));
         }
 
         // Getting copy of stocksOwnedMap
@@ -372,7 +401,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch (e) {
             console.log(e);
-            return this.retryStream(this.handleTransactionsStream.bind(this));
+            return this.retryStreamTransactions(this.handleTransactionsStream.bind(this));
         }
     }
 
