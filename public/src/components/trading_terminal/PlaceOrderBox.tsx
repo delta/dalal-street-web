@@ -97,8 +97,8 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
         }
         if (orderType == "market") {
             const cost = this.props.currentPrice * stockCount;
-            const orderFee = Math.round(this.props.orderFeePercent * cost * stockCount /100);
-            expectedCostField.innerHTML = (orderAction ==='buy')? (String(orderFee + cost) + ".00") : String(stockCount) ;
+            const orderFee = Math.floor(this.props.orderFeePercent * cost * stockCount /100);
+            expectedCostField.innerHTML = (orderAction ==='buy')? (String(cost) + ".00") : String(stockCount) ;
             orderFeeField.innerHTML = String(orderFee) + ".00";
         }
         else {
@@ -110,8 +110,8 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                 return;
             }
             const cost = triggerPrice * stockCount;
-            const orderFee  = Math.round(this.props.orderFeePercent * cost *stockCount /100);
-            expectedCostField.innerHTML = (orderAction ==='buy')? (String(orderFee + cost) + ".00") : String(stockCount) ;
+            const orderFee  = Math.floor(this.props.orderFeePercent * cost *stockCount /100);
+            expectedCostField.innerHTML = (orderAction ==='buy')? (String(cost) + ".00") : String(stockCount) ;
             orderFeeField.innerHTML = String(orderFee) + ".00";
         }
     };
