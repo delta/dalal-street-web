@@ -98,7 +98,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
         if (orderType == "market") {
             const cost = this.props.currentPrice * stockCount;
             const orderFee = Math.round(this.props.orderFeePercent * cost * stockCount /100);
-            expectedCostField.innerHTML = String(orderFee + cost) + ".00";
+            expectedCostField.innerHTML = (orderAction ==='buy')? (String(orderFee + cost) + ".00") : String(stockCount) ;
             orderFeeField.innerHTML = String(orderFee) + ".00";
         }
         else {
@@ -111,7 +111,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
             }
             const cost = triggerPrice * stockCount;
             const orderFee  = Math.round(this.props.orderFeePercent * cost *stockCount /100);
-            expectedCostField.innerHTML = String(cost + orderFee) + ".00";
+            expectedCostField.innerHTML = (orderAction ==='buy')? (String(orderFee + cost) + ".00") : String(stockCount) ;
             orderFeeField.innerHTML = String(orderFee) + ".00";
         }
     };
@@ -137,8 +137,8 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted green button" onClick={e => this.handleOrder(e,  MARKET, "buy")}>BUY</button>
 
                         <div className="expected-cost">
-                            You will lose approximately ₹ <span id="market-buy-estimation">0.00</span> in cash<br></br>
-                            Order Fees: ₹ <span id="market-buy-orderfee-estimation">0.00</span> per stock<br></br>
+                            We will reserve approximately ₹ <span id="market-buy-estimation">0.00</span> in cash<br></br>
+                            Order Fees: ₹ <span id="market-buy-orderfee-estimation">0.00</span> in cash<br></br>
                         </div>
                     </div>
                     <div className="ui bottom attached tab segment inverted" data-tab="market/sell">
@@ -148,7 +148,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted red button" onClick={e => this.handleOrder(e, MARKET,"sell")}>SELL</button>
 
                         <div className="expected-cost">
-                            You will gain approximately ₹ <span id="market-sell-estimation">0.00</span> in cash<br></br>
+                            We will reserve approximately <span id="market-sell-estimation">0</span> of these stocks for this trade<br></br>
                             Order Fees: ₹ <span id="market-sell-orderfee-estimation">0.00</span> in cash
                         </div>
                     </div>
@@ -168,7 +168,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted green button" onClick={e => this.handleOrder(e, LIMIT,"buy")}>BUY</button>
 
                         <div className="expected-cost">
-                            You will lose atmost ₹ <span id="limit-buy-estimation">0.00</span> in cash<br></br>
+                            We will reserve atmost ₹ <span id="limit-buy-estimation">0.00</span> in cash<br></br>
                             Order Fees: ₹ <span id="limit-buy-orderfee-estimation">0.00</span> in cash
                         </div>
                     </div>
@@ -182,7 +182,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted red button" onClick={e => this.handleOrder(e, LIMIT,"sell")}>SELL</button>
 
                         <div className="expected-cost">
-                            You will gain atleast ₹ <span id="limit-sell-estimation">0.00</span> in cash<br></br>
+                            We will reserve atleast  <span id="limit-sell-estimation">0</span> of these stocks for this trade<br></br>
                               Order Fees: ₹ <span id="limit-sell-orderfee-estimation">0.00</span> in cash
                         </div>
                     </div>
@@ -202,7 +202,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted green button" onClick={e => this.handleOrder(e, STOPLOSS,"buy")}>BUY</button>
 
                         <div className="expected-cost">
-                            You will lose approximately ₹ <span id="stoploss-buy-estimation">0.00</span> in cash<br></br>
+                            We will reserve approximately ₹ <span id="stoploss-buy-estimation">0.00</span> in cash<br></br>
                               Order Fees: ₹ <span id="stoploss-buy-orderfee-estimation">0.00</span> in cash
                         </div>
                     </div>
@@ -216,7 +216,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <button className="ui inverted red button" onClick={e => this.handleOrder(e, STOPLOSS,"sell")}>SELL</button>
 
                         <div className="expected-cost">
-                            You will gain approximately ₹ <span id="stoploss-sell-estimation">0.00</span> in cash<br></br>
+                            We will reserve approximately  <span id="stoploss-sell-estimation">0</span> of these stocks for this trade<br></br>
                             Order Fees: ₹ <span id="stoploss-sell-orderfee-estimation">0.00</span> in cash
                         </div>
                     </div>
