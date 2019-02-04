@@ -190,13 +190,13 @@ export class Main extends React.Component<MainProps, MainState> {
           counter = counter * 2;
           this.setStreamCounter(flag,counter);
           const endtime = moment();
-          if(moment.duration(endtime.diff(this.state.networkTimeOut)) >= 120000)
+          if(endtime.diff(this.state.networkTimeOut) >= 120000)
             {
               this.setState({
                 networkTimeOut: moment(),
               });
               PNotify.removeAll();
-              showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (Math.round(counter/60)) + "mins", "Network error");
+              showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (Math.round(counter/60)) + " mins", "Network error");
             }
           setTimeout(func,counter*1000);
       }
