@@ -154,45 +154,53 @@ export class Main extends React.Component<MainProps, MainState> {
         }
     }
 
+    getStreamCounter = (flag: string) => {
+       if(flag === "notifications")
+          return this.state.networkTimeOutCounterNotifs;
+       else if(flag === "transactions")
+          return this.state.networkTimeOutCounterTrans;
+       else if(flag === "stockPrices")
+          return this.state.networkTimeOutCounterPrices;
+        else return -1;
+    }
+
+    setStreamCounter = (flag: string, counter : number, func : Function) => {
+        if(flag === "notifications"){
+           this.setState({
+             networkTimeOutCounterNotifs:counter*2,
+           });
+           this.showRetryNotifs();
+           setTimeout(func,this.state.networkTimeOutCounterNotifs*this.state.networkTimeOut);
+         }
+        if(flag === "transactions"){
+          this.setState({
+            networkTimeOutCounterTrans:counter*2,
+          });
+          this.showRetryNotifs();
+          setTimeout(func,this.state.networkTimeOutCounterTrans*this.state.networkTimeOut);
+        }
+        if(flag === "stockPrices"){
+        this.setState({
+          networkTimeOutCounterPrices:counter*2,
+        });
+        this.showRetryNotifs();
+        setTimeout(func,this.state.networkTimeOutCounterPrices*this.state.networkTimeOut);
+      }
+    }
+
     retryStream = (func: Function, flag: string) => {
       this.setState({
         connectionStatus: false,
       });
-      if(flag === "notifications"){
-       if(this.state.networkTimeOutCounterNotifs<=1024)
+      const counter = this.getStreamCounter(flag);
+       if(counter != -1 && counter <= 1024)
        {
-        this.setState({
-          networkTimeOutCounterNotifs: this.state.networkTimeOutCounterNotifs*2,
-        });
-        this.forErrorNotifs();
-        setTimeout(func,this.state.networkTimeOutCounterNotifs*this.state.networkTimeOut);
-      }
-    }
-      else if(flag === "transactions"){
-        if(this.state.networkTimeOutCounterTrans<=1024)
-        {
-          this.setState({
-            networkTimeOutCounterTrans: this.state.networkTimeOutCounterTrans*2,
-          });
-          this.forErrorNotifs();
-          setTimeout(func,this.state.networkTimeOutCounterTrans*this.state.networkTimeOut);
-        }
-      }
-      else if(flag === "stockPrices"){
-        if(this.state.networkTimeOutCounterPrices<=1024)
-        {
-        this.setState({
-          networkTimeOutCounterPrices: this.state.networkTimeOutCounterPrices*2,
-        });
-          this.forErrorNotifs();
-          setTimeout(func,this.state.networkTimeOutCounterPrices*this.state.networkTimeOut);
-        }
+        this.setStreamCounter(flag,this.getStreamCounter(flag),func);
       }
     }
 
-    forErrorNotifs = () => {
-      if(this.state.networkTimeOutCounterNotifs === this.state.networkTimeOutCounterTrans && this.state.networkTimeOutCounterNotifs=== this.state.networkTimeOutCounterPrices
-        && this.state.networkTimeOutCounterTrans === this.state.networkTimeOutCounterPrices)
+    showRetryNotifs = () => {
+      if(this.state.networkTimeOutCounterNotifs === this.state.networkTimeOutCounterTrans && this.state.networkTimeOutCounterNotifs=== this.state.networkTimeOutCounterPrices)
       {
           PNotify.removeAll();
           showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (this.state.networkTimeOutCounterNotifs) + "s", "Network error");
