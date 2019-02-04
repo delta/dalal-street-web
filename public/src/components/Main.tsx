@@ -154,12 +154,13 @@ export class Main extends React.Component<MainProps, MainState> {
         }
     }
 
-    retryStreamNotifications = (func: Function) => {
+    retryStream = (func: Function, flag: string) => {
       this.setState({
         connectionStatus: false,
       });
-      if(this.state.networkTimeOutCounterNotifs<=1024)
-      {
+      if(flag === "notifications"){
+       if(this.state.networkTimeOutCounterNotifs<=1024)
+       {
         this.setState({
           networkTimeOutCounterNotifs: this.state.networkTimeOutCounterNotifs*2,
         });
@@ -167,11 +168,7 @@ export class Main extends React.Component<MainProps, MainState> {
         setTimeout(func,this.state.networkTimeOutCounterNotifs*this.state.networkTimeOut);
       }
     }
-
-    retryStreamTransactions = (func: Function) => {
-        this.setState({
-          connectionStatus: false,
-        });
+      else if(flag === "transactions"){
         if(this.state.networkTimeOutCounterTrans<=1024)
         {
           this.setState({
@@ -180,21 +177,18 @@ export class Main extends React.Component<MainProps, MainState> {
           this.forErrorNotifs();
           setTimeout(func,this.state.networkTimeOutCounterTrans*this.state.networkTimeOut);
         }
-    }
-
-    retryStreamStockPrices = (func: Function) => {
-          this.setState({
-            connectionStatus: false,
-          });
-          if(this.state.networkTimeOutCounterPrices<=1024)
-          {
-          this.setState({
-            networkTimeOutCounterPrices: this.state.networkTimeOutCounterPrices*2,
-          });
-            this.forErrorNotifs();
-            setTimeout(func,this.state.networkTimeOutCounterPrices*this.state.networkTimeOut);
-          }
       }
+      else if(flag === "stockPrices"){
+        if(this.state.networkTimeOutCounterPrices<=1024)
+        {
+        this.setState({
+          networkTimeOutCounterPrices: this.state.networkTimeOutCounterPrices*2,
+        });
+          this.forErrorNotifs();
+          setTimeout(func,this.state.networkTimeOutCounterPrices*this.state.networkTimeOut);
+        }
+      }
+    }
 
     forErrorNotifs = () => {
       if(this.state.networkTimeOutCounterNotifs === this.state.networkTimeOutCounterTrans && this.state.networkTimeOutCounterNotifs=== this.state.networkTimeOutCounterPrices
@@ -219,7 +213,7 @@ export class Main extends React.Component<MainProps, MainState> {
             });
         } catch(e) {
             console.log(e);
-            return this.retryStreamNotifications(this.handleNotificationsStream.bind(this));
+            return this.retryStream(this.handleNotificationsStream.bind(this),"notifications");
         }
 
         // subscribe to the news ones
@@ -234,7 +228,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch(e) {
             console.log(e);
-            return this.retryStreamNotifications(this.handleNotificationsStream.bind(this));
+            return this.retryStream(this.handleNotificationsStream.bind(this),"notifications");
         }
 
         this.connectionSucceeded();
@@ -263,7 +257,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch(e) {
             console.log(e);
-            return this.retryStreamNotifications(this.handleNotificationsStream.bind(this));
+            return this.retryStream(this.handleNotificationsStream.bind(this),"notifications");
         }
     };
 
@@ -287,7 +281,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch(e) {
             console.log(e);
-            return this.retryStreamStockPrices(this.handleStockPricesStream.bind(this));
+            return this.retryStream(this.handleStockPricesStream.bind(this), "stockPrices");
         }
 
         this.connectionSucceeded();
@@ -322,7 +316,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch(e) {
             console.log(e);
-            return this.retryStreamStockPrices(this.handleStockPricesStream.bind(this));
+            return this.retryStream(this.handleStockPricesStream.bind(this), "stockPrices");
         }
     };
 
@@ -340,7 +334,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch(e) {
             console.log(e);
-            return this.retryStreamTransactions(this.handleTransactionsStream.bind(this));
+            return this.retryStream(this.handleTransactionsStream.bind(this), "transactions");
         }
 
         // Getting copy of stocksOwnedMap
@@ -401,7 +395,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch (e) {
             console.log(e);
-            return this.retryStreamTransactions(this.handleTransactionsStream.bind(this));
+            return this.retryStream(this.handleTransactionsStream.bind(this), "transactions");
         }
     }
 
