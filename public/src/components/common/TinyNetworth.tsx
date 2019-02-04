@@ -7,6 +7,7 @@ declare var $: any;
 export interface TinyNetworthProps {
     userCash: number,
     userTotal: number,
+    connectionStatus: boolean,
 }
 
 export class TinyNetworth extends React.Component<TinyNetworthProps, {}> {
@@ -21,8 +22,16 @@ export class TinyNetworth extends React.Component<TinyNetworthProps, {}> {
     render() {
         const stockWorth = this.props.userTotal - this.props.userCash;
         const stockWorthClass = stockWorth >= 0 ? "green" : "red";
+        const connection = this.props.connectionStatus == true ? "Connected" : "Disconnected";
+        const connectionStatusClass = this.props.connectionStatus == true ? "green" : "red";
         return (
             <div id="tiny-networth" className="ui statistics">
+              <div className="ui six wide column box" data-content="Internet connection status">
+                  <h3 className={"ui center aligned " + connectionStatusClass + " header inverted"}>
+                      <i className="wifi icon small"></i>
+                       {connection}
+                  </h3>
+              </div>
                 <div className="ui six wide column box" data-content="Cash in hand">
                     <h3 className={"ui center aligned green header inverted"}>
                         <i className="fa fa-money"></i> &nbsp;&nbsp;

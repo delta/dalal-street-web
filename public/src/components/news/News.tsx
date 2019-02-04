@@ -17,6 +17,7 @@ declare var $: any;
 export interface NewsProps {
     userCash: number,
     userTotal: number,
+    connectionStatus: boolean,
     sessionMd: Metadata,
     newsCount: number,
     notifications: Notification_pb[],
@@ -109,7 +110,7 @@ export class News extends React.Component<NewsProps, NewsState> {
         return (
             <Fragment>
                 <div className="row" id="top_bar">
-                    <TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} />
+                    <TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus}/>
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>

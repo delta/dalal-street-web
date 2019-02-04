@@ -29,6 +29,7 @@ export interface TradingTerminalProps {
 	userName: string
 	userCash: number
 	userTotal: number
+	connectionStatus: boolean
 
 	stocksOwnedMap: NumNumMap // stocks owned by user for a given stockid
 	stockBriefInfoMap: { [index: number]: StockBriefInfo } // get stock detail for a given stockid
@@ -353,7 +354,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 							defaultStock={this.state.currentStockId} />
 					</div>
 
-					<TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} />
+					<TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus}/>
 					<div id="notif-component">
 						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
 					</div>

@@ -29,6 +29,7 @@ import * as jspb from "google-protobuf";
 
 declare var $: any;
 declare var PNotify: any;
+declare var moment: any;
 
 export interface MainProps {
     sessionMd: 		Metadata
@@ -62,8 +63,11 @@ interface MainState {
 
     latestTransaction: Transaction_pb
 
+    connectionStatus: boolean
     networkTimeOut: number
-    networkTimeOutCounter: number // goes up to 3
+    networkTimeOutCounterNotifs: number
+    networkTimeOutCounterTrans: number
+    networkTimeOutCounterPrices: number
     successCounter: number // goes up to 3
 }
 
@@ -98,9 +102,12 @@ export class Main extends React.Component<MainProps, MainState> {
             transactionSubcriptionId: new SubscriptionId,
             stockDetails: [],
             latestTransaction: new Transaction_pb,
-            networkTimeOut: 1000,
-            networkTimeOutCounter: 0,
+            networkTimeOut: moment(),
+            networkTimeOutCounterNotifs: 2,
+            networkTimeOutCounterTrans: 2,
+            networkTimeOutCounterPrices: 2,
             successCounter: 0,
+            connectionStatus: true,
         };
 
         this.handleNotificationsStream();
@@ -133,9 +140,12 @@ export class Main extends React.Component<MainProps, MainState> {
         if (this.state.successCounter == 2) {
             showSuccessNotif("Connected to server", "Success");
             this.setState({
-                networkTimeOut: 1000,
+                networkTimeOut: moment(),
                 successCounter: 0,
-                networkTimeOutCounter: 0,
+                networkTimeOutCounterNotifs: 2,
+                networkTimeOutCounterTrans: 2,
+                networkTimeOutCounterPrices: 2,
+                connectionStatus: true,
             });
         } else {
             let sc = this.state.successCounter;
@@ -145,22 +155,52 @@ export class Main extends React.Component<MainProps, MainState> {
         }
     }
 
-    retryStream = (func: Function) => {
-        let newcounter = this.state.networkTimeOutCounter;
-        let newTimeout = this.state.networkTimeOut + Math.floor(newcounter/3) * this.state.networkTimeOut;
+    getStreamCounter = (flag: string) => {
+       if(flag === "notifications")
+          return this.state.networkTimeOutCounterNotifs;
+       else if(flag === "transactions")
+          return this.state.networkTimeOutCounterTrans;
+       else if(flag === "stockPrices")
+          return this.state.networkTimeOutCounterPrices;
+        else return -1;
+    }
 
-        if (newcounter == 2) {
-            const timeOut = this.state.networkTimeOut;
-            showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (timeOut/1000) + "s", "Network error");
-            setTimeout(func, timeOut);
-        }
+    setStreamCounter = (flag: string, counter : number) => {
+        if(flag === "notifications")
+           this.setState({
+             networkTimeOutCounterNotifs:counter,
+           });
+        if(flag === "transactions")
+          this.setState({
+          networkTimeOutCounterTrans:counter,
+          });
+        if(flag === "stockPrices")
+          this.setState({
+            networkTimeOutCounterPrices:counter,
+          });
+    }
 
-        newcounter = (newcounter+1)%3;
-        this.setState({
-            networkTimeOut: newTimeout,
-            networkTimeOutCounter: newcounter,
-        });
-    };
+    retryStream = (func: Function, flag: string) => {
+      this.setState({
+        connectionStatus: false,
+      });
+      let counter = this.getStreamCounter(flag);
+       if(counter != -1 && counter <= 3600)
+       {
+          counter = counter * 2;
+          this.setStreamCounter(flag,counter);
+          const endtime = moment();
+          if(endtime.diff(this.state.networkTimeOut) >= 20000)
+            {
+              this.setState({
+                networkTimeOut: moment(),
+              });
+              PNotify.removeAll();
+              showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (counter) + "s", "Network error");
+            }
+          setTimeout(func,counter*1000);
+      }
+    }
 
     handleNotificationsStream = async () => {
         const sessionMd = this.props.sessionMd;
@@ -175,7 +215,7 @@ export class Main extends React.Component<MainProps, MainState> {
             });
         } catch(e) {
             console.log(e);
-            return this.retryStream(this.handleNotificationsStream.bind(this));
+            return this.retryStream(this.handleNotificationsStream.bind(this),"notifications");
         }
 
         // subscribe to the news ones
@@ -190,7 +230,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch(e) {
             console.log(e);
-            return this.retryStream(this.handleNotificationsStream.bind(this));
+            return this.retryStream(this.handleNotificationsStream.bind(this),"notifications");
         }
 
         this.connectionSucceeded();
@@ -219,7 +259,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch(e) {
             console.log(e);
-            return this.retryStream(this.handleNotificationsStream.bind(this));
+            return this.retryStream(this.handleNotificationsStream.bind(this),"notifications");
         }
     };
 
@@ -243,7 +283,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch(e) {
             console.log(e);
-            return this.retryStream(this.handleStockPricesStream.bind(this));
+            return this.retryStream(this.handleStockPricesStream.bind(this), "stockPrices");
         }
 
         this.connectionSucceeded();
@@ -278,7 +318,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch(e) {
             console.log(e);
-            return this.retryStream(this.handleStockPricesStream.bind(this));
+            return this.retryStream(this.handleStockPricesStream.bind(this), "stockPrices");
         }
     };
 
@@ -296,7 +336,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch(e) {
             console.log(e);
-            return this.retryStream(this.handleTransactionsStream.bind(this));
+            return this.retryStream(this.handleTransactionsStream.bind(this), "transactions");
         }
 
         // Getting copy of stocksOwnedMap
@@ -357,7 +397,7 @@ export class Main extends React.Component<MainProps, MainState> {
         }
         catch (e) {
             console.log(e);
-            return this.retryStream(this.handleTransactionsStream.bind(this));
+            return this.retryStream(this.handleTransactionsStream.bind(this), "transactions");
         }
     }
 
@@ -390,6 +430,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userName={this.props.user.getName()}
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    connectionStatus={this.state.connectionStatus}
                     stocksOwnedMap={this.state.stocksOwnedMap}
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
@@ -403,6 +444,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     notifications={this.state.notifications}
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    connectionStatus={this.state.connectionStatus}
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     stocksOwnedMap={this.state.stocksOwnedMap}
@@ -415,6 +457,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     stockDetailsMap={this.state.stockDetailsMap}
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    connectionStatus={this.state.connectionStatus}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
@@ -424,6 +467,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     leaderboardCount={this.props.constantsMap['LEADERBOARD_COUNT']}
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    connectionStatus={this.state.connectionStatus}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
@@ -433,6 +477,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     newsCount={this.props.constantsMap["MARKET_EVENT_COUNT"]}
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    connectionStatus={this.state.connectionStatus}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
@@ -443,6 +488,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    connectionStatus={this.state.connectionStatus}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     disclaimerElement={this.disclaimerElement}
                 />
@@ -456,6 +502,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     stocksOwnedMap={this.state.stocksOwnedMap}
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    connectionStatus={this.state.connectionStatus}
                     depositRate={this.props.constantsMap['MORTGAGE_DEPOSIT_RATE']}
                     retrieveRate={this.props.constantsMap['MORTGAGE_RETRIEVE_RATE']}
                     latestTransaction={this.state.latestTransaction}
@@ -466,6 +513,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 return <Help
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    connectionStatus={this.state.connectionStatus}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
