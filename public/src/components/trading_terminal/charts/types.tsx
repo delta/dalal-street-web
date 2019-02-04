@@ -5,5 +5,14 @@ export type ohlcPointType = {
     h: number,
     l: number,
     c: number,
+    t: number
+}
+
+export type ohlcvPointType = {
+    o: number,
+    h: number,
+    l: number,
+    c: number,
     t: number,
+    v: number
 }

@@ -1,8 +1,9 @@
 import * as React from "react";
 import { Fragment } from "react";
-import { intervalType, ohlcPointType } from "./types";
+import { intervalType, ohlcPointType, ohlcvPointType } from "./types";
 import { Candlestick } from "./candlestick";
 import { LineChart } from "./lineChart";
+import {VolumeChart} from "./volume";
 import { GetStockHistoryRequest, GetStockHistoryResponse, StockHistoryResolution} from "../../../../proto_build/actions/GetStockHistory_pb";
 import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService} from "../../../../proto_build/DalalMessage_pb_service";
@@ -21,22 +22,22 @@ export interface ChartsProps {
 }
 
 export interface intervalData {
-	"1min" : ohlcPointType[],
-	"5min" : ohlcPointType[],
-	"15min" : ohlcPointType[],
-	"30min": ohlcPointType[],
-	"60min" : ohlcPointType[],
-	"1d": ohlcPointType[],
+	"1min" : ohlcvPointType[],
+	"5min" : ohlcvPointType[],
+	"15min" : ohlcvPointType[],
+	"30min": ohlcvPointType[],
+	"60min" : ohlcvPointType[],
+	"1d": ohlcvPointType[],
 }
 
-type chartType = "candlestick" | "line";
+type chartType = "candlestick" | "line" | "volume";
 
 interface ChartsState {
 	isLoading: boolean
 	stockId: number
 	chartType: chartType
 	interval: intervalType
-	data: ohlcPointType[]
+	data: ohlcvPointType[]
 	subscriptionId: SubscriptionId
 	textDesc: string
 }
@@ -74,7 +75,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 	}
 
 	getOldStockHistory = async (stockId: number) => {
-		let globalIntervalData: ohlcPointType[] = [];
+		let globalIntervalData: ohlcvPointType[] = [];
 
 		let historyReq = new GetStockHistoryRequest();
 		historyReq.setStockId(stockId);
@@ -93,6 +94,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 					h: history.getHigh(),
 					l: history.getLow(),
 					c: history.getClose(),
+					v: history.getVolume(),
 					t: Date.parse(history.getCreatedAt()),
 				});
 			});
@@ -142,6 +144,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 				h: newUpdate.getHigh(),
 				l: newUpdate.getLow(),
 				c: newUpdate.getClose(),
+				v: newUpdate.getVolume(),
 				t: Date.parse(newUpdate.getCreatedAt()),
 			});
 
@@ -185,8 +188,11 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 
 		if (this.state.chartType == "candlestick") {
 			$("#candles-chart-container").addClass("active");
-		} else {
+		} else if(this.state.chartType == "line") {
 			$("#line-chart-container").addClass("active");
+		}
+		else{
+			$("#volume-chart-container").addClass("active");
 		}
 
 		this.getOldStockHistory(this.props.stockId);
@@ -199,7 +205,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 	}
 
 	onChartTabChange = (tabPath: string) => {
-		const chartType = tabPath.indexOf("candlestick") != -1 ? "candlestick" : "line";
+		const chartType = tabPath.indexOf("candlestick") != -1 ?  "candlestick" : tabPath.indexOf("line") != -1? "line": "volume";
 		this.setState({chartType: chartType});
 	}
 
@@ -209,6 +215,8 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 			<div id="charts-menu-container" className="ui pointing secondary menu">
 				<a className="item active" data-tab="candles-chart-container">Candlesticks</a>
 				<a className="item" data-tab="line-chart-container">Line</a>
+				<a className="item" data-tab="volume-chart-container">Volume</a>
+
 				<span className="item">
 					<div id="chart-interval-dropdown" className="ui inline dropdown">
 						<div className="text">1min</div>
@@ -234,6 +242,8 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 			<div className={!this.state.isLoading ? "" : "hidden"}>
 			<Candlestick stockId={this.props.stockId} data={this.state.data} tabName={"candles-chart-container"} interval={this.state.interval} />
 			<LineChart stockId={this.props.stockId} data={this.state.data} tabName={"line-chart-container"} interval={this.state.interval} />
+			<VolumeChart stockId={this.props.stockId} data={this.state.data} tabName={"volume-chart-container"} interval={this.state.interval} />
+
 			</div>
 			</Fragment>
 		);

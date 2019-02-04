@@ -1,13 +1,13 @@
 import * as React from "react";
 import { Fragment } from "react";
 
-import { ohlcPointType, intervalType } from "./types";
+import { ohlcPointType,ohlcvPointType, intervalType } from "./types";
 import { getUnit } from "./utils";
 
 export interface CandlestickProps {
 	stockId: number
 	tabName: string
-	data: ohlcPointType[]
+	data: ohlcvPointType[]
 	interval: intervalType
 }
 
@@ -21,10 +21,15 @@ export class Candlestick extends React.Component<CandlestickProps, {}> {
 		super(props);
 	}
 
+	ohlcvToOnlyOhlc(p: ohlcvPointType) {
+		let ohlc : ohlcPointType = { o: p.o, h: p.h, l: p.l, c: p.c, t: p.t};
+		return ohlc;
+    }
+
 	componentWillReceiveProps(nextProps: CandlestickProps) {
 		// update the data and the chart, don't render the thing again pls
 		this.chartElem.data.datasets = [{
-			data: nextProps.data,
+			data: nextProps.data.map(this.ohlcvToOnlyOhlc),
 			fractionalDigitsCount: 2,
 		}];
 		this.chartElem.options.scales.xAxes[0].time.unit = getUnit(this.props.interval);
@@ -34,7 +39,7 @@ export class Candlestick extends React.Component<CandlestickProps, {}> {
 	componentDidMount() {
 		const cvs = document.getElementById("candles-chart") as HTMLCanvasElement;
 		const ctx = cvs!.getContext('2d')!;
-		const data = this.props.data;
+		const data = this.props.data.map(this.ohlcvToOnlyOhlc);
 
 		this.chartElem = new Chart(ctx, {
 			type: 'candlestick',
