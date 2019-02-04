@@ -103,9 +103,9 @@ export class Main extends React.Component<MainProps, MainState> {
             stockDetails: [],
             latestTransaction: new Transaction_pb,
             networkTimeOut: moment(),
-            networkTimeOutCounterNotifs: 10,
-            networkTimeOutCounterTrans: 10,
-            networkTimeOutCounterPrices: 10,
+            networkTimeOutCounterNotifs: 2,
+            networkTimeOutCounterTrans: 2,
+            networkTimeOutCounterPrices: 2,
             successCounter: 0,
             connectionStatus: true,
         };
@@ -142,9 +142,9 @@ export class Main extends React.Component<MainProps, MainState> {
             this.setState({
                 networkTimeOut: moment(),
                 successCounter: 0,
-                networkTimeOutCounterNotifs: 10,
-                networkTimeOutCounterTrans: 10,
-                networkTimeOutCounterPrices: 10,
+                networkTimeOutCounterNotifs: 2,
+                networkTimeOutCounterTrans: 2,
+                networkTimeOutCounterPrices: 2,
                 connectionStatus: true,
             });
         } else {
@@ -190,13 +190,13 @@ export class Main extends React.Component<MainProps, MainState> {
           counter = counter * 2;
           this.setStreamCounter(flag,counter);
           const endtime = moment();
-          if(endtime.diff(this.state.networkTimeOut) >= 120000)
+          if(endtime.diff(this.state.networkTimeOut) >= 20000)
             {
               this.setState({
                 networkTimeOut: moment(),
               });
               PNotify.removeAll();
-              showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (Math.round(counter/60)) + " mins", "Network error");
+              showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (counter) + "s", "Network error");
             }
           setTimeout(func,counter*1000);
       }
