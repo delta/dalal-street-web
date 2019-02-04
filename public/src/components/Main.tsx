@@ -29,6 +29,7 @@ import * as jspb from "google-protobuf";
 
 declare var $: any;
 declare var PNotify: any;
+declare var moment: any;
 
 export interface MainProps {
     sessionMd: 		Metadata
@@ -101,10 +102,10 @@ export class Main extends React.Component<MainProps, MainState> {
             transactionSubcriptionId: new SubscriptionId,
             stockDetails: [],
             latestTransaction: new Transaction_pb,
-            networkTimeOut: 1000,
-            networkTimeOutCounterNotifs: 1,
-            networkTimeOutCounterTrans: 1,
-            networkTimeOutCounterPrices: 1,
+            networkTimeOut: moment(),
+            networkTimeOutCounterNotifs: 10,
+            networkTimeOutCounterTrans: 10,
+            networkTimeOutCounterPrices: 10,
             successCounter: 0,
             connectionStatus: true,
         };
@@ -139,11 +140,11 @@ export class Main extends React.Component<MainProps, MainState> {
         if (this.state.successCounter == 2) {
             showSuccessNotif("Connected to server", "Success");
             this.setState({
-                networkTimeOut: 1000,
+                networkTimeOut: moment(),
                 successCounter: 0,
-                networkTimeOutCounterNotifs: 1,
-                networkTimeOutCounterTrans: 1,
-                networkTimeOutCounterPrices: 1,
+                networkTimeOutCounterNotifs: 10,
+                networkTimeOutCounterTrans: 10,
+                networkTimeOutCounterPrices: 10,
                 connectionStatus: true,
             });
         } else {
@@ -184,16 +185,20 @@ export class Main extends React.Component<MainProps, MainState> {
         connectionStatus: false,
       });
       let counter = this.getStreamCounter(flag);
-       if(counter != -1 && counter <= 1024)
+       if(counter != -1 && counter <= 3600)
        {
           counter = counter * 2;
           this.setStreamCounter(flag,counter);
-          if(this.state.networkTimeOutCounterNotifs === this.state.networkTimeOutCounterTrans && this.state.networkTimeOutCounterNotifs=== this.state.networkTimeOutCounterPrices)
+          const endtime = moment();
+          if(moment.duration(endtime.diff(this.state.networkTimeOut)) >= 120000)
             {
+              this.setState({
+                networkTimeOut: moment(),
+              });
               PNotify.removeAll();
-              showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (counter) + "s", "Network error");
+              showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (Math.round(counter/60)) + "mins", "Network error");
             }
-          setTimeout(func,counter*this.state.networkTimeOut);
+          setTimeout(func,counter*1000);
       }
     }
 
