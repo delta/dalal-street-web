@@ -120,8 +120,8 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
         return (
             <Fragment>
                 <div className="ui pointing secondary menu place-order-box-menu">
-                    <a className="item active" data-tab="market">Market</a>
-                    <a className="item" data-tab="limit">Limit</a>
+                    <a className="item active " data-tab="limit">Limit</a>
+                    <a className="item" data-tab="market">Market</a>
                     <a className="item" data-tab="stoploss">Stoploss</a>
                     <h3 className="panel-header item right">Place Order</h3>
                 </div>
