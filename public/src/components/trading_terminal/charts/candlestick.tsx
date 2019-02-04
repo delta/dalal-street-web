@@ -22,10 +22,8 @@ export class Candlestick extends React.Component<CandlestickProps, {}> {
 	}
 
 	ohlcvToOnlyOhlc(p: ohlcvPointType) {
-		var ohlc : ohlcPointType = { o: p.o, h: p.h, l: p.l, c: p.c, t: p.t};
-		
+		let ohlc : ohlcPointType = { o: p.o, h: p.h, l: p.l, c: p.c, t: p.t};
 		return ohlc;
-        
     }
 
 	componentWillReceiveProps(nextProps: CandlestickProps) {

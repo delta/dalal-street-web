@@ -244,8 +244,6 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 		const openAsks = this.state.openAsks;
 		const openBids = this.state.openBids;
 
-		console.log("OPENASKS AND OPENBIDS", openAsks, openBids);
-
 		// Check if any order has been placed
 		if (Object.keys(openAsks).length === 0 && Object.keys(openBids).length === 0) {
 			return (
