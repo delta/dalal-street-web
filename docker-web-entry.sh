@@ -13,6 +13,7 @@ export PATH=$PATH:$(pwd)/protobuf/bin
 # Install dependencies
 echo "######## Installing dependencies ######"
 npm install
+rm -rf node_modules/@types/text-encoding/
 
 # Update protoc-gen
 echo "######## Updating protoc-gen ########"
