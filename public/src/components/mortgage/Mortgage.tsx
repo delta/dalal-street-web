@@ -152,8 +152,9 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
             showNotif("Enter a positive integer", "Invalid input");
             return;
         }
-        if (stockQuantity > this.props.stocksOwnedMap[stockId]) {
-            showNotif("You own only " + this.props.stocksOwnedMap[stockId] + " stocks", "Invalid input");
+        const stocksOwned: number = this.props.stocksOwnedMap[stockId]? this.props.stocksOwnedMap[stockId]: 0;
+        if (stockQuantity > stocksOwned) {
+            showNotif("You own only " + stocksOwned + " stocks", "Invalid input");
             return;
         }
         const mortgageStocksRequest = new MortgageStocksRequest();
