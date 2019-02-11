@@ -380,8 +380,17 @@ export class Main extends React.Component<MainProps, MainState> {
                         case TransactionType_pb.MORTGAGE_TRANSACTION:
                             notif = `You have ${total < 0 ? "retrieved" : "mortgaged"} ${Math.abs(stockQty)} ${stockOrStocks} of ${stockName} @ ₹ ${-total/stockQty}`
                             break;
+                        case TransactionType_pb.TAX_TRANSACTION:
+                            notif = `A total of ₹ ${total} has been deducted from you as tax on the last profit you made`;
+                            break
+                        case TransactionType_pb.PLACE_ORDER_TRANSACTION:
+                            notif = `A total of ${ stockQty < 0 ? Math.abs(stockQty) + " stocks" : "₹ " + Math.abs(total) } has been reserved for the order placed.`;
+                            break;
+                        case TransactionType_pb.CANCEL_ORDER_TRANSACTION:
+                            notif = `A total of ${ stockQty < 0 ? Math.abs(stockQty) + " stocks" : "₹ " + Math.abs(total) } has been returned for cancelling the order.`;
+                            break;
                         case TransactionType_pb.ORDER_FILL_TRANSACTION:
-                            notif = `You have ${total < 0 ? "bought" : "sold"} ${Math.abs(stockQty)} ${stockOrStocks} of ${stockName} @ ₹ ${price} via an order`;
+                            notif = `${stockQty > 0 ? "Buy ":"Sell"} order completed successfully! `;
                             break;
                         default:
                             console.error("Unexpected transaction type ", newTransaction.getType());
