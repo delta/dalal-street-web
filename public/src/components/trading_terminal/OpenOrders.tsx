@@ -210,7 +210,6 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 					openBids: currOpenBids
 				});
 			}
-			showSuccessNotif("Order cancelled successfully!");
 		} catch(e) {
 			// error could be grpc error or Dalal error. Both handled in exception
 			console.log("Error happened! ", e.statusCode, e.statusMessage, e);
