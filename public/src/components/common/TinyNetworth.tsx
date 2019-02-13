@@ -22,6 +22,7 @@ export class TinyNetworth extends React.Component<TinyNetworthProps, {}> {
     render() {
         const stockWorth = this.props.userTotal - this.props.userCash;
         const stockWorthClass = stockWorth >= 0 ? "green" : "red";
+        const netWorthClass = this.props.userTotal >= 0 ? "green" : "red";
         const connection = this.props.connectionStatus == true ? "Connected" : "Disconnected";
         const connectionStatusClass = this.props.connectionStatus == true ? "green" : "red";
         return (
@@ -45,7 +46,7 @@ export class TinyNetworth extends React.Component<TinyNetworthProps, {}> {
                     </h3>
                 </div>
                 <div className="ui five wide column box" data-content="Your net worth">
-                    <h3 className="ui center aligned green header inverted">
+                    <h3 className={"ui center aligned " + netWorthClass + " header inverted"}>
                         <i className="database icon very small"></i>
                         {addCommas(this.props.userTotal)}
                     </h3>

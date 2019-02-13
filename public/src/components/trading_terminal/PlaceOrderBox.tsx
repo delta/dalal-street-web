@@ -125,7 +125,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                     <a className="item" data-tab="stoploss">Stoploss</a>
                     <h3 className="panel-header item right">Place Order</h3>
                 </div>
-                <div className="ui tab inverted active" data-tab="market">
+                <div className="ui tab inverted " data-tab="market">
                     <div className="ui top attached tabular menu inverted place-order-box-menu">
                         <a className="active item green" data-tab="market/buy">BUY</a>
                         <a className="item red" data-tab="market/sell">SELL</a>
@@ -153,7 +153,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         </div>
                     </div>
                 </div>
-                <div className="ui tab inverted" data-tab="limit">
+                <div className="ui tab inverted active" data-tab="limit">
                     <div className="ui top attached tabular menu inverted place-order-box-menu">
                         <a className="item active green" data-tab="limit/buy">BUY</a>
                         <a className="item red" data-tab="limit/sell">SELL</a>
