@@ -103,9 +103,9 @@ export class Main extends React.Component<MainProps, MainState> {
             stockDetails: [],
             latestTransaction: new Transaction_pb,
             networkTimeOut: moment(),
-            networkTimeOutCounterNotifs: 2,
-            networkTimeOutCounterTrans: 2,
-            networkTimeOutCounterPrices: 2,
+            networkTimeOutCounterNotifs: 1,
+            networkTimeOutCounterTrans: 1,
+            networkTimeOutCounterPrices: 1,
             successCounter: 0,
             connectionStatus: true,
         };
@@ -142,9 +142,9 @@ export class Main extends React.Component<MainProps, MainState> {
             this.setState({
                 networkTimeOut: moment(),
                 successCounter: 0,
-                networkTimeOutCounterNotifs: 2,
-                networkTimeOutCounterTrans: 2,
-                networkTimeOutCounterPrices: 2,
+                networkTimeOutCounterNotifs: 1,
+                networkTimeOutCounterTrans: 1,
+                networkTimeOutCounterPrices: 1,
                 connectionStatus: true,
             });
         } else {
@@ -187,7 +187,7 @@ export class Main extends React.Component<MainProps, MainState> {
       let counter = this.getStreamCounter(flag);
        if(counter != -1 && counter <= 3600)
        {
-          counter = counter * 2;
+          counter = counter * 1.24;
           this.setStreamCounter(flag,counter);
           const endtime = moment();
           if(endtime.diff(this.state.networkTimeOut) >= 20000)
@@ -196,8 +196,9 @@ export class Main extends React.Component<MainProps, MainState> {
                 networkTimeOut: moment(),
               });
               PNotify.removeAll();
-              showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (counter) + "s", "Network error");
-            }
+
+              showErrorNotif("Unable to connect to server. Please check your internet connection. Retrying in " + (Math.round(counter)) + "s", "Network error");
+              }
           setTimeout(func,counter*1000);
       }
     }
@@ -210,6 +211,16 @@ export class Main extends React.Component<MainProps, MainState> {
         notifReq.setCount(10);
         try {
             const notifs = await DalalActionService.getNotifications(notifReq, sessionMd);
+            if(notifs.getNotificationsList().length === 0){
+              let blankNotif : Notification_pb = new Notification_pb;
+              blankNotif.setText("Nothing new here");
+              let blankNotifList = this.state.notifications;
+              blankNotifList[0] = blankNotif;
+               this.setState({
+                 notifications:blankNotifList
+               });
+             }
+               else
             this.setState({
                 notifications: notifs.getNotificationsList()
             });
@@ -412,7 +423,6 @@ export class Main extends React.Component<MainProps, MainState> {
         //and hence react's history wont be changing ie
         //pushing to path in App cannot be retrieved by Route exact path
         //because the history for react will not have those changes reflected
-
         if (!this.state.isMarketOpen) {
             $("#market-close-modal").modal({
                 closable:false,
