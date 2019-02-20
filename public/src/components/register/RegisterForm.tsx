@@ -121,7 +121,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
         } catch (e) {
             console.log(e);
             this.setState({
-                error: e.IsGrpcError ? "Unable to connect to the server. Please check your internet connection." : e.statusMessage,
+                error: e.isGrpcError ? "Unable to connect to the server. Please check your internet connection." : e.statusMessage,
                 successful: false,
             });
         }
