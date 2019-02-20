@@ -79,7 +79,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
             // no need to show notif. Transaction will show a notif for this.
         } catch (e) {
             console.log("Error happened while placing order! ", e.statusCode, e.statusMessage, e);
-            if (e.IsGrpcError) {
+            if (e.isGrpcError) {
                 showErrorNotif("Oops! Unable to reach server. Please check your internet connection!");
             } else {
                 showErrorNotif("Oops! Something went wrong! " + e.statusMessage);
