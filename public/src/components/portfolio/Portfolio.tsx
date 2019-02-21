@@ -21,6 +21,7 @@ export interface PortfolioProps {
     notifications: Notification_pb[],
     transactionCount: number,
     userCash: number,
+    userReservedCash: number,
     userTotal: number,
     connectionStatus: boolean,
     stockBriefInfoMap: { [index: number]: StockBriefInfo },
@@ -43,7 +44,7 @@ export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
         return (
             <Fragment>
                 <div className="row" id="top_bar">
-                    <TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} />
+                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} />
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>
@@ -58,6 +59,7 @@ export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
                     <div id="networth-container" className="row">
                         <Networth
                             userCash={this.props.userCash}
+                            userReservedCash={this.props.userReservedCash}
                             userTotal={this.props.userTotal}
                         />
                     </div>

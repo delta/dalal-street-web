@@ -28,6 +28,7 @@ export interface TradingTerminalProps {
 
 	userName: string
 	userCash: number
+	userReservedCash: number
 	userTotal: number
 	connectionStatus: boolean
 
@@ -349,7 +350,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 							defaultStock={this.state.currentStockId} />
 					</div>
 
-					<TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus}/>
+					<TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus}/>
 					<div id="notif-component">
 						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
 					</div>

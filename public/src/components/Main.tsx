@@ -47,6 +47,7 @@ export interface MainProps {
 interface MainState {
     notifications: 	Notification_pb[]
     userCash:		number
+    userReservedCash: number
     userTotal:		number
 
     stocksOwnedMap:    { [index:number]: number } // stocks owned by user for a given stockid
@@ -92,6 +93,7 @@ export class Main extends React.Component<MainProps, MainState> {
         this.state = {
             notifications: [],
             userCash: this.props.user.getCash(),
+            userReservedCash: this.props.user.getReservedCash(),
             userTotal: this.calculateTotal(this.props.user.getCash(), this.props.stocksOwnedMap, this.props.stockDetailsMap),
             stocksOwnedMap: this.props.stocksOwnedMap,
             stockDetailsMap: this.props.stockDetailsMap,
@@ -447,6 +449,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     sessionMd={this.props.sessionMd}
                     notifications={this.state.notifications}
                     userName={this.props.user.getName()}
+                    userReservedCash={this.state.userReservedCash}
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
@@ -462,6 +465,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     sessionMd={this.props.sessionMd}
                     notifications={this.state.notifications}
                     userCash={this.state.userCash}
+                    userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
@@ -475,6 +479,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 return <Market sessionMd={this.props.sessionMd}
                     stockDetailsMap={this.state.stockDetailsMap}
                     userCash={this.state.userCash}
+                    userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
                     notifications={this.state.notifications}
@@ -485,6 +490,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     sessionMd={this.props.sessionMd}
                     leaderboardCount={this.props.constantsMap['LEADERBOARD_COUNT']}
                     userCash={this.state.userCash}
+                    userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
                     notifications={this.state.notifications}
@@ -495,6 +501,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     sessionMd={this.props.sessionMd}
                     newsCount={this.props.constantsMap["MARKET_EVENT_COUNT"]}
                     userCash={this.state.userCash}
+                    userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
                     notifications={this.state.notifications}
@@ -506,6 +513,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     notifications={this.state.notifications}
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     userCash={this.state.userCash}
+                    userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
@@ -520,6 +528,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     stocksOwnedMap={this.state.stocksOwnedMap}
                     userCash={this.state.userCash}
+                    userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
                     depositRate={this.props.constantsMap['MORTGAGE_DEPOSIT_RATE']}
@@ -531,6 +540,7 @@ export class Main extends React.Component<MainProps, MainState> {
             case "/help":
                 return <Help
                     userCash={this.state.userCash}
+                    userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
                     notifications={this.state.notifications}

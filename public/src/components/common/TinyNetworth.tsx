@@ -6,6 +6,7 @@ declare var $: any;
 
 export interface TinyNetworthProps {
     userCash: number,
+    userReservedCash: number,
     userTotal: number,
     connectionStatus: boolean,
 }
@@ -37,6 +38,12 @@ export class TinyNetworth extends React.Component<TinyNetworthProps, {}> {
                     <h3 className={"ui center aligned green header inverted"}>
                         <i className="fa fa-money"></i> &nbsp;&nbsp;
                         {addCommas(this.props.userCash)}
+                    </h3>
+                </div>
+                <div className="ui six wide column box" data-content="Reserved Cash">
+                    <h3 className={"ui center aligned red header inverted"}>
+                        <i className="fa fa-money"></i> &nbsp;&nbsp;
+                        {addCommas(this.props.userReservedCash)}
                     </h3>
                 </div>
                 <div className="ui six wide column box" data-content="Worth of stocks owned by you">
