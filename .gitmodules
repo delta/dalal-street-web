@@ -3,4 +3,5 @@
 	url = git@github.com:delta/dalal-street-proto.git
 [submodule "ts-protoc-gen"]
 	path = ts-protoc-gen
-	url = git@github.com:thakkarparth007/ts-protoc-gen
+	url = git@github.com:delta/ts-protoc-gen
+
