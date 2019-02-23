@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   cache: true,
@@ -40,8 +41,24 @@ module.exports = {
         'NODE_ENV': JSON.stringify('production')
       }
     }),
+
+
+      new UglifyJsPlugin({
+        test: /\.js($|\?)/i,
+        sourceMap: true,
+        uglifyOptions: {
+          mangle: {
+            keep_fnames: true,
+          },
+          compress: {
+            warnings: false,
+          },
+          output: {
+            beautify: false,
+          },
+        },
+      }),
     new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin(),
     new webpack.optimize.AggressiveMergingPlugin(),
     ],
   resolve: {
