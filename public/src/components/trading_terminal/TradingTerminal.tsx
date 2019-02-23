@@ -74,7 +74,6 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					placement: 'right',
 					styles: {
 						options: {
-							width: 300,
 						}
 					},
 					target: '.rupee',
@@ -85,7 +84,6 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					placement: 'right',
 					styles: {
 					  options: {
-						width: 300,
 					  }
 					},
 					target: '.book',
@@ -96,7 +94,6 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					placement: 'right',
 					styles: {
 					  options: {
-						width: 300,
 					  }
 					},
 					target: '.chart',
@@ -107,7 +104,6 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					placement: 'right',
 					styles: {
 					  options: {
-						width: 300,
 					  }
 					},
 					target: '.university',
@@ -118,7 +114,6 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					placement: 'right',
 					styles: {
 					  options: {
-						width: 300,
 					  }
 					},
 					target: '.suitcase',
@@ -129,7 +124,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					placement: 'right',
 					styles: {
 					  options: {
-						width: 300,
+
 					  }
 					},
 					target: '.newspaper',
@@ -140,7 +135,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					placement: 'right',
 					styles: {
 					  options: {
-						width: 300,
+
 					  }
 					},
 					target: '.trophy',
@@ -151,7 +146,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					placement: 'right',
 					styles: {
 					  options: {
-						width: 300,
+
 					  }
 					},
 					target: '.help',
@@ -173,7 +168,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					placement: 'bottom',
 					styles: {
 					  options: {
-						width: 300,
+
 					  }
 					},
 					target: '.search',
@@ -184,7 +179,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					placement: 'bottom',
 					styles: {
 					  options: {
-						width: 300,
+
 					  }
 					},
 					target: '#notifbutton',
@@ -195,7 +190,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					placement: 'right',
 					styles: {
 					  options: {
-						width: 300,
+
 					  }
 					},
 					target: '#market-depth',
@@ -222,7 +217,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					placement: 'right',
 					styles: {
 					  options: {
-						width: 300,
+
 					  }
 					},
 					target: '#trading-history',
@@ -233,7 +228,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					placement: 'left',
 					styles: {
 					  options: {
-						width: 300,
+
 					  },
 					  spotlight: {
 						backgroundColor: '#ffffff00',
@@ -247,7 +242,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					placement: 'right',
 					styles: {
 					  options: {
-						width: 300,
+
 					  },
 					  spotlight: {
 						backgroundColor: '#ffffff00',
@@ -261,7 +256,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					placement: 'left',
 					styles: {
 					  options: {
-						width: 300,
+
 					  },
 					  spotlight: {
 						backgroundColor: '#ffffff00',
