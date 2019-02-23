@@ -30,7 +30,7 @@ export interface intervalData {
 	"1d": ohlcvPointType[],
 }
 
-type chartType = "candlestick" | "line" | "volume";
+type chartType = "line" | "candlestick" | "volume";
 
 interface ChartsState {
 	isLoading: boolean
@@ -66,7 +66,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 		this.state = {
 			isLoading: false, // loading happens in componentDidMount()
 			stockId: props.stockId,
-			chartType: "candlestick",
+			chartType: "line",
 			interval: "1min",
 			data: [],
 			subscriptionId: new SubscriptionId,
@@ -80,7 +80,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 		let historyReq = new GetStockHistoryRequest();
 		historyReq.setStockId(stockId);
 		historyReq.setResolution(intervalTypeToResolutionProto[this.state.interval]);
-		
+
 		this.setState({
 			isLoading: true,
 		});
@@ -101,7 +101,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 
 			// this is a beautification thing. Our charts work nicely with 61 entries.
 			// this will get removed after the first minute
-			
+
 			let dummy_data = $.extend(true, {}, globalIntervalData[0])
 			dummy_data.t = dummy_data.t - 60000;
 			globalIntervalData.unshift(dummy_data);
@@ -116,7 +116,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 			this.setState({
 				isLoading: false,
 				textDesc:e.statusMessage,
-			});	
+			});
 		}
 	}
 
@@ -205,7 +205,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 	}
 
 	onChartTabChange = (tabPath: string) => {
-		const chartType = tabPath.indexOf("candlestick") != -1 ?  "candlestick" : tabPath.indexOf("line") != -1? "line": "volume";
+		const chartType = tabPath.indexOf("line") != -1 ?  "line" : tabPath.indexOf("candlestick") != -1? "candlestick": "volume";
 		this.setState({chartType: chartType});
 	}
 
@@ -213,8 +213,8 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 		return (
 			<Fragment>
 			<div id="charts-menu-container" className="ui pointing secondary menu">
-				<a className="item active" data-tab="candles-chart-container">Candlesticks</a>
-				<a className="item" data-tab="line-chart-container">Line</a>
+				<a className="item active" data-tab="line-chart-container">Line</a>
+				<a className="item" data-tab="candles-chart-container">Candlesticks</a>
 				<a className="item" data-tab="volume-chart-container">Volume</a>
 
 				<span className="item">
@@ -240,8 +240,8 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 				<p></p>
 			</div>
 			<div className={!this.state.isLoading ? "" : "hidden"}>
-			<Candlestick stockId={this.props.stockId} data={this.state.data} tabName={"candles-chart-container"} interval={this.state.interval} />
 			<LineChart stockId={this.props.stockId} data={this.state.data} tabName={"line-chart-container"} interval={this.state.interval} />
+			<Candlestick stockId={this.props.stockId} data={this.state.data} tabName={"candles-chart-container"} interval={this.state.interval} />
 			<VolumeChart stockId={this.props.stockId} data={this.state.data} tabName={"volume-chart-container"} interval={this.state.interval} />
 
 			</div>
