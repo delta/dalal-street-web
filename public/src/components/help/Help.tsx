@@ -8,6 +8,7 @@ declare var $: any;
 
 export interface HelpProps {
     userCash: number,
+    userReservedCash: number,
     userTotal: number,
     connectionStatus: boolean,
     notifications: Notification_pb[],
@@ -23,7 +24,7 @@ export class Help extends React.Component<HelpProps, {}> {
         return (
             <Fragment>
                 <div className="row" id="top_bar">
-                    <TinyNetworth userCash={this.props.userCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus}/>
+                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus}/>
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>
