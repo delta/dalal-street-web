@@ -371,6 +371,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 								stockId={this.state.currentStockId}
 								currentPrice={this.state.currentPrice}
 								sessionMd={this.props.sessionMd}
+								isMarketOpen={this.props.isMarketOpen}
 							  orderFeePercent={this.props.constantsMap['ORDER_FEE_PERCENT']} />
 						</div>
 

@@ -22,6 +22,7 @@ export interface MarketProps {
     userReservedCash: number,
     userTotal: number,
     connectionStatus: boolean,
+    isMarketOpen: boolean,
     sessionMd: Metadata,
     stockDetailsMap: { [index: number]: Stock_pb },
     notifications: Notification_pb[],
@@ -97,6 +98,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
     }
 
     render() {
+        $("#exchange-button").disabled = this.props.isMarketOpen;
         let history: any[] = [];
         let percentageIncrease: number;
         let diffClass: string;
@@ -117,7 +119,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
                     <td className={"volume " + diffClass}><strong>{percentageIncrease}{" %"}</strong></td>
                     <td className="volume"><strong>{currentStock.getStocksInExchange()}</strong></td>
                     <td className="volume"><strong><input id={"input-" + currentStock.getId()} placeholder="0" className="market-input" /></strong></td>
-                    <td className="volume"><strong><button className="ui inverted green button" onClick={(e) => { this.purchaseFromExchange(e, currentStock.getId()) }}>Buy</button></strong></td>
+                    <td className="volume"><strong><button id="exchange-button" className="ui inverted green button" onClick={(e) => { this.purchaseFromExchange(e, currentStock.getId()) }}>Buy</button></strong></td>
                 </tr>
             );
         }
