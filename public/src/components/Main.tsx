@@ -518,14 +518,6 @@ export class Main extends React.Component<MainProps, MainState> {
         //and hence react's history wont be changing ie
         //pushing to path in App cannot be retrieved by Route exact path
         //because the history for react will not have those changes reflected
-        if (!this.state.isMarketOpen) {
-            $("#market-close-modal").modal({
-                closable:false,
-            }).modal("show");
-        }
-        else {
-            $("#market-close-modal").modal("hide");
-        }
 
         switch (window.location.pathname) {
             case "/trade":
@@ -569,6 +561,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     connectionStatus={this.state.connectionStatus}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
+                    isMarketOpen={this.state.isMarketOpen}
                 />;
             case "/leaderboard":
                 return <Leaderboard
@@ -620,6 +613,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     retrieveRate={this.props.constantsMap['MORTGAGE_RETRIEVE_RATE']}
                     latestTransaction={this.state.latestTransaction}
                     disclaimerElement={this.disclaimerElement}
+                    isMarketOpen={this.state.isMarketOpen}
                 />
 
             case "/help":

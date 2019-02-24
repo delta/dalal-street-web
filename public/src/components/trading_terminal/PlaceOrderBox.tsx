@@ -24,6 +24,7 @@ export interface PlaceOrderBoxProps{
     stockId: number,
     currentPrice: number,
     sessionMd: Metadata,
+    isMarketOpen: boolean,
     orderFeePercent: number,// various constants. Documentation found in server/actionservice/Login method
 }
 
@@ -117,6 +118,10 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
     };
 
     render() {
+
+          $("#buy-button").disabled = this.props.isMarketOpen;
+          $("#sell-button").disabled = this.props.isMarketOpen;
+
         return (
             <Fragment>
                 <div className="ui pointing secondary menu place-order-box-menu">
@@ -127,8 +132,8 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                 </div>
                 <div className="ui tab inverted " data-tab="market">
                     <div className="ui top attached tabular menu inverted place-order-box-menu">
-                        <a className="active item green" data-tab="market/buy">BUY</a>
-                        <a className="item red" data-tab="market/sell">SELL</a>
+                        <a id="buy-button" className="active item green" data-tab="market/buy">BUY</a>
+                        <a id="sell-button" className="item red" data-tab="market/sell">SELL</a>
                     </div>
                     <div className="ui bottom attached active tab segment inverted" data-tab="market/buy">
                         <div className="ui input">
