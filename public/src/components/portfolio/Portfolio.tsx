@@ -15,6 +15,8 @@ import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service
 import { GetPortfolioRequest } from "../../../proto_build/actions/GetPortfolio_pb";
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { Fragment } from "react";
+import { StockCharts } from "./StockCharts";
+declare var $: any; // $ will be exposed globally by jQuery
 
 export interface PortfolioProps {
     sessionMd: Metadata,
@@ -27,13 +29,14 @@ export interface PortfolioProps {
     stockBriefInfoMap: { [index: number]: StockBriefInfo },
     stockPricesMap: { [index: number]: number },
     stocksOwnedMap: { [index: number]: number },
+    stocksReservedMap: { [index: number]: number },
     latestTransaction: Transaction_pb,
     disclaimerElement: JSX.Element
 }
 
 interface PortfolioState {
-
 }
+
 
 export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
     constructor(props: PortfolioProps) {
@@ -50,12 +53,12 @@ export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
                     </div>
                 </div>
                 <div id="portfolio-container" className="main-container ui stackable grid pusher">
-                    <div id="stockchart-container" className="row">
-                        <StockChart
-                            stockBriefInfoMap={this.props.stockBriefInfoMap}
-                            chartData={this.props.stocksOwnedMap}
-                        />
-                    </div>
+                    <StockCharts 
+                        stockBriefInfoMap={this.props.stockBriefInfoMap}
+                        stocksOwnedMap={this.props.stocksOwnedMap}
+                        stocksReservedMap={this.props.stocksReservedMap}
+                    />
+                    
                     <div id="networth-container" className="row">
                         <Networth
                             userCash={this.props.userCash}

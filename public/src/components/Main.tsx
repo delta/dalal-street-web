@@ -37,6 +37,7 @@ export interface MainProps {
 
     stocksOwnedMap:  { [index:number]: number } // stocks owned by user for a given stockid
     stockDetailsMap: { [index:number]: Stock_pb } // get stock detail for a given stockid
+    stocksReservedMap: {[index: number]: number} //stocks reserved from user for a given stockid
     constantsMap:    { [index:string]: number } // various constants. Documentation found in server/actionservice/Login method
 
     marketIsOpenHackyNotif: 	string
@@ -52,6 +53,7 @@ interface MainState {
 
     stocksOwnedMap:    { [index:number]: number } // stocks owned by user for a given stockid
     stockDetailsMap:   { [index:number]: Stock_pb } // get stock detail for a given stockid
+    stocksReservedMap: {[index: number]: number} //stocks reserved from user for a given stockid
     stockBriefInfoMap: { [index:number]: StockBriefInfo }
 
     isMarketOpen: 	boolean
@@ -97,6 +99,7 @@ export class Main extends React.Component<MainProps, MainState> {
             userTotal: this.calculateTotal(this.props.user.getCash(), this.props.stocksOwnedMap, this.props.stockDetailsMap),
             stocksOwnedMap: this.props.stocksOwnedMap,
             stockDetailsMap: this.props.stockDetailsMap,
+            stocksReservedMap: this.props.stocksReservedMap,
             stockBriefInfoMap: stockBriefInfoMap,
             isMarketOpen: this.props.isMarketOpen,
             notifSubscriptionId: new SubscriptionId,
@@ -355,18 +358,97 @@ export class Main extends React.Component<MainProps, MainState> {
         // Getting copy of stocksOwnedMap
         // To be updated by transactions stream
         let stocksOwnedMap = this.state.stocksOwnedMap;
+        let stocksReservedMap = this.state.stocksReservedMap;
+        let userCash = this.state.userCash;
+        let reservedCash = this.state.userReservedCash;
 
         this.connectionSucceeded();
 
         try {
             for await (const update of stream) {
                 const newTransaction = update.getTransaction()!;
-                if (newTransaction.getStockId() in stocksOwnedMap) {
-                    stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
-                }
-                else {
-                    stocksOwnedMap[newTransaction.getStockId()] = newTransaction.getStockQuantity();
-                }
+                    switch(newTransaction.getType()){
+                        case TransactionType_pb.FROM_EXCHANGE_TRANSACTION:
+                            userCash+=newTransaction.getTotal();
+                            if (newTransaction.getStockId() in stocksOwnedMap) {
+                                stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
+                            }
+                            else {
+                                stocksOwnedMap[newTransaction.getStockId()] = newTransaction.getStockQuantity();
+                            }
+                            break;
+
+                        case TransactionType_pb.MORTGAGE_TRANSACTION:
+                            userCash+=newTransaction.getTotal();
+                            if (newTransaction.getStockId() in stocksOwnedMap) {
+                                stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
+                            }
+                            else {
+                                stocksOwnedMap[newTransaction.getStockId()] = newTransaction.getStockQuantity();
+                            }
+                            break;
+
+                        case TransactionType_pb.TAX_TRANSACTION:
+                            userCash+=newTransaction.getTotal();                          
+                            break;
+
+                        case TransactionType_pb.PLACE_ORDER_TRANSACTION:
+                            userCash+=newTransaction.getTotal();
+                            reservedCash-=newTransaction.getTotal();
+                            if (newTransaction.getStockId() in stocksOwnedMap) {
+                                stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
+                            }
+                            else {
+                                stocksOwnedMap[newTransaction.getStockId()] = newTransaction.getStockQuantity();
+                            }
+
+                            if (newTransaction.getStockId() in stocksReservedMap) {
+                                stocksReservedMap[newTransaction.getStockId()] -= newTransaction.getStockQuantity();
+                            }
+                            else {
+                                stocksReservedMap[newTransaction.getStockId()] = -newTransaction.getStockQuantity();
+                            }  
+                            break;
+
+                        case TransactionType_pb.CANCEL_ORDER_TRANSACTION:
+                            userCash+=newTransaction.getTotal();
+                            reservedCash-=newTransaction.getTotal();
+                            if (newTransaction.getStockId() in stocksOwnedMap) {
+                                stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
+                            }
+                            else {
+                                stocksOwnedMap[newTransaction.getStockId()] = newTransaction.getStockQuantity();
+                            }
+
+                            if (newTransaction.getStockId() in stocksReservedMap) {
+                                stocksReservedMap[newTransaction.getStockId()] -= newTransaction.getStockQuantity();
+                            }
+                            else {
+                                stocksReservedMap[newTransaction.getStockId()] = -newTransaction.getStockQuantity();
+                            }  
+                            break;
+
+                        case TransactionType_pb.ORDER_FILL_TRANSACTION:
+                            userCash+=newTransaction.getTotal();
+                            break;
+
+                        case TransactionType_pb.RESERVE_UPDATE_TRANSACTION:
+                            reservedCash-=newTransaction.getTotal();
+                            if (newTransaction.getStockId() in stocksReservedMap) {
+                                stocksReservedMap[newTransaction.getStockId()] -= newTransaction.getStockQuantity();
+                            }
+                            else {
+                                stocksReservedMap[newTransaction.getStockId()] = -newTransaction.getStockQuantity();
+                            }  
+                            break;
+                        
+                        case TransactionType_pb.DIVIDEND_TRANSACTION:
+                            userCash+=newTransaction.getTotal();
+                            break;
+
+                        default:
+                            
+                    }
 
                 try {
                     let notif = "";
@@ -406,12 +488,14 @@ export class Main extends React.Component<MainProps, MainState> {
                     console.error("Unexpected error: ", e);
                 }
 
-                this.setState((prevState) => {
-                    const newCash = prevState.userCash + newTransaction.getTotal();
+                this.setState(() => {
+                    // const newCash = prevState.userCash + newTransaction.getTotal();
                     return {
                         stocksOwnedMap: stocksOwnedMap,
-                        userCash: newCash,
-                        userTotal: this.calculateTotal(newCash, stocksOwnedMap, this.state.stockDetailsMap),
+                        stocksReservedMap: stocksReservedMap, 
+                        userCash: userCash,
+                        userReservedCash: reservedCash,
+                        userTotal: this.calculateTotal(userCash, stocksOwnedMap, this.state.stockDetailsMap),
                         latestTransaction: newTransaction,
                     };
                 });
@@ -471,6 +555,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     stocksOwnedMap={this.state.stocksOwnedMap}
+                    stocksReservedMap={this.state.stocksReservedMap}
                     transactionCount={this.props.constantsMap['GET_TRANSACTION_COUNT']}
                     latestTransaction={this.state.latestTransaction}
                     disclaimerElement={this.disclaimerElement}

@@ -6,7 +6,8 @@ declare var Chart: any;
 
 export interface StockChartProps {
     stockBriefInfoMap: { [index:number]: StockBriefInfo },
-    chartData: { [index:number]: number }
+    chartData: { [index:number]: number },
+    label: string,
 }
 
 interface StockChartState {
@@ -56,12 +57,6 @@ export class StockChart extends React.Component<StockChartProps, StockChartState
                 legend: {
                     display: false,
                 },
-                title: {
-                    display: true,
-                    text: "Your stocks",
-                    fontSize: 14,
-                    fontColor: "#FFF"
-                }
             }
         });
     }
@@ -80,7 +75,7 @@ export class StockChart extends React.Component<StockChartProps, StockChartState
 
     render() {
         return (
-            <canvas id="bar-chart" height="60%"></canvas>
+				<canvas id="bar-chart" height="60%"></canvas>
         );
     }
 }

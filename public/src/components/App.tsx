@@ -31,6 +31,7 @@ interface AppState {
 
 	stocksOwnedMap: { [index: number]: number } // stocks owned by user for a given stockid
 	stockDetailsMap: { [index: number]: Stock_pb } // get stock detail for a given stockid
+	stocksReservedMap: {[index: number]: number} //stocks reserved from user for a given stockid
 	constantsMap: { [index: string]: number } // various constants. Documentation found in server/actionservice/Login method
 
 	marketIsOpenHackyNotif: string
@@ -55,6 +56,7 @@ export class App extends React.Component<{}, AppState> {
 			user: new User_pb(),
 			stocksOwnedMap: {},
 			stockDetailsMap: {},
+			stocksReservedMap:{},
 			constantsMap: {},
 			marketIsClosedHackyNotif: "",
 			marketIsOpenHackyNotif: "",
@@ -107,6 +109,11 @@ export class App extends React.Component<{}, AppState> {
 			stockDetailsMap[stockId] = stock;
 		});
 
+		const stockReservedMap: { [index: number]: number } = {};
+		resp.getReservedStocksOwnedMap().forEach((stock, stockId) => {
+			stockReservedMap[stockId] = stock;
+		});
+
 		const constantsMap: { [index: string]: number } = {};
 		resp.getConstantsMap().forEach((value, name) => {
 			constantsMap[name] = value;
@@ -121,6 +128,7 @@ export class App extends React.Component<{}, AppState> {
 			user: resp.getUser()!,
 			stocksOwnedMap: stocksOwnedMap,
 			stockDetailsMap: stockDetailsMap,
+			stocksReservedMap: stockReservedMap,
 			constantsMap: constantsMap,
 			marketIsOpenHackyNotif: resp.getMarketIsOpenHackyNotif(),
 			marketIsClosedHackyNotif: resp.getMarketIsClosedHackyNotif(),
@@ -143,6 +151,7 @@ export class App extends React.Component<{}, AppState> {
 				user: new User_pb(),
 				stocksOwnedMap: {},
 				stockDetailsMap: {},
+				stocksReservedMap: {},
 				constantsMap: {},
 				marketIsClosedHackyNotif: "",
 				marketIsOpenHackyNotif: "",
@@ -195,6 +204,7 @@ export class App extends React.Component<{}, AppState> {
 				user: new User_pb(),
 				stocksOwnedMap: {},
 				stockDetailsMap: {},
+				stocksReservedMap: {},
 				constantsMap: {},
 				marketIsClosedHackyNotif: "",
 				marketIsOpenHackyNotif: "",
@@ -243,6 +253,7 @@ export class App extends React.Component<{}, AppState> {
 							user={this.state.user!}
 							stocksOwnedMap={this.state.stocksOwnedMap!}
 							stockDetailsMap={this.state.stockDetailsMap!}
+							stocksReservedMap={this.state.stocksReservedMap!}
 							constantsMap={this.state.constantsMap!}
 							marketIsOpenHackyNotif={this.state.marketIsOpenHackyNotif!}
 							marketIsClosedHackyNotif={this.state.marketIsClosedHackyNotif!}
