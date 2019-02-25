@@ -10,7 +10,7 @@ import { GetMyOpenOrdersRequest, GetMyOpenOrdersResponse } from "../../../proto_
 import { CancelOrderRequest } from "../../../proto_build/actions/CancelOrder_pb";
 import { Ask as Ask_pb } from "../../../proto_build/models/Ask_pb";
 import { Bid as Bid_pb } from "../../../proto_build/models/Bid_pb";
-import { showNotif, showErrorNotif, showSuccessNotif } from "../../utils";
+import { showNotif, showErrorNotif, showSuccessNotif, closeNotifs } from "../../utils";
 
 const LIMIT = OrderType.LIMIT;
 const MARKET = OrderType.MARKET;
@@ -191,6 +191,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 		cancelOrderRequest.setOrderId(Number(orderId));
 		cancelOrderRequest.setIsAsk(isAsk);
 
+		closeNotifs();
 		try {
 			const resp = await DalalActionService.cancelOrder(cancelOrderRequest, this.props.sessionMd);
 
