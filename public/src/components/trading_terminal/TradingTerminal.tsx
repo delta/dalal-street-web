@@ -340,6 +340,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 						zIndex: 10000,
 						}
 					}}
+					disableOverlayClose={true}
 				/>
 				<div className="row" id="top_bar">
 					<div id="search-bar">
