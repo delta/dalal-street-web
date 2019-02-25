@@ -5,7 +5,7 @@ import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service
 import { Metadata } from "grpc-web-client";
 import { Fragment } from "react";
 
-import { showNotif, showErrorNotif, showInfoNotif, isPositiveInteger } from "../../utils";
+import { showNotif, showErrorNotif, showInfoNotif, isPositiveInteger, closeNotifs } from "../../utils";
 
 const LIMIT = OrderType.LIMIT;
 const MARKET = OrderType.MARKET;
@@ -47,7 +47,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
         orderRequest.setOrderType(orderType);
         orderRequest.setPrice(price);
         orderRequest.setStockQuantity(stockQuantity);
-
+        closeNotifs();
         try {
             const resp = await DalalActionService.placeOrder(orderRequest, this.props.sessionMd);
             showInfoNotif("Order placed successfully!", "");

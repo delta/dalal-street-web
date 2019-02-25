@@ -4,7 +4,7 @@ import { TradingTerminal, StockBriefInfo } from "./trading_terminal/TradingTermi
 import { SearchBar } from "./trading_terminal/SearchBar"
 import { NotFound } from "./NotFound";
 
-import { showNotif, showSuccessNotif, showErrorNotif, showInfoNotif, isPositiveInteger } from "../utils";
+import { showNotif, showSuccessNotif, showErrorNotif, showInfoNotif, isPositiveInteger, closeNotifs } from "../utils";
 
 import { Leaderboard } from "./leaderboard/Leaderboard";
 import { Portfolio } from "./portfolio/Portfolio";
