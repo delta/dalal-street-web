@@ -11,6 +11,7 @@ export interface HelpProps {
     userReservedCash: number,
     userTotal: number,
     connectionStatus: boolean,
+    isMarketOpen: boolean,
     notifications: Notification_pb[],
     disclaimerElement: JSX.Element,
 }
@@ -24,7 +25,7 @@ export class Help extends React.Component<HelpProps, {}> {
         return (
             <Fragment>
                 <div className="row" id="top_bar">
-                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus}/>
+                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen}/>
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>

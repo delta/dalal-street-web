@@ -26,6 +26,7 @@ export interface PortfolioProps {
     userReservedCash: number,
     userTotal: number,
     connectionStatus: boolean,
+    isMarketOpen: boolean,
     stockBriefInfoMap: { [index: number]: StockBriefInfo },
     stockPricesMap: { [index: number]: number },
     stocksOwnedMap: { [index: number]: number },
@@ -47,18 +48,18 @@ export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
         return (
             <Fragment>
                 <div className="row" id="top_bar">
-                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} />
+                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen} />
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>
                 </div>
                 <div id="portfolio-container" className="main-container ui stackable grid pusher">
-                    <StockCharts 
+                    <StockCharts
                         stockBriefInfoMap={this.props.stockBriefInfoMap}
                         stocksOwnedMap={this.props.stocksOwnedMap}
                         stocksReservedMap={this.props.stocksReservedMap}
                     />
-                    
+
                     <div id="networth-container" className="row">
                         <Networth
                             userCash={this.props.userCash}

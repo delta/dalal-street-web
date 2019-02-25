@@ -9,6 +9,7 @@ export interface TinyNetworthProps {
     userReservedCash: number,
     userTotal: number,
     connectionStatus: boolean,
+    isMarketOpen: boolean,
 }
 
 export class TinyNetworth extends React.Component<TinyNetworthProps, {}> {
@@ -24,7 +25,10 @@ export class TinyNetworth extends React.Component<TinyNetworthProps, {}> {
         const stockWorth = this.props.userTotal - this.props.userCash;
         const stockWorthClass = stockWorth >= 0 ? "green" : "red";
         const netWorthClass = this.props.userTotal >= 0 ? "green" : "red";
-        const connection = this.props.connectionStatus == true ? "Connected" : "Disconnected";
+        let connection = "";
+        if(this.props.isMarketOpen)
+             connection = this.props.connectionStatus == true ? "Connected" : "Disconnected";
+        else  connection = "Closed";
         const connectionStatusClass = this.props.connectionStatus == true ? "green" : "red";
         return (
             <div id="tiny-networth" className="ui statistics">

@@ -350,7 +350,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 							defaultStock={this.state.currentStockId} />
 					</div>
 
-					<TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus}/>
+					<TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen}/>
 					<div id="notif-component">
 						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
 					</div>
@@ -371,6 +371,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 								stockId={this.state.currentStockId}
 								currentPrice={this.state.currentPrice}
 								sessionMd={this.props.sessionMd}
+								isMarketOpen={this.props.isMarketOpen}
 							  orderFeePercent={this.props.constantsMap['ORDER_FEE_PERCENT']} />
 						</div>
 

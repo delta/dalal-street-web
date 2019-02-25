@@ -389,7 +389,7 @@ export class Main extends React.Component<MainProps, MainState> {
                             break;
 
                         case TransactionType_pb.TAX_TRANSACTION:
-                            userCash+=newTransaction.getTotal();                          
+                            userCash+=newTransaction.getTotal();
                             break;
 
                         case TransactionType_pb.PLACE_ORDER_TRANSACTION:
@@ -407,7 +407,7 @@ export class Main extends React.Component<MainProps, MainState> {
                             }
                             else {
                                 stocksReservedMap[newTransaction.getStockId()] = -newTransaction.getStockQuantity();
-                            }  
+                            }
                             break;
 
                         case TransactionType_pb.CANCEL_ORDER_TRANSACTION:
@@ -425,7 +425,7 @@ export class Main extends React.Component<MainProps, MainState> {
                             }
                             else {
                                 stocksReservedMap[newTransaction.getStockId()] = -newTransaction.getStockQuantity();
-                            }  
+                            }
                             break;
 
                         case TransactionType_pb.ORDER_FILL_TRANSACTION:
@@ -439,15 +439,15 @@ export class Main extends React.Component<MainProps, MainState> {
                             }
                             else {
                                 stocksReservedMap[newTransaction.getStockId()] = -newTransaction.getStockQuantity();
-                            }  
+                            }
                             break;
-                        
+
                         case TransactionType_pb.DIVIDEND_TRANSACTION:
                             userCash+=newTransaction.getTotal();
                             break;
 
                         default:
-                            
+
                     }
 
                 try {
@@ -492,7 +492,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     // const newCash = prevState.userCash + newTransaction.getTotal();
                     return {
                         stocksOwnedMap: stocksOwnedMap,
-                        stocksReservedMap: stocksReservedMap, 
+                        stocksReservedMap: stocksReservedMap,
                         userCash: userCash,
                         userReservedCash: reservedCash,
                         userTotal: this.calculateTotal(userCash, stocksOwnedMap, this.state.stockDetailsMap),
@@ -518,14 +518,6 @@ export class Main extends React.Component<MainProps, MainState> {
         //and hence react's history wont be changing ie
         //pushing to path in App cannot be retrieved by Route exact path
         //because the history for react will not have those changes reflected
-        if (!this.state.isMarketOpen) {
-            $("#market-close-modal").modal({
-                closable:false,
-            }).modal("show");
-        }
-        else {
-            $("#market-close-modal").modal("hide");
-        }
 
         switch (window.location.pathname) {
             case "/trade":
@@ -552,6 +544,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
+                    isMarketOpen={this.state.isMarketOpen}
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     stocksOwnedMap={this.state.stocksOwnedMap}
@@ -569,6 +562,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     connectionStatus={this.state.connectionStatus}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
+                    isMarketOpen={this.state.isMarketOpen}
                 />;
             case "/leaderboard":
                 return <Leaderboard
@@ -578,6 +572,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
+                    isMarketOpen={this.state.isMarketOpen}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
@@ -589,6 +584,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
+                    isMarketOpen={this.state.isMarketOpen}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
@@ -601,6 +597,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
+                    isMarketOpen={this.state.isMarketOpen}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     disclaimerElement={this.disclaimerElement}
                 />
@@ -620,6 +617,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     retrieveRate={this.props.constantsMap['MORTGAGE_RETRIEVE_RATE']}
                     latestTransaction={this.state.latestTransaction}
                     disclaimerElement={this.disclaimerElement}
+                    isMarketOpen={this.state.isMarketOpen}
                 />
 
             case "/help":
@@ -628,6 +626,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
+                    isMarketOpen={this.state.isMarketOpen}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
