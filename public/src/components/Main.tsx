@@ -389,7 +389,7 @@ export class Main extends React.Component<MainProps, MainState> {
                             break;
 
                         case TransactionType_pb.TAX_TRANSACTION:
-                            userCash+=newTransaction.getTotal();                          
+                            userCash+=newTransaction.getTotal();
                             break;
 
                         case TransactionType_pb.PLACE_ORDER_TRANSACTION:
@@ -407,7 +407,7 @@ export class Main extends React.Component<MainProps, MainState> {
                             }
                             else {
                                 stocksReservedMap[newTransaction.getStockId()] = -newTransaction.getStockQuantity();
-                            }  
+                            }
                             break;
 
                         case TransactionType_pb.CANCEL_ORDER_TRANSACTION:
@@ -425,7 +425,7 @@ export class Main extends React.Component<MainProps, MainState> {
                             }
                             else {
                                 stocksReservedMap[newTransaction.getStockId()] = -newTransaction.getStockQuantity();
-                            }  
+                            }
                             break;
 
                         case TransactionType_pb.ORDER_FILL_TRANSACTION:
@@ -439,15 +439,15 @@ export class Main extends React.Component<MainProps, MainState> {
                             }
                             else {
                                 stocksReservedMap[newTransaction.getStockId()] = -newTransaction.getStockQuantity();
-                            }  
+                            }
                             break;
-                        
+
                         case TransactionType_pb.DIVIDEND_TRANSACTION:
                             userCash+=newTransaction.getTotal();
                             break;
 
                         default:
-                            
+
                     }
 
                 try {
@@ -492,7 +492,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     // const newCash = prevState.userCash + newTransaction.getTotal();
                     return {
                         stocksOwnedMap: stocksOwnedMap,
-                        stocksReservedMap: stocksReservedMap, 
+                        stocksReservedMap: stocksReservedMap,
                         userCash: userCash,
                         userReservedCash: reservedCash,
                         userTotal: this.calculateTotal(userCash, stocksOwnedMap, this.state.stockDetailsMap),
@@ -544,6 +544,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
+                    isMarketOpen={this.state.isMarketOpen}
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     stocksOwnedMap={this.state.stocksOwnedMap}
@@ -571,6 +572,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
+                    isMarketOpen={this.state.isMarketOpen}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
@@ -582,6 +584,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
+                    isMarketOpen={this.state.isMarketOpen}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
@@ -594,6 +597,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
+                    isMarketOpen={this.state.isMarketOpen}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     disclaimerElement={this.disclaimerElement}
                 />
@@ -622,6 +626,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
+                    isMarketOpen={this.state.isMarketOpen}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;

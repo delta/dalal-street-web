@@ -119,7 +119,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
                     <td className={"volume " + diffClass}><strong>{percentageIncrease}{" %"}</strong></td>
                     <td className="volume"><strong>{currentStock.getStocksInExchange()}</strong></td>
                     <td className="volume"><strong><input id={"input-" + currentStock.getId()} placeholder="0" className="market-input" /></strong></td>
-                    <td className="volume"> <div data-tooltip="This is used to buy stocks from exchange" data-position="top center"><strong><button disabled={this.props.isMarketOpen ? false : true} className="ui inverted green button" onClick={(e) => { this.purchaseFromExchange(e, currentStock.getId()) }}>Buy</button></strong></div></td>
+                    <td className="volume"><strong><button disabled={this.props.isMarketOpen ? false : true} className="ui inverted green button" onClick={(e) => { this.purchaseFromExchange(e, currentStock.getId()) }}>Buy</button></strong></td>
                 </tr>
             );
         }
@@ -127,7 +127,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
         return (
             <Fragment>
                 <div className="row" id="top_bar">
-                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} />
+                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen} />
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>
