@@ -735,6 +735,9 @@ h1 {
 .news-element .header .date {
 	float: left;
 	font-size: 12px;
+	background: hsl(206, 10%, 57%);
+	padding: 2px;
+	border-radius: 3px; 
 }
 .news-element .menu-content {
 	float: right;
