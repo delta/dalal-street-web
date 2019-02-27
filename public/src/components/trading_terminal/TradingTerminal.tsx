@@ -11,7 +11,7 @@ import { TinyNetworth } from "../common/TinyNetworth";
 import { PlaceOrderBox } from "./PlaceOrderBox";
 import { Charts } from "./charts/Charts";
 import { Fragment } from "react";
-import ReactJoyride, { STATUS, StoreState, Step } from 'react-joyride';
+import ReactJoyride, { STATUS, StoreState, Step, EVENTS, ACTIONS } from 'react-joyride';
 
 export type StockBriefInfo = {
 	id: number
@@ -47,6 +47,7 @@ interface TradingTerminalState {
 	currentPrice: number
 	stockPricesMap: NumNumMap
 	steps: Step[]
+	stepIndex: number
 }
 
 export class TradingTerminal extends React.Component<TradingTerminalProps, TradingTerminalState> {
@@ -58,6 +59,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 			currentStockId: currentStockId,
 			currentPrice: this.props.stockPricesMap[currentStockId],
 			stockPricesMap: this.props.stockPricesMap,
+			stepIndex: 0,
 			steps: [
 				{
 					content: (
@@ -198,11 +200,14 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					title: 'Market Depth'
 				},
 				{
-					target: '#orderbook-menu a:nth-child(2)',
-					content: "Go ahead and click here.",
-					placement: 'right',
-					disableOverlayClose: true,
-					spotlightClicks: true,
+          target: '#orderbook-menu a:nth-child(2)',
+          content: "Go ahead and click here.",
+          placement: 'right',
+          disableBeacon: true,
+          disableOverlayClose: true,
+          hideCloseButton: true,
+          hideFooter: true,
+          spotlightClicks: true,
 					styles: {
 					  options: {
 						zIndex: 10000,
@@ -210,9 +215,9 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					  spotlight: {
 						backgroundColor: '#ffffff00',
 					  },
-					},
-					title: 'Trading History'
-				},
+          },
+          title:'Trading History'
+        },
 				{
 					content: "This table shows you transactions that have occurred in the past for the company in focus.",
 					placement: 'right',
@@ -283,6 +288,14 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 		};
 	}
 
+	handleClickOpen = () => {
+    const { stepIndex } = this.state;
+
+    this.setState({
+      stepIndex: stepIndex+1
+    });
+  };
+
 	// parent will update the stock prices or cash
 	componentWillReceiveProps(nextProps: TradingTerminalProps) {
 		this.setState(prevState => {
@@ -312,9 +325,15 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 	};
 
 	handleJoyrideCallback = (data: any) => {
-		const { status, type } = data;
+		const { action, status, type, index } = data;
 		if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
 		  localStorage.setItem("first_time_dalal",  "yeah");
+		}
+		else if([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND].includes(type)){
+			const stepIndex = index + (action === ACTIONS.PREV ? -1 : 1);
+			this.setState({
+				stepIndex: stepIndex
+			})
 		}
 	}
 
@@ -331,6 +350,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					callback={this.handleJoyrideCallback}
 					continuous
 					run={run}
+					stepIndex={this.state.stepIndex}
 					scrollToFirstStep
 					showProgress
 					showSkipButton
@@ -359,7 +379,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 				<div id="trading-terminal" className="main-container ui stackable grid pusher">
 					<div className="row">
 						<div id="order-book-container" className="six wide column box">
-							<OrderBook stockId={this.state.currentStockId} sessionMd={this.props.sessionMd} />
+							<OrderBook stockId={this.state.currentStockId} sessionMd={this.props.sessionMd} handleClickOpen={this.handleClickOpen.bind(this)} />
 						</div>
 
 						<div id="charts-container" className="ten wide column box">
