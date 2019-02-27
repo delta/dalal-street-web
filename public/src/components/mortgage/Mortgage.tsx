@@ -58,6 +58,12 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
 
             // If the latest transaction is negative, then it means we mortgaged something
             if (latestTransaction.getStockQuantity() < 0) {
+
+                // Create empty array if stock has never been mortgaged before
+                if (! mortgageDetails[stockId]) {
+                    mortgageDetails[stockId] = [];
+                }
+
                 let alreadyUpdated: boolean = false;
                 // Search if it already exists. If it does, update it
                 for (let i = 0; i < mortgageDetails[stockId].length; i++) {
@@ -74,9 +80,6 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
                     newMortgageDetail.setStocksInBank(latestTransaction.getStockQuantity() * -1);
                     newMortgageDetail.setStockId(latestTransaction.getStockId());
                     newMortgageDetail.setMortgagePrice(latestTransaction.getPrice());
-                    if (! mortgageDetails[stockId]) {
-                        mortgageDetails[stockId] = [];
-                    }
                     mortgageDetails[stockId].push(newMortgageDetail);
                 }
             }
