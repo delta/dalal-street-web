@@ -9,7 +9,7 @@ import { Notification } from "../common/Notification";
 import { TinyNetworth } from "../common/TinyNetworth";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
 import { Transaction as Transaction_pb, TransactionType } from "../../../proto_build/models/Transaction_pb";
-import { showNotif, showErrorNotif, isPositiveInteger } from "../../utils";
+import { showNotif, showErrorNotif, isPositiveInteger, closeNotifs } from "../../utils";
 import { Fragment } from "react";
 import { MortgageDetail } from "../../../proto_build/models/MortgageDetail_pb";
 
@@ -148,6 +148,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
     }
 
     mortgageStocks = async (stockId: number) => {
+        closeNotifs();
         const stockQuantity = $("#mortgageinput-" + stockId).val() as number;
         $("#mortgageinput-" + stockId).val("");
         if (!isPositiveInteger(stockQuantity)) {
@@ -173,6 +174,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
     }
 
     retrieveStocks = async (stockId: number, price: number) => {
+        closeNotifs();
         const uniqueKey = this.getUniqueIdFromMortgageDetail(stockId, price);
         const stockQuantity = $("#retrieveinput-" + uniqueKey).val() as number;
         $("#retrieveinput-" + stockId).val("");

@@ -32,6 +32,10 @@ export function showInfoNotif(msg: string, title: string) {
     });
 }
 
+export function closeNotifs(){
+    PNotify.removeAll();
+}
+
 export function isPositiveInteger(x: number): boolean {
     return (!isNaN(x) && x % 1 === 0 && x > 0);
 }

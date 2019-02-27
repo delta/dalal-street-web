@@ -13,6 +13,7 @@ declare var $: any;
 export interface OrderBookProps {
 	stockId: number
 	sessionMd: Metadata
+	handleClickOpen: Function
 }
 
 interface OrderBookState {
@@ -155,7 +156,7 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 			<Fragment>
 				<div id="orderbook-menu" className="ui pointing secondary menu">
 					<a className="item active" data-tab="market-depth">Market Depth</a>
-					<a className="item" data-tab="trading-history">Trading History</a>
+					<a className="item" data-tab="trading-history" onClick={()=>this.props.handleClickOpen()}>Trading History</a>
 					<h3 className="panel-header right item">Order Book</h3>
 				</div>
 				<MarketDepth stockId={this.props.stockId} askDepth={this.state.askDepth} bidDepth={this.state.bidDepth}  />
