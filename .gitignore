@@ -19,3 +19,6 @@ protoc-3.2.0rc2-linux-x86_64.zip*
 # images
 public/src/images/news
 public/src/images/companies
+
+# macOS files
+.DS_Store
