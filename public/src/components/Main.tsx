@@ -442,8 +442,7 @@ export class Main extends React.Component<MainProps, MainState> {
                                 stocksReservedMap[newTransaction.getStockId()] = -newTransaction.getStockQuantity();
                             }
                             break;
-
-                        case TransactionType_pb.DIVIDEND_TRANSACTION:
+                        case TransactionType_pb.ORDER_FEE_TRANSACTION:
                             userCash+=newTransaction.getTotal();
                             break;
 
@@ -478,7 +477,7 @@ export class Main extends React.Component<MainProps, MainState> {
                             notif = `${stockQty > 0 ? "Buy ":"Sell"} order completed successfully! `;
                             break;
                         default:
-                            console.error("Unexpected transaction type ", newTransaction.getType());
+                            console.error("Useless Transaction, left unprocessed ", newTransaction.getType());
                     }
 
                     if (notif != "") {
