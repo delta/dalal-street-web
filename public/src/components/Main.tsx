@@ -122,8 +122,9 @@ export class Main extends React.Component<MainProps, MainState> {
 
     disclaimerElement = (
         <div className="row disclaimer-footer">
-            Disclaimer : Stock prices and news articles released in this game are entirely fictitious and in no way related to the real world.
-        </div>
+            Disclaimer : Stock prices and news articles released in this game are entirely fictitious and in no way related to the real world.<br></br>
+            &copy; Made with <span className="red">&hearts;</span> by <a href="https://delta.nitt.edu">Delta Force</a>
+         </div>
     );
 
     getStockPrices(stockDetailsMap: { [index:number]: Stock_pb }) {
