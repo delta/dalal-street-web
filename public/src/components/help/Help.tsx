@@ -103,11 +103,21 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <p>Lets walk through all the elements of this page.</p>
                                         <p><strong>Order Book</strong> - The Market Depth lists all <em>open</em> buy and sell orders. This includes orders issued by <em>all players</em> that have not been filled yet. By observing the Market Depth, you can see the prices at which other players are placing their orders and judge the current mood of the market. The Trading History displays the last 15 transactions that have been executed for the company you’ve chosen.</p>
                                         <p><strong>Place Orders</strong> - There are 3 different types of orders you can place - Market, Limit and Stoploss. <em>(You can read more about these terms in our FAQ section)</em>. Once your orders are placed, we will fill the order based on a <em>best match</em> algorithm.</p>
-                                        <p><strong>Open Orders</strong> - These are the orders that you have placed but have not been filled yet. After you place an order, the order will appear here until it is successfully filled.</p>
+                                        <p><strong>Reserved Assets</strong> - When you place a Bid order, <strong>cash</strong> is reserved. When you place a Sell order, <strong>stocks</strong> are reserved. You can check how much cash is reserved in the Nav Bar at the top. Reserved stocks can be viewed in the <strong>Portfolio Page</strong>.</p>
+                                        <p><strong>Open Orders</strong> - These are the orders that you have placed but have not been filled yet. After you place an order, the order will appear here until it is successfully filled. You can cancel your open orders to get back your reserved assets.</p>
                                         <p><strong>Price Chart</strong> - This shows how the stock price of the selected company has changed over time. You can view the chart with different time intervals by using the dropdown above the chart. This allows you to analyse the data at different levels of detail.</p>
                                         <p>Once you’ve bought some stocks, you can view all the stocks you own as well as your <em>Net Worth</em> on the <strong>Portfolios Page</strong>, as shown in the image below. This page also displays a list of all your <strong>executed transactions</strong>.</p>
                                         <p className="image-wrapper"><img src="./public/src/images/help/Dalal_Portfolio_Page.png" alt="Portfolio Image" /></p>
                                         <p>Hopefully, this should be enough to get you going and start trading! If you still have some questions, please read our FAQ section where we address some more common doubts that players may have.</p>
+                                    </div>
+
+                                    <div className="title">
+                                        <i className="dropdown icon inverted"></i>
+                                        <span className="faq-questions lighter">How is the winner determined</span>
+                                    </div>
+                                    <div className="content">
+                                        <p>Please note that <strong>while the game is progressing, the Leaderboard rankings do not 100% accurately reflect the winner of the game</strong>. This is because the leaderboard rankings <strong>do not take Reserved Assets into account</strong>. At the end of the game however, all Reserved Assets will be returned to the user. This will change the Net Worth and could ultimately change the leaderboard rankings as well.</p>
+                                        <p>So don't give up until the end! Your leaderboard rankings could jump when you receive all your Reserved Assets back at the end of the game!</p>
                                     </div>
                                 </div>
                             </div>
@@ -149,7 +159,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <span className="faq-questions">What is my Net Worth and how is it calculated?</span>
                                     </div>
                                     <div className="content">
-                                        <p>The player with the highest Net Worth at the end of 7 days is the winner. Your Net Worth is split into two parts - <em>Cash In Hand</em> and <em>Stock Worth</em>. You can view these values on the <strong>Portfolio page</strong>. Here’s a table explaining how your Net Worth will change in response to different events :-</p>
+                                        <p>Your Net Worth is split into two parts - <em>Cash In Hand</em> and <em>Stock Worth</em>. You can view these values on the <strong>Portfolio page</strong>. Here’s a table explaining how your Net Worth will change in response to different events :-</p>
                                         <table className="ui inverted table">
                                             <thead>
                                                 <tr>
@@ -186,6 +196,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <p>Please note that your <strong>Net Worth does NOT take into account reserved assets.</strong> At the end of 7 days, all open orders will be cancelled, thus <strong>returning all reserved assets</strong> to the user. <strong>This will change your Net Worth</strong> and could change the leaderboard rankings.</p>
                                     </div>
 
                                     <div className="title">
@@ -199,6 +210,20 @@ export class Help extends React.Component<HelpProps, {}> {
                                             <p>After you short sell a company, if the stock price dips below the price you sold it for, then you will have made a profit and vice-versa.</p>
                                             <p><em>Note: You can only short sell a maximum of 50 stocks per company</em></p>
                                         </div>
+                                    </div>
+
+                                    <div className="title">
+                                        <i className="dropdown icon inverted"></i>
+                                        <span className="faq-questions">What are the different types of transactions on the Portfolio Page?</span>
+                                    </div>
+                                    <div className="content">
+                                        <p><strong>Exchange</strong> - When you buy stocks from the exchange.</p>
+                                        <p><strong>OrderFill</strong> - Represents a trade between users.</p>
+                                        <p><strong>Mortgage</strong> - These transactions occur when you mortgage your stocks or retrieve stocks you've already mortgaged.</p>
+                                        <p><strong>Order Fee</strong> - Every order you place has an associated order fee.</p>
+                                        <p><strong>Tax</strong> - Nothing comes free! So you are charged a small tax whenever you make a profit off of a trade.</p>
+                                        <p><strong>Reserve Asset</strong> - Represents either cash or stocks being reserved when you place a Bid or Sell order respectively.</p>
+                                        <p><strong>Cancel Order</strong> - Represents Reserved Assets being returned when you cancel an order.</p>
                                     </div>
 
                                     <div className="title">
@@ -225,10 +250,10 @@ export class Help extends React.Component<HelpProps, {}> {
                                             <ol>
                                                 <li><strong>Mortgage</strong> - In this step, you will be selling your stocks to the exchange at the Deposit Rate <em>(80% of the Current Stock Price).</em></li>
                                                 <br /><p className="image-wrapper"><img src="./public/src/images/help/Dalal_Mortgage.png" alt="Mortgage Image" /></p>
-                                                <li><strong>Retrieval</strong> - Here, you will be retrieving the stocks you initially mortgaged by paying the exchange at the Retrieval Rate <em>(90% of the Current Stock Price).</em></li>
+                                                <li><strong>Retrieval</strong> - Here, you will be retrieving the stocks you initially mortgaged by paying the exchange at the Retrieval Rate <em>(90% of the Mortgaged Price).</em></li>
                                                 <br /><p className="image-wrapper"><img src="./public/src/images/help/Dalal_Retrieve.png" alt="Retrieval Image" /></p>
                                             </ol>
-                                            <p><em>Note</em> : After you mortgage a stock, it is no longer a part of your portfolio and hence, will not contribute to your stock worth (until you retrieve it).</p>
+                                            <p><em>Note</em> : After you mortgage a stock, it is no longer a part of your portfolio and hence, will not contribute to your stock worth (until you retrieve it). However, at the end of the game, users will be forced to retrieve all of their mortgaged stocks at the Retrieval Price.</p>
                                         </div>
                                     </div>
 
