@@ -63,7 +63,7 @@ export class Navbar extends React.Component<NavProps, {}> {
 			Help
 		</a>
 		
-		{/* <a className="item" href="https://www.allanswered.com/community/s/dalal-street/" target="_blank">
+		{/* <a className="item" href="https://forum.pragyan.org/c/dalal-street" target="_blank">
 			<i className="users icon"></i>
 			Forum
 		</a> */}

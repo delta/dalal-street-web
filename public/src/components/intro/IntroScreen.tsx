@@ -70,7 +70,7 @@ export class IntroScreen extends React.Component<{}, {}> {
                                 <h2>Questions or comments?</h2>
                             </header>
 
-                            <p>Reach out to us on <a href="https://www.allanswered.com/community/s/dalal-street/">the Dalal Forum</a></p>
+                            <p>Reach out to us on <a href="https://forum.pragyan.org/c/dalal-street">the Dalal Forum</a></p>
 
 
                                 &copy; Made with <span className="red">&hearts;</span> by <a href="https://delta.nitt.edu">Delta Force</a>
