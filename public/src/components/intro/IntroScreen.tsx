@@ -26,9 +26,10 @@ export class IntroScreen extends React.Component<{}, {}> {
                     <div id="main">
 
                         <header className="major container 75%">
-                            <h3>If stock market experts were so expert,<br/>
-                                they would be buying stock, not selling advice.<br/>
-                                - Norman Ralph Augustine
+                            <h3>I could calculate the motions of <br/>
+                                the heavenly bodies, but not the <br/>
+                                madness of the people. <br/>
+                                - Sir Isaac Newton
                             </h3>
                         </header>
 

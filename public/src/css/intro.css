@@ -300,7 +300,7 @@
   -webkit-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
   -ms-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
   transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
-  background: #544d55;
+  background: #00695c;
   border-radius: 4px;
   border: 0;
   color: #ffffff;
@@ -400,9 +400,10 @@
 #intro-div .feature.left .content {
   padding-right: 0;
 }
+/* url("../images/overlay.png"), */
 #intro-div #header {
   background-attachment: scroll, scroll, fixed;
-  background-image: url("../images/top-3200.svg"), url("../images/overlay.png"), url("../images/header.jpg");
+  background-image: url("../images/top-3200.svg"),linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)), url("../images/dalalfront.jpg");
   background-position: bottom center, top left, center center;
   background-repeat: repeat-x, repeat, no-repeat;
   background-size: 3200px 460px, auto, cover;
@@ -456,7 +457,7 @@
 }
 #intro-div #footer {
   background-attachment: scroll;
-  background-color: #4eb980;
+  background-color: #263238;
   background-image: url("../images/bottom-3200.svg");
   background-position: top center;
   background-repeat: repeat-x;
@@ -785,7 +786,7 @@
 }
 #intro-div #cloud-logo {
    height: auto;
-   width: 250px;
+   width: 150px;
    margin:0 auto;
 
 }
