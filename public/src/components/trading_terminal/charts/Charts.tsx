@@ -80,7 +80,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 		let historyReq = new GetStockHistoryRequest();
 		historyReq.setStockId(stockId);
 		historyReq.setResolution(intervalTypeToResolutionProto[this.state.interval]);
-		
+
 		this.setState({
 			isLoading: true,
 		});
@@ -101,7 +101,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 
 			// this is a beautification thing. Our charts work nicely with 61 entries.
 			// this will get removed after the first minute
-			
+
 			let dummy_data = $.extend(true, {}, globalIntervalData[0])
 			dummy_data.t = dummy_data.t - 60000;
 			globalIntervalData.unshift(dummy_data);
@@ -116,7 +116,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 			this.setState({
 				isLoading: false,
 				textDesc:e.statusMessage,
-			});	
+			});
 		}
 	}
 
@@ -165,7 +165,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 			return;
 		unsubscribe(this.props.sessionMd, this.state.subscriptionId);
 
-		this.getOldStockHistory(nextProps.stockId);
+		await this.getOldStockHistory(nextProps.stockId);
 		this.getStockHistoryStream(nextProps.stockId);
 	}
 
@@ -195,7 +195,7 @@ export class Charts extends React.Component<ChartsProps, ChartsState> {
 			$("#volume-chart-container").addClass("active");
 		}
 
-		this.getOldStockHistory(this.props.stockId);
+		await this.getOldStockHistory(this.props.stockId);
 		this.getStockHistoryStream(this.props.stockId);
 	}
 
