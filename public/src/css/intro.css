@@ -794,6 +794,11 @@
   font-size: 4em;
   letter-spacing: inherit;
 }
+#portfolio-name{
+  margin-left: 25px;
+  margin-top: 0.7em !important;
+  margin-bottom: 0.5em !important; 
+}
 
 .p-text {
   font-size: 20px !important;
