@@ -115,7 +115,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
         try {
             const resp = await DalalActionService.register(registerRequest);
             this.setState({
-                error:"Registration Successful, Please proceed to Login",
+                error:"An Email has been sent to your registered Email Id for verification.",
                 successful: true,
             });
         } catch (e) {
