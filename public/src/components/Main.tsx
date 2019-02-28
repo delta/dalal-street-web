@@ -552,6 +552,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     transactionCount={this.props.constantsMap['GET_TRANSACTION_COUNT']}
                     latestTransaction={this.state.latestTransaction}
                     disclaimerElement={this.disclaimerElement}
+                    userName={this.props.user.getName()}
                 />;
             case "/market":
                 return <Market sessionMd={this.props.sessionMd}

@@ -25,6 +25,7 @@ export interface PortfolioProps {
     userCash: number,
     userReservedCash: number,
     userTotal: number,
+    userName: string,
     connectionStatus: boolean,
     isMarketOpen: boolean,
     stockBriefInfoMap: { [index: number]: StockBriefInfo },
@@ -52,6 +53,7 @@ export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>
+                    <div id="portfolio-name"> <h3>Portfolio of {this.props.userName}</h3></div>
                 </div>
                 <div id="portfolio-container" className="main-container ui stackable grid pusher">
                     <StockCharts
