@@ -27,17 +27,22 @@ export class TinyNetworth extends React.Component<TinyNetworthProps, {}> {
         const netWorthClass = this.props.userTotal >= 0 ? "green" : "red";
         let connection = "";
         let connectionStatusClass = "";
+        let connectionMessage = "";
+        
         if(this.props.isMarketOpen){
              connection = this.props.connectionStatus == true ? "Connected" : "Disconnected";
              connectionStatusClass = this.props.connectionStatus == true ? "green" : "red";
+             connectionMessage = "Server connection status";
         }
         else {
             connection = "Closed";
             connectionStatusClass = "cyan";
+            connectionMessage = "Market is closed";
         }
+
         return (
             <div id="tiny-networth" className="ui statistics">
-              <div className="ui six wide column box" data-content="Internet connection status">
+              <div className="ui six wide column box" data-content={connectionMessage}>
                   <h3 className={"ui center aligned " + connectionStatusClass + " header inverted"}>
                       <i className="wifi icon small"></i>
                        {connection}
