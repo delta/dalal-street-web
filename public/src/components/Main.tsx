@@ -465,7 +465,7 @@ export class Main extends React.Component<MainProps, MainState> {
                             notif = `You have ${total < 0 ? "retrieved" : "mortgaged"} ${Math.abs(stockQty)} ${stockOrStocks} of ${stockName} @ ₹ ${-total/stockQty}`
                             break;
                         case TransactionType_pb.TAX_TRANSACTION:
-                            notif = `A total of ₹ ${total} has been deducted from you as tax on the last profit you made`;
+                            notif = `A total of ₹ ${-1*total} has been deducted from you as tax on the last profit you made`;
                             break
                         case TransactionType_pb.PLACE_ORDER_TRANSACTION:
                             notif = `A total of ${ stockQty < 0 ? Math.abs(stockQty) + " stocks" : "₹ " + Math.abs(total) } has been reserved for the order placed.`;
