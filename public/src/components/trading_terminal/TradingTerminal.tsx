@@ -83,7 +83,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					title: 'Trading Terminal'
 				},
 				{
-					content: "Want to view the stocks you've purchsed? Or the cash you have in hand? All this can be found in your portfolio",
+					content: "Want to view the stocks you've purchased? Or the cash you have in hand? All this can be found in your portfolio",
 					placement: 'right',
 					styles: {
 					  options: {
@@ -275,8 +275,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					content: (
 					  <React.Fragment>
 						<h3>All set!</h3>
-						<p>The joyride ends here but that's not all the help there is! If you aren't familiar with the basics of the stock market such as what the different
-						types of order mean, the Help section is a MUST-READ!
+						<p>The joyride ends here but that's not all the help there is! If you aren't familiar with the basics of the stock market, the Help section is a MUST-READ!
 						</p>
 					  </React.Fragment>
 					),

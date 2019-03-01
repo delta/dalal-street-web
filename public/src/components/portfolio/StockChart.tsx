@@ -57,7 +57,15 @@ export class StockChart extends React.Component<StockChartProps, StockChartState
                 legend: {
                     display: false,
                 },
-            }
+            },
+            scales: {
+             yAxes: [{
+               display: true,
+               ticks: {
+                 suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
+               }
+            }]
+          }
         });
     }
 
