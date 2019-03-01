@@ -105,7 +105,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                                     This is what it all comes down to
                             </div>
                             <div className="grey sub header">
-                                   <b>Reserved stocks and cash are considered towards leaderboard rankings until the end of the game.</b> 
+                                   <b>Reserved stocks and cash are considered towards leaderboard rankings only at the end of the game.</b> 
                             </div>
                             </div>
                         </h2>
