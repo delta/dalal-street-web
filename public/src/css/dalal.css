@@ -537,6 +537,12 @@ h3.panel-header {
 	min-height: 135px;
 	background: #1B1C1D !important;
 }
+#help-icon{
+	background-color:#2f323d !important;
+	color:white !important;
+	border: none;
+	font-size: 0.4em;
+}
 
 /* Leaderboard styling ends */
 
@@ -737,7 +743,7 @@ h1 {
 	font-size: 12px;
 	background: hsl(206, 10%, 57%);
 	padding: 2px;
-	border-radius: 3px; 
+	border-radius: 3px;
 }
 .news-element .menu-content {
 	float: right;
