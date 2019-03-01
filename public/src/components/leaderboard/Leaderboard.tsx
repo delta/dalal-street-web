@@ -104,8 +104,12 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                             <div className="grey sub header">
                                     This is what it all comes down to
                             </div>
+                            <br></br>
                             <div className="grey sub header">
-                                   <b>Reserved stocks and cash are considered towards leaderboard rankings only at the end of the game.</b> 
+                                   <b>Reserved stocks and cash are considered towards leaderboard rankings only at the end of the game.</b>
+                                   <button  id="help-icon" data-tooltip="Check FAQ section of the Help Page for more information">
+                                      <i className=" very small question circle icon "></i>
+                                   </button>
                             </div>
                             </div>
                         </h2>
