@@ -639,6 +639,10 @@ h3.panel-header {
 	margin: 0 15px;
 	font-size: 1.2em;
 }
+#heading{
+	margin-bottom: 8px;
+	text-align: center;
+}
 
 /* CompanyDetails styling ends here */
 
