@@ -136,12 +136,11 @@ export class CompanyDetails extends React.Component<CompanyDetailsProps, Company
                 </div>
                 <div id="company-info" className="row centered">
                     <div className="ui black message">
-                        <h2 className="ui center aligned header inverted">
-                            A Brief Description about {companyDetails.getFullName()}
-                        </h2>
-                        <br/>
                         <div className="ui grid">
                             <div className="twelve wide column">
+                                <h2 id = "heading" className="ui left aligned header inverted">
+                                    A Brief Description about {companyDetails.getFullName()}
+                                </h2>
                                 {companyDetails.getDescription()}
                             </div>
                             <div className="four wide column">
