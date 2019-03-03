@@ -125,8 +125,10 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
 
     render() {
         const currentTransactions = this.state.transactions;
-        let transactionsContent = currentTransactions.map((transaction) => (
-            <tr key={transaction.getId()}>
+        let transactionsContent = currentTransactions.map((transaction) =>
+         transaction.getType()!= TransactionType.RESERVE_UPDATE_TRANSACTION ? (
+
+           <tr key={transaction.getId()}>
                 <td>
                     <strong>
                         {this.props.stockBriefInfoMap[transaction.getStockId()].shortName}
@@ -142,7 +144,7 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
                 </td>
                 <td><strong>{transactionTime(transaction.getCreatedAt())}</strong></td>
             </tr>
-        ));
+        ):"");
         return (
             <Fragment>
                 <table className="ui inverted table unstackable">
