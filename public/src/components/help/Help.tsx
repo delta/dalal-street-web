@@ -199,6 +199,27 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <p>Please note that your <strong>Net Worth does NOT take into account reserved assets.</strong> At the end of 7 days, all open orders will be cancelled, thus <strong>returning all reserved assets</strong> to the user. <strong>This will change your Net Worth</strong> and could change the leaderboard rankings.</p>
                                     </div>
 
+                                     <div className="title">
+                                        <i className="dropdown icon inverted"></i>
+                                        <span className="faq-questions">Where are my Reserved Assets shown?</span>
+                                    </div>
+                                    <div className="content">
+                                        <p> When you place a Bid order, <strong>cash</strong> is reserved. When you place a Sell order, <strong>stocks</strong> are reserved. You can check how much cash is reserved in the <strong>Nav Bar</strong> at the top. Reserved stocks can be viewed in the <strong>Portfolio Page</strong>, in the <strong>Reserved Stocks tab</strong>.
+                                        If you cancel the Bid order, the cash reserved will be returned to you. Similarly, cancelling a Sell order will return your stocks.</p>
+                                        <p> Please note that <strong>Order fee  for placing these orders will NOT be returned.</strong></p>
+                                    </div>
+
+                                    <div className="title">
+                                        <i className="dropdown icon inverted"></i>
+                                        <span className="faq-questions">What is this Order Fee shown when I place orders?</span>
+                                    </div>
+                                    <div className="content">
+                                             <p>You have to pay a small fee whenever you place an order, called the order fee.
+                                             Once the order has been placed and you have paid the order fee from the cash in hand, even if you cancel the order, <strong>this fee will NOT be returned.</strong></p>
+                                    </div>
+
+
+
                                     <div className="title">
                                         <i className="dropdown icon inverted"></i>
                                         <span className="faq-questions">What is this short selling you speak of?</span>
