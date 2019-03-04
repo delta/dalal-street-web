@@ -27,7 +27,8 @@ export interface PlaceOrderBoxProps{
     isMarketOpen: boolean,
     isBlocked: boolean,
     isBankrupt: boolean,
-    orderFeePercent: number,// various constants. Documentation found in server/actionservice/Login method
+    orderFeePercent: number,
+    orderPriceWindow: number,// various constants. Documentation found in server/actionservice/Login method
 }
 
 declare var $: any;
@@ -93,11 +94,18 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
         const stockCount = Number(stockInputField.value);
         const expectedCostField = document.getElementById(orderType+"-"+orderAction+"-estimation")!;
         const orderFeeField = document.getElementById(orderType+"-"+orderAction+"-orderfee-estimation")!;
+        const lowerWindowField = document.getElementById(orderType+"-"+orderAction+"-lower-window")!;
+        const higherWindowField = document.getElementById(orderType+"-"+orderAction+"-higher-window")!;
         if (isNaN(stockCount) || stockCount <= 0) {
             expectedCostField.innerHTML = "0.00";
             orderFeeField.innerHTML = "0.00";
+            lowerWindowField.innerHTML = "0.00";
+            higherWindowField.innerHTML = "0.00";
             return;
         }
+        const change = Math.floor(this.props.currentPrice * this.props.orderPriceWindow / 100) ;
+        lowerWindowField.innerHTML = String(this.props.currentPrice - change) + ".00" ;
+        higherWindowField.innerHTML = String(this.props.currentPrice + change) + ".00" ;
         if (orderType == "market") {
             const cost = this.props.currentPrice * stockCount;
             const orderFee = Math.floor(this.props.orderFeePercent * cost / 100);
@@ -153,7 +161,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 
                         <div className="expected-cost">
                             Reserved Stock : We will reserve <span id="market-sell-estimation">0</span> stocks for this trade<br></br>
-                            Order Fee: ₹ <span id="market-sell-orderfee-estimation">0.00</span>
+                            Order Fee: ₹ <span id="market-sell-orderfee-estimation">0.00</span><br></br>
                         </div>
                     </div>
                 </div>
@@ -173,7 +181,8 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 
                         <div className="expected-cost">
                             Reserved Cash : We will reserve ₹ <span id="limit-buy-estimation">0.00</span> for this trade<br></br>
-                            Order Fee: ₹ <span id="limit-buy-orderfee-estimation">0.00</span>
+                            Order Fee: ₹ <span id="limit-buy-orderfee-estimation">0.00</span><br></br>
+                            Price should be between ₹ <span id="limit-buy-lower-window">0.00</span> and ₹ <span id="limit-buy-higher-window">0.00</span><br></br>
                         </div>
                     </div>
                     <div className="ui bottom attached tab segment inverted" data-tab="limit/sell">
@@ -187,11 +196,12 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 
                         <div className="expected-cost">
                             Reserved Stock : We will reserve <span id="limit-sell-estimation">0</span> stocks for this trade<br></br>
-                            Order Fee: ₹ <span id="limit-sell-orderfee-estimation">0.00</span>
+                            Order Fee: ₹ <span id="limit-sell-orderfee-estimation">0.00</span><br></br>
+                            Price should be between ₹ <span id="limit-sell-lower-window">0.00</span> and ₹ <span id="limit-sell-higher-window">0.00</span><br></br>
                         </div>
                     </div>
-                </div>
-                <div className="ui tab inverted" data-tab="stoploss">
+                  </div>
+                  <div className="ui tab inverted" data-tab="stoploss">
                     <div className="ui top attached tabular menu inverted place-order-box-menu">
                         <a className="item active green" data-tab="stoploss/buy">BUY</a>
                         <a className="item red" data-tab="stoploss/sell">SELL</a>
@@ -207,9 +217,9 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 
                         <div className="expected-cost">
                             Reserved Cash : We will reserve ₹ <span id="stoploss-buy-estimation">0.00</span> for this trade<br></br>
-                            Order Fee: ₹ <span id="stoploss-buy-orderfee-estimation">0.00</span>
-                        </div>
+                            Order Fee: ₹ <span id="stoploss-buy-orderfee-estimation">0.00</span><br></br>
                     </div>
+                  </div>
                     <div className="ui bottom attached tab segment inverted" data-tab="stoploss/sell">
                         <div className="ui input">
                             <input id="stoploss-sell-count" placeholder="Number of stocks" type="text" onChange={e => this.predictCost(e,"stoploss","sell")}/>
@@ -221,7 +231,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
 
                         <div className="expected-cost">
                             Reserved Stock : We will reserve <span id="stoploss-sell-estimation">0</span> stocks for this trade<br></br>
-                            Order Fee: ₹ <span id="stoploss-sell-orderfee-estimation">0.00</span>
+                            Order Fee: ₹ <span id="stoploss-sell-orderfee-estimation">0.00</span><br></br>
                         </div>
                     </div>
                 </div>
