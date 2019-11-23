@@ -3,7 +3,7 @@
 # DalalStreet frontend (based on `grpc-web`)
 
 ## Prerequisites
-- Nodejs 7.x
+- Nodejs 10.17
 - npm 4.x 
 - protoc (the protobuf compiler)
 
