@@ -26,6 +26,7 @@ import { Notification as Notification_pb } from "../../proto_build/models/Notifi
 import { Transaction as Transaction_pb, TransactionType as TransactionType_pb, TransactionType } from "../../proto_build/models/Transaction_pb";
 
 import * as jspb from "google-protobuf";
+import { Admin } from "./admin/Admin";
 
 declare var $: any;
 declare var PNotify: any;
@@ -631,6 +632,11 @@ export class Main extends React.Component<MainProps, MainState> {
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
+
+            case "/admin":
+                return <Admin
+                    sessionMd={this.props.sessionMd}
+                />
             default:
                 return <NotFound />;
         }
