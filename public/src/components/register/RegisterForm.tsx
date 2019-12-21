@@ -1,6 +1,12 @@
 import * as React from "react";
+
+import * as fp from "fingerprintjs2";
 import { RegisterRequest, RegisterResponse } from "../../../proto_build/actions/Register_pb";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
+
+
+
+
 
 declare var $: any;
 
@@ -96,14 +102,28 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
             });
             return;
         }
+  
 
+      
+ 
         if (this.state.country != "Select Country") {
+        
+            let options={};
+            var values;
+            var fingerprint="hii";
             let registerRequest = new RegisterRequest();
             registerRequest.setEmail(this.state.email);
             registerRequest.setPassword(this.state.password);
             registerRequest.setFullName(this.state.fullName);
             registerRequest.setCountry(this.state.country);
-            this.registerUser(registerRequest);
+              let fingerprint2=await fp.getPromise(options).then(function(components)
+            {
+                 values = components.map(function (component) { return component.value })
+                 fingerprint = fp.x64hash128(values.join(''), 31)
+                 registerRequest.setFingerprint(fingerprint);
+                 
+            })
+               this.registerUser(registerRequest);
         }
         this.setState({
             disabled: false,
