@@ -935,3 +935,37 @@ h1 {
 }
 
 /* Mortgage styling ends here */
+
+
+/* Dividend styling starts here */
+
+.dividendPanel{
+	float: right;
+}
+
+#stock-container {
+	margin: 5px 15px;
+	max-width: 200px;
+}
+
+.dividendPanel{
+	 max-width: 600px;
+ }
+
+#stock-container .row {
+	padding-left: 0 !important;
+	padding-right: 5px !important;
+}
+#stock-container div.text {
+	width: 100%;
+	position: relative;
+}
+#stock-container div.text * {
+	display: inline-block;
+}
+#stock-container div.text .companyName {
+	width: 60%;
+}
+
+
+/* Dividend styling ends here */
