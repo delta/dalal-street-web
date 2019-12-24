@@ -413,6 +413,9 @@ export class Main extends React.Component<MainProps, MainState> {
                         case TransactionType_pb.ORDER_FILL_TRANSACTION:
                             notif = `${stockQty > 0 ? "Buy ":"Sell"} order completed successfully! `;
                             break;
+                        case TransactionType_pb.DIVIDEND_TRANSACTION:
+                            notif=` Dividen has been sent for ${stockName}`;
+                            break;
                         default:
                             console.error("Useless Transaction, left unprocessed ", newTransaction.getType());
                     }
@@ -572,6 +575,8 @@ export class Main extends React.Component<MainProps, MainState> {
             case "/admin":
                 return <Admin
                     sessionMd={this.props.sessionMd}
+                    stockBriefInfoMap={this.state.stockBriefInfoMap}
+                    stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                 />
             default:
                 return <NotFound />;
