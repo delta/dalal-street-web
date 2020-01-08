@@ -115,10 +115,6 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <i className="dropdown icon inverted"></i>
                                         <span className="faq-questions lighter">How is the winner determined</span>
                                     </div>
-                                    <div className="content">
-                                        <p>Please note that <strong>while the game is progressing, the Leaderboard rankings do not 100% accurately reflect the winner of the game</strong>. This is because the leaderboard rankings <strong>do not take Reserved Assets into account</strong>. At the end of the game however, all Reserved Assets will be returned to the user. This will change the Net Worth and could ultimately change the leaderboard rankings as well.</p>
-                                        <p>So don't give up until the end! Your leaderboard rankings could jump when you receive all your Reserved Assets back at the end of the game!</p>
-                                    </div>
                                 </div>
                             </div>
                             <div className="ui bottom attached tab segment" data-tab="faqs">
