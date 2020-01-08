@@ -369,87 +369,23 @@ export class Main extends React.Component<MainProps, MainState> {
         try {
             for await (const update of stream) {
                 const newTransaction = update.getTransaction()!;
-                    switch(newTransaction.getType()){
-                        case TransactionType_pb.FROM_EXCHANGE_TRANSACTION:
-                            userCash+=newTransaction.getTotal();
-                            if (newTransaction.getStockId() in stocksOwnedMap) {
-                                stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
-                            }
-                            else {
-                                stocksOwnedMap[newTransaction.getStockId()] = newTransaction.getStockQuantity();
-                            }
-                            break;
+                console.log(newTransaction)
+                            
+                userCash+=newTransaction.getTotal();
+                reservedCash+=newTransaction.getReservedCashTotal();
+                if (newTransaction.getStockId() in stocksOwnedMap) {
+                    stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
+                }
+                else {
+                    stocksOwnedMap[newTransaction.getStockId()] = newTransaction.getStockQuantity();
+                }
 
-                        case TransactionType_pb.MORTGAGE_TRANSACTION:
-                            userCash+=newTransaction.getTotal();
-                            if (newTransaction.getStockId() in stocksOwnedMap) {
-                                stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
-                            }
-                            else {
-                                stocksOwnedMap[newTransaction.getStockId()] = newTransaction.getStockQuantity();
-                            }
-                            break;
-
-                        case TransactionType_pb.TAX_TRANSACTION:
-                            userCash+=newTransaction.getTotal();
-                            break;
-
-                        case TransactionType_pb.PLACE_ORDER_TRANSACTION:
-                            userCash+=newTransaction.getTotal();
-                            reservedCash-=newTransaction.getTotal();
-                            if (newTransaction.getStockId() in stocksOwnedMap) {
-                                stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
-                            }
-                            else {
-                                stocksOwnedMap[newTransaction.getStockId()] = newTransaction.getStockQuantity();
-                            }
-
-                            if (newTransaction.getStockId() in stocksReservedMap) {
-                                stocksReservedMap[newTransaction.getStockId()] -= newTransaction.getStockQuantity();
-                            }
-                            else {
-                                stocksReservedMap[newTransaction.getStockId()] = -newTransaction.getStockQuantity();
-                            }
-                            break;
-
-                        case TransactionType_pb.CANCEL_ORDER_TRANSACTION:
-                            userCash+=newTransaction.getTotal();
-                            reservedCash-=newTransaction.getTotal();
-                            if (newTransaction.getStockId() in stocksOwnedMap) {
-                                stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
-                            }
-                            else {
-                                stocksOwnedMap[newTransaction.getStockId()] = newTransaction.getStockQuantity();
-                            }
-
-                            if (newTransaction.getStockId() in stocksReservedMap) {
-                                stocksReservedMap[newTransaction.getStockId()] -= newTransaction.getStockQuantity();
-                            }
-                            else {
-                                stocksReservedMap[newTransaction.getStockId()] = -newTransaction.getStockQuantity();
-                            }
-                            break;
-
-                        case TransactionType_pb.ORDER_FILL_TRANSACTION:
-                            userCash+=newTransaction.getTotal();
-                            break;
-
-                        case TransactionType_pb.RESERVE_UPDATE_TRANSACTION:
-                            reservedCash-=newTransaction.getTotal();
-                            if (newTransaction.getStockId() in stocksReservedMap) {
-                                stocksReservedMap[newTransaction.getStockId()] -= newTransaction.getStockQuantity();
-                            }
-                            else {
-                                stocksReservedMap[newTransaction.getStockId()] = -newTransaction.getStockQuantity();
-                            }
-                            break;
-                        case TransactionType_pb.ORDER_FEE_TRANSACTION:
-                            userCash+=newTransaction.getTotal();
-                            break;
-
-                        default:
-
-                    }
+                if (newTransaction.getStockId() in stocksReservedMap) {
+                    stocksReservedMap[newTransaction.getStockId()] += newTransaction.getReservedStockQuantity();
+                }
+                else {
+                    stocksReservedMap[newTransaction.getStockId()] = newTransaction.getReservedStockQuantity();
+                }                  
 
                 try {
                     let notif = "";
