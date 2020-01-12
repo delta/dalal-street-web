@@ -12,16 +12,20 @@ import { Login } from "./login/Login"
 import { Register } from "./register/Register"
 import { IntroScreen } from "./intro/IntroScreen";
 import { LoadingScreen } from "./common/LoadingScreen";
-
+import {Forgotpassword} from "./forgotpassword/forgotpassword";
 import { Navbar } from "./common/Navbar";
 import { Main } from "./Main";
 import { RegisterResponse } from "../../proto_build/actions/Register_pb";
+import { ForgotPasswordResponse } from "../../proto_build/actions/ForgotPassword_pb";
+import { ChangePassword } from "./changepassword/changepassword";
 
 const LOGIN = 1;
 const SIGNUP = 2;
 const MAIN = 3;
 const LOADING = 4;
 const SPLASH = 5;
+const FORGOTPASSWORD=6;
+const CHANGEPASSWORD=7;
 
 interface AppState {
 	isLoading: boolean // Waiting for response from login
@@ -171,6 +175,14 @@ export class App extends React.Component<{}, AppState> {
 		window.history.replaceState({}, "Dalal Street | Register", "/register");
 		this.forceUpdate()
 	}
+	forgotpasswordRedirect = () =>{
+		window.history.replaceState({},"Dalal Street |Login ","/forgotpassword");
+		this.forceUpdate();
+	}
+	changePasswordURL = () =>{
+		 window.history.replaceState({},"Dalal Street" , "/changepassword" );
+		 this.forceUpdate();
+	}
 	routeMe = () => {
 		const path = window.location.pathname
 		if (this.state.isLoading) {
@@ -184,6 +196,12 @@ export class App extends React.Component<{}, AppState> {
 		}
 		if (path == "/login") {
 			return LOGIN;
+		}
+		if(path == "/forgotpassword") {
+            return FORGOTPASSWORD;
+		}
+		if(path=="/changepassword") {
+			return CHANGEPASSWORD;
 		}
 		//If render ever reaches here it means that login response was an error
 		//and it is loading hence has to be rerouted to /login and the login component
@@ -267,18 +285,23 @@ export class App extends React.Component<{}, AppState> {
 			case LOGIN:
 				return <Login loginSuccessHandler={this.parseLoginResponse}
 					signUpRedirect={this.signUpRedirect}
+					forgotpasswordRedirect={this.forgotpasswordRedirect}
 				/>;
 			case LOADING:
 				return <LoadingScreen />;
 			case SPLASH:
 				return <div id="intro-div"><IntroScreen /></div>;
+			case FORGOTPASSWORD:
+				return <Forgotpassword />;
+			case CHANGEPASSWORD:
+				return 	<ChangePassword />
 		}
 
 		// if (this.state.isLoggedIn) {
 
 		//Getting the path
 		// const path = window.location.pathname;
-		// If anything breaks put this on top of render :)
+		// If anything breaks put this .on top of render :)
 		// //If it's logged in and is hitting "" or "/" or "/login" redirect to /trade by default
 		// //Issues:If you hit /leaderboard say you'll be redirected to /login and then
 		// //be routed to /trade
