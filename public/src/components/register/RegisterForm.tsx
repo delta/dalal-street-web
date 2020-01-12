@@ -1,9 +1,4 @@
 import * as React from "react";
-<<<<<<< HEAD
-=======
-
->>>>>>> bc904a4f2c4431377294e27773cb7a6b4a183a55
-import * as fp from "fingerprintjs2";
 import { RegisterRequest, RegisterResponse } from "../../../proto_build/actions/Register_pb";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 
