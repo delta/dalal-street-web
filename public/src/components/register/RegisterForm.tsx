@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as fp from "fingerprintjs2";
 import { RegisterRequest, RegisterResponse } from "../../../proto_build/actions/Register_pb";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 
@@ -96,13 +97,16 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
             });
             return;
         }
-
-        if (this.state.country != "Select Country") {
+  
+  
+            if (this.state.country != "Select Country") {
+          
             let registerRequest = new RegisterRequest();
             registerRequest.setEmail(this.state.email);
             registerRequest.setPassword(this.state.password);
             registerRequest.setFullName(this.state.fullName);
             registerRequest.setCountry(this.state.country);
+         
             this.registerUser(registerRequest);
         }
         this.setState({
