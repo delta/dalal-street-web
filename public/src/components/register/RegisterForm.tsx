@@ -106,18 +106,9 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
             return;
         }
   
-<<<<<<< HEAD
   
             if (this.state.country != "Select Country") {
           
-=======
-
-      
- 
-        if (this.state.country != "Select Country") {
-        
-        
->>>>>>> bc904a4f2c4431377294e27773cb7a6b4a183a55
             let registerRequest = new RegisterRequest();
             registerRequest.setEmail(this.state.email);
             registerRequest.setPassword(this.state.password);
