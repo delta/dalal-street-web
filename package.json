@@ -30,6 +30,7 @@
     "@types/react-joyride": "^2.0.1",
     "@types/react-paginate": "^4.3.1",
     "es6-promise": "^4.2.2",
+    "fingerprintjs2": "^2.1.0",
     "google-protobuf": "^3.5.0",
     "grpc-web-client": "^0.3.1",
     "jquery": "^3.2.1",
@@ -39,6 +40,7 @@
     "react-paginate": "^5.0.0"
   },
   "devDependencies": {
+    "@types/fingerprintjs2": "^2.0.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-async-generator-functions": "^6.24.1",

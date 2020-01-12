@@ -10,7 +10,7 @@ export interface FormState {
     temp_password: string,
     new_password: string,
     confirm_new_password: string
-    successfull: boolean
+    successful: boolean
 
 }
 
@@ -24,7 +24,7 @@ export class ChangePasswordForm extends React.Component<any, FormState>{
             confirm_new_password: "",
             disabled: false,
             error: null,
-            successfull: false
+            successful: false
 
         }
 
@@ -58,7 +58,7 @@ export class ChangePasswordForm extends React.Component<any, FormState>{
          {
              this.setState({
                  error:error,
-                 successfull:false,
+                 successful:false,
                  disabled:false
              })
              return
@@ -85,7 +85,7 @@ export class ChangePasswordForm extends React.Component<any, FormState>{
             console.log(resp);
             this.setState({
                 error: "Password changed successfully!",
-                successfull: true
+                successful: true
             })
 
         } catch (e) {
@@ -93,7 +93,7 @@ export class ChangePasswordForm extends React.Component<any, FormState>{
             console.log(e);
             this.setState({
                 error: e.isGrpcError ? "Unable to reach server. Please check your internet connection." : e.statusMessage,
-                successfull: false
+                successful: false
             });
         }
 
@@ -145,7 +145,11 @@ export class ChangePasswordForm extends React.Component<any, FormState>{
                             <div className="ui fluid large teal submit disabled button">Change Password</div> :
                             <div className="ui fluid large teal submit button" onClick={this.handleSubmit}>Change Password</div>
                         }
-                        {this.state.error != null && <div className="ui negative bottom attached message">
+                        {this.state.error != null && !this.state.successful && <div className="ui negative bottom attached message">
+                            <i className="icon error"></i>
+                            {this.state.error}
+                        </div>}
+                        {this.state.error != null && this.state.successful && <div className="ui positive bottom attached message">
                             <i className="icon error"></i>
                             {this.state.error}
                         </div>}
