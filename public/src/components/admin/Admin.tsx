@@ -40,8 +40,17 @@ export class Admin extends React.Component<AdminProps,AdminState> {
         const dividendAmount=this.state.dividendAmount;
         const sessionMd = this.props.sessionMd;
         const stockName = this.props.stockBriefInfoMap[dividendStockId].fullName;
-        // Yet to be coded
         
+        // Change to defaults: avoids multiple click issue
+        const currentStockId = Number(Object.keys(this.props.stockBriefInfoMap).sort()[0]);
+        this.setState(prevState => {
+            return {
+                currentStockId: currentStockId,
+                dividendAmount: 0
+            }
+        });
+        
+
         if(isPositiveInteger(dividendAmount+1)){
         const dividendReq = new SendDividendsRequest();
         try{
@@ -63,19 +72,6 @@ export class Admin extends React.Component<AdminProps,AdminState> {
         else{
             showErrorNotif("Enter a valid integer!");
         }
-
-
-
-
-        // Change to defaults: avoids multiple click issue
-        const currentStockId = Number(Object.keys(this.props.stockBriefInfoMap).sort()[0]);
-        this.setState(prevState => {
-			return {
-                currentStockId: currentStockId,
-                dividendAmount: 0
-			}
-		});
-
     }
 
 
