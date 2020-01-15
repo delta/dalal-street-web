@@ -7,7 +7,6 @@ import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { Dividend } from "./Dividend";
 import { showNotif, showErrorNotif, isPositiveInteger, closeNotifs } from "../../utils";
 
-
 type NumNumMap = { [index: number]: number };
 
 export interface AdminProps {
@@ -28,20 +27,23 @@ export class Admin extends React.Component<AdminProps,AdminState> {
         const currentStockId = Number(Object.keys(this.props.stockBriefInfoMap).sort()[0]);
         this.state = {
             currentStockId: currentStockId,
-            dividendAmount: 0
+            dividendAmount: 0 
         }
     }
-
-
     // Submit states to backend for dividend feature
-
     applyDividend=async () => {
-        const dividendStockId=this.state.currentStockId;
-        const dividendAmount=this.state.dividendAmount;
+        var dividendStockId=this.state.currentStockId;
+        var dividendAmount=this.state.dividendAmount;
         const sessionMd = this.props.sessionMd;
-        const stockName = this.props.stockBriefInfoMap[dividendStockId].fullName;
-        // Yet to be coded
-        
+        const stockName = this.props.stockBriefInfoMap[dividendStockId].fullName; 
+        // Change to defaults: avoids multiple click issue
+        $("#dividend-amount" ).val("");
+        const currentStockId = Number(Object.keys(this.props.stockBriefInfoMap).sort()[0]);
+        this.setState(prevState => {
+            return {
+                dividendAmount: 0,
+            }
+        });
         if(isPositiveInteger(dividendAmount+1)){
         const dividendReq = new SendDividendsRequest();
         try{
@@ -50,7 +52,6 @@ export class Admin extends React.Component<AdminProps,AdminState> {
             const resp = await DalalActionService.sendDividends(dividendReq, sessionMd);
             // If any error occurs, it will be raised in DalalMessage_pb_Service
             showNotif("Dividend has been successfully sent on "+stockName+"!");
-
         }catch(e){
             console.log("Error happened while applying dividend! ", e.statusCode, e.statusMessage, e);
             if (e.isGrpcError) {
@@ -63,24 +64,8 @@ export class Admin extends React.Component<AdminProps,AdminState> {
         else{
             showErrorNotif("Enter a valid integer!");
         }
-
-
-
-
-        // Change to defaults: avoids multiple click issue
-        const currentStockId = Number(Object.keys(this.props.stockBriefInfoMap).sort()[0]);
-        this.setState(prevState => {
-			return {
-                currentStockId: currentStockId,
-                dividendAmount: 0
-			}
-		});
-
     }
-
-
     // Updates stockid for dividend feature
-
     handleStockIdChange = (newStockId: number) => {
 		this.setState(prevState => {
 			return {
@@ -88,10 +73,7 @@ export class Admin extends React.Component<AdminProps,AdminState> {
 			}
 		});
     };
-
-
     // Updates no.of stocks for dividend feature 
-
     handleDividendAmountChange = (newamount: number) => {
 		this.setState(prevState => {
 			return {
@@ -99,9 +81,6 @@ export class Admin extends React.Component<AdminProps,AdminState> {
 			}
 		});
 	};
-
-
-
     purchaseFromExchange = async (event: any) => {
         try {
             const request = new SendNewsRequest();
@@ -112,17 +91,12 @@ export class Admin extends React.Component<AdminProps,AdminState> {
         }
     }
     render() {
-
-        
         return (
             <React.Fragment>
                 <div className="adminPanel">
                   <h1>ADMIN PANEL</h1>
                   <span>dsaaaaaaaaaaaaaaaaaaaaaaaa</span><button onClick = {(e) => { this.purchaseFromExchange(e) }}>Send</button>       
-                </div>
-
-                {/* Dividend Feature */}
-                
+                </div>               
                 <div className="dividendPanel">
                   <Dividend 
                    sessionMd={this.props.sessionMd} 
@@ -132,10 +106,8 @@ export class Admin extends React.Component<AdminProps,AdminState> {
                    handleStockIdChangeCallback={this.handleStockIdChange}
                    handleDividendAmountChangeCallback={this.handleDividendAmountChange}
                    applyDividendCallback={this.applyDividend}
-
                   />
-                </div>
-                
+                </div>             
             </React.Fragment>
         )
     }
