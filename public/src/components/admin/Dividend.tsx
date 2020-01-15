@@ -8,12 +8,11 @@ export interface DividendProps{
     sessionMd: Metadata,
     stockBriefInfoMap: { [index: number]: StockBriefInfo } // get stock detail for a given stockid
     currentStockId: Number
-    dividendAmount:Number
+    dividendAmount: Number
     handleStockIdChangeCallback: (newStockId: number) => void
     applyDividendCallback: () => void
     handleDividendAmountChangeCallback:(newamount: number )=> void
 }
-
 
 export class Dividend extends React.Component<DividendProps,{}> {
     constructor(props: DividendProps) {
@@ -24,25 +23,23 @@ export class Dividend extends React.Component<DividendProps,{}> {
 		$("#stock-container").dropdown({
 			onChange: this.handleStockChange,
 		});
-	}
-
-	// just semantic things.
+    }
+    
 	componentDidUpdate() {
 		$("#stock-container").dropdown("refresh");
 		$("#stock-container div.text").html($("#stock-container .item.selected").html())
-	}
-
-
+    }
+    
     handleStockChange = (stockId: string) => {
 		const newStockId = Number(stockId);
 		this.props.handleStockIdChangeCallback(newStockId);
-	};
-
+    };
+    
     handleDividendAmountChange= (e:any) =>{
         const value=e.target.value;
         this.props.handleDividendAmountChangeCallback(value);
-    }
-    
+    }  
+
     render() {
         const stockBriefInfoMap = this.props.stockBriefInfoMap;
         const options = [];
@@ -55,6 +52,7 @@ export class Dividend extends React.Component<DividendProps,{}> {
 			);
         
         }
+        
         return (
             <React.Fragment>
             <table id="dividend-table">
@@ -71,7 +69,7 @@ export class Dividend extends React.Component<DividendProps,{}> {
 			            </div>
                         </td>
                         <td>
-                          <input type="integer" className="market-input" id="dividend-amount" name="dividend-amount" onChange={this.handleDividendAmountChange.bind(this)} value={this.props.dividendAmount.toString()}/>
+                          <input type="integer" className="market-input" id="dividend-amount" name="dividend-amount" onChange={this.handleDividendAmountChange.bind(this)} placeholder="0" />
                         </td>
                         <td>
                           <input type="button" className="ui inverted green button" onClick={this.props.applyDividendCallback.bind(this)} value="Send Dividends"/>
