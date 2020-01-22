@@ -10,6 +10,8 @@ import { LeaderboardRow as LeaderboardRow_pb } from "../../../proto_build/models
 import { Fragment } from "react";
 import { addCommas, showErrorNotif } from "../../utils";
 
+declare var $: any;
+
 export interface LeaderboardProps {
     userCash: number,
     userReservedCash: number,
@@ -41,6 +43,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
     }
 
     componentDidMount() {
+        $("#leaderboard .box").popup();
         this.getLeaderboard(1);
     }
 
@@ -128,11 +131,17 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                     <div className="row fourteen wide column centered">
                         <table className="ui inverted table unstackable">
                             <thead>
-                                <tr>
+                                <tr id="leaderboard">
                                     <th>Rank</th>
                                     <th>Username</th>
-                                    <th>Cash (₹)</th>
-                                    <th>StockWorth (₹)</th>
+                                    <th className="box" data-position="top center" data-content="Cash in hand + Reserved cash">
+                                    <div>
+                                       Total Cash (₹) <i className="fa fa-question-circle" aria-hidden="true"></i>
+                                    </div>
+                                    </th>
+                                    <th className="box" data-position="top center" data-content="Stock owned + Reserved stock">
+                                       Total Stock Worth (₹) <i className="fa fa-question-circle" aria-hidden="true"></i>
+                                    </th>
                                     <th>Net Worth (₹)</th>
                                 </tr>
                             </thead>
