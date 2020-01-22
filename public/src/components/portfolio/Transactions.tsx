@@ -142,6 +142,8 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
                 <td className={transaction.getTotal() >= 0 ? "green" : "red"}>
                     <strong>{transaction.getTotal()}</strong>
                 </td>
+                <td><strong>{transaction.getReservedCashTotal()}</strong></td>
+                <td><strong>{transaction.getReservedStockQuantity()}</strong></td>
                 <td><strong>{transactionTime(transaction.getCreatedAt())}</strong></td>
             </tr>
         ):"");
@@ -162,7 +164,9 @@ export class Transactions extends React.Component<TransactionsProps, Transaction
                             <th>Type</th>
                             <th>Quantity</th>
                             <th>Trade Price</th>
-                            <th>Total</th>
+                            <th>Cash</th>
+                            <th>Reserved Cash</th>
+                            <th>Reserved Stocks</th>
                             <th>Time</th>
                         </tr>
                     </thead>
