@@ -67,8 +67,14 @@
 	background: #1B1C1D !important;
 }
 
-#open-orders-container td.cancel-order-button {
+#open-orders-container td .cancel-order-button {
 	cursor: pointer;
+	background-color: inherit;
+	border: none;
+}
+
+#open-orders-container td .cancel-order-button:focus {
+	outline: none;
 }
 /* Open orders ends */
 
