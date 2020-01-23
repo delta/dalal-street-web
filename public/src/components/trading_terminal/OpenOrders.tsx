@@ -28,6 +28,7 @@ const orderTypeToStr = (ot: OrderType): string => {
 export interface OpenOrdersProps {
 	sessionMd: Metadata,
 	stockBriefInfoMap: { [index:number]: StockBriefInfo }
+	isMarketOpen: boolean
 }
 
 interface OpenOrdersState {
@@ -225,6 +226,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 	}
 
 	render() {
+		const cancelButtonState = this.props.isMarketOpen ? false : true;
 		if (this.state.isLoading) {
 			return (
 				<Fragment>
@@ -279,7 +281,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 					<td className="red volume"><strong>{openAsks[askId].getStockQuantity()}</strong></td>
 					<td className="red volume"><strong>{openAsks[askId].getStockQuantityFulfilled()}</strong></td>
 					<td className="red volume"><strong>{price}</strong></td>
-					<td onClick={e => this.confirmCancelModal(this,askId,true)} className="red cancel-order-button">❌</td>
+					 <td><button onClick={e => this.confirmCancelModal(this,askId,true)} disabled={cancelButtonState} className="red cancel-order-button">❌</button></td>
 				</tr>
 			);
 		}
@@ -290,6 +292,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 			const price = orderType == "Market" ? "N/A" : openBids[bidId].getPrice();
 
 			counter = counter + 1;
+		
 			orderElements.push(
 				<tr key={counter}>
 					<td className="green volume"><strong>{stockInfo[stockId].shortName}</strong></td>
@@ -297,7 +300,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 					<td className="green volume"><strong>{openBids[bidId].getStockQuantity()}</strong></td>
 					<td className="green volume"><strong>{openBids[bidId].getStockQuantityFulfilled()}</strong></td>
 					<td className="green volume"><strong>{price}</strong></td>
-					<td onClick={e => this.confirmCancelModal(this,bidId,false)} className="red cancel-order-button">❌</td>
+					<td><button onClick={e => this.confirmCancelModal(this,bidId,true)} disabled={cancelButtonState} className="red cancel-order-button">❌</button></td>
 				</tr>
 			);
 		}
