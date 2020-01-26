@@ -8,6 +8,7 @@ export interface TinyNetworthProps {
     userCash: number,
     userReservedCash: number,
     userTotal: number,
+    userReservedStocksWorth: number,
     connectionStatus: boolean,
     isMarketOpen: boolean,
 }
@@ -22,7 +23,7 @@ export class TinyNetworth extends React.Component<TinyNetworthProps, {}> {
     }
 
     render() {
-        const stockWorth = this.props.userTotal - this.props.userCash;
+        const stockWorth = this.props.userTotal - this.props.userCash - this.props.userReservedCash - this.props.userReservedStocksWorth;
         const stockWorthClass = stockWorth >= 0 ? "green" : "red";
         const netWorthClass = this.props.userTotal >= 0 ? "green" : "red";
         let connection = "";
@@ -65,6 +66,12 @@ export class TinyNetworth extends React.Component<TinyNetworthProps, {}> {
                     <h3 className={"ui center aligned " + stockWorthClass + " header inverted"}>
                         <i className="line chart icon small"></i>
                         {addCommas(stockWorth)}
+                    </h3>
+                </div>
+                <div className="ui six wide column box" data-content="Reserved Stocks worth">
+                    <h3 className={"ui center aligned red header inverted"}>
+                        <i className="balance scale icon small"></i>
+                        {addCommas(this.props.userReservedStocksWorth)}
                     </h3>
                 </div>
                 <div className="ui five wide column box" data-content="Your net worth">

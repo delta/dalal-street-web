@@ -19,7 +19,8 @@ export interface LeaderboardProps {
     sessionMd: Metadata,
     leaderboardCount: number,
     notifications: Notification_pb[],
-    disclaimerElement: JSX.Element
+    disclaimerElement: JSX.Element,
+    reservedStocksWorth: number,
 }
 
 interface LeaderboardState {
@@ -90,7 +91,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
         return (
             <Fragment>
                 <div className="row" id="top_bar">
-                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen}/>
+                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen}/>
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>
