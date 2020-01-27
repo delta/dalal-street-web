@@ -30,6 +30,7 @@ export interface MortgageProps {
     userTotal: number,
     userStockWorth: number,
     connectionStatus: boolean,
+    isPhoneVerified: boolean,
     isMarketOpen: boolean,
     reservedStocksWorth: number,
 }
@@ -215,6 +216,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         const stockPricesMap = this.props.stockPricesMap;
         const stocksOwnedMap = this.props.stocksOwnedMap;
         const mortgageDetails = this.state.mortgageDetails;
+        const disablePanel = !(this.props.isMarketOpen && this.props.isPhoneVerified);
 
         const mortgageTable: any[] = [];
         const retrieveTable: any[] = [];
@@ -228,7 +230,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
                     <td><strong>{this.props.depositRate + "%"}</strong></td>
                     <td className="green"><strong>{(stockPricesMap[stockId] * this.props.depositRate) / 100}</strong></td>
                     <td><strong><input id={"mortgageinput-" + stockId} placeholder="0" className="mortgage-input" /></strong></td>
-                    <td><strong><button disabled={this.props.isMarketOpen ? false : true} className="ui inverted green button" onClick={() => { this.mortgageStocks(Number(stockId)) }}>Mortgage</button></strong></td>
+                    <td><strong><button disabled={disablePanel ? true : false} className="ui inverted green button" onClick={() => { this.mortgageStocks(Number(stockId)) }}>Mortgage</button></strong></td>
                 </tr>
             );
         }
@@ -246,7 +248,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
                         <td><strong>{this.props.retrieveRate + "%"}</strong></td>
                         <td className="green"><strong>{(mortgagePrice * this.props.retrieveRate) / 100}</strong></td>
                         <td><strong><input id={"retrieveinput-" + uniqueKey} placeholder="0" className="mortgage-input" /></strong></td>
-                        <td><strong><button disabled={this.props.isMarketOpen ? false : true} className="ui inverted green button" onClick={() => { this.retrieveStocks(Number(stockId), mortgagePrice) }}>Retrieve</button></strong></td>
+                        <td><strong><button disabled={disablePanel ? true : false} className="ui inverted green button" onClick={() => { this.retrieveStocks(Number(stockId), mortgagePrice) }}>Retrieve</button></strong></td>
                     </tr>
                 );
             });

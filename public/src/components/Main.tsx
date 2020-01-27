@@ -59,6 +59,7 @@ interface MainState {
     stocksReservedMap: {[index: number]: number} //stocks reserved from user for a given stockid
     stockBriefInfoMap: { [index:number]: StockBriefInfo }
 
+    isPhoneVerified: boolean
     isMarketOpen: 	boolean
 
     notifSubscriptionId: SubscriptionId
@@ -106,6 +107,7 @@ export class Main extends React.Component<MainProps, MainState> {
             stockDetailsMap: this.props.stockDetailsMap,
             stocksReservedMap: this.props.stocksReservedMap,
             stockBriefInfoMap: stockBriefInfoMap,
+            isPhoneVerified: this.props.user.getIsPhoneVerified(),
             isMarketOpen: this.props.isMarketOpen,
             notifSubscriptionId: new SubscriptionId,
             stockSubscriptionId: new SubscriptionId,
@@ -503,6 +505,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     constantsMap={this.props.constantsMap}
+                    isPhoneVerified={this.state.isPhoneVerified}
                     isMarketOpen={this.state.isMarketOpen}
                     disclaimerElement={this.disclaimerElement}
                 />
@@ -537,6 +540,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     connectionStatus={this.state.connectionStatus}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
+                    isPhoneVerified={this.state.isPhoneVerified}
                     isMarketOpen={this.state.isMarketOpen}
                 />;
             case "/leaderboard":
@@ -600,6 +604,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     retrieveRate={this.props.constantsMap['MORTGAGE_RETRIEVE_RATE']}
                     latestTransaction={this.state.latestTransaction}
                     disclaimerElement={this.disclaimerElement}
+                    isPhoneVerified={this.state.isPhoneVerified}
                     isMarketOpen={this.state.isMarketOpen}
                 />
 

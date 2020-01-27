@@ -40,6 +40,7 @@ export interface TradingTerminalProps {
 	stockPricesMap: NumNumMap
 	constantsMap: { [index: string]: number } // various constants. Documentation found in server/actionservice/Login method
 
+	isPhoneVerified: boolean
 	isMarketOpen: boolean
 
 	disclaimerElement: JSX.Element
@@ -345,6 +346,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 		if (!localStorage.getItem('first_time_dalal')) {
 			run = true;
 		}
+		const disablePanel = !(this.props.isMarketOpen && this.props.isPhoneVerified);
 
 		return (
 			<Fragment>
@@ -394,7 +396,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 								stockId={this.state.currentStockId}
 								currentPrice={this.state.currentPrice}
 								sessionMd={this.props.sessionMd}
-								isMarketOpen={this.props.isMarketOpen}
+								disablePanel={disablePanel}
 							  orderFeePercent={this.props.constantsMap['ORDER_FEE_PERCENT']} />
 						</div>
 

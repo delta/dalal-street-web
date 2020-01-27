@@ -23,6 +23,7 @@ export interface MarketProps {
     userTotal: number,
     userStockWorth: number,
     connectionStatus: boolean,
+    isPhoneVerified: boolean,
     isMarketOpen: boolean,
     sessionMd: Metadata,
     stockDetailsMap: { [index: number]: Stock_pb },
@@ -100,7 +101,8 @@ export class Market extends React.Component<MarketProps, MarketState> {
     }
 
     render() {
-        $("#exchange-button").disabled = (!this.props.isMarketOpen);
+        const disablePanel = !(this.props.isMarketOpen && this.props.isPhoneVerified);
+        $("#exchange-button").disabled = (disablePanel);
         let history: any[] = [];
         let percentageIncrease: number;
         let diffClass: string;
@@ -121,7 +123,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
                     <td className={"volume " + diffClass}><strong>{percentageIncrease}{" %"}</strong></td>
                     <td className="volume"><strong>{currentStock.getStocksInExchange()}</strong></td>
                     <td className="volume"><strong><input id={"input-" + currentStock.getId()} placeholder="0" className="market-input" /></strong></td>
-                    <td className="volume"><strong><button disabled={this.props.isMarketOpen ? false : true} className="ui inverted green button" onClick={(e) => { this.purchaseFromExchange(e, currentStock.getId()) }}>Buy</button></strong></td>
+                    <td className="volume"><strong><button disabled={disablePanel ? true : false} className="ui inverted green button" onClick={(e) => { this.purchaseFromExchange(e, currentStock.getId()) }}>Buy</button></strong></td>
                 </tr>
             );
         }
