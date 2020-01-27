@@ -25,6 +25,7 @@ export interface PortfolioProps {
     userCash: number,
     userReservedCash: number,
     userTotal: number,
+    userStockWorth: number,
     userName: string,
     connectionStatus: boolean,
     isMarketOpen: boolean,
@@ -32,9 +33,9 @@ export interface PortfolioProps {
     stockPricesMap: { [index: number]: number },
     stocksOwnedMap: { [index: number]: number },
     stocksReservedMap: { [index: number]: number },
+    reservedStocksWorth: number,
     latestTransaction: Transaction_pb,
     disclaimerElement: JSX.Element,
-    reservedStocksWorth: number,
 }
 
 interface PortfolioState {
@@ -50,7 +51,7 @@ export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
         return (
             <Fragment>
                 <div className="row" id="top_bar">
-                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen} />
+                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal}  userStockWorth={this.props.userStockWorth} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen} />
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>
@@ -67,6 +68,8 @@ export class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
                         <Networth
                             userCash={this.props.userCash}
                             userReservedCash={this.props.userReservedCash}
+                            userReservedStocks={this.props.reservedStocksWorth}
+                            userStockWorth={this.props.userStockWorth}
                             userTotal={this.props.userTotal}
                         />
                     </div>

@@ -310,6 +310,10 @@ body {
 	color: rgb(158, 0, 0) !important;
 }
 
+#tiny-networth h3.black {
+	color: rgb(0, 0, 0) !important;
+}
+
 #tiny-networth i.icon {
 	font-size: 0.75em;
 }
@@ -972,7 +976,6 @@ h1 {
 #stock-container div.text .companyName {
 	width: 60%;
 }
-
 
 /* Dividend styling ends here */
 

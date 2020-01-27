@@ -31,6 +31,7 @@ export interface TradingTerminalProps {
 	userReservedCash: number
 	userTotal: number
 	connectionStatus: boolean
+	userStockWorth: number
 
 	stocksOwnedMap: NumNumMap // stocks owned by user for a given stockid
 	stocksReservedMap: NumNumMap // stocks owned by user for a given stockid
@@ -372,7 +373,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 							defaultStock={this.state.currentStockId} />
 					</div>
 
-					<TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen}/>
+					<TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} userStockWorth={this.props.userStockWorth} isMarketOpen={this.props.isMarketOpen}/>
 					<div id="notif-component">
 						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
 					</div>
