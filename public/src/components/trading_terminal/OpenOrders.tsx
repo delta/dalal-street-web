@@ -27,8 +27,8 @@ const orderTypeToStr = (ot: OrderType): string => {
 
 export interface OpenOrdersProps {
 	sessionMd: Metadata,
-	stockBriefInfoMap: { [index:number]: StockBriefInfo }
-	isMarketOpen: boolean
+	stockBriefInfoMap: { [index:number]: StockBriefInfo },
+	disablePanel: boolean,
 }
 
 interface OpenOrdersState {
@@ -300,7 +300,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 					<td className="green volume"><strong>{openBids[bidId].getStockQuantity()}</strong></td>
 					<td className="green volume"><strong>{openBids[bidId].getStockQuantityFulfilled()}</strong></td>
 					<td className="green volume"><strong>{price}</strong></td>
-					<td><button onClick={e => this.confirmCancelModal(this,bidId,true)} disabled={cancelButtonState} className="red cancel-order-button">❌</button></td>
+					<td onClick={e => !this.props.disablePanel ? this.confirmCancelModal(this,bidId,false) : undefined} aria-disabled={this.props.disablePanel ? true : false} className="red cancel-order-button">❌</td>
 				</tr>
 			);
 		}
