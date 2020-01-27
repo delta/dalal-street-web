@@ -5,6 +5,8 @@ import { addCommas } from "../../utils";
 export interface NetworthProps {
     userCash: number,
     userReservedCash: number,
+    userReservedStocks: number,
+    userStockWorth: number,
     userTotal: number,
 }
 
@@ -22,30 +24,35 @@ export class Networth extends React.Component<NetworthProps, NetworthState> {
     }
 
     render() {
-        const stockWorth = this.props.userTotal - this.props.userCash;
-        const stockWorthClass = stockWorth >= 0 ? "green" : "red";
+        const stockWorthClass = this.props.userStockWorth >= 0 ? "green" : "red";
         const netWorthClass = this.props.userTotal >= 0 ? "green" : "red";
         return (
             <Fragment>
-                <div className="ui four wide column">
+                <div className="ui three wide column">
                     <h1 className="ui center aligned green header inverted">
                         ₹ {addCommas(this.props.userCash)}
                         <div className="sub header">Cash in Hand</div>
                     </h1>
                 </div>
-                <div className="ui four wide column">
+                <div className="ui three wide column">
                     <h1 className={"ui center aligned green header inverted"}>
                         ₹ {addCommas(this.props.userReservedCash)}
                         <div className="sub header">Reserved Cash</div>
                     </h1>
                 </div>
-                <div className="ui four wide column">
+                <div className="ui three wide column">
                     <h1 className={"ui center aligned " + stockWorthClass + " header inverted"}>
-                        ₹ {addCommas(stockWorth)}
+                        ₹ {addCommas(this.props.userStockWorth)}
                         <div className="sub header">Stock Worth</div>
                     </h1>
                 </div>
-                <div className="ui four wide column">
+                <div className="ui three wide column">
+                    <h1 className={"ui center aligned green header inverted"}>
+                        ₹ {addCommas(this.props.userReservedStocks)}
+                        <div className="sub header">Reserved Stock Worth</div>
+                    </h1>
+                </div>
+                <div className="ui three wide column">
                     <h1 className={"ui center aligned " + netWorthClass+ " header inverted"}>
                         ₹ {addCommas(this.props.userTotal)}
                         <div className="sub header">Net Worth</div>

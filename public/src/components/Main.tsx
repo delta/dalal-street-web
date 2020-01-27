@@ -52,6 +52,7 @@ interface MainState {
     userReservedCash: number
     userTotal:		number
     reservedStocksWorth: number
+    stockWorth: number
 
     stocksOwnedMap:    { [index:number]: number } // stocks owned by user for a given stockid
     stockDetailsMap:   { [index:number]: Stock_pb } // get stock detail for a given stockid
@@ -100,6 +101,7 @@ export class Main extends React.Component<MainProps, MainState> {
             userReservedCash: this.props.user.getReservedCash(),
             userTotal: this.calculateTotal(this.props.user.getCash(), this.props.stocksOwnedMap, this.props.stockDetailsMap, this.props.stocksReservedMap, this.props.user.getReservedCash()),
             reservedStocksWorth: this.calculateUserReservedStocksWorth(this.props.stockDetailsMap, this.props.stocksReservedMap),
+            stockWorth: this.calculateUserStockWorth(this.props.stockDetailsMap, this.props.stocksReservedMap,  this.props.stocksOwnedMap),
             stocksOwnedMap: this.props.stocksOwnedMap,
             stockDetailsMap: this.props.stockDetailsMap,
             stocksReservedMap: this.props.stocksReservedMap,
@@ -153,6 +155,15 @@ export class Main extends React.Component<MainProps, MainState> {
 
         for (const stockId in stocksReservedMap) {
             worth += stocksReservedMap[stockId] * stockDetailsMap[stockId].getCurrentPrice();
+        }
+        return worth;
+    }
+    calculateUserStockWorth(stockDetailsMap: { [index:number]: Stock_pb }, stocksReservedMap: { [index:number]: number }, stocksOwnedMap: { [index:number]: number }){
+        let worth = 0;
+        for (const stockId in stockDetailsMap) {
+           if (stockId in stocksOwnedMap) {
+            worth += stocksOwnedMap[stockId] * stockDetailsMap[stockId].getCurrentPrice();
+           }
         }
         return worth;
     }
@@ -376,16 +387,18 @@ export class Main extends React.Component<MainProps, MainState> {
         let stocksReservedMap = this.state.stocksReservedMap;
         let userCash = this.state.userCash;
         let reservedCash = this.state.userReservedCash;
-
+        let stockWorth = this.state.stockWorth;
+        let stockId;
         this.connectionSucceeded();
 
         try {
             for await (const update of stream) {
                 const newTransaction = update.getTransaction()!;
                 console.log(newTransaction)
-                            
+                stockId=newTransaction.getStockId();
                 userCash+=newTransaction.getTotal();
                 reservedCash+=newTransaction.getReservedCashTotal();
+                stockWorth+=newTransaction.getStockQuantity() * this.state.stockDetailsMap[stockId].getCurrentPrice();
                 if (newTransaction.getStockId() in stocksOwnedMap) {
                     stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
                 }
@@ -448,6 +461,7 @@ export class Main extends React.Component<MainProps, MainState> {
                         stocksReservedMap: stocksReservedMap,
                         userCash: userCash,
                         userReservedCash: reservedCash,
+                        stockWorth: stockWorth,
                         userTotal: this.calculateTotal(userCash, stocksOwnedMap, this.state.stockDetailsMap, stocksReservedMap, reservedCash),
                         latestTransaction: newTransaction,
                     };
@@ -483,6 +497,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     reservedStocksWorth={this.state.reservedStocksWorth}
                     userCash={this.state.userCash}
                     userTotal={this.state.userTotal}
+                    userStockWorth={this.state.stockWorth}
                     connectionStatus={this.state.connectionStatus}
                     stocksOwnedMap={this.state.stocksOwnedMap}
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
@@ -498,6 +513,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userCash={this.state.userCash}
                     userReservedCash={this.state.userReservedCash}
                     reservedStocksWorth={this.state.reservedStocksWorth}
+                    userStockWorth={this.state.stockWorth}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
                     isMarketOpen={this.state.isMarketOpen}
@@ -517,6 +533,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userReservedCash={this.state.userReservedCash}
                     reservedStocksWorth={this.state.reservedStocksWorth}
                     userTotal={this.state.userTotal}
+                    userStockWorth={this.state.stockWorth}
                     connectionStatus={this.state.connectionStatus}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
@@ -530,6 +547,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     reservedStocksWorth={this.state.reservedStocksWorth}
                     userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
+                    userStockWorth={this.state.stockWorth}
                     connectionStatus={this.state.connectionStatus}
                     isMarketOpen={this.state.isMarketOpen}
                     notifications={this.state.notifications}
@@ -543,6 +561,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userReservedCash={this.state.userReservedCash}
                     reservedStocksWorth={this.state.reservedStocksWorth}
                     userTotal={this.state.userTotal}
+                    userStockWorth={this.state.stockWorth}
                     connectionStatus={this.state.connectionStatus}
                     isMarketOpen={this.state.isMarketOpen}
                     notifications={this.state.notifications}
@@ -556,6 +575,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     reservedStocksWorth={this.state.reservedStocksWorth}
                     userCash={this.state.userCash}
                     userReservedCash={this.state.userReservedCash}
+                    userStockWorth={this.state.stockWorth}
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
                     isMarketOpen={this.state.isMarketOpen}
@@ -574,6 +594,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userCash={this.state.userCash}
                     userReservedCash={this.state.userReservedCash}
                     userTotal={this.state.userTotal}
+                    userStockWorth={this.state.stockWorth}
                     connectionStatus={this.state.connectionStatus}
                     depositRate={this.props.constantsMap['MORTGAGE_DEPOSIT_RATE']}
                     retrieveRate={this.props.constantsMap['MORTGAGE_RETRIEVE_RATE']}
@@ -588,6 +609,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userReservedCash={this.state.userReservedCash}
                     reservedStocksWorth={this.state.reservedStocksWorth}
                     userTotal={this.state.userTotal}
+                    userStockWorth={this.state.stockWorth}
                     connectionStatus={this.state.connectionStatus}
                     isMarketOpen={this.state.isMarketOpen}
                     notifications={this.state.notifications}
