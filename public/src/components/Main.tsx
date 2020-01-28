@@ -13,6 +13,7 @@ import { News } from "./news/News";
 import { Company } from "./companies/Companies";
 import { Mortgage } from "./mortgage/Mortgage";
 import { Help } from "./help/Help";
+import { MobileVerification } from "./mobileverification/MobileVerification"; 
 
 import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService } from "../../proto_build/DalalMessage_pb_service";
@@ -44,6 +45,7 @@ export interface MainProps {
     marketIsOpenHackyNotif: 	string
     marketIsClosedHackyNotif: 	string
     isMarketOpen: 				boolean
+    updateIsPhoneVerifiedApp: () =>void
 }
 
 interface MainState {
@@ -172,6 +174,11 @@ export class Main extends React.Component<MainProps, MainState> {
     connectionSucceeded = () => {
         if (this.state.successCounter == 2) {
             showSuccessNotif("Connected to server", "Success");
+            if(!this.state.isPhoneVerified)
+            {
+                // console.log("yes");
+                showInfoNotif(`Please verify phone number at https://dalalstreet.org/registerphone`,"Phone Number not Verified")
+            }
             this.setState({
                 networkTimeOut: moment(),
                 successCounter: 0,
@@ -180,6 +187,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 networkTimeOutCounterPrices: 1,
                 connectionStatus: true,
             });
+
         } else {
             let sc = this.state.successCounter;
             this.setState({
@@ -480,6 +488,31 @@ export class Main extends React.Component<MainProps, MainState> {
         unsubscribe(this.props.sessionMd, this.state.notifSubscriptionId);
         unsubscribe(this.props.sessionMd, this.state.stockSubscriptionId);
         unsubscribe(this.props.sessionMd, this.state.transactionSubcriptionId);
+    }   
+    updatePhoneVerified = () =>{
+        window.history.replaceState({},"Dalal Street","/trade");
+        this.setState({
+            isPhoneVerified:true
+        })
+        this.props.updateIsPhoneVerifiedApp();
+        showSuccessNotif("Phone number verified successfully!");
+    }
+
+    handlePhoneAlreadyVerified = () =>{
+        window.history.replaceState({},"Dalal Street","/trade");
+        showSuccessNotif("Phone number already verified!");
+    }
+
+    routeMe = ():string =>{
+        if(this.state.isPhoneVerified)
+        {
+            const path = window.location.pathname;
+            window.history.replaceState({},"Dalal Street" , path); 
+            return path;  
+        }else{
+            window.history.replaceState({},"Dalal Street" , "/registerphone");
+            return "/registerphone";
+        }
     }
 
     render() {
@@ -488,7 +521,7 @@ export class Main extends React.Component<MainProps, MainState> {
         //pushing to path in App cannot be retrieved by Route exact path
         //because the history for react will not have those changes reflected
 
-        switch (window.location.pathname) {
+        switch (this.routeMe()) {
             case "/trade":
                 return <TradingTerminal
                     sessionMd={this.props.sessionMd}
@@ -627,6 +660,33 @@ export class Main extends React.Component<MainProps, MainState> {
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                 />
+            case "/registerphone":
+                if(!this.state.isPhoneVerified)
+                {
+                return <MobileVerification  sessionMd={this.props.sessionMd} updatePhoneVerified={this.updatePhoneVerified} />   
+                }else{
+                    this.handlePhoneAlreadyVerified()
+                    return <TradingTerminal
+                    sessionMd={this.props.sessionMd}
+                    notifications={this.state.notifications}
+                    userName={this.props.user.getName()}
+                    userReservedCash={this.state.userReservedCash}
+                    stocksReservedMap={this.state.stocksReservedMap}
+                    reservedStocksWorth={this.state.reservedStocksWorth}
+                    userCash={this.state.userCash}
+                    userTotal={this.state.userTotal}
+                    userStockWorth={this.state.stockWorth}
+                    connectionStatus={this.state.connectionStatus}
+                    stocksOwnedMap={this.state.stocksOwnedMap}
+                    stockBriefInfoMap={this.state.stockBriefInfoMap}
+                    stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
+                    constantsMap={this.props.constantsMap}
+                    isPhoneVerified={this.state.isPhoneVerified}
+                    isMarketOpen={this.state.isMarketOpen}
+                    disclaimerElement={this.disclaimerElement}
+                />
+                }
+                 
             default:
                 return <NotFound />;
         }
