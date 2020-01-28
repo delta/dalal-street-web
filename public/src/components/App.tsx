@@ -18,6 +18,7 @@ import { Main } from "./Main";
 import { RegisterResponse } from "../../proto_build/actions/Register_pb";
 import { ForgotPasswordResponse } from "../../proto_build/actions/ForgotPassword_pb";
 import { ChangePassword } from "./changepassword/ChangePassword";
+import { MobileVerification } from "./mobile_verification/MobileVerification";
 
 const LOGIN = 1;
 const SIGNUP = 2;
@@ -26,6 +27,8 @@ const LOADING = 4;
 const SPLASH = 5;
 const FORGOTPASSWORD = 6;
 const CHANGEPASSWORD = 7;
+const MOBILEVERIFICATION = 8;
+
 
 interface AppState {
 	isLoading: boolean // Waiting for response from login
@@ -41,6 +44,7 @@ interface AppState {
 	marketIsOpenHackyNotif: string
 	marketIsClosedHackyNotif: string
 	isMarketOpen: boolean
+	isPhoneVerified: boolean
 }
 
 export class App extends React.Component<{}, AppState> {
@@ -65,6 +69,7 @@ export class App extends React.Component<{}, AppState> {
 			marketIsClosedHackyNotif: "",
 			marketIsOpenHackyNotif: "",
 			isMarketOpen: false,
+			isPhoneVerified: false
 		};
 	}
 
@@ -122,12 +127,10 @@ export class App extends React.Component<{}, AppState> {
 		resp.getConstantsMap().forEach((value, name) => {
 			constantsMap[name] = value;
 		});
-		const shouldRedirect = ["", "/", "/login", "/register", "/home"].indexOf(window.location.pathname) != -1;
-		if (shouldRedirect) {
-			window.history.replaceState({}, "Dalal Street", "/trade");
-		}
+		const user = resp.getUser();
 		this.setState({
 			isLoggedIn: true,
+			isLoading: true,
 			sessionMd: new Metadata({ "sessionid": resp.getSessionId() }),
 			user: resp.getUser()!,
 			stocksOwnedMap: stocksOwnedMap,
@@ -136,8 +139,21 @@ export class App extends React.Component<{}, AppState> {
 			constantsMap: constantsMap,
 			marketIsOpenHackyNotif: resp.getMarketIsOpenHackyNotif(),
 			marketIsClosedHackyNotif: resp.getMarketIsClosedHackyNotif(),
-			isMarketOpen: resp.getIsMarketOpen()
+			isMarketOpen: resp.getIsMarketOpen(),
+			isPhoneVerified: (user)?user.getIsPhoneVerified():false
 		});
+		const shouldRedirect = ["", "/", "/login", "/register", "/home"].indexOf(window.location.pathname) != -1;
+		if (shouldRedirect) {
+			if(this.state.user.getIsPhoneVerified())
+			{
+			window.history.replaceState({}, "Dalal Street", "/trade");
+			}else{
+			window.history.replaceState({}, "Dalal Street", "/registerphone");
+			}
+			this.setState({
+				isLoading: false
+			})
+		}
 	}
 
 	handleUrlChange = () => {
@@ -160,11 +176,19 @@ export class App extends React.Component<{}, AppState> {
 				marketIsClosedHackyNotif: "",
 				marketIsOpenHackyNotif: "",
 				isMarketOpen: false,
+				isPhoneVerified: false,
 			})
 			this.forceUpdate()
 		} else {
 			this.forceUpdate()
 		}
+	}
+	updateIsPhoneVerified = () => {
+		this.setState({
+			isPhoneVerified: true
+		})
+		window.history.replaceState({}, "Dalal Street | Register", "/trade");
+		this.forceUpdate()
 	}
 	loginRedirect = () => {
 		window.history.replaceState({}, "Dalal Street | Register", "/login");
@@ -183,13 +207,24 @@ export class App extends React.Component<{}, AppState> {
 		window.history.replaceState({}, "Dalal Street", "/changepassword");
 		this.forceUpdate();
 	}
+	otpVerificationRedirect = () => {
+		window.history.replaceState({},"Dalal Street | Login" , "/registerphone" );
+		this.forceUpdate();
+	}
 	routeMe = () => {
 		const path = window.location.pathname
 		if (this.state.isLoading) {
 			return LOADING;
 		}
 		if (this.state.isLoggedIn) {
-			return MAIN;
+			if(this.state.isPhoneVerified)
+			{
+                window.history.replaceState({},"Dalal Street",path);
+			    return MAIN;
+			}else{
+				window.history.replaceState({},"Dalal Street","/registerphone");
+				return MOBILEVERIFICATION;
+			}
 		}
 		if (path == "/register") {
 			return SIGNUP
@@ -227,6 +262,7 @@ export class App extends React.Component<{}, AppState> {
 				marketIsClosedHackyNotif: "",
 				marketIsOpenHackyNotif: "",
 				isMarketOpen: false,
+				isPhoneVerified: false
 			})
 		}
 		if (this.state.isLoggedIn) {
@@ -237,7 +273,12 @@ export class App extends React.Component<{}, AppState> {
 			//be routed to /trade
 			const shouldRedirect = ["", "/", "/login", "/register", "/home"].indexOf(path) != -1;
 			if (shouldRedirect) {
-				window.history.replaceState({}, "Dalal Street", "/trade");
+				if(this.state.isPhoneVerified)
+				{
+				window.history.replaceState({}, "Dalal Street", path);
+				}else{
+				window.history.replaceState({}, "Dalal Street", "/registerphone");
+				}
 			}
 		}
 	}
@@ -265,7 +306,7 @@ export class App extends React.Component<{}, AppState> {
 			case MAIN:
 				return (
 					<Fragment>
-						<Navbar handleUrlChange={this.handleUrlChange} />
+						<Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified ={this.state.isPhoneVerified}/>
 						<Main
 							sessionMd={this.state.sessionMd!}
 							user={this.state.user!}
@@ -276,9 +317,17 @@ export class App extends React.Component<{}, AppState> {
 							marketIsOpenHackyNotif={this.state.marketIsOpenHackyNotif!}
 							marketIsClosedHackyNotif={this.state.marketIsClosedHackyNotif!}
 							isMarketOpen={this.state.isMarketOpen!}
+							isPhoneVerified={this.state.isPhoneVerified}
 						/>
 					</Fragment>
 				);
+			case MOBILEVERIFICATION:
+				return(
+				 <Fragment>
+					 <Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified ={this.state.isPhoneVerified}/>
+					 <MobileVerification  sessionMd={this.state.sessionMd} updatePhoneVerified={this.updateIsPhoneVerified} /> 
+				 </Fragment>
+				);	
 			case SIGNUP:
 				return <Register loginRedirect={this.loginRedirect} />
 
@@ -296,9 +345,9 @@ export class App extends React.Component<{}, AppState> {
 					loginRedirect={this.loginRedirect}
 				/>;
 			case CHANGEPASSWORD:
-				return <ChangePassword
-					loginRedirect={this.loginRedirect}
-				/>
+				return 	<ChangePassword 
+				loginRedirect={this.loginRedirect}
+				/>;
 		}
 
 		// if (this.state.isLoggedIn) {
