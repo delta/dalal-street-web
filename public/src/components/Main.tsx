@@ -44,6 +44,7 @@ export interface MainProps {
     marketIsOpenHackyNotif: 	string
     marketIsClosedHackyNotif: 	string
     isMarketOpen: 				boolean
+    isPhoneVerified:            boolean
 }
 
 interface MainState {

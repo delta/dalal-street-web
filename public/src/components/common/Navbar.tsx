@@ -3,6 +3,7 @@ import { MouseEvent } from "react";
 
 export interface NavProps {
 	handleUrlChange: () => void
+	isPhoneVerified: boolean
 }
 
 declare var $: any;
@@ -16,14 +17,27 @@ export class Navbar extends React.Component<NavProps, {}> {
 		window.history.pushState({}, "Dalal Street", newPath);
 		//Rerender App and thereby changing appropriate component in Main
 		this.props.handleUrlChange();
+		
 	}
-	
+
 	render(){
 		let currentLink: string = window.location.pathname;
 		//If it was initially rendered with some path that should be set to active
         return(
         <div id="navbar" className="ui sidebar inverted labeled icon left vertical menu uncover visible">
-		<a className={"item " + (currentLink == "/trade" ? "active" : "")} onClick={e => this.handleClick(e, "/trade")}>
+		{	this.props.isPhoneVerified ==false && <div>
+		<a className={"item " + (currentLink == "/registerphone" ? "active" : "")}  onClick={e => this.handleClick(e, "/registerphone")}>
+			<i className="mobile icon"></i>
+			PhoneVerify
+	    </a>
+		<a className={"item " + (currentLink == "/logout" ? "active" : "")} onClick={e => this.handleClick(e, "/logout")}>
+		<i className="window close icon"></i>
+		Logout
+	</a>
+	</div>
+		}
+		{this.props.isPhoneVerified  && <div>
+		<a className={"item " + (currentLink == "/trade" ? "active" : "")}  onClick={e => this.handleClick(e, "/trade")}>
 			<i className="rupee icon"></i>
 			Trade
 		</a>
@@ -72,6 +86,8 @@ export class Navbar extends React.Component<NavProps, {}> {
 			<i className="window close icon"></i>
 			Logout
 		</a>
+		</div>
+	}
 	</div>)  
     };
 }
