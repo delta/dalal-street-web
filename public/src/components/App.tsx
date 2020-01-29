@@ -41,8 +41,6 @@ interface AppState {
 	stocksReservedMap: { [index: number]: number } //stocks reserved from user for a given stockid
 	constantsMap: { [index: string]: number } // various constants. Documentation found in server/actionservice/Login method
 
-	marketIsOpenHackyNotif: string
-	marketIsClosedHackyNotif: string
 	isMarketOpen: boolean
 	isPhoneVerified: boolean
 }
@@ -66,8 +64,6 @@ export class App extends React.Component<{}, AppState> {
 			stockDetailsMap: {},
 			stocksReservedMap: {},
 			constantsMap: {},
-			marketIsClosedHackyNotif: "",
-			marketIsOpenHackyNotif: "",
 			isMarketOpen: false,
 			isPhoneVerified: false,
 		};
@@ -174,8 +170,6 @@ export class App extends React.Component<{}, AppState> {
 				stockDetailsMap: {},
 				stocksReservedMap: {},
 				constantsMap: {},
-				marketIsClosedHackyNotif: "",
-				marketIsOpenHackyNotif: "",
 				isMarketOpen: false,
 				isPhoneVerified: false,
 			
@@ -261,8 +255,6 @@ export class App extends React.Component<{}, AppState> {
 				stockDetailsMap: {},
 				stocksReservedMap: {},
 				constantsMap: {},
-				marketIsClosedHackyNotif: "",
-				marketIsOpenHackyNotif: "",
 				isMarketOpen: false,
 				isPhoneVerified: false,
 				
@@ -316,8 +308,6 @@ export class App extends React.Component<{}, AppState> {
 							stockDetailsMap={this.state.stockDetailsMap!}
 							stocksReservedMap={this.state.stocksReservedMap!}
 							constantsMap={this.state.constantsMap!}
-							marketIsOpenHackyNotif={this.state.marketIsOpenHackyNotif!}
-							marketIsClosedHackyNotif={this.state.marketIsClosedHackyNotif!}
 							isMarketOpen={this.state.isMarketOpen!}
 							isPhoneVerified={this.state.isPhoneVerified}
 						/>
