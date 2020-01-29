@@ -1,7 +1,13 @@
 import * as React from "react";
 import { Metadata } from "grpc-web-client";
+<<<<<<< HEAD
 import { SendNewsRequest } from "../../../proto_build/actions/SendNews_pb";
 import { SendDividendsRequest } from "../../../proto_build/actions/SendDividends_pb";
+=======
+import {SendNewsRequest} from "../../../proto_build/actions/SendNews_pb";
+import {SendDividendsRequest} from "../../../proto_build/actions/SendDividends_pb";
+import {CloseMarketRequest}  from "../../../proto_build/actions/CloseMarket_pb";
+>>>>>>> [Streams] : Add GameState Strean
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { Dividend } from "./Dividend";
@@ -89,9 +95,8 @@ export class Admin extends React.Component<AdminProps,AdminState> {
 	};
     purchaseFromExchange = async (event: any) => {
         try {
-            const request = new SendNewsRequest();
-            request.setNews("This is the first news");
-            const resp = await DalalActionService.sendNews(request, this.props.sessionMd);
+            const request = new CloseMarketRequest();
+            const resp = await DalalActionService.closeMarket(request, this.props.sessionMd);
         } catch (e) {
             console.log(e);
         }
@@ -99,11 +104,19 @@ export class Admin extends React.Component<AdminProps,AdminState> {
     render() {
         return (
             <React.Fragment>
+<<<<<<< HEAD
                 <div id="admin-panel" className="main-container ui stackable grid pusher"> 
                 <table>
                 <tbody>
                 <tr>
                   <td className="dividendPanel">
+=======
+                <div className="adminPanel">
+                  <h1>ADMIN PANEL</h1>
+                  <span>dsaaaaaaaaaaaaaaaaaaaaaaaa</span><button onClick = {(e) => { this.purchaseFromExchange(e)}}>Send</button>       
+                </div>               
+                <div className="dividendPanel">
+>>>>>>> [Streams] : Add GameState Strean
                   <Dividend 
                    sessionMd={this.props.sessionMd} 
                    stockBriefInfoMap={this.props.stockBriefInfoMap}

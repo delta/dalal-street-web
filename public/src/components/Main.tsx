@@ -41,8 +41,6 @@ export interface MainProps {
     stocksReservedMap: {[index: number]: number} //stocks reserved from user for a given stockid
     constantsMap:    { [index:string]: number } // various constants. Documentation found in server/actionservice/Login method
 
-    marketIsOpenHackyNotif: 	string
-    marketIsClosedHackyNotif: 	string
     isMarketOpen: 				boolean
     isPhoneVerified:            boolean
 }
@@ -124,6 +122,7 @@ export class Main extends React.Component<MainProps, MainState> {
         this.handleNotificationsStream();
         this.handleStockPricesStream();
         this.handleTransactionsStream();
+        this.handleGameStateStream();
     }
 
     disclaimerElement = (
@@ -281,13 +280,6 @@ export class Main extends React.Component<MainProps, MainState> {
         try {
             for await (const notifUpdate of stream) {
                 const notif = notifUpdate.getNotification()!;
-                // checking for market close
-                let isMarketOpen: boolean = this.state.isMarketOpen;
-                if (notif.getText() == this.props.marketIsClosedHackyNotif) {
-                    isMarketOpen = false;
-                } else if (notif.getText() == this.props.marketIsOpenHackyNotif) {
-                    isMarketOpen = true;
-                }
 
                 showInfoNotif(notif.getText(), "New Notification");
 
@@ -295,7 +287,6 @@ export class Main extends React.Component<MainProps, MainState> {
                 notifs.unshift(notif);
 
                 this.setState({
-                    isMarketOpen: isMarketOpen,
                     notifications: notifs,
                 });
             }
@@ -365,6 +356,43 @@ export class Main extends React.Component<MainProps, MainState> {
         }
     };
 
+    handleGameStateStream = async () => {
+        const props = this.props;
+        let subscriptionId, stream;
+
+        try {
+            subscriptionId = await subscribe(props.sessionMd, DataStreamType.GAME_STATE);
+            stream = DalalStreamService.getGameStateUpdates(subscriptionId, props.sessionMd);
+            console.log(subscriptionId);
+        }
+        catch(e) {
+            console.log(e);
+            return this.retryStream(this.handleGameStateStream.bind(this), "gameState");
+        }
+
+        this.connectionSucceeded();
+
+        try {
+            for await (const update of stream) {
+                console.log(update);
+                if(update  && update!.getGameState())
+                {     if(update.getGameState()!.hasMarketState()){
+                               const marketState = update.getGameState()!.getMarketState();
+                               this.setState({
+                                    isMarketOpen: marketState!.getOpenOrClose(),
+                                });
+                }else if (update.getGameState()!.getStockDividendState()){
+            }
+        }
+      }
+    }
+        catch (e) {
+          console.log(e);
+          return this.retryStream(this.handleGameStateStream.bind(this), "gameState");
+        }
+
+    }
+
     handleTransactionsStream = async () => {
         const props = this.props;
 
@@ -412,7 +440,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 }
                 else {
                     stocksReservedMap[newTransaction.getStockId()] = newTransaction.getReservedStockQuantity();
-                }                  
+                }
 
                 try {
                     let notif = "";
