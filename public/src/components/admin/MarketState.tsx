@@ -5,17 +5,13 @@ import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service
 import { OpenMarketRequest } from "../../../proto_build/actions/OpenMarket_pb";
 import { CloseMarketRequest } from "../../../proto_build/actions/CloseMarket_pb";
 
-declare var $: any;
-
 export interface MarketStateProps{
     sessionMd: Metadata,
     isMarketOpen: boolean
 }
-
 export interface MarketStateState{
     option: string
 }
-
 export class MarketState extends React.Component<MarketStateProps, MarketStateState> {
     constructor(props: MarketStateProps) {
         super(props);      
