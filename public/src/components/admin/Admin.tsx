@@ -6,13 +6,16 @@ import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { Dividend } from "./Dividend";
 import { showNotif, showErrorNotif, isPositiveInteger, closeNotifs } from "../../utils";
+import {MarketState} from "./MarketState";
+
 
 type NumNumMap = { [index: number]: number };
 
 export interface AdminProps {
     sessionMd: Metadata,
     stockBriefInfoMap: { [index: number]: StockBriefInfo }, // get stock detail for a given stockid
-	stockPricesMap: NumNumMap
+    stockPricesMap: NumNumMap,
+    isMarketOpen: boolean
 }
 
 interface AdminState {
@@ -93,11 +96,11 @@ export class Admin extends React.Component<AdminProps,AdminState> {
     render() {
         return (
             <React.Fragment>
-                <div className="adminPanel">
-                  <h1>ADMIN PANEL</h1>
-                  <span>dsaaaaaaaaaaaaaaaaaaaaaaaa</span><button onClick = {(e) => { this.purchaseFromExchange(e) }}>Send</button>       
-                </div>               
-                <div className="dividendPanel">
+                <div id="admin-panel" className="main-container ui stackable grid pusher"> 
+                <table>
+                <tbody>
+                <tr>
+                  <td className="dividendPanel">
                   <Dividend 
                    sessionMd={this.props.sessionMd} 
                    stockBriefInfoMap={this.props.stockBriefInfoMap}
@@ -107,7 +110,17 @@ export class Admin extends React.Component<AdminProps,AdminState> {
                    handleDividendAmountChangeCallback={this.handleDividendAmountChange}
                    applyDividendCallback={this.applyDividend}
                   />
-                </div>             
+                  </td>
+                  <td className="marketStatus">
+                  <MarketState 
+                   sessionMd={this.props.sessionMd}
+                   isMarketOpen={this.props.isMarketOpen}
+                  /> 
+                  </td>
+                </tr>
+                </tbody>
+                </table> 
+                </div>                       
             </React.Fragment>
         )
     }
