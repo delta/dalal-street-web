@@ -1069,3 +1069,22 @@ h1 {
 	  background: white;
   }
 /* Market State styling ends here  */
+
+/* Notification styling starts here */
+.notify-text{
+	text-align: center;
+	/* width:240px; */
+	height: 30px;
+	background-color: white !important;
+	color:#242323 !important;
+	border-radius: 5px;
+	outline: none;
+	border: 1px solid #242323;
+	padding: 3px;
+}
+
+#Notification td{
+	overflow:hidden;
+}
+
+/* Notification styling ends here */

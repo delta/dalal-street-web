@@ -5,84 +5,83 @@ import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service
 import { OpenMarketRequest } from "../../../proto_build/actions/OpenMarket_pb";
 import { CloseMarketRequest } from "../../../proto_build/actions/CloseMarket_pb";
 
-declare var $: any;
-
 export interface MarketStateProps{
     sessionMd: Metadata,
     isMarketOpen: boolean
 }
-
 export interface MarketStateState{
-    option: string
+    option: boolean
 }
-
 export class MarketState extends React.Component<MarketStateProps, MarketStateState> {
     constructor(props: MarketStateProps) {
         super(props);      
         this.state = {
-            option: "No"
+            option: false
         }
     }
 
-    handleOptionChange = (e:any) => {
+    handleOptionChange = () => {
+        let option = $('#true').is(":checked");
         this.setState(prevState => {
 			return {
-				option: e
+				option: option
 			}
         });
     }
-    
-    handleMarketState = async (e:any) =>{
-        const option = this.state.option=="Yes" ? true : false;
+
+    handleOpenMarket = async (e:any) =>{
+        const option = this.state.option;
         const sessionMd = this.props.sessionMd;
-        if(this.props.isMarketOpen){
-          // close Market
-          const MarketRequest = new CloseMarketRequest();
-          try{
-            MarketRequest.setUpdatePrevDayClose(option);
-            const resp = await DalalActionService.closeMarket(MarketRequest, sessionMd);
-            // If any error occurs, it will be raised in DalalMessage_pb_Service
-            showNotif("Market has been successfully closed!");
-            this.setState(prevState => {
-                return {
-                    option: "No"
-                }
-            });
-          }catch(err){
-            console.log("Error happened while Closing Market! ", e.statusCode, e.statusMessage, e);
-            if (e.isGrpcError) {
-                showErrorNotif("Oops! Unable to reach server. Please check your internet connection!");
-            } else {
-                showErrorNotif("Oops! Something went wrong! " + e.statusMessage);
+        // open Market
+        const MarketRequest = new OpenMarketRequest();
+        try{
+          MarketRequest.setUpdateDayHighAndLow(option);
+          const resp = await DalalActionService.openMarket(MarketRequest, sessionMd);
+          // If any error occurs, it will be raised in DalalMessage_pb_Service
+          showNotif("Market has been successfully opened");
+          // showNotif("Market has been successfully!");
+          this.setState(prevState => {
+            return {
+                option: false
             }
+          });
+        }catch(err){
+          console.log("Error happened while Opening Market! ", e.statusCode, e.statusMessage, e);
+          if (e.isGrpcError) {
+            showErrorNotif("Oops! Unable to reach server. Please check your internet connection!");
+          } else {
+            showErrorNotif("Oops! Something went wrong! " + e.statusMessage);
           }
         }
-        else{
-          // open Market
-          const MarketRequest = new OpenMarketRequest();
-          try{
-            MarketRequest.setUpdateDayHighAndLow(option);
-            const resp = await DalalActionService.openMarket(MarketRequest, sessionMd);
-            // If any error occurs, it will be raised in DalalMessage_pb_Service
-            showNotif("Market has been successfully opened");
-            this.setState(prevState => {
-                return {
-                    option: "No"
-                }
-            });
-          }catch(err){
-            console.log("Error happened while Opening Market! ", e.statusCode, e.statusMessage, e);
-            if (e.isGrpcError) {
-                showErrorNotif("Oops! Unable to reach server. Please check your internet connection!");
-            } else {
-                showErrorNotif("Oops! Something went wrong! " + e.statusMessage);
+    }
+ 
+    handleCloseMarket = async (e:any) =>{
+        const option = this.state.option;
+        const sessionMd = this.props.sessionMd;
+        // close Market
+        const MarketRequest = new CloseMarketRequest();
+        try{
+          MarketRequest.setUpdatePrevDayClose(option);
+          const resp = await DalalActionService.closeMarket(MarketRequest, sessionMd);
+          // If any error occurs, it will be raised in DalalMessage_pb_Service
+          showNotif("Market has been successfully closed!");
+          this.setState(prevState => {
+            return {
+                option: false
             }
+          });
+        }catch(err){
+          console.log("Error happened while Closing Market! ", e.statusCode, e.statusMessage, e);
+          if (e.isGrpcError) {
+            showErrorNotif("Oops! Unable to reach server. Please check your internet connection!");
+          } else {
+            showErrorNotif("Oops! Something went wrong! " + e.statusMessage);
           }
         }
     }
 
     render() {
-        let marketStatus = this.props.isMarketOpen ? "red" : "green";
+        console.log("market props",this.props.isMarketOpen);
         return (
             <React.Fragment>
                 <table id="MarketState">
@@ -93,17 +92,22 @@ export class MarketState extends React.Component<MarketStateProps, MarketStateSt
                       </td>
                       <td>
                         <label className="radiolabel">
-                         <input type="radio" value="Yes" onChange={(e) => {this.handleOptionChange(e.target.value)}} checked={this.state.option === "Yes"}/>Yes
+                         <input type="radio" id="true" onChange={(e) => {this.handleOptionChange()}} checked={this.state.option === true}/>Yes
                          <span className="radiocheckmark"></span>
                         </label>
                         <label className="radiolabel">
-                         <input type="radio" value="No" onChange={(e) => {this.handleOptionChange(e.target.value)}} checked={this.state.option == "No"}/>No
+                         <input type="radio" id="false" onChange={(e) => {this.handleOptionChange()}} checked={this.state.option == false}/>No
                          <span className="radiocheckmark"></span>
                         </label>
                       </td>
                     </tr>
                     <tr>
-                       <input type="button" className={"ui inverted " + marketStatus + " button"} onClick={(e) => {this.handleMarketState(e)}} value={this.props.isMarketOpen ? "Close Market" : "Open Market"}/>
+                      <td>
+                       <input type="button" disabled={this.props.isMarketOpen ? true : false} className={"ui inverted green button"} onClick={(e) => {this.handleOpenMarket(e)}} value="Open Market"/>
+                      </td>
+                      <td>
+                      <input type="button" disabled={this.props.isMarketOpen ? false : true} className={"ui inverted red button"} onClick={(e) => {this.handleCloseMarket(e)}} value="Close Market"/>
+                      </td>
                     </tr>
                     </tbody>
                 </table>
