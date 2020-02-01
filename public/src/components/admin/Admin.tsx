@@ -1,12 +1,13 @@
 import * as React from "react";
 import { Metadata } from "grpc-web-client";
-import {SendNewsRequest} from "../../../proto_build/actions/SendNews_pb";
-import {SendDividendsRequest} from "../../../proto_build/actions/SendDividends_pb";
+import { SendNewsRequest } from "../../../proto_build/actions/SendNews_pb";
+import { SendDividendsRequest } from "../../../proto_build/actions/SendDividends_pb";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { Dividend } from "./Dividend";
+import { Notifications } from "./Notification";
 import { showNotif, showErrorNotif, isPositiveInteger, closeNotifs } from "../../utils";
-import {MarketState} from "./MarketState";
+import { MarketState } from "./MarketState";
 
 
 type NumNumMap = { [index: number]: number };
@@ -117,6 +118,12 @@ export class Admin extends React.Component<AdminProps,AdminState> {
                    isMarketOpen={this.props.isMarketOpen}
                   /> 
                   </td>
+                </tr>
+                <tr>
+                  <td>
+                  <Notifications sessionMd={this.props.sessionMd} />
+                  </td>
+                  <td></td>
                 </tr>
                 </tbody>
                 </table> 
