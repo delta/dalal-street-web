@@ -621,6 +621,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     sessionMd={this.props.sessionMd}
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
+                    isMarketOpen={this.state.isMarketOpen}
                 />
             default:
                 return <NotFound />;
