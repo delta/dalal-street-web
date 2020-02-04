@@ -10,6 +10,7 @@ import { showNotif, showErrorNotif, isPositiveInteger, closeNotifs } from "../..
 import { MarketState } from "./MarketState";
 import { MarketEvent } from "./MarketEvent";
 import { Bankruptcy } from "./Bankruptcy";
+import { SetDividends } from "./SetDividends";
 
 type NumNumMap = { [index: number]: number };
 
@@ -137,11 +138,16 @@ export class Admin extends React.Component<AdminProps,AdminState> {
                     sessionMd={this.props.sessionMd}
                    />   
                   </td>
-                  <td></td>
+                  <td>
+                   <SetDividends
+                    sessionMd={this.props.sessionMd}
+                    stockBriefInfoMap={this.props.stockBriefInfoMap}
+                   />
+                  </td>
                 </tr>
                 </tbody>
-                </table> 
-                </div>                       
+                </table>                      
+                </div>            
             </React.Fragment>
         )
     }
