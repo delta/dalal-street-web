@@ -123,6 +123,7 @@ export class Main extends React.Component<MainProps, MainState> {
         this.handleNotificationsStream();
         this.handleStockPricesStream();
         this.handleTransactionsStream();
+        this.handleGameStateStream();
     }
 
     disclaimerElement = (
@@ -363,6 +364,41 @@ export class Main extends React.Component<MainProps, MainState> {
             return this.retryStream(this.handleStockPricesStream.bind(this), "stockPrices");
         }
     };
+
+    handleGameStateStream = async () => {
+        const props = this.props;
+        console.log("Okay Game State Stream is listened")
+        let subscriptionId, stream;
+
+        try {
+            subscriptionId = await subscribe(props.sessionMd, DataStreamType.GAME_STATE);
+            stream = DalalStreamService.getGameStateUpdates(subscriptionId, props.sessionMd);
+            console.log(subscriptionId);
+        }
+        catch(e) {
+            console.log(e);
+            return this.retryStream(this.handleGameStateStream.bind(this), "gameState");
+        }
+        
+        this.connectionSucceeded();
+
+        try {
+            for await (const update of stream) {
+                console.log(update)
+                // const gameState = update.getGameState();
+                // if(gameState.hasMarketState())
+                // {
+                //     // console.log(`Value is ${update.getGameState().getMarketState().getOpenOrClose()}`)
+                //     console.log()
+                // }
+
+            }
+        } 
+        catch (e) {
+            console.error("Unexpected error: ", e);
+        }
+        
+    }
 
     handleTransactionsStream = async () => {
         const props = this.props;
