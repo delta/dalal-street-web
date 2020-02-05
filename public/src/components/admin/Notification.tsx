@@ -12,32 +12,33 @@ export interface NotificationsProps{
 }
 
 export interface NotificationsState{
-    option: string
+    option: boolean
 }
 
 export class Notifications extends React.Component<NotificationsProps, NotificationsState> {
     constructor(props: NotificationsProps) {
         super(props);
         this.state = {
-            option: "Yes"
+            option: true
         }      
     }
 
     handleOptionChange = (e:any) => {
-        this.setState(prevState => {
-			return {
-				option: e
-			}
-        });
-        if(e==="Yes"){
-            $('#user-id').val('');
-        }
+      let option = $('#option1').is(":checked");
+      this.setState(prevState => {
+			  return {
+			  	option: option
+		  	}
+      });
+      if(option){
+        $('#user-id').val('');
+      }
     }
     
     handleNotification = async (e:any) =>{
         const userId = $('#user-id').val() as number;
         const notifyText = $('#notify-text').val() as string;
-        const optionbool = this.state.option==="Yes" ? true : false;
+        const optionbool = this.state.option;
         const option = optionbool ? 0 : userId;
         const sessionMd = this.props.sessionMd;
         if(isPositiveInteger(userId+1)){
@@ -53,10 +54,10 @@ export class Notifications extends React.Component<NotificationsProps, Notificat
             $('#user-id').val('');
             this.setState(prevState => {
                 return {
-                    option: "Yes"
+                    option: true
                 }
             });
-          }catch(err){
+          }catch(e){
             console.log("Error happened while sending Notifications! ", e.statusCode, e.statusMessage, e);
             if (e.isGrpcError) {
                 showErrorNotif("Oops! Unable to reach server. Please check your internet connection!");
@@ -77,20 +78,20 @@ export class Notifications extends React.Component<NotificationsProps, Notificat
                     <tr>
                       <td>
                         <label className="radiolabel">
-                         <input type="radio" value="Yes" onChange={(e) => {this.handleOptionChange(e.target.value)}} checked={this.state.option === "Yes"}/>Send Notification to Everyone
+                         <input type="radio" onChange={(e) => {this.handleOptionChange(e.target.value)}} checked={this.state.option}/>Send Notification to Everyone
                          <span className="radiocheckmark"></span>
                         </label>
                       </td>
                       <td>
                         <label className="radiolabel">
-                         <input type="radio" value="No" onChange={(e) => {this.handleOptionChange(e.target.value)}} checked={this.state.option == "No"}/>Send Notification to an user
+                         <input type="radio" onChange={(e) => {this.handleOptionChange(e.target.value)}} checked={!this.state.option}/>Send Notification to an user
                          <span className="radiocheckmark"></span>
                         </label>
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        <input type="integer" disabled={this.state.option=="Yes"} className="market-input" id="user-id" placeholder="0" />
+                        <input type="integer" disabled={this.state.option} className="market-input" id="user-id" placeholder="0" />
                       </td>
                       <td>
                         <input type="text" id="notify-text" className="notify-text" placeholder="Enter a message here" />
