@@ -21,12 +21,12 @@ export class MarketState extends React.Component<MarketStateProps, MarketStateSt
     }
 
     handleOptionChange = () => {
-        let option = $('#true').is(":checked");
-        this.setState(prevState => {
-			return {
-				option: option
-			}
-        });
+      let option = $('#option1').is(":checked");
+      this.setState(prevState => {
+			  return {
+			   	option: option
+			  }
+      });
     }
 
     handleOpenMarket = async (e:any) =>{
@@ -45,7 +45,7 @@ export class MarketState extends React.Component<MarketStateProps, MarketStateSt
                 option: false
             }
           });
-        }catch(err){
+        }catch(e){
           console.log("Error happened while Opening Market! ", e.statusCode, e.statusMessage, e);
           if (e.isGrpcError) {
             showErrorNotif("Oops! Unable to reach server. Please check your internet connection!");
@@ -70,7 +70,7 @@ export class MarketState extends React.Component<MarketStateProps, MarketStateSt
                 option: false
             }
           });
-        }catch(err){
+        }catch(e){
           console.log("Error happened while Closing Market! ", e.statusCode, e.statusMessage, e);
           if (e.isGrpcError) {
             showErrorNotif("Oops! Unable to reach server. Please check your internet connection!");
@@ -81,7 +81,6 @@ export class MarketState extends React.Component<MarketStateProps, MarketStateSt
     }
 
     render() {
-        console.log("market props",this.props.isMarketOpen);
         return (
             <React.Fragment>
                 <table id="MarketState">
@@ -92,11 +91,11 @@ export class MarketState extends React.Component<MarketStateProps, MarketStateSt
                       </td>
                       <td>
                         <label className="radiolabel">
-                         <input type="radio" id="true" onChange={(e) => {this.handleOptionChange()}} checked={this.state.option === true}/>Yes
+                         <input type="radio" id="option1" onChange={(e) => {this.handleOptionChange()}} checked={this.state.option}/>Yes
                          <span className="radiocheckmark"></span>
                         </label>
                         <label className="radiolabel">
-                         <input type="radio" id="false" onChange={(e) => {this.handleOptionChange()}} checked={this.state.option == false}/>No
+                         <input type="radio" id="option2" onChange={(e) => {this.handleOptionChange()}} checked={!this.state.option}/>No
                          <span className="radiocheckmark"></span>
                         </label>
                       </td>
