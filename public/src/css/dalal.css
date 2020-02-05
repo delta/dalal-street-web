@@ -1070,10 +1070,9 @@ h1 {
   }
 /* Market State styling ends here  */
 
-/* Notification styling starts here */
+/* Send Notification styling starts here */
 .notify-text{
 	text-align: center;
-	/* width:240px; */
 	height: 30px;
 	background-color: white !important;
 	color:#242323 !important;
@@ -1087,4 +1086,4 @@ h1 {
 	overflow:hidden;
 }
 
-/* Notification styling ends here */
+/* Send Notification styling ends here */
