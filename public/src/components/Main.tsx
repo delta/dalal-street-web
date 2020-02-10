@@ -481,13 +481,30 @@ export class Main extends React.Component<MainProps, MainState> {
         unsubscribe(this.props.sessionMd, this.state.transactionSubcriptionId);
     }
 
+    routeMe = (): string =>{
+        const path: string=window.location.pathname;
+      if(this.props.user.getIsAdmin())
+      {
+          return path;
+      }
+      else{
+          if(path == "/6c128e2708ab2b16a4a6b412cfd559fa"){
+              window.history.replaceState({},"Dalal Street","/trade");
+              return "/trade";
+          }
+          else{
+              return path;
+          }
+      }
+    }
+
     render() {
         //Use window.location.pathname because react router is removed
         //and hence react's history wont be changing ie
         //pushing to path in App cannot be retrieved by Route exact path
         //because the history for react will not have those changes reflected
 
-        switch (window.location.pathname) {
+        switch (this.routeMe()) {
             case "/trade":
                 return <TradingTerminal
                     sessionMd={this.props.sessionMd}
@@ -617,7 +634,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     disclaimerElement={this.disclaimerElement}
                 />;
 
-            case "/admin":
+            case "/6c128e2708ab2b16a4a6b412cfd559fa":
                 return <Admin
                     sessionMd={this.props.sessionMd}
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
