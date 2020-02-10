@@ -69,7 +69,7 @@ export class App extends React.Component<{}, AppState> {
 			marketIsClosedHackyNotif: "",
 			marketIsOpenHackyNotif: "",
 			isMarketOpen: false,
-			isPhoneVerified: false
+			isPhoneVerified: false,
 		};
 	}
 
@@ -140,8 +140,9 @@ export class App extends React.Component<{}, AppState> {
 			marketIsOpenHackyNotif: resp.getMarketIsOpenHackyNotif(),
 			marketIsClosedHackyNotif: resp.getMarketIsClosedHackyNotif(),
 			isMarketOpen: resp.getIsMarketOpen(),
-			isPhoneVerified: (user)?user.getIsPhoneVerified():false
+			isPhoneVerified: (user)?user.getIsPhoneVerified():false,
 		});
+	
 		const shouldRedirect = ["", "/", "/login", "/register", "/home"].indexOf(window.location.pathname) != -1;
 		if (shouldRedirect) {
 			if(this.state.user.getIsPhoneVerified())
@@ -177,6 +178,7 @@ export class App extends React.Component<{}, AppState> {
 				marketIsOpenHackyNotif: "",
 				isMarketOpen: false,
 				isPhoneVerified: false,
+			
 			})
 			this.forceUpdate()
 		} else {
@@ -217,7 +219,7 @@ export class App extends React.Component<{}, AppState> {
 			return LOADING;
 		}
 		if (this.state.isLoggedIn) {
-			if(this.state.isPhoneVerified)
+			if(this.state.isPhoneVerified )
 			{
                 window.history.replaceState({},"Dalal Street",path);
 			    return MAIN;
@@ -262,7 +264,8 @@ export class App extends React.Component<{}, AppState> {
 				marketIsClosedHackyNotif: "",
 				marketIsOpenHackyNotif: "",
 				isMarketOpen: false,
-				isPhoneVerified: false
+				isPhoneVerified: false,
+				
 			})
 		}
 		if (this.state.isLoggedIn) {
@@ -276,7 +279,8 @@ export class App extends React.Component<{}, AppState> {
 				if(this.state.isPhoneVerified)
 				{
 				window.history.replaceState({}, "Dalal Street", path);
-				}else{
+				}
+	     		else{
 				window.history.replaceState({}, "Dalal Street", "/registerphone");
 				}
 			}
@@ -291,11 +295,9 @@ export class App extends React.Component<{}, AppState> {
 				=> if loginresponse ok:
 					render main
 				=> else redirect to login, render login
-
 				TODO: (@Ar-Sibi):
 					document this stuff. Especially the forceUpdate.
 					Also we're not using react router
-
 					basically forceUpdate()ing whenever we change url. Have to do this because
 					react-router doesn't give a good way to redirect programmatically. It's horrible.
 					It's simply horrible.
@@ -366,3 +368,4 @@ export class App extends React.Component<{}, AppState> {
 		// }
 	}
 }
+
