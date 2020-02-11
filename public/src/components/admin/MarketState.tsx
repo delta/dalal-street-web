@@ -10,39 +10,38 @@ export interface MarketStateProps{
     isMarketOpen: boolean
 }
 export interface MarketStateState{
-    option: boolean
+    marketState: boolean
 }
 export class MarketState extends React.Component<MarketStateProps, MarketStateState> {
     constructor(props: MarketStateProps) {
         super(props);      
         this.state = {
-            option: false
+          marketState: false
         }
     }
 
     handleOptionChange = () => {
-      let option = $('#option1').is(":checked");
+      let marketState = $('#marketState1').is(":checked");
       this.setState(prevState => {
 			  return {
-			   	option: option
+          marketState: marketState
 			  }
       });
     }
 
     handleOpenMarket = async (e:any) =>{
-        const option = this.state.option;
+        const marketState = this.state.marketState;
         const sessionMd = this.props.sessionMd;
         // open Market
         const MarketRequest = new OpenMarketRequest();
         try{
-          MarketRequest.setUpdateDayHighAndLow(option);
+          MarketRequest.setUpdateDayHighAndLow(marketState);
           const resp = await DalalActionService.openMarket(MarketRequest, sessionMd);
           // If any error occurs, it will be raised in DalalMessage_pb_Service
           showNotif("Market has been successfully opened");
-          // showNotif("Market has been successfully!");
           this.setState(prevState => {
             return {
-                option: false
+              marketState: false
             }
           });
         }catch(e){
@@ -56,18 +55,18 @@ export class MarketState extends React.Component<MarketStateProps, MarketStateSt
     }
  
     handleCloseMarket = async (e:any) =>{
-        const option = this.state.option;
+        const marketState = this.state.marketState;
         const sessionMd = this.props.sessionMd;
         // close Market
         const MarketRequest = new CloseMarketRequest();
         try{
-          MarketRequest.setUpdatePrevDayClose(option);
+          MarketRequest.setUpdatePrevDayClose(marketState);
           const resp = await DalalActionService.closeMarket(MarketRequest, sessionMd);
           // If any error occurs, it will be raised in DalalMessage_pb_Service
           showNotif("Market has been successfully closed!");
           this.setState(prevState => {
             return {
-                option: false
+              marketState: false
             }
           });
         }catch(e){
@@ -91,21 +90,21 @@ export class MarketState extends React.Component<MarketStateProps, MarketStateSt
                       </td>
                       <td>
                         <label className="radiolabel">
-                         <input type="radio" id="option1" onChange={(e) => {this.handleOptionChange()}} checked={this.state.option}/>Yes
+                         <input type="radio" id="marketState1" name="marketState" onChange={(e) => {this.handleOptionChange()}} checked={this.state.marketState}/>Yes
                          <span className="radiocheckmark"></span>
                         </label>
                         <label className="radiolabel">
-                         <input type="radio" id="option2" onChange={(e) => {this.handleOptionChange()}} checked={!this.state.option}/>No
+                         <input type="radio" id="marketState2" name="marketState" onChange={(e) => {this.handleOptionChange()}} checked={!this.state.marketState}/>No
                          <span className="radiocheckmark"></span>
                         </label>
                       </td>
                     </tr>
                     <tr>
                       <td>
-                       <input type="button" disabled={this.props.isMarketOpen ? true : false} className={"ui inverted green button"} onClick={(e) => {this.handleOpenMarket(e)}} value="Open Market"/>
+                       <input type="button" disabled={this.props.isMarketOpen} className={"ui inverted green button"} onClick={(e) => {this.handleOpenMarket(e)}} value="Open Market"/>
                       </td>
                       <td>
-                      <input type="button" disabled={this.props.isMarketOpen ? false : true} className={"ui inverted red button"} onClick={(e) => {this.handleCloseMarket(e)}} value="Close Market"/>
+                      <input type="button" disabled={!this.props.isMarketOpen} className={"ui inverted red button"} onClick={(e) => {this.handleCloseMarket(e)}} value="Close Market"/>
                       </td>
                     </tr>
                     </tbody>

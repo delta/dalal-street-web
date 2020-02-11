@@ -56,7 +56,7 @@ export class MarketEvent extends React.Component<MarketEventProps,{}> {
         return (
             <React.Fragment>
             <table id="event-table">
-                <tbody>
+                <tbody className="ui bottom attached tab segment active inverted">
                     <tr>
                         <td>
                           <input type="integer" className="market-input" id="event-stockid" placeholder="0" />
