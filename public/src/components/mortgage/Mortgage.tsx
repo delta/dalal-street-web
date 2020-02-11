@@ -228,7 +228,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
                     <td><strong>{this.props.depositRate + "%"}</strong></td>
                     <td className="green"><strong>{(stockPricesMap[stockId] * this.props.depositRate) / 100}</strong></td>
                     <td><strong><input id={"mortgageinput-" + stockId} placeholder="0" className="mortgage-input" /></strong></td>
-                    <td><strong><button disabled={this.props.isMarketOpen ? false : true} className="ui inverted green button" onClick={() => { this.mortgageStocks(Number(stockId)) }}>Mortgage</button></strong></td>
+                    <td><strong><button disabled={this.props.isMarketOpen && !stockBriefInfoMap[stockId].isBankrupt ? false : true} className="ui inverted green button" onClick={() => { this.mortgageStocks(Number(stockId)) }}>Mortgage</button></strong></td>
                 </tr>
             );
         }

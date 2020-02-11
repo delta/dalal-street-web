@@ -12,12 +12,15 @@ import { PlaceOrderBox } from "./PlaceOrderBox";
 import { Charts } from "./charts/Charts";
 import { Fragment } from "react";
 import ReactJoyride, { STATUS, StoreState, Step, EVENTS, ACTIONS } from 'react-joyride';
+import { StockBankruptState } from "../../../proto_build/models/GameState_pb";
 
 export type StockBriefInfo = {
 	id: number
 	shortName: string
 	fullName: string
 	previousDayClose: number
+	isBankrupt: boolean
+	givesDividends: boolean
 }
 
 type NumNumMap = { [index: number]: number };
@@ -57,7 +60,18 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 	constructor(props: TradingTerminalProps) {
 		super(props);
 
-		const currentStockId = Number(Object.keys(this.props.stockBriefInfoMap).sort()[0]);
+		let currentStockId = Number(Object.keys(this.props.stockBriefInfoMap).sort()[0]);
+		for(const stockId in this.props.stockBriefInfoMap){
+			  let bankruptStatus: boolean = this.props.stockBriefInfoMap[stockId].isBankrupt;
+			  if(!bankruptStatus){
+				  currentStockId=Number(stockId);
+				  break;
+			  }
+		}
+		if(!isNaN(currentStockId) && this.props.stockBriefInfoMap[currentStockId]!.isBankrupt)
+		{
+			currentStockId= NaN;
+		}
 		this.state = {
 			currentStockId: currentStockId,
 			currentPrice: this.props.stockPricesMap[currentStockId],
