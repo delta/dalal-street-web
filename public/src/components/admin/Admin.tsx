@@ -9,6 +9,7 @@ import { Notifications } from "./Notification";
 import { showNotif, showErrorNotif, isPositiveInteger, closeNotifs } from "../../utils";
 import { MarketState } from "./MarketState";
 import { MarketEvent } from "./MarketEvent";
+import { Bankruptcy } from "./Bankruptcy";
 
 type NumNumMap = { [index: number]: number };
 
@@ -128,6 +129,15 @@ export class Admin extends React.Component<AdminProps,AdminState> {
                      sessionMd={this.props.sessionMd}
                     />
                   </td>
+                </tr>
+                <tr>
+                  <td>
+                   <Bankruptcy
+                    stockBriefInfoMap={this.props.stockBriefInfoMap}
+                    sessionMd={this.props.sessionMd}
+                   />   
+                  </td>
+                  <td></td>
                 </tr>
                 </tbody>
                 </table> 
