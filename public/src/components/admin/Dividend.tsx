@@ -56,7 +56,7 @@ export class Dividend extends React.Component<DividendProps,{}> {
         return (
             <React.Fragment>
             <table id="dividend-table">
-                <tbody>
+                <tbody className="ui bottom attached tab segment active inverted">
                     <tr>
                         <td>
                         <div id="stock-container" className="ui fluid search selection dropdown">

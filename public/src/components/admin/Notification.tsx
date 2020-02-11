@@ -12,25 +12,25 @@ export interface NotificationsProps{
 }
 
 export interface NotificationsState{
-    option: boolean
+    notificationState: boolean
 }
 
 export class Notifications extends React.Component<NotificationsProps, NotificationsState> {
     constructor(props: NotificationsProps) {
         super(props);
         this.state = {
-            option: true
+          notificationState: true
         }      
     }
 
-    handleOptionChange = (e:any) => {
-      let option = $('#option1').is(":checked");
+    handleOptionChange = () => {
+      let notificationState = $('#notificationState1').is(":checked");
       this.setState(prevState => {
 			  return {
-			  	option: option
+			  	notificationState: notificationState
 		  	}
       });
-      if(option){
+      if(notificationState){
         $('#user-id').val('');
       }
     }
@@ -38,14 +38,14 @@ export class Notifications extends React.Component<NotificationsProps, Notificat
     handleNotification = async (e:any) =>{
         const userId = $('#user-id').val() as number;
         const notifyText = $('#notify-text').val() as string;
-        const optionbool = this.state.option;
-        const option = optionbool ? 0 : userId;
+        const notificationState = this.state.notificationState;
+        const notificationUserId = notificationState ? 0 : userId;
         const sessionMd = this.props.sessionMd;
         if(isPositiveInteger(userId+1)){
           const NotificationsRequest = new SendNotificationsRequest();
           try{
-            NotificationsRequest.setUserId(option);
-            NotificationsRequest.setIsglobal(optionbool);
+            NotificationsRequest.setUserId(notificationUserId);
+            NotificationsRequest.setIsglobal(notificationState);
             NotificationsRequest.setText(notifyText);
             const resp = await DalalActionService.sendNotifications(NotificationsRequest, sessionMd);
             // If any error occurs, it will be raised in DalalMessage_pb_Service
@@ -54,7 +54,7 @@ export class Notifications extends React.Component<NotificationsProps, Notificat
             $('#user-id').val('');
             this.setState(prevState => {
                 return {
-                    option: true
+                  notificationState: true
                 }
             });
           }catch(e){
@@ -78,20 +78,20 @@ export class Notifications extends React.Component<NotificationsProps, Notificat
                     <tr>
                       <td>
                         <label className="radiolabel">
-                         <input type="radio" onChange={(e) => {this.handleOptionChange(e.target.value)}} checked={this.state.option}/>Send Notification to Everyone
+                         <input type="radio" id="notificationState1" name="notificationState" onChange={(e) => {this.handleOptionChange()}} checked={this.state.notificationState}/>Send Notification to Everyone
                          <span className="radiocheckmark"></span>
                         </label>
                       </td>
                       <td>
                         <label className="radiolabel">
-                         <input type="radio" onChange={(e) => {this.handleOptionChange(e.target.value)}} checked={!this.state.option}/>Send Notification to an user
+                         <input type="radio" id="notificationState2" name="notificationState" onChange={(e) => {this.handleOptionChange()}} checked={!this.state.notificationState}/>Send Notification to an user
                          <span className="radiocheckmark"></span>
                         </label>
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        <input type="integer" disabled={this.state.option} className="market-input" id="user-id" placeholder="0" />
+                        <input type="integer" disabled={this.state.notificationState} className="market-input" id="user-id" placeholder="0" />
                       </td>
                       <td>
                         <input type="text" id="notify-text" className="notify-text" placeholder="Enter a message here" />
