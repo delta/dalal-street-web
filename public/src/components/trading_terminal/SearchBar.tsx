@@ -5,6 +5,8 @@ type StockBriefInfo = {
 	shortName: string
 	fullName: string
 	previousDayClose: number
+	isBankrupt: boolean
+	givesDividends: boolean
 }
 
 declare var $: any;
@@ -57,17 +59,42 @@ export class SearchBar extends React.Component<SearchBarProps, {}> {
 			const priceIncrease = prices[stockId] - stockInfo.previousDayClose;
 			const percentageIncrease = (priceIncrease * 100 / (stockInfo.previousDayClose+1)).toFixed(2);
 			diff = percentageIncrease + "%";
-
-			options.push(
-				<div key={stockId} className="item row" data-value={stockId}>
-					<div className="companyName nine wide column">{stockInfo.fullName}</div>
-
-					<div className={priceClass + " three wide column " + diffClass}>
-					₹ {prices[stockId]}
+			if(stockInfo.isBankrupt){
+				options.push(
+					<div key={stockId} className="disabled item row" data-value={stockId}>
+						<div className="companyName nine wide column">{stockInfo.fullName} <span className="bankrupt-text">Bankrupt</span> </div>
+	
+						<div className={priceClass + " three wide column " + diffClass}>
+						 ₹ {prices[stockId]}
+						</div>
+						<div className={"three wide column search-bar-price-diff " + diffClass}>{diff}</div>
 					</div>
-					<div className={"three wide column search-bar-price-diff " + diffClass}>{diff}</div>
-				</div>
-			);
+				);
+			}
+			else if(stockInfo.givesDividends){
+				options.push(
+					<div key={stockId} className="item row" data-value={stockId}>
+						<div className="companyName nine wide column" data-tooltip="Company is giving dividends now!" data-position="right center">{stockInfo.fullName} <span className="dividends-text">$</span> </div>
+						<div className={priceClass + " three wide column " + diffClass}>
+							₹ {prices[stockId]}
+						</div>
+						<div className={"three wide column search-bar-price-diff " + diffClass}>{diff}</div>
+
+					</div>
+				);
+			}
+			else{
+				options.push(
+					<div key={stockId} className="item row" data-value={stockId}>
+						<div className="companyName nine wide column">{stockInfo.fullName}</div>
+	
+						<div className={priceClass + " three wide column " + diffClass}>
+						₹ {prices[stockId]}
+						</div>
+						<div className={"three wide column search-bar-price-diff " + diffClass}>{diff}</div>
+					</div>
+				);
+			}
 		}
 		return (
 			<div id="search-container" className="ui fluid search selection dropdown">

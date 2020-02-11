@@ -113,7 +113,7 @@ export class App extends React.Component<{}, AppState> {
 		resp.getStockListMap().forEach((stock, stockId) => {
 			stockDetailsMap[stockId] = stock;
 		});
-
+        console.log(stockDetailsMap);
 		const stockReservedMap: { [index: number]: number } = {};
 		resp.getReservedStocksOwnedMap().forEach((stock, stockId) => {
 			stockReservedMap[stockId] = stock;
@@ -133,8 +133,6 @@ export class App extends React.Component<{}, AppState> {
 			stockDetailsMap: stockDetailsMap,
 			stocksReservedMap: stockReservedMap,
 			constantsMap: constantsMap,
-			marketIsOpenHackyNotif: resp.getMarketIsOpenHackyNotif(),
-			marketIsClosedHackyNotif: resp.getMarketIsClosedHackyNotif(),
 			isMarketOpen: resp.getIsMarketOpen(),
 			isPhoneVerified: (user)?user.getIsPhoneVerified():false,
 		});
@@ -207,6 +205,12 @@ export class App extends React.Component<{}, AppState> {
 		window.history.replaceState({},"Dalal Street | Login" , "/registerphone" );
 		this.forceUpdate();
 	}
+    changeStockDetailsMap = (stockDetailsMap: { [index: number]: Stock_pb }) =>{
+            this.setState({
+				stockDetailsMap: stockDetailsMap
+			})
+	}
+
 	routeMe = () => {
 		const path = window.location.pathname
 		if (this.state.isLoading) {
@@ -310,6 +314,7 @@ export class App extends React.Component<{}, AppState> {
 							constantsMap={this.state.constantsMap!}
 							isMarketOpen={this.state.isMarketOpen!}
 							isPhoneVerified={this.state.isPhoneVerified}
+							changeStockDetailsMapCallBack={this.changeStockDetailsMap}
 						/>
 					</Fragment>
 				);
