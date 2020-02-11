@@ -43,6 +43,7 @@ export interface MainProps {
 
     isMarketOpen: 				boolean
     isPhoneVerified:            boolean
+    changeStockDetailsMapCallBack: (stockDetailsMap: { [index: number]: Stock_pb }) => void
 }
 
 interface MainState {
@@ -85,12 +86,13 @@ export class Main extends React.Component<MainProps, MainState> {
         const stockBriefInfoMap : { [index:number]: StockBriefInfo } = {};
         for (const stockId in this.props.stockDetailsMap) {
             const stock = this.props.stockDetailsMap[stockId];
-
             stockBriefInfoMap[stockId] = {
                 id: stock.getId(),
                 shortName: stock.getShortName(),
                 fullName: stock.getFullName(),
                 previousDayClose: stock.getPreviousDayClose(),
+                isBankrupt: stock.getIsBankrupt(),
+                givesDividends: stock.getGivesDividends()
             };
         }
 
@@ -374,18 +376,45 @@ export class Main extends React.Component<MainProps, MainState> {
 
         try {
             for await (const update of stream) {
-                console.log(update);
-                if(update  && update!.getGameState())
-                {     if(update.getGameState()!.hasMarketState()){
-                               const marketState = update.getGameState()!.getMarketState();
-                               this.setState({
-                                    isMarketOpen: marketState!.getOpenOrClose(),
-                                });
-                }else if (update.getGameState()!.getStockDividendState()){
+                if (update && update!.getGameState()) {
+                    if (update.getGameState()!.hasMarketState()) {
+                        const marketState = update.getGameState()!.getMarketState();
+                        this.setState({
+                            isMarketOpen: marketState!.getIsMarketOpen(),
+                        });
+                    } else if (update.getGameState()!.getStockDividendState()) {
+                        let stockDetailsMap: { [index: number]: Stock_pb } = this.state.stockDetailsMap;
+                        let stockid = update.getGameState()!.getStockDividendState()!.getStockId();
+                        let stock: Stock_pb = stockDetailsMap[stockid];
+                        let stockBriefInfoMap: { [index: number]: StockBriefInfo } = this.state.stockBriefInfoMap;
+                        let briefStock: StockBriefInfo = stockBriefInfoMap[stockid];
+                        stockDetailsMap[stockid].setGivesDividends(true);
+                        stockBriefInfoMap[stockid].givesDividends = true;
+                        this.setState({
+                            stockDetailsMap: stockDetailsMap,
+                            stockBriefInfoMap: stockBriefInfoMap
+                        })
+                        this.props.changeStockDetailsMapCallBack(stockDetailsMap);
+                        showInfoNotif(stock.getFullName()+" has earned huge profits and thus has planned to give out dividends to its shareholders soon!","Dividend Notification");
+                    }
+                    else if (update.getGameState()!.getStockBankruptState()) {
+                        const stockDetailsMap: { [index: number]: Stock_pb } = this.state.stockDetailsMap;
+                        const stockid=update.getGameState()!.getStockBankruptState()!.getStockId();
+                        const stock:Stock_pb =stockDetailsMap[stockid];
+                        let stockBriefInfoMap: { [index: number]: StockBriefInfo } = this.state.stockBriefInfoMap;
+                        stockDetailsMap[stockid].setIsBankrupt(true);
+                        stockBriefInfoMap[stockid].isBankrupt=true;
+                        this.setState({
+                            stockDetailsMap: stockDetailsMap,
+                            stockBriefInfoMap: stockBriefInfoMap
+                        })
+                        this.props.changeStockDetailsMapCallBack(stockDetailsMap);
+                        showInfoNotif("Owing to continuous heavy losses and degrading market conditions," + stock.getFullName()+" has filed for bankruptcy.","Bankruptcy Notification");
+
+                    }
+                }
             }
         }
-      }
-    }
         catch (e) {
           console.log(e);
           return this.retryStream(this.handleGameStateStream.bind(this), "gameState");

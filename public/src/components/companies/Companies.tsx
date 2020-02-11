@@ -32,7 +32,18 @@ export class Company extends React.Component<CompanyProps, CompanyState> {
     constructor(props: CompanyProps) {
         super(props);
 
-        const currentStockId = Number(Object.keys(this.props.stockBriefInfoMap).sort()[0])
+        let currentStockId = Number(Object.keys(this.props.stockBriefInfoMap).sort()[0]);
+        for(const stockId in this.props.stockBriefInfoMap){
+            let bankruptStatus: boolean = this.props.stockBriefInfoMap[stockId].isBankrupt;
+            if(!bankruptStatus){
+                currentStockId= Number(stockId);
+                break;
+            }
+        }
+		if(!isNaN(currentStockId) && this.props.stockBriefInfoMap[currentStockId]!.isBankrupt)
+		{
+			currentStockId= NaN;
+		}
         this.state = {
             currentStockId: currentStockId,
             currentPrice: props.stockPricesMap[currentStockId],

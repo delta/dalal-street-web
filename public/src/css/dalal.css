@@ -183,6 +183,24 @@ div.expected-cost {
 .search-bar-price-diff.loss:after {
 	content: "↓";
 }
+.bankrupt-text{
+	color: rgb(158, 0, 0);
+	text-align: center;
+	float: right;
+	padding-left: 5px;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+.dividends-text{
+	color: rgb(0, 80, 0);
+	text-align: center;
+	float: right;
+	padding-right: 30px;
+	padding-left: 5px;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
 
 /* Notification styling starts */
 #notifbutton{
