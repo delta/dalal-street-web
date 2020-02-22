@@ -43,6 +43,7 @@ export interface MainProps {
 
     isMarketOpen: 				boolean
     isPhoneVerified:            boolean
+    isBlocked:                  boolean
     changeStockDetailsMapCallBack: (stockDetailsMap: { [index: number]: Stock_pb }) => void
 }
 
@@ -410,7 +411,10 @@ export class Main extends React.Component<MainProps, MainState> {
                         })
                         this.props.changeStockDetailsMapCallBack(stockDetailsMap);
                         showInfoNotif("Owing to continuous heavy losses and degrading market conditions," + stock.getFullName()+" has filed for bankruptcy.","Bankruptcy Notification");
+<<<<<<< HEAD
 
+=======
+>>>>>>> 61f1d00... Block user frontend
                     }
                 }
             }
@@ -579,6 +583,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     constantsMap={this.props.constantsMap}
                     isMarketOpen={this.state.isMarketOpen}
+                    isBlocked={this.props.isBlocked}
                     disclaimerElement={this.disclaimerElement}
                 />
             case "/portfolio":
@@ -592,6 +597,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
                     isMarketOpen={this.state.isMarketOpen}
+                    isBlocked={this.props.isBlocked}
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     stocksOwnedMap={this.state.stocksOwnedMap}
@@ -613,6 +619,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                     isMarketOpen={this.state.isMarketOpen}
+                    isBlocked={this.props.isBlocked}
                 />;
             case "/leaderboard":
                 return <Leaderboard
@@ -625,6 +632,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userStockWorth={this.state.stockWorth}
                     connectionStatus={this.state.connectionStatus}
                     isMarketOpen={this.state.isMarketOpen}
+                    isBlocked={this.props.isBlocked}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
@@ -639,6 +647,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userStockWorth={this.state.stockWorth}
                     connectionStatus={this.state.connectionStatus}
                     isMarketOpen={this.state.isMarketOpen}
+                    isBlocked={this.props.isBlocked}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
@@ -654,6 +663,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userTotal={this.state.userTotal}
                     connectionStatus={this.state.connectionStatus}
                     isMarketOpen={this.state.isMarketOpen}
+                    isBlocked={this.props.isBlocked}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     disclaimerElement={this.disclaimerElement}
                 />
@@ -676,6 +686,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     latestTransaction={this.state.latestTransaction}
                     disclaimerElement={this.disclaimerElement}
                     isMarketOpen={this.state.isMarketOpen}
+                    isBlocked={this.props.isBlocked}
                 />
 
             case "/help":
@@ -687,6 +698,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     userStockWorth={this.state.stockWorth}
                     connectionStatus={this.state.connectionStatus}
                     isMarketOpen={this.state.isMarketOpen}
+                    isBlocked={this.props.isBlocked}
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
