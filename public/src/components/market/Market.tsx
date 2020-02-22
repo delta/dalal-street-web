@@ -24,6 +24,7 @@ export interface MarketProps {
     userStockWorth: number,
     connectionStatus: boolean,
     isMarketOpen: boolean,
+    isBlocked: boolean
     sessionMd: Metadata,
     stockDetailsMap: { [index: number]: Stock_pb },
     notifications: Notification_pb[],
@@ -100,7 +101,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
     }
 
     render() {
-        $("#exchange-button").disabled = (!this.props.isMarketOpen);
+        $("#exchange-button").disabled = (!this.props.isMarketOpen || this.props.isBlocked);
         let history: any[] = [];
         let percentageIncrease: number;
         let diffClass: string;
@@ -121,7 +122,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
                     <td className={"volume " + diffClass}><strong>{percentageIncrease}{" %"}</strong></td>
                     <td className="volume"><strong>{currentStock.getStocksInExchange()}</strong></td>
                     <td className="volume"><strong><input id={"input-" + currentStock.getId()} placeholder="0" className="market-input" /></strong></td>
-                    <td className="volume"><strong><button disabled={this.props.isMarketOpen && !currentStock.getIsBankrupt() ? false : true} className="ui inverted green button" onClick={(e) => { this.purchaseFromExchange(e, currentStock.getId()) }}>Buy</button></strong></td>
+                    <td className="volume"><strong><button disabled={this.props.isMarketOpen && !currentStock.getIsBankrupt() && !this.props.isBlocked ? false : true} className="ui inverted green button" onClick={(e) => { this.purchaseFromExchange(e, currentStock.getId()) }}>Buy</button></strong></td>
                 </tr>
             );
         }
@@ -129,7 +130,7 @@ export class Market extends React.Component<MarketProps, MarketState> {
         return (
             <Fragment>
                 <div className="row" id="top_bar">
-                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} userStockWorth={this.props.userStockWorth} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen} />
+                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} userStockWorth={this.props.userStockWorth} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen} isBlocked={this.props.isBlocked} />
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>

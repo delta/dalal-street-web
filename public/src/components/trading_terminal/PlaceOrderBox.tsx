@@ -25,6 +25,7 @@ export interface PlaceOrderBoxProps{
     currentPrice: number,
     sessionMd: Metadata,
     isMarketOpen: boolean,
+    isBlocked: boolean,
     orderFeePercent: number,// various constants. Documentation found in server/actionservice/Login method
 }
 
@@ -136,7 +137,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <div className="ui input">
                             <input id="market-buy-count" placeholder="Number of stocks" type="text" onChange={e => this.predictCost(e,"market","buy")}/>
                         </div>
-                        <button disabled={this.props.isMarketOpen ? false : true} className="ui inverted green button" onClick={e => this.handleOrder(e,  MARKET, "buy")}>BUY</button>
+                        <button disabled={(this.props.isMarketOpen && !this.props.isBlocked) ? false : true} className="ui inverted green button" onClick={e => this.handleOrder(e,  MARKET, "buy")}>BUY</button>
 
                         <div className="expected-cost">
                             Reserved Cash : We will reserve ₹ <span id="market-buy-estimation">0.00</span> for this trade<br></br>
@@ -147,7 +148,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <div className="ui input">
                             <input id="market-sell-count" placeholder="Number of stocks" type="text" onChange={e => this.predictCost(e,"market","sell")}/>
                         </div>
-                        <button disabled={this.props.isMarketOpen ? false : true} className="ui inverted red button" onClick={e => this.handleOrder(e, MARKET,"sell")}>SELL</button>
+                        <button disabled={(this.props.isMarketOpen && !this.props.isBlocked) ? false : true} className="ui inverted red button" onClick={e => this.handleOrder(e, MARKET,"sell")}>SELL</button>
 
                         <div className="expected-cost">
                             Reserved Stock : We will reserve <span id="market-sell-estimation">0</span> stocks for this trade<br></br>
@@ -167,7 +168,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <div className="ui input">
                             <input id="limit-buy-price" placeholder="Limit Price" type="text" onChange={e => this.predictCost(e,"limit","buy")}/>
                         </div>
-                        <button disabled={this.props.isMarketOpen ? false : true} className="ui inverted green button" onClick={e => this.handleOrder(e, LIMIT,"buy")}>BUY</button>
+                        <button disabled={(this.props.isMarketOpen && !this.props.isBlocked) ? false : true} className="ui inverted green button" onClick={e => this.handleOrder(e, LIMIT,"buy")}>BUY</button>
 
                         <div className="expected-cost">
                             Reserved Cash : We will reserve ₹ <span id="limit-buy-estimation">0.00</span> for this trade<br></br>
@@ -181,7 +182,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <div className="ui input">
                             <input id="limit-sell-price" placeholder="Limit Price" type="text" onChange={e => this.predictCost(e,"limit","sell")}/>
                         </div>
-                       <button disabled={this.props.isMarketOpen ? false : true} className="ui inverted red button" onClick={e => this.handleOrder(e, LIMIT,"sell")}>SELL</button>
+                       <button disabled={(this.props.isMarketOpen && !this.props.isBlocked) ? false : true} className="ui inverted red button" onClick={e => this.handleOrder(e, LIMIT,"sell")}>SELL</button>
 
                         <div className="expected-cost">
                             Reserved Stock : We will reserve <span id="limit-sell-estimation">0</span> stocks for this trade<br></br>
@@ -201,7 +202,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <div className="ui input">
                             <input id="stoploss-buy-price" placeholder="Stoploss Price" type="text" onChange={e => this.predictCost(e,"stoploss","buy")}/>
                         </div>
-                        <button disabled={this.props.isMarketOpen ? false : true} className="ui inverted green button" onClick={e => this.handleOrder(e, STOPLOSS,"buy")}>BUY</button>
+                        <button disabled={(this.props.isMarketOpen && !this.props.isBlocked) ? false : true} className="ui inverted green button" onClick={e => this.handleOrder(e, STOPLOSS,"buy")}>BUY</button>
 
                         <div className="expected-cost">
                             Reserved Cash : We will reserve ₹ <span id="stoploss-buy-estimation">0.00</span> for this trade<br></br>
@@ -215,7 +216,7 @@ export class PlaceOrderBox extends React.Component<PlaceOrderBoxProps, {}> {
                         <div className="ui input">
                             <input id="stoploss-sell-price" placeholder="Stoploss Price" type="text" onChange={e => this.predictCost(e,"stoploss","sell")}/>
                         </div>
-                        <button disabled={this.props.isMarketOpen ? false : true} className="ui inverted red button" onClick={e => this.handleOrder(e, STOPLOSS,"sell")}>SELL</button>
+                        <button disabled={(this.props.isMarketOpen && !this.props.isBlocked) ? false : true} className="ui inverted red button" onClick={e => this.handleOrder(e, STOPLOSS,"sell")}>SELL</button>
 
                         <div className="expected-cost">
                             Reserved Stock : We will reserve <span id="stoploss-sell-estimation">0</span> stocks for this trade<br></br>

@@ -31,6 +31,7 @@ export interface MortgageProps {
     userStockWorth: number,
     connectionStatus: boolean,
     isMarketOpen: boolean,
+    isBlocked: boolean,
     reservedStocksWorth: number,
 }
 
@@ -228,7 +229,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
                     <td><strong>{this.props.depositRate + "%"}</strong></td>
                     <td className="green"><strong>{(stockPricesMap[stockId] * this.props.depositRate) / 100}</strong></td>
                     <td><strong><input id={"mortgageinput-" + stockId} placeholder="0" className="mortgage-input" /></strong></td>
-                    <td><strong><button disabled={this.props.isMarketOpen && !stockBriefInfoMap[stockId].isBankrupt ? false : true} className="ui inverted green button" onClick={() => { this.mortgageStocks(Number(stockId)) }}>Mortgage</button></strong></td>
+                    <td><strong><button disabled={this.props.isMarketOpen && !stockBriefInfoMap[stockId].isBankrupt && !this.props.isBlocked ? false : true} className="ui inverted green button" onClick={() => { this.mortgageStocks(Number(stockId)) }}>Mortgage</button></strong></td>
                 </tr>
             );
         }
@@ -246,7 +247,11 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
                         <td><strong>{this.props.retrieveRate + "%"}</strong></td>
                         <td className="green"><strong>{(mortgagePrice * this.props.retrieveRate) / 100}</strong></td>
                         <td><strong><input id={"retrieveinput-" + uniqueKey} placeholder="0" className="mortgage-input" /></strong></td>
+<<<<<<< HEAD
                         <td><strong><button disabled={this.props.isMarketOpen ? false : true} className="ui inverted green button" onClick={() => { this.retrieveStocks(Number(stockId), mortgagePrice) }}>Retrieve</button></strong></td>
+=======
+                        <td><strong><button disabled={this.props.isMarketOpen && !stockBriefInfoMap[stockId].isBankrupt && !this.props.isBlocked ? false : true} className="ui inverted green button" onClick={() => { this.retrieveStocks(Number(stockId), mortgagePrice) }}>Retrieve</button></strong></td>
+>>>>>>> 61f1d00... Block user frontend
                     </tr>
                 );
             });
@@ -254,7 +259,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
         return (
             <Fragment>
                 <div className="row" id="top_bar">
-                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} userStockWorth={this.props.userStockWorth} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen}/>
+                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} userStockWorth={this.props.userStockWorth} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen} isBlocked={this.props.isBlocked} />
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>

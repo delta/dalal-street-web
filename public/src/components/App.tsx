@@ -42,6 +42,7 @@ interface AppState {
 	constantsMap: { [index: string]: number } // various constants. Documentation found in server/actionservice/Login method
 
 	isMarketOpen: boolean
+	isBlocked: boolean
 	isPhoneVerified: boolean
 }
 
@@ -66,6 +67,7 @@ export class App extends React.Component<{}, AppState> {
 			constantsMap: {},
 			isMarketOpen: false,
 			isPhoneVerified: false,
+			isBlocked: false
 		};
 	}
 
@@ -135,6 +137,7 @@ export class App extends React.Component<{}, AppState> {
 			constantsMap: constantsMap,
 			isMarketOpen: resp.getIsMarketOpen(),
 			isPhoneVerified: (user)?user.getIsPhoneVerified():false,
+			isBlocked: (user)?user.getIsBlocked():false,
 		});
 	
 		const shouldRedirect = ["", "/", "/login", "/register", "/home"].indexOf(window.location.pathname) != -1;
@@ -170,6 +173,7 @@ export class App extends React.Component<{}, AppState> {
 				constantsMap: {},
 				isMarketOpen: false,
 				isPhoneVerified: false,
+				isBlocked: false
 			
 			})
 			this.forceUpdate()
@@ -261,7 +265,7 @@ export class App extends React.Component<{}, AppState> {
 				constantsMap: {},
 				isMarketOpen: false,
 				isPhoneVerified: false,
-				
+				isBlocked: false,
 			})
 		}
 		if (this.state.isLoggedIn) {
@@ -315,6 +319,7 @@ export class App extends React.Component<{}, AppState> {
 							isMarketOpen={this.state.isMarketOpen!}
 							isPhoneVerified={this.state.isPhoneVerified}
 							changeStockDetailsMapCallBack={this.changeStockDetailsMap}
+							isBlocked={this.state.isBlocked}
 						/>
 					</Fragment>
 				);

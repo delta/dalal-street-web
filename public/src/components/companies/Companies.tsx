@@ -15,6 +15,7 @@ export interface CompanyProps {
     userStockWorth: number,
     connectionStatus: boolean,
     isMarketOpen: boolean,
+    isBlocked: boolean,
     sessionMd: Metadata,
     notifications: Notification_pb[],
     stockBriefInfoMap: { [index: number]: StockBriefInfo },
@@ -74,7 +75,7 @@ export class Company extends React.Component<CompanyProps, CompanyState> {
                             defaultStock={this.state.currentStockId} />
                     </div>
 
-                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth = {this.props.reservedStocksWorth} userTotal={this.props.userTotal} userStockWorth={this.props.userStockWorth} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen} />
+                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth = {this.props.reservedStocksWorth} userTotal={this.props.userTotal} userStockWorth={this.props.userStockWorth} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen} isBlocked={this.props.isBlocked} />
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>

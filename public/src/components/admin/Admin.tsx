@@ -13,6 +13,8 @@ import { MarketEvent } from "./MarketEvent";
 import { Bankruptcy } from "./Bankruptcy";
 import { SetDividends } from "./SetDividends";
 import { InspectUser } from "./InspectUser"
+import { BlockUser } from "./BlockUser";
+import { UnBlockUser } from "./UnBlockUser";
 
 type NumNumMap = { [index: number]: number };
 
@@ -148,6 +150,18 @@ export class Admin extends React.Component<AdminProps, AdminState> {
                             </tr>
                             <tr>
                                 <td>
+                                    <BlockUser
+                                        sessionMd={this.props.sessionMd}
+                                    />
+                                </td>
+                                <td>
+                                    <UnBlockUser
+                                        sessionMd={this.props.sessionMd}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
                                     <InspectUser
                                         sessionMd={this.props.sessionMd}
                                     />
@@ -156,6 +170,8 @@ export class Admin extends React.Component<AdminProps, AdminState> {
                         </tbody>
                     </table>
                 </div>
+
+
             </React.Fragment>
         )
     }
