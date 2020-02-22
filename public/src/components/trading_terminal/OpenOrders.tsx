@@ -29,6 +29,7 @@ export interface OpenOrdersProps {
 	sessionMd: Metadata,
 	stockBriefInfoMap: { [index:number]: StockBriefInfo }
 	isMarketOpen: boolean
+	isBlocked: boolean
 }
 
 interface OpenOrdersState {
@@ -226,7 +227,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 	}
 
 	render() {
-		const cancelButtonState = this.props.isMarketOpen ? false : true;
+		const cancelButtonState = (this.props.isMarketOpen && !this.props.isBlocked)? false : true;
 		if (this.state.isLoading) {
 			return (
 				<Fragment>

@@ -12,6 +12,7 @@ export interface TinyNetworthProps {
     connectionStatus: boolean,
     userStockWorth: number,
     isMarketOpen: boolean,
+    isBlocked: boolean,
 }
 
 export class TinyNetworth extends React.Component<TinyNetworthProps, {}> {
@@ -31,11 +32,17 @@ export class TinyNetworth extends React.Component<TinyNetworthProps, {}> {
         let connectionStatusClass = "";
         let connectionMessage = "";
         
-        if(this.props.isMarketOpen){
+        if(this.props.isMarketOpen && !this.props.isBlocked){
              connection = this.props.connectionStatus == true ? "Connected" : "Disconnected";
              connectionStatusClass = this.props.connectionStatus == true ? "green" : "red";
              connectionStatusClass += " inverted";
              connectionMessage = "Server connection status";
+        }
+        else if(this.props.isBlocked){
+            connection = this.props.connectionStatus == true ? "Blocked": "Disconnected";
+            connectionStatusClass = "red";
+            connectionStatusClass += " inverted";
+            connectionMessage = "This account is blocked temporarily for doing inappropiate actions";
         }
         else {
             connection = "Closed";

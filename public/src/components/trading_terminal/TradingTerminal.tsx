@@ -44,7 +44,8 @@ export interface TradingTerminalProps {
 	constantsMap: { [index: string]: number } // various constants. Documentation found in server/actionservice/Login method
 
 	isMarketOpen: boolean
-
+	isBlocked: boolean
+   
 	disclaimerElement: JSX.Element
 }
 
@@ -387,7 +388,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 							defaultStock={this.state.currentStockId} />
 					</div>
 
-					<TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} userStockWorth={this.props.userStockWorth} isMarketOpen={this.props.isMarketOpen}/>
+					<TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} userStockWorth={this.props.userStockWorth} isMarketOpen={this.props.isMarketOpen} isBlocked={this.props.isBlocked} />
 					<div id="notif-component">
 						<Notification notifications={this.props.notifications} icon={"open envelope icon"} />
 					</div>
@@ -409,11 +410,12 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 								currentPrice={this.state.currentPrice}
 								sessionMd={this.props.sessionMd}
 								isMarketOpen={this.props.isMarketOpen}
+								isBlocked={this.props.isBlocked}
 							  orderFeePercent={this.props.constantsMap['ORDER_FEE_PERCENT']} />
 						</div>
 
 						<div id="open-orders-container" className="ten wide column box">
-							<OpenOrders sessionMd={this.props.sessionMd} stockBriefInfoMap={this.props.stockBriefInfoMap} isMarketOpen={this.props.isMarketOpen}/>
+							<OpenOrders sessionMd={this.props.sessionMd} stockBriefInfoMap={this.props.stockBriefInfoMap} isMarketOpen={this.props.isMarketOpen} isBlocked={this.props.isBlocked}/>
 						</div>
 					</div>
 					{this.props.disclaimerElement}
