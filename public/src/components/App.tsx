@@ -19,6 +19,7 @@ import { RegisterResponse } from "../../proto_build/actions/Register_pb";
 import { ForgotPasswordResponse } from "../../proto_build/actions/ForgotPassword_pb";
 import { ChangePassword } from "./changepassword/ChangePassword";
 import { MobileVerification } from "./mobile_verification/MobileVerification";
+import { showInfoNotif ,showErrorNotif } from "../utils";
 
 const LOGIN = 1;
 const SIGNUP = 2;
@@ -181,6 +182,17 @@ export class App extends React.Component<{}, AppState> {
 			this.forceUpdate()
 		}
 	}
+	updateUserBlocked = (blockedStatus: boolean) =>{
+		 this.setState({
+			 isBlocked: blockedStatus
+		 })
+		 if(!blockedStatus){
+			 showInfoNotif("Your account has been unblocked! Any further violation of Code of Conduct will result in permanent ban of your account  ","Account Unblocked");
+		 }
+		 else{
+			showErrorNotif("Your account has been blocked due to violation of Code of Conduct","Account Blocked");
+		 }
+	}
 	updateIsPhoneVerified = () => {
 		this.setState({
 			isPhoneVerified: true
@@ -320,6 +332,7 @@ export class App extends React.Component<{}, AppState> {
 							isPhoneVerified={this.state.isPhoneVerified}
 							changeStockDetailsMapCallBack={this.changeStockDetailsMap}
 							isBlocked={this.state.isBlocked}
+							updateUserBlocked={this.updateUserBlocked}
 						/>
 					</Fragment>
 				);

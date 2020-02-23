@@ -5,7 +5,7 @@ import { UnblockUserRequest } from "../../../proto_build/actions/UnblockUser_pb"
 import { showNotif, showErrorNotif, isPositiveInteger, closeNotifs } from "../../utils";
 
 export interface UnBlockUserState {
-    userId: string
+    userId: number
 
 }
 
@@ -17,7 +17,7 @@ export class UnBlockUser extends React.Component<UnBlockUserProps,UnBlockUserSta
     constructor(props: UnBlockUserProps) {
         super(props);      
         this.state = {
-            userId: "",
+            userId: 0,
         }
 
     }
@@ -25,7 +25,7 @@ export class UnBlockUser extends React.Component<UnBlockUserProps,UnBlockUserSta
     handleUnBlockUser = () =>{
 
         let unBlockUserRequest = new UnblockUserRequest();
-        if(this.state.userId.length > 0)
+        if(this.state.userId > 0)
         {
             unBlockUserRequest.setUserId(Number(this.state.userId));    
             this.unBlockUser(unBlockUserRequest);            
@@ -41,7 +41,7 @@ export class UnBlockUser extends React.Component<UnBlockUserProps,UnBlockUserSta
             const resp = await DalalActionService.unBlockUser(unBlockUserRequest,this.props.sessionMd);
             showNotif("User id "+this.state.userId+" is unblocked successfully");
             this.setState({
-                userId:""
+                userId: 0,
             })
          }
          catch(e)
@@ -57,7 +57,7 @@ export class UnBlockUser extends React.Component<UnBlockUserProps,UnBlockUserSta
 
     handleUserIdChange = (event: React.FormEvent<HTMLInputElement>) =>{
        this.setState({
-           userId:event.currentTarget.value,
+           userId: Number(event.currentTarget.value),
        })
     }
       render() {
@@ -68,7 +68,7 @@ export class UnBlockUser extends React.Component<UnBlockUserProps,UnBlockUserSta
                     <tr>
                         <td >
                         <div className="ui inverted input">
-                            <input type="number"  placeholder="User Id" onChange={this.handleUserIdChange} value={this.state.userId} />
+                            <input type="number"  placeholder="User Id" onChange={this.handleUserIdChange} value={String(this.state.userId)} />
                         </div>
                         </td>
                         <td>

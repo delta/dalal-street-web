@@ -15,6 +15,7 @@ import { SetDividends } from "./SetDividends";
 import { InspectUser } from "./InspectUser"
 import { BlockUser } from "./BlockUser";
 import { UnBlockUser } from "./UnBlockUser";
+import { UnBlockAllUsers } from "./UnBlockAllUsers"
 
 type NumNumMap = { [index: number]: number };
 
@@ -161,6 +162,11 @@ export class Admin extends React.Component<AdminProps, AdminState> {
                                 </td>
                             </tr>
                             <tr>
+                                <UnBlockAllUsers
+                                    sessionMd={this.props.sessionMd}
+                                />
+                            </tr>
+                            <tr>
                                 <td>
                                     <InspectUser
                                         sessionMd={this.props.sessionMd}
@@ -170,8 +176,6 @@ export class Admin extends React.Component<AdminProps, AdminState> {
                         </tbody>
                     </table>
                 </div>
-
-
             </React.Fragment>
         )
     }
