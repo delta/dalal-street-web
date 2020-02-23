@@ -95,6 +95,17 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <p><em>Pro Tip</em>: If you’re using the <a target="_blank" href="https://play.google.com/store/apps/details?id=org.pragyan.dalal18">Dalal Street Android App</a>, you will receive a notification on your phone every time a new article is published.</p>
                                     </div>
 
+                                    
+                                    <div className="title">
+                                        <i className="dropdown icon inverted"></i>
+                                        <span className="faq-questions lighter">Malpractices</span>
+                                    </div>
+                                    <div className="content">
+                                    <p>
+                                    Whenever we observe a user doing malpractices, the user will be blocked for a day. If the user continues to do malpractice, the user will be blocked from playing for the entire duration. Malpractices include having multiple accounts and performing cash funnelling operations between the accounts.
+                                    </p>
+                                    </div>
+
                                     <div className="title">
                                         <i className="dropdown icon inverted"></i>
                                         <span className="faq-questions lighter">Buying and Selling Stocks</span>
@@ -113,10 +124,6 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <p>Hopefully, this should be enough to get you going and start trading! If you still have some questions, please read our FAQ section where we address some more common doubts that players may have.</p>
                                     </div>
 
-                                    <div className="title">
-                                        <i className="dropdown icon inverted"></i>
-                                        <span className="faq-questions lighter">How is the winner determined</span>
-                                    </div>
                                 </div>
                             </div>
                             <div className="ui bottom attached tab segment" data-tab="faqs">
@@ -154,10 +161,11 @@ export class Help extends React.Component<HelpProps, {}> {
 
                                     <div className="title">
                                         <i className="dropdown icon inverted"></i>
-                                        <span className="faq-questions">What is my Net Worth and how is it calculated?</span>
+                                        <span className="faq-questions">How is the winner determined?</span>
                                     </div>
                                     <div className="content">
-                                        <p>Your Net Worth is split into two parts - <em>Cash In Hand</em> and <em>Stock Worth</em>. You can view these values on the <strong>Portfolio page</strong>. Here’s a table explaining how your Net Worth will change in response to different events :-</p>
+                                        <p>The player with the highest Total Net Worth at the end of <b>7 days </b>is declared as the winner. Your Total Net Worth is calculated by adding - <b> Cash In Hand, Stock Worth, Reserved Cash and Reserved Stock Worth </b>. 
+                                        You can view these values on the <strong>Portfolio page</strong>. Here’s a table explaining how your Net Worth will change in response to different events :-</p>
                                         <table className="ui inverted table">
                                             <thead>
                                                 <tr>
@@ -194,7 +202,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <p>Please note that your <strong>Net Worth does NOT take into account reserved assets.</strong> At the end of 7 days, all open orders will be cancelled, thus <strong>returning all reserved assets</strong> to the user. <strong>This will change your Net Worth</strong> and could change the leaderboard rankings.</p>
+
                                     </div>
 
                                      <div className="title">
@@ -284,6 +292,32 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <p>While we don’t expect any more companies to go public over the course of this game, existing companies may release more shares in the middle. If this happens, then the number of <em>Stocks in Exchange</em> will increase, and you can buy these stocks from the <strong>Exchange Page</strong>. Stay tuned to the <strong>News Page</strong> or download the <a target="_blank" href="https://play.google.com/store/apps/details?id=org.pragyan.dalal18">Dalal Street Android App</a> to be the first to know when to expect more shares.</p>
                                         <p>If you still have any queries, please feel free to ask it on our <a target="_blank" href="https://forum.pragyan.org/c/dalal-street">Official Forum</a> and we'll try to get back to you as soon as possible. Happy Trading!</p>
                                     </div>
+
+                                    <div className="title">
+                                        <i className="dropdown icon inverted"></i>
+                                        <span className="faq-questions">Can a company give dividends?</span>
+                                    </div>
+                                    <div className="content">
+                                        <p>During the course of the game, some companies may give dividends. A dividend is a fixed amount that a company offers you for each stock you own of that company. You'll be notified when a company is giving dividends, till then stay tuned to the news for the latest updates of a company.</p>
+                                    </div>
+
+                                    <div className="title">
+                                        <i className="dropdown icon inverted"></i>
+                                        <span className="faq-questions">Can a company go bankrupt at any point?</span>
+                                    </div>
+                                    <div className="content">
+                                        <p>Yes. A company might go bankrupt depending on their current financial situation. Stay tuned to the news page for the latest updates about companies. When a company goes bankrupt, you can no longer exchange stocks their stocks and all stocks you own of that company become worthless.</p>
+                                    </div>
+
+
+                                    <div className="title">
+                                        <i className="dropdown icon inverted"></i>
+                                        <span className="faq-questions">Help! My account got blocked!</span>
+                                    </div>
+                                    <div className="content">
+                                        <p>Whenever we observe a user breaking our rules of conduct, we block the user from playing. Check out our malpractice section in Getting Started for more details. Reach out to us on our forum for any clarification.</p>
+                                    </div>
+
                                 </div>
                             </div>
                             <div className="ui bottom attached tab segment" data-tab="forum">
