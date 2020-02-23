@@ -45,6 +45,7 @@ export interface MainProps {
     isPhoneVerified:            boolean
     isBlocked:                  boolean
     changeStockDetailsMapCallBack: (stockDetailsMap: { [index: number]: Stock_pb }) => void
+    updateUserBlocked: (blockedStatus: boolean) => void
 }
 
 interface MainState {
@@ -377,6 +378,7 @@ export class Main extends React.Component<MainProps, MainState> {
 
         try {
             for await (const update of stream) {
+                console.log(update.getGameState()!.getUserBlockState());
                 if (update && update!.getGameState()) {
                     if (update.getGameState()!.hasMarketState()) {
                         const marketState = update.getGameState()!.getMarketState();
@@ -411,10 +413,11 @@ export class Main extends React.Component<MainProps, MainState> {
                         })
                         this.props.changeStockDetailsMapCallBack(stockDetailsMap);
                         showInfoNotif("Owing to continuous heavy losses and degrading market conditions," + stock.getFullName()+" has filed for bankruptcy.","Bankruptcy Notification");
-<<<<<<< HEAD
-
-=======
->>>>>>> 61f1d00... Block user frontend
+                    }
+                    else if(update.getGameState()!.getUserBlockState()!)
+                    {
+                         let blockedState: boolean = update.getGameState()!.getUserBlockState()!.getIsBlocked();
+                         this.props.updateUserBlocked(blockedState);
                     }
                 }
             }

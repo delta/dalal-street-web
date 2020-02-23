@@ -247,11 +247,7 @@ export class Mortgage extends React.Component<MortgageProps, MortgageState> {
                         <td><strong>{this.props.retrieveRate + "%"}</strong></td>
                         <td className="green"><strong>{(mortgagePrice * this.props.retrieveRate) / 100}</strong></td>
                         <td><strong><input id={"retrieveinput-" + uniqueKey} placeholder="0" className="mortgage-input" /></strong></td>
-<<<<<<< HEAD
-                        <td><strong><button disabled={this.props.isMarketOpen ? false : true} className="ui inverted green button" onClick={() => { this.retrieveStocks(Number(stockId), mortgagePrice) }}>Retrieve</button></strong></td>
-=======
                         <td><strong><button disabled={this.props.isMarketOpen && !stockBriefInfoMap[stockId].isBankrupt && !this.props.isBlocked ? false : true} className="ui inverted green button" onClick={() => { this.retrieveStocks(Number(stockId), mortgagePrice) }}>Retrieve</button></strong></td>
->>>>>>> 61f1d00... Block user frontend
                     </tr>
                 );
             });

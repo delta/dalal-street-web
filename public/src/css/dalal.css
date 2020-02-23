@@ -192,10 +192,10 @@ div.expected-cost {
 	font-weight: bold;
 }
 .dividends-text{
-	color: rgb(0, 80, 0);
+	color: rgb(45, 80, 45);
 	text-align: center;
 	float: right;
-	padding-right: 30px;
+	padding-right: 10px;
 	padding-left: 5px;
 	text-transform: uppercase;
 	font-weight: bold;
