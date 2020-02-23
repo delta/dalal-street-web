@@ -12,6 +12,7 @@ import { MarketState } from "./MarketState";
 import { MarketEvent } from "./MarketEvent";
 import { Bankruptcy } from "./Bankruptcy";
 import { SetDividends } from "./SetDividends";
+import {InspectUser} from "./InspectUser"
 
 type NumNumMap = { [index: number]: number };
 
@@ -140,6 +141,14 @@ export class Admin extends React.Component<AdminProps,AdminState> {
                   </td>
                   <td>
                    <SetDividends
+                    sessionMd={this.props.sessionMd}
+                    stockBriefInfoMap={this.props.stockBriefInfoMap}
+                   />
+                  </td>
+                </tr>
+                <tr>
+                <td>
+                   <InspectUser
                     sessionMd={this.props.sessionMd}
                     stockBriefInfoMap={this.props.stockBriefInfoMap}
                    />
