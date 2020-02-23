@@ -5,7 +5,13 @@ import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { InspectUserRequest } from "../../../proto_build/actions/InspectUser_pb";
 
-
+export type UserTable ={
+    id: any
+    email: any
+    transactionCount: any
+    position: any
+    stockSum: any
+}
 export interface InspectUserProps{
     sessionMd: Metadata,
     stockBriefInfoMap: { [index: number]: StockBriefInfo } // get stock detail for a given stockid  
@@ -14,14 +20,16 @@ export interface InspectUserProps{
 interface InspectUserState{
     UserId: number
     transType: boolean
+    options:{ [index: number]: UserTable } 
 }
- 
+
 export class InspectUser extends React.Component<InspectUserProps,InspectUserState> {
     constructor(props: InspectUserProps) {
         super(props);  
         this.state = {
             UserId: 0,
-            transType: false
+            transType: false,
+            options: {}
         }    
     }
 
@@ -46,9 +54,26 @@ export class InspectUser extends React.Component<InspectUserProps,InspectUserSta
           const resp = await DalalActionService.inspectUser(inspectUserReq, sessionMd);
           // If any error occurs, it will be raised in DalalMessage_pb_Service
           const res = resp.getListList()
+          let options: {[index:number]: any} = {};
           for(var i = 0 ;i < res.length;i++){
-              console.log("id: ", res[i].getId()," email: ", res[i].getEmail()," Transaction Count: ", res[i].getTransactionCount()," Position: ", res[i].getPosition()," Stock sum ", res[i].getStockSum()," Reserved Stock sum ", res[i].getReservedstockSum());
+              console.log("id: ", res[i].getId()," email: ", res[i].getEmail()," Transaction Count: ", res[i].getTransactionCount()," Position: ", res[i].getPosition()," Stock sum ", res[i].getStockSum());
           }
+             resp.getListList().forEach((obj,objId) => {
+                //  options[objId] = obj.getId();
+                let object ={
+                     id: obj.getId(),
+                     email: obj.getEmail(),
+                     transactionCount: obj.getTransactionCount(),
+                     position: obj.getPosition(),
+                     stockSum: obj.getStockSum(),
+                }
+                options[objId] = object
+               
+             });
+             this.setState({
+                 options:options
+             })
+
         }catch(e){
           console.log("Error happened while inspecting User ", e.statusCode, e.statusMessage, e);
           if (e.isGrpcError) {
@@ -81,7 +106,20 @@ export class InspectUser extends React.Component<InspectUserProps,InspectUserSta
       }
     
     render() {
-       
+          let content = [];
+          let options: { [index:number]: UserTable} = this.state.options;
+
+          for(const id in  options){
+              content.push(
+                 <tr>
+                     <td>{options[id].id}</td>
+                     <td>{options[id].email}</td>
+                     <td>{options[id].transactionCount}</td>
+                     <td>{options[id].position}</td>
+                     <td>{options[id].stockSum}</td>
+                 </tr>
+              )
+          }
 
         return (
             <React.Fragment>
@@ -107,6 +145,18 @@ export class InspectUser extends React.Component<InspectUserProps,InspectUserSta
                     </tr>
                 </tbody>
             </table>
+                <table className="ui celled table">
+                    <thead>
+                        <tr><th>Id</th>
+                            <th>Email</th>
+                            <th>Transaction Count</th>
+                            <th>Position</th>
+                            <th>Stock Sum</th>
+                        </tr></thead>
+                    <tbody>
+                       {content}
+                    </tbody>
+                </table>
             </React.Fragment>	   
         );
     }
