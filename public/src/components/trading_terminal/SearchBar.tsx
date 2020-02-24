@@ -27,6 +27,7 @@ export class SearchBar extends React.Component<SearchBarProps, {}> {
 		$("#search-container").dropdown({
 			onChange: this.handleStockChange,
 		});
+		$("#search-options .dividend").popup();
 	}
 
 	// just semantic things.
@@ -63,18 +64,13 @@ export class SearchBar extends React.Component<SearchBarProps, {}> {
 				options.push(
 					<div key={stockId} className="disabled item row" data-value={stockId}>
 						<div className="companyName nine wide column">{stockInfo.fullName} <span className="bankrupt-text">Bankrupt</span> </div>
-	
-						<div className={priceClass + " three wide column " + diffClass}>
-						 ₹ {prices[stockId]}
-						</div>
-						<div className={"three wide column search-bar-price-diff " + diffClass}>{diff}</div>
 					</div>
 				);
 			}
 			else if(stockInfo.givesDividends){
 				options.push(
-					<div key={stockId} className="item row" data-value={stockId}>
-						<div className="companyName nine wide column" data-tooltip="Company is giving dividends now!" data-position="right center">{stockInfo.fullName} <span className="dividends-text">$</span> </div>
+					<div key={stockId} className="dividend item row" data-value={stockId} data-content="Company is giving dividends now!" data-position="right center">
+						<div className="companyName nine wide column" >{stockInfo.fullName} <span className="dividends-text">$</span> </div>
 						<div className={priceClass + " three wide column " + diffClass}>
 							₹ {prices[stockId]}
 						</div>
@@ -101,7 +97,7 @@ export class SearchBar extends React.Component<SearchBarProps, {}> {
 				<input name="stock" type="hidden" value={this.props.defaultStock}/>
 				<i className="dropdown icon"></i>
 				<div className="default text">Select Stock</div>
-				<div className="menu ui grid">
+				<div className="menu ui grid" id="search-options">
 					{options}
 				</div>
 			</div>
