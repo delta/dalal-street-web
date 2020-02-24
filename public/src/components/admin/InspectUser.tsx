@@ -20,6 +20,7 @@ interface InspectUserState {
     userId: number
     transType: boolean
     inspectUserMap: { [index: number]: InspectUserRow }
+    days: number
 }
 
 export class InspectUser extends React.Component<InspectUserProps, InspectUserState> {
@@ -28,7 +29,8 @@ export class InspectUser extends React.Component<InspectUserProps, InspectUserSt
         this.state = {
             userId: 0,
             transType: false,
-            inspectUserMap: {}
+            inspectUserMap: {},
+            days: 7
         }
     }
 
@@ -47,9 +49,11 @@ export class InspectUser extends React.Component<InspectUserProps, InspectUserSt
         const userId = this.state.userId;
         const sessionMd = this.props.sessionMd;
         const transtype = this.state.transType;
+        const days = this.state.days;
         try {
             inspectUserReq.setUserId(userId);
             inspectUserReq.setTransactionType(transtype)
+            inspectUserReq.setDay(days)
             const resp = await DalalActionService.inspectUser(inspectUserReq, sessionMd);
             // If any error occurs, it will be raised in DalalMessage_pb_Service
             const res = resp.getListList()
@@ -96,6 +100,15 @@ export class InspectUser extends React.Component<InspectUserProps, InspectUserSt
         });
     }
 
+    handleMarketDaysChange = (e: any) => {
+        const newDaysCount = Number(e.currentTarget.value);
+        this.setState(prevState => {
+            return {
+                days: newDaysCount
+            }
+        });
+    }
+
     render() {
         let content = [];
         let inspectUserMap: { [index: number]: InspectUserRow } = this.state.inspectUserMap;
@@ -129,6 +142,9 @@ export class InspectUser extends React.Component<InspectUserProps, InspectUserSt
                             </td>
                             <td>
                                 <input type="integer" className="market-input" id="user-id" name="user-id" onChange={this.handleUserIdChange.bind(this)} placeholder="User ID" />
+                            </td>
+                            <td>
+                                <input type="integer" className="market-input" id="market-days" name="market-days" onChange={this.handleMarketDaysChange.bind(this)} placeholder="Days" />
                             </td>
                             <td>
                                 <input type="button" className="ui inverted green button" onClick={this.GetDetails.bind(this)} value="Inspect User" />
