@@ -595,6 +595,16 @@ h3.panel-header {
 	border: none;
 	font-size: 0.4em;
 }
+.leaderboard-blocked{
+	background-color: rgba(0, 0, 0, 0.2);
+	color: rgba(255, 255, 255, 0.2) !important
+}
+.leaderboard-blocked-cell-green{
+	color:rgba(125,234,99,0.3);
+}
+.leaderboard-blocked-cell-red{
+	color:rgba(255,0,0,0.3);
+}
 
 /* Leaderboard styling ends */
 
