@@ -14,8 +14,10 @@ import { Bankruptcy } from "./Bankruptcy";
 import { SetDividends } from "./SetDividends";
 import { InspectUser } from "./InspectUser"
 import { BlockUser } from "./BlockUser";
+import { AddStocksToExchange } from "./StocksToExhange";
 import { UnBlockUser } from "./UnBlockUser";
 import { UnBlockAllUsers } from "./UnBlockAllUsers"
+import { UpdateStockPrice } from "./UpdateStockPrice";
 
 type NumNumMap = { [index: number]: number };
 
@@ -165,6 +167,18 @@ export class Admin extends React.Component<AdminProps, AdminState> {
                                 <UnBlockAllUsers
                                     sessionMd={this.props.sessionMd}
                                 />
+                            </tr>
+                            <tr>
+                                <td>
+                                    <AddStocksToExchange
+                                        sessionMd={this.props.sessionMd}
+                                    />
+                                </td>
+                                <td>
+                                    <UpdateStockPrice
+                                        sessionMd={this.props.sessionMd}
+                                    />
+                                </td>
                             </tr>
                             <tr>
                                 <td>
