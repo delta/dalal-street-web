@@ -5,7 +5,7 @@ import { GetCompanyProfileRequest, GetCompanyProfileResponse } from "../../../pr
 import { Stock as Stock_pb } from "../../../proto_build/models/Stock_pb";
 import { Fragment } from "react";
 
-
+declare var $: any;
 export interface CompanyDetailsProps {
     sessionMd: Metadata,
     currentStockId: number,
@@ -27,6 +27,8 @@ export class CompanyDetails extends React.Component<CompanyDetailsProps, Company
 
     componentDidMount() {
         this.getCompanyDetails(this.props.currentStockId)
+        $('.dividend-msg')
+           .transition('flash');
     }
 
     componentWillReceiveProps(newProps: CompanyDetailsProps) {
@@ -65,6 +67,11 @@ export class CompanyDetails extends React.Component<CompanyDetailsProps, Company
                         <i className="circular suitcase icon"></i>
                         {companyDetails.getFullName()}
                     </h1>
+                </div>
+                <div className="row dividend-msg ">
+                    <h2 className="ui center aligned icon header green" >
+                        {this.state.companyDetails.getGivesDividends() ? this.state.companyDetails.getFullName()+" has announced to pay Dividends" : ""}
+                    </h2>
                 </div>
                 <div className="row">
                     <div className="five wide column box">

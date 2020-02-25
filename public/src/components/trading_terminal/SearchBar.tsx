@@ -38,6 +38,9 @@ export class SearchBar extends React.Component<SearchBarProps, {}> {
 
 	handleStockChange = (stockId: string) => {
 		const newStockId = Number(stockId);
+		this.setState({
+			defaultStock: newStockId
+		})
 		this.props.handleStockIdCallback(newStockId);
 	};
 
@@ -62,8 +65,8 @@ export class SearchBar extends React.Component<SearchBarProps, {}> {
 			diff = percentageIncrease + "%";
 			if(stockInfo.isBankrupt){
 				options.push(
-					<div key={stockId} className="disabled item row" data-value={stockId}>
-						<div className="companyName nine wide column">{stockInfo.fullName} <span className="bankrupt-text">Bankrupt</span> </div>
+					<div key={stockId} className="item row" data-value={stockId}>
+						<div className="bankruptCompanyName sixteen wide column">{stockInfo.fullName} <span className="bankrupt-text">Bankrupt</span> </div>
 					</div>
 				);
 			}
@@ -93,8 +96,8 @@ export class SearchBar extends React.Component<SearchBarProps, {}> {
 			}
 		}
 		return (
-			<div id="search-container" className="ui fluid search selection dropdown">
-				<input name="stock" type="hidden" value={this.props.defaultStock}/>
+			<div id="search-container" className="ui fluid search selection dropdown" data-tooltip={this.props.stockBriefInfoMap[this.props.defaultStock].givesDividends && !this.props.stockBriefInfoMap[this.props.defaultStock].isBankrupt?"Company is giving dividends now! ":null} data-position="bottom center"	>
+				<input name="stock" id="default-stock" type="hidden" value={this.props.defaultStock	} />
 				<i className="dropdown icon"></i>
 				<div className="default text">Select Stock</div>
 				<div className="menu ui grid" id="search-options">

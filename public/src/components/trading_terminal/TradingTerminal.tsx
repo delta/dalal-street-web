@@ -62,17 +62,6 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 		super(props);
 
 		let currentStockId = Number(Object.keys(this.props.stockBriefInfoMap).sort()[0]);
-		for(const stockId in this.props.stockBriefInfoMap){
-			  let bankruptStatus: boolean = this.props.stockBriefInfoMap[stockId].isBankrupt;
-			  if(!bankruptStatus){
-				  currentStockId=Number(stockId);
-				  break;
-			  }
-		}
-		if(!isNaN(currentStockId) && this.props.stockBriefInfoMap[currentStockId]!.isBankrupt)
-		{
-			currentStockId= NaN;
-		}
 		this.state = {
 			currentStockId: currentStockId,
 			currentPrice: this.props.stockPricesMap[currentStockId],
@@ -411,6 +400,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 								sessionMd={this.props.sessionMd}
 								isMarketOpen={this.props.isMarketOpen}
 								isBlocked={this.props.isBlocked}
+								isBankrupt={this.props.stockBriefInfoMap[this.state.currentStockId].isBankrupt?true:false}
 							  orderFeePercent={this.props.constantsMap['ORDER_FEE_PERCENT']} />
 						</div>
 
