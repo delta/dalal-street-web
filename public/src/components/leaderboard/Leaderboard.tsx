@@ -84,13 +84,13 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
         const state = this.state;
 
         const leaderboardEntries = state.leaderboardEntries.map((entry, index) => (
-            <tr key={index} className={entry.getIsblocked()?"leaderboard-blocked": ""}>
+            <tr key={index} className={entry.getIsBlocked()?"leaderboard-blocked": ""}>
                 <td><strong>{entry.getRank()}</strong></td>
-                {entry.getIsblocked() && <td className="box" data-tooltip="Account Blocked for a day" data-position="left center" data-variation="mini" ><strong>{entry.getUserName()}  </strong> </td> }
-                {!entry.getIsblocked() && <td><strong>{entry.getUserName()}</strong></td>}
+                {entry.getIsBlocked() && <td className="box" data-tooltip="Account Blocked for a day" data-position="left center" data-variation="mini" ><strong>{entry.getUserName()}  </strong> </td> }
+                {!entry.getIsBlocked() && <td><strong>{entry.getUserName()}</strong></td>}
                 <td><strong>{addCommas(entry.getCash())}</strong></td>
-                <td className={!entry.getIsblocked()?(entry.getStockWorth() >= 0 ? "green" : "red"): (entry.getStockWorth() >= 0 ? "leaderboard-blocked-cell-green": "leaderboard-blocked-cell-red")}><strong>{addCommas(entry.getStockWorth())}</strong></td>
-                <td className={!entry.getIsblocked()?"green": "leaderboard-blocked-cell-green"}><strong>{addCommas(entry.getTotalWorth())}</strong></td>
+                <td className={!entry.getIsBlocked()?(entry.getStockWorth() >= 0 ? "green" : "red"): (entry.getStockWorth() >= 0 ? "leaderboard-blocked-cell-green": "leaderboard-blocked-cell-red")}><strong>{addCommas(entry.getStockWorth())}</strong></td>
+                <td className={!entry.getIsBlocked()?"green": "leaderboard-blocked-cell-green"}><strong>{addCommas(entry.getTotalWorth())}</strong></td>
             </tr>
         ));
 
