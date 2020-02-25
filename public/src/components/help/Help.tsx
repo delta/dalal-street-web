@@ -28,7 +28,7 @@ export class Help extends React.Component<HelpProps, {}> {
         return (
             <Fragment>
                 <div className="row" id="top_bar">
-                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} userStockWorth={this.props.userStockWorth} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen} isBlocked={this.props.isBlocked}/>
+                <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} userStockWorth={this.props.userStockWorth} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen} isBlocked={this.props.isBlocked}/>
                     <div id="notif-component">
                         <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
                     </div>
@@ -96,14 +96,14 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <p><em>Pro Tip</em>: If you’re using the <a target="_blank" href="https://play.google.com/store/apps/details?id=org.pragyan.dalal18">Dalal Street Android App</a>, you will receive a notification on your phone every time a new article is published.</p>
                                     </div>
 
-                                    
+
                                     <div className="title">
                                         <i className="dropdown icon inverted"></i>
-                                        <span className="faq-questions lighter">Malpractices</span>
+                                        <span className="faq-questions lighter">Action against Malpractice</span>
                                     </div>
                                     <div className="content">
                                     <p>
-                                    Whenever we observe a user doing malpractices, the user will be blocked for a day. If the user continues to do malpractice, the user will be blocked from playing for the entire duration. Malpractices include having multiple accounts and performing cash funnelling operations between the accounts.
+                                    If a user is found guilty of any form of malpractice,including but not limited to, <span className="red">having multiple accounts, performing cash funnelling operations between the accounts and any other form of embezzlement</span>, the user will be blocked for the day, as a warning for violating the Code of Conduct. If the user is still found to be continuing with malpractice, then the user will be blocked from playing for the entire duration of the game.
                                     </p>
                                     </div>
 
@@ -113,7 +113,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                     </div>
                                     <div className="content">
                                         <p>All trading related tasks are performed on the <strong>Trading Page</strong>, which is shown in the image below.</p>
-                                        <p className="image-wrapper"><img src="./public/src/images/help/Dalal_Trading_Page.png" alt="Trading Image" /></p>
+                                        <p className="image-wrapper"><img src="./public/src/images/help/dalaltradepage.png" alt="Trading Image" /></p>
                                         <p>Lets walk through all the elements of this page.</p>
                                         <p><strong>Order Book</strong> - The Market Depth lists all <em>open</em> buy and sell orders. This includes orders issued by <em>all players</em> that have not been filled yet. By observing the Market Depth, you can see the prices at which other players are placing their orders and judge the current mood of the market. The Trading History displays the last 15 transactions that have been executed for the company you’ve chosen.</p>
                                         <p><strong>Place Orders</strong> - There are 3 different types of orders you can place - Market, Limit and Stoploss. <em>(You can read more about these terms in our FAQ section)</em>. Once your orders are placed, we will fill the order based on a <em>best match</em> algorithm.</p>
@@ -121,7 +121,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <p><strong>Open Orders</strong> - These are the orders that you have placed but have not been filled yet. After you place an order, the order will appear here until it is successfully filled. You can cancel your open orders to get back your reserved assets.</p>
                                         <p><strong>Price Chart</strong> - This shows how the stock price of the selected company has changed over time. You can view the chart with different time intervals by using the dropdown above the chart. This allows you to analyse the data at different levels of detail.</p>
                                         <p>Once you’ve bought some stocks, you can view all the stocks you own as well as your <em>Net Worth</em> on the <strong>Portfolios Page</strong>, as shown in the image below. This page also displays a list of all your <strong>executed transactions</strong>.</p>
-                                        <p className="image-wrapper"><img src="./public/src/images/help/Dalal_Portfolio_Page.png" alt="Portfolio Image" /></p>
+                                        <p className="image-wrapper"><img src="./public/src/images/help/dalalportfoliopage.png" alt="Portfolio Image" /></p>
                                         <p>Hopefully, this should be enough to get you going and start trading! If you still have some questions, please read our FAQ section where we address some more common doubts that players may have.</p>
                                     </div>
 
@@ -165,21 +165,20 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <span className="faq-questions">How is the winner determined?</span>
                                     </div>
                                     <div className="content">
-                                        <p>The player with the highest Total Net Worth at the end of <b>7 days </b>is declared as the winner. Your Total Net Worth is calculated by adding - <b> Cash In Hand, Stock Worth, Reserved Cash and Reserved Stock Worth </b>. 
-                                        You can view these values on the <strong>Portfolio page</strong>. Here’s a table explaining how your Net Worth will change in response to different events :-</p>
+                                        <p>The player with the highest Total Net Worth at the end of <b>7 days </b>is declared as the winner. Your Total Net Worth is calculated by adding - <b> Cash In Hand, Stock Worth, Reserved Cash and Reserved Stock Worth </b>. You can view these values on the <strong>Portfolio page</strong>. Here’s a table explaining how your Net Worth will change in response to different events :-</p>
                                         <table className="ui inverted table">
                                             <thead>
                                                 <tr>
                                                     <th>Event</th>
-                                                    <th>Cash In Hand</th>
-                                                    <th>Stock Worth</th>
+                                                    <th>Total Cash</th>
+                                                    <th>Total Stock Worth</th>
                                                     <th>Net Worth</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
                                                     <td>Buy stocks</td>
-                                                    <td className="red">Decreases</td>
+                                                    <td className="red">Decreases </td>
                                                     <td className="green">Increases</td>
                                                     <td className="cyan">Constant</td>
                                                 </tr>
@@ -299,7 +298,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <span className="faq-questions">Can a company give dividends?</span>
                                     </div>
                                     <div className="content">
-                                        <p>During the course of the game, some companies may give dividends. A dividend is a fixed amount that a company offers you for each stock you own of that company. You'll be notified when a company is giving dividends, till then stay tuned to the news for the latest updates of a company.</p>
+                                        <p>During the course of the game, some companies may decide to give out dividends to its shareholders. Dividend is a fixed amount that a company, which has made huge profits, offers you for each stock you own of that company. You'll be notified when a company is giving dividends, till then stay tuned to the <strong>News Page</strong> for the latest updates on the companies.</p>
                                     </div>
 
                                     <div className="title">
@@ -307,7 +306,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <span className="faq-questions">Can a company go bankrupt at any point?</span>
                                     </div>
                                     <div className="content">
-                                        <p>Yes. A company might go bankrupt depending on their current financial situation. Stay tuned to the news page for the latest updates about companies. When a company goes bankrupt, you can no longer exchange stocks their stocks and all stocks you own of that company become worthless.</p>
+                                    <p>Yes. A company might file for bankruptcy depending on their current financial situation. Stay tuned to the <strong>News Page</strong> for the latest updates about companies. When a company goes bankrupt, you can no longer exchange their stocks and all stocks that you own of this company become worthless.</p>
                                     </div>
 
 
@@ -316,7 +315,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <span className="faq-questions">Help! My account got blocked!</span>
                                     </div>
                                     <div className="content">
-                                        <p>Whenever we observe a user breaking our rules of conduct, we block the user from playing. Check out our malpractice section in Getting Started for more details. Reach out to us on our forum for any clarification.</p>
+                                    <p>If a user is found breaking the rules of our Code of Conduct, the user will be blocked from playing the game any further. Check out our <strong>Action against Malpractice</strong> section in <strong>Getting Started</strong> for more details. Reach out to us on our forum for any further clarification.</p>
                                     </div>
 
                                 </div>
