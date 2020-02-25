@@ -164,6 +164,7 @@ export class Main extends React.Component<MainProps, MainState> {
     }
     calculateUserStockWorth(stockDetailsMap: { [index:number]: Stock_pb }, stocksReservedMap: { [index:number]: number }, stocksOwnedMap: { [index:number]: number }){
         let worth = 0;
+
         for (const stockId in stockDetailsMap) {
            if (stockId in stocksOwnedMap) {
             worth += stocksOwnedMap[stockId] * stockDetailsMap[stockId].getCurrentPrice();
@@ -453,6 +454,7 @@ export class Main extends React.Component<MainProps, MainState> {
         let userCash = this.state.userCash;
         let reservedCash = this.state.userReservedCash;
         let stockWorth = this.state.stockWorth;
+        let reservedStocksWorth = this.state.reservedStocksWorth;
         let stockId;
         this.connectionSucceeded();
 
@@ -464,6 +466,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 userCash+=newTransaction.getTotal();
                 reservedCash+=newTransaction.getReservedCashTotal();
                 stockWorth+=newTransaction.getStockQuantity() * this.state.stockDetailsMap[stockId].getCurrentPrice();
+                reservedStocksWorth-=newTransaction.getStockQuantity() * this.state.stockDetailsMap[stockId].getCurrentPrice()
                 if (newTransaction.getStockId() in stocksOwnedMap) {
                     stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
                 }
@@ -527,6 +530,7 @@ export class Main extends React.Component<MainProps, MainState> {
                         userCash: userCash,
                         userReservedCash: reservedCash,
                         stockWorth: stockWorth,
+                        reservedStocksWorth: reservedStocksWorth,
                         userTotal: this.calculateTotal(userCash, stocksOwnedMap, this.state.stockDetailsMap, stocksReservedMap, reservedCash),
                         latestTransaction: newTransaction,
                     };
