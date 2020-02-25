@@ -150,6 +150,9 @@ div.expected-cost {
 #search-container div.text .companyName {
 	width: 60%;
 }
+#search-container div.text .bankruptCompanyName {
+    width:100%;
+}
 #search-container div.text .search-bar-current-price {
 	width: 19.5%;
 }
@@ -188,9 +191,15 @@ div.expected-cost {
 	text-align: center;
 	float: right;
 	padding-left: 5px;
+	padding-right: 20px;
 	text-transform: uppercase;
 	font-weight: bold;
 }
+
+#search-options .item.row .bankruptCompanyName {
+     padding-right: 20px;
+}
+
 .dividends-text{
 	color: rgb(45, 80, 45);
 	text-align: center;
@@ -200,7 +209,6 @@ div.expected-cost {
 	text-transform: uppercase;
 	font-weight: bold;
 }
-
 
 /* Notification styling starts */
 #notifbutton{

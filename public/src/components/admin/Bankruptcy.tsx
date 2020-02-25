@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Metadata } from "grpc-web-client";
-import { showNotif, showErrorNotif, closeNotifs } from "../../utils";
+import { showNotif, showErrorNotif, closeNotifs , showSuccessNotif } from "../../utils";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { SetBankruptcyRequest } from "../../../proto_build/actions/SetBankruptcy_pb";
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
@@ -45,17 +45,33 @@ export class Bankruptcy extends React.Component<BankruptcyProps,BankruptcyState>
         });
     };
 
-    setBankruptcy = async () => {
+    handleSetBankruptcy = (event: React.FormEvent<HTMLInputElement>) =>{
+          const id = event.currentTarget.id;
+          if(id === "set")
+          {
+            this.setBankruptcy(true);
+          }   
+          else if(id === "unset") {
+             this.setBankruptcy(false);
+          }    
+    }
+
+    setBankruptcy = async (bankruptcyStatus: boolean) => {
       const setBankruptcy = new SetBankruptcyRequest();
       const stockId = this.state.currentStockId;
       const stockName = this.props.stockBriefInfoMap[stockId].fullName;
       const sessionMd = this.props.sessionMd;
       try{
         setBankruptcy.setStockId(stockId);
-        setBankruptcy.setIsBankrupt(true);
+        setBankruptcy.setIsBankrupt(bankruptcyStatus);
         const resp = await DalalActionService.setBankruptcy(setBankruptcy, sessionMd);
         // If any error occurs, it will be raised in DalalMessage_pb_Service
+        if(bankruptcyStatus){
         showNotif(stockName+" has been successfully set Bankrupt!");
+        }
+        else{
+            showSuccessNotif(stockName+" has been successfully unset as Bankrupt!");
+        }
       }catch(e){
         console.log("Error happened while setting Bankruptcy! ", e.statusCode, e.statusMessage, e);
         if (e.isGrpcError) {
@@ -95,7 +111,10 @@ export class Bankruptcy extends React.Component<BankruptcyProps,BankruptcyState>
 			            </div>
                         </td>
                         <td>
-                          <input type="button" className="ui inverted green button" onClick={this.setBankruptcy.bind(this)} value="Set Bankrupt"/>
+                          <input type="button" id="set" className="ui inverted green button" onClick={this.handleSetBankruptcy} value="Set Bankrupt"/>
+                        </td>
+                        <td>
+                          <input type="button" id="unset" className="ui inverted red button"  onClick={this.handleSetBankruptcy} value="Unset Bankrupt"/>
                         </td>
                     </tr>
                 </tbody>
