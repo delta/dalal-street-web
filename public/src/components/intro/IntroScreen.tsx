@@ -10,13 +10,13 @@ export class IntroScreen extends React.Component<{}, {}> {
                                 <a href="/login" className="intro-button intro">Login</a>
                                 <a href="/register" className="intro-button intro">Sign Up</a>
                         </div>
-                        <span id="pragyan-logo">
+                        <div id="pragyan-logo">
                             <img className="image" src="./public/src/images/pragyanlogo.png" />
-                        </span>
-                        <div id="cloud-logo">
+                        </div>
+                      {/*<div id="cloud-logo">
                         <p> Cloud partner</p>
                           <img  className="image" src="./public/src/images/DO_Logo_horizontal_white.svg" />
-                        </div>
+                        </div>*/}
                         <div id="text">
                         <h1>Dalal Street</h1>
                         <p>The stock market gaming engine</p>
@@ -70,7 +70,7 @@ export class IntroScreen extends React.Component<{}, {}> {
                                 <h2>Questions or comments?</h2>
                             </header>
 
-                            <p>Reach out to us on <a href="https://forum.pragyan.org/c/dalal-street">the Dalal Forum</a></p>
+                            <p>Reach out to us on <a href="https://forum.pragyan.org/t/dalal-street-frequently-asked-questions/19">the Dalal Forum</a></p>
 
 
                                 &copy; Made with <span className="red">&hearts;</span> by <a href="https://delta.nitt.edu">Delta Force</a>
