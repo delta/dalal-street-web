@@ -263,6 +263,8 @@
 }
 #intro-div .image img {
   display: block;
+  max-width: 100%;
+  max-height: 100%;
 }
 #intro-div .icon {
   text-decoration: none;
@@ -782,7 +784,18 @@
 }
 #intro-div #pragyan-logo {
   position: relative;
-  left: -10px;
+  height: 110px;
+  width: 250px;
+  text-align : center;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  padding : none;
+
+}
+img {
+  max-height :100%;
+  max-width :100%;
 }
 #intro-div #cloud-logo {
    height: auto;
