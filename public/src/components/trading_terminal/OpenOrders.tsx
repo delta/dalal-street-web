@@ -301,7 +301,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps, OpenOrdersState
 					<td className="green volume"><strong>{openBids[bidId].getStockQuantity()}</strong></td>
 					<td className="green volume"><strong>{openBids[bidId].getStockQuantityFulfilled()}</strong></td>
 					<td className="green volume"><strong>{price}</strong></td>
-					<td><button onClick={e => this.confirmCancelModal(this,bidId,true)} disabled={cancelButtonState} className="red cancel-order-button">❌</button></td>
+					<td><button onClick={e => this.confirmCancelModal(this,bidId,false)} disabled={cancelButtonState} className="red cancel-order-button">❌</button></td>
 				</tr>
 			);
 		}
