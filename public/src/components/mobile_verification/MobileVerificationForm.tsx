@@ -17,6 +17,8 @@ export interface MobileVerificationFormState {
     successful: boolean
     disabled: boolean
     error: string | null
+    resendOtp: boolean
+    resetTimer: boolean
 }
 
 export interface MobileVerificationFormProps {
@@ -35,7 +37,9 @@ export class MobileVerificationForm extends React.Component<MobileVerificationFo
             mobileInputDisable: false,
             successful: false,
             disabled: false,
-            error: null
+            error: null,
+            resendOtp: false,
+            resetTimer: true
         }
     }
 
@@ -116,29 +120,34 @@ export class MobileVerificationForm extends React.Component<MobileVerificationFo
                 mobileStatus: true,
                 successful: true,
                 error: errMsg,
-                mobileInputDisable: true
+                mobileInputDisable: true,
             })
 
         } catch (e) {
             console.log(e);
             this.setState({
                 error: e.isGrpcError ? "Unable to reach server. Please check your internet connection." : e.statusMessage,
-                successful: false
+                successful: false,
+                resetTimer: false
             })
         }
 
         this.setState({
-            disabled: false
+            disabled: false,
+            resetTimer: false,
         })
     }
     handleResendOTPSubmit = async () =>{
         this.setState({
             disabled: true,
+            resetTimer: true,
+            resendOtp: false,
         })
 
         const addPhoneRequest = new AddPhoneRequest();
         let fullPhoneNumber = this.state.countryCode+this.state.mobileNumber;
         addPhoneRequest.setPhonenumber(fullPhoneNumber);
+        
         this.SendOTP(addPhoneRequest,"New OTP sent your mobile Number Successfully");
     }
     handleMobileNumberChange = (event: React.FormEvent<HTMLInputElement>) => {
@@ -159,6 +168,12 @@ export class MobileVerificationForm extends React.Component<MobileVerificationFo
    handleCountryCodeChange = (country: string|null) =>{
         this.setState({
             countryCode: country
+        })
+    }
+    handleResendOtpCallback = () => {
+         this.setState({
+             resendOtp: true,
+             resetTimer: false
         })
     }
 
@@ -199,15 +214,20 @@ export class MobileVerificationForm extends React.Component<MobileVerificationFo
                                 <div className="ui fluid large teal submit disabled button">Change Phone Number</div> :
                                 <div className="ui fluid large teal submit button" onClick={this.handleChangeNumber} >Change Phone Number</div>
                             }
-                             {this.state.disabled ?
-                                <div className="ui fluid large teal submit disabled button">Resend OTP</div> :
-                                <div className="ui fluid large teal submit button" onClick={this.handleResendOTPSubmit}>Resend OTP</div>
+                             {this.state.disabled || !this.state.resendOtp ?
+                                <div className="ui fluid large teal submit disabled button"><Timer
+                                    handleResendOtpCallback={this.handleResendOtpCallback}
+                                    resetTimer={this.state.resetTimer}>
+                                  </Timer></div> :
+                                <div className="ui fluid large teal submit button" onClick={this.handleResendOTPSubmit}><Timer
+                                    handleResendOtpCallback={this.handleResendOtpCallback}
+                                    resetTimer={this.state.resetTimer}>
+                                </Timer></div>
                             }
                             {this.state.disabled ?
                                 <div className="ui fluid large teal submit disabled button">Verify OTP</div> :
                                 <div className="ui fluid large teal submit button" onClick={this.handleOTPSubmit}>Verify OTP</div>
                             }
-                           <div className = "field"><Timer></Timer></div>
                         </div>
                         }
 
