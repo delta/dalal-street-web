@@ -4,6 +4,7 @@ import { AddPhoneRequest, AddPhoneResponse } from "../../../proto_build/actions/
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { VerifyOTPRequest } from "../../../proto_build/actions/VerifyOTP_pb";
 import { CountryTelCode } from "../countrycode/CountryTelCode";
+import {Timer} from "./Timer";
 import { showSuccessNotif } from "../../utils";
 
 export interface MobileVerificationFormState {
@@ -98,15 +99,15 @@ export class MobileVerificationForm extends React.Component<MobileVerificationFo
                   successful: false,
                   disabled: false,
               })
-             return ; 
+             return ;
          }
 
-               
+
         const addPhoneRequest = new AddPhoneRequest();
         let fullPhoneNumber = this.state.countryCode+this.state.mobileNumber;
         addPhoneRequest.setPhonenumber(fullPhoneNumber);
         this.SendOTP(addPhoneRequest,"Fill the OTP sent your mobile number ");
-        
+
     }
     SendOTP = async(addPhoneRequest: AddPhoneRequest,errMsg: string) => {
         try {
@@ -153,12 +154,12 @@ export class MobileVerificationForm extends React.Component<MobileVerificationFo
     handleChangeNumber = () => {
         this.setState({
             mobileInputDisable: false
-        })   
+        })
     }
    handleCountryCodeChange = (country: string|null) =>{
         this.setState({
             countryCode: country
-        }) 
+        })
     }
 
     render() {
@@ -191,7 +192,7 @@ export class MobileVerificationForm extends React.Component<MobileVerificationFo
                                 <div className="ui fluid large teal submit disabled button">Get OTP</div> :
                                 <div className="ui fluid large teal submit button" onClick={this.handleNumberSubmit}>Get OTP</div>
                             }
-                        </div> 
+                        </div>
                          }
                         {this.state.mobileStatus && <div>
                             {this.state.disabled ?
@@ -206,9 +207,10 @@ export class MobileVerificationForm extends React.Component<MobileVerificationFo
                                 <div className="ui fluid large teal submit disabled button">Verify OTP</div> :
                                 <div className="ui fluid large teal submit button" onClick={this.handleOTPSubmit}>Verify OTP</div>
                             }
-                           
+                           <div className = "field"><Timer></Timer></div>
                         </div>
                         }
+
                         {this.state.error != null && !this.state.successful && <div className="ui negative bottom attached message">
                             <i className="icon error"></i>
                             {this.state.error}
