@@ -13,10 +13,6 @@ export class IntroScreen extends React.Component<{}, {}> {
                         <div id="pragyan-logo">
                             <img className="image" src="./public/src/images/pragyanlogo.png" />
                         </div>
-                      {/*<div id="cloud-logo">
-                        <p> Cloud partner</p>
-                          <img  className="image" src="./public/src/images/DO_Logo_horizontal_white.svg" />
-                        </div>*/}
                         <div id="text">
                         <h1>Dalal Street</h1>
                         <p>The stock market gaming engine</p>
