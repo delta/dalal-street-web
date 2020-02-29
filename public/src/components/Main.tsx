@@ -386,6 +386,11 @@ export class Main extends React.Component<MainProps, MainState> {
                         this.setState({
                             isMarketOpen: marketState!.getIsMarketOpen(),
                         });
+                        if(this.state.isMarketOpen){
+                          showInfoNotif("Dalal Street Stock Market is open now!","Market Open");
+                        }
+                        else
+                        showInfoNotif("Dalal Street Stock Market is closed right now","Market Closed");
                     } else if (update.getGameState()!.getStockDividendState()) {
                         let stockDetailsMap: { [index: number]: Stock_pb } = this.state.stockDetailsMap;
                         let stockid = update.getGameState()!.getStockDividendState()!.getStockId();
