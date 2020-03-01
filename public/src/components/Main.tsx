@@ -471,7 +471,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 userCash+=newTransaction.getTotal();
                 reservedCash+=newTransaction.getReservedCashTotal();
                 stockWorth+=newTransaction.getStockQuantity() * this.state.stockDetailsMap[stockId].getCurrentPrice();
-                reservedStocksWorth-=newTransaction.getStockQuantity() * this.state.stockDetailsMap[stockId].getCurrentPrice()
+                reservedStocksWorth+=newTransaction.getReservedStockQuantity() * this.state.stockDetailsMap[stockId].getCurrentPrice()
                 if (newTransaction.getStockId() in stocksOwnedMap) {
                     stocksOwnedMap[newTransaction.getStockId()] += newTransaction.getStockQuantity();
                 }
