@@ -32,7 +32,7 @@
     "es6-promise": "^4.2.2",
     "google-protobuf": "^3.5.0",
     "grpc-web-client": "^0.3.1",
-    "jquery": "^3.2.1",
+    "jquery": "^3.5.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-joyride": "^2.0.1",
