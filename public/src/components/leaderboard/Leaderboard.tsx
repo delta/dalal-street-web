@@ -91,6 +91,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                 <td><strong>{addCommas(entry.getCash())}</strong></td>
                 <td className={!entry.getIsBlocked()?(entry.getStockWorth() >= 0 ? "green" : "red"): (entry.getStockWorth() >= 0 ? "leaderboard-blocked-cell-green": "leaderboard-blocked-cell-red")}><strong>{addCommas(entry.getStockWorth())}</strong></td>
                 <td className={!entry.getIsBlocked()?"green": "leaderboard-blocked-cell-green"}><strong>{addCommas(entry.getTotalWorth())}</strong></td>
+
             </tr>
         ));
 

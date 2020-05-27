@@ -45,7 +45,7 @@ export interface TradingTerminalProps {
 
 	isMarketOpen: boolean
 	isBlocked: boolean
-   
+
 	disclaimerElement: JSX.Element
 }
 
@@ -311,7 +311,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 			};
 		});
 	}
-	
+
 	computeNetWorth(cash: number, stockPricesMap: NumNumMap, stocksOwnedMap: NumNumMap) {
 		let worth = 0;
 		for (let stockId in stockPricesMap) {
@@ -401,7 +401,9 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 								isMarketOpen={this.props.isMarketOpen}
 								isBlocked={this.props.isBlocked}
 								isBankrupt={this.props.stockBriefInfoMap[this.state.currentStockId].isBankrupt?true:false}
-							  orderFeePercent={this.props.constantsMap['ORDER_FEE_PERCENT']} />
+							  orderFeePercent={this.props.constantsMap['ORDER_FEE_PERCENT']}
+							  orderPriceWindow={this.props.constantsMap['ORDER_PRICE_WINDOW']} />
+
 						</div>
 
 						<div id="open-orders-container" className="ten wide column box">
