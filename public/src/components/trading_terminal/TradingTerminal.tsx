@@ -400,7 +400,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 								sessionMd={this.props.sessionMd}
 								isMarketOpen={this.props.isMarketOpen}
 								isBlocked={this.props.isBlocked}
-								isBankrupt={this.props.stockBriefInfoMap[this.state.currentStockId].isBankrupt?true:false}
+								isBankrupt={this.state.currentStockId?(this.props.stockBriefInfoMap[this.state.currentStockId].isBankrupt?true:false):false}
 							  orderFeePercent={this.props.constantsMap['ORDER_FEE_PERCENT']} />
 						</div>
 
