@@ -96,7 +96,7 @@ export class SearchBar extends React.Component<SearchBarProps, {}> {
 			}
 		}
 		return (
-			<div id="search-container" className="ui fluid search selection dropdown" data-tooltip={this.props.stockBriefInfoMap[this.props.defaultStock].givesDividends && !this.props.stockBriefInfoMap[this.props.defaultStock].isBankrupt?"Company is giving dividends now! ":null} data-position="bottom center"	>
+			<div id="search-container" className="ui fluid search selection dropdown" data-tooltip={(this.props.defaultStock?(this.props.stockBriefInfoMap[this.props.defaultStock].givesDividends):false && (this.props.defaultStock?(!this.props.stockBriefInfoMap[this.props.defaultStock].isBankrupt):false))?"Company is giving dividends now! ":null} data-position="bottom center"	>
 				<input name="stock" id="default-stock" type="hidden" value={this.props.defaultStock	} />
 				<i className="dropdown icon"></i>
 				<div className="default text">Select Stock</div>
