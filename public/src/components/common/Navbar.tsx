@@ -1,9 +1,13 @@
 import * as React from "react";
 import { MouseEvent } from "react";
+import { Referral } from "../referralcode/ReferralCode"
+import { Metadata } from "grpc-web-client";
 
 export interface NavProps {
 	handleUrlChange: () => void
 	isPhoneVerified: boolean
+	email : string
+	sessionMd :Metadata
 }
 
 declare var $: any;
@@ -81,6 +85,8 @@ export class Navbar extends React.Component<NavProps, {}> {
 			<i className="users icon"></i>
 			Forum
 		</a> */}
+
+		<Referral email={this.props.email} sessionMd={this.props.sessionMd!}/>
 
 		<a className={"item " + (currentLink == "/logout" ? "active" : "")} onClick={e => this.handleClick(e, "/logout")}>
 			<i className="window close icon"></i>

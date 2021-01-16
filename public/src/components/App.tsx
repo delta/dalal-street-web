@@ -37,6 +37,7 @@ interface AppState {
 	sessionMd: Metadata
 	user: User_pb
 
+	email : string
 	stocksOwnedMap: { [index: number]: number } // stocks owned by user for a given stockid
 	stockDetailsMap: { [index: number]: Stock_pb } // get stock detail for a given stockid
 	stocksReservedMap: { [index: number]: number } //stocks reserved from user for a given stockid
@@ -62,6 +63,7 @@ export class App extends React.Component<{}, AppState> {
 			isLoggedIn: false,
 			sessionMd: new Metadata(),
 			user: new User_pb(),
+			email : "",
 			stocksOwnedMap: {},
 			stockDetailsMap: {},
 			stocksReservedMap: {},
@@ -132,6 +134,7 @@ export class App extends React.Component<{}, AppState> {
 			isLoading: true,
 			sessionMd: new Metadata({ "sessionid": resp.getSessionId() }),
 			user: resp.getUser()!,
+			email:(user)?user.getEmail():"",
 			stocksOwnedMap: stocksOwnedMap,
 			stockDetailsMap: stockDetailsMap,
 			stocksReservedMap: stockReservedMap,
@@ -168,6 +171,7 @@ export class App extends React.Component<{}, AppState> {
 				isLoggedIn: false,
 				sessionMd: new Metadata(),
 				user: new User_pb(),
+				email: "",
 				stocksOwnedMap: {},
 				stockDetailsMap: {},
 				stocksReservedMap: {},
@@ -320,7 +324,7 @@ export class App extends React.Component<{}, AppState> {
 			case MAIN:
 				return (
 					<Fragment>
-						<Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified ={this.state.isPhoneVerified}/>
+						<Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified ={this.state.isPhoneVerified} email={this.state.email} sessionMd={this.state.sessionMd!}/>
 						<Main
 							sessionMd={this.state.sessionMd!}
 							user={this.state.user!}
@@ -339,7 +343,7 @@ export class App extends React.Component<{}, AppState> {
 			case MOBILEVERIFICATION:
 				return(
 				 <Fragment>
-					 <Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified ={this.state.isPhoneVerified}/>
+					 <Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified ={this.state.isPhoneVerified} email={this.state.email} sessionMd={this.state.sessionMd!}/>
 					 <MobileVerification  sessionMd={this.state.sessionMd} updatePhoneVerified={this.updateIsPhoneVerified} /> 
 				 </Fragment>
 				);	
