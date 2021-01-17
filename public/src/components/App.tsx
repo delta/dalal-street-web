@@ -32,10 +32,10 @@ const MOBILEVERIFICATION = 8;
 
 
 interface AppState {
-  isLoading: boolean // Waiting for response from login
-  isLoggedIn: boolean // To check if a successful login response has been handled
-  sessionMd: Metadata
-  user: User_pb
+ 		 isLoading: boolean // Waiting for response from login
+  	isLoggedIn: boolean // To check if a successful login response has been handled
+  	sessionMd: Metadata
+  	user: User_pb
 
   email: string
   stocksOwnedMap: { [index: number]: number } // stocks owned by user for a given stockid
@@ -43,9 +43,9 @@ interface AppState {
   stocksReservedMap: { [index: number]: number } //stocks reserved from user for a given stockid
   constantsMap: { [index: string]: number } // various constants. Documentation found in server/actionservice/Login method
 
-  isMarketOpen: boolean
-  isBlocked: boolean
-  isPhoneVerified: boolean
+  	isMarketOpen: boolean
+  	isBlocked: boolean
+  	isPhoneVerified: boolean
 }
 
 export class App extends React.Component<{}, AppState> {
