@@ -324,7 +324,7 @@ export class App extends React.Component<{}, AppState> {
 			case MAIN:
 				return (
 					<Fragment>
-						<Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified ={this.state.isPhoneVerified} email={this.state.email} sessionMd={this.state.sessionMd!}/>
+						<Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified={this.state.isPhoneVerified} email={this.state.email} sessionMd={this.state.sessionMd!}/>
 						<Main
 							sessionMd={this.state.sessionMd!}
 							user={this.state.user!}
@@ -343,7 +343,7 @@ export class App extends React.Component<{}, AppState> {
 			case MOBILEVERIFICATION:
 				return(
 				 <Fragment>
-					 <Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified ={this.state.isPhoneVerified} email={this.state.email} sessionMd={this.state.sessionMd!}/>
+					 <Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified={this.state.isPhoneVerified} email={this.state.email} sessionMd={this.state.sessionMd!}/>
 					 <MobileVerification  sessionMd={this.state.sessionMd} updatePhoneVerified={this.updateIsPhoneVerified} /> 
 				 </Fragment>
 				);	

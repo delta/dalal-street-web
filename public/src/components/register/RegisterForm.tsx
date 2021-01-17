@@ -16,7 +16,7 @@ export interface RegisterFormState {
     disabled: boolean,
     error: string | null,
     successful: boolean,
-    referralCode : string,
+    referralCode: string,
 }
 export class RegisterForm extends React.Component<RegisterFormProps, RegisterFormState>{
     constructor(props: RegisterFormProps) {
@@ -27,7 +27,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
             confirmPassword: "",
             fullName: "",
             country: "",
-            referralCode : "",
+            referralCode: "",
             disabled: false,
             error: null,
             successful: false
@@ -58,9 +58,9 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
         });
     }
 
-    handleReferralCodeChange = (e : React.FormEvent<HTMLInputElement>) => {
+    handleReferralCodeChange = (e: React.FormEvent<HTMLInputElement>) => {
         this.setState({
-            referralCode : e.currentTarget.value
+            referralCode: e.currentTarget.value
         })
     }
 

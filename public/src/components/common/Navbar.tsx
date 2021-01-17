@@ -4,10 +4,10 @@ import { Referral } from "../referralcode/ReferralCode"
 import { Metadata } from "grpc-web-client";
 
 export interface NavProps {
-	handleUrlChange: () => void
-	isPhoneVerified: boolean
-	email : string
-	sessionMd :Metadata
+  handleUrlChange: () => void;
+  isPhoneVerified: boolean;
+  email: string;
+  sessionMd: Metadata;
 }
 
 declare var $: any;
