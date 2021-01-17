@@ -32,20 +32,20 @@ const MOBILEVERIFICATION = 8;
 
 
 interface AppState {
-	isLoading: boolean // Waiting for response from login
-	isLoggedIn: boolean // To check if a successful login response has been handled
-	sessionMd: Metadata
-	user: User_pb
+  isLoading: boolean; // Waiting for response from login
+  isLoggedIn: boolean; // To check if a successful login response has been handled
+  sessionMd: Metadata;
+  user: User_pb;
 
-	email : string
-	stocksOwnedMap: { [index: number]: number } // stocks owned by user for a given stockid
-	stockDetailsMap: { [index: number]: Stock_pb } // get stock detail for a given stockid
-	stocksReservedMap: { [index: number]: number } //stocks reserved from user for a given stockid
-	constantsMap: { [index: string]: number } // various constants. Documentation found in server/actionservice/Login method
+  email: string;
+  stocksOwnedMap: { [index: number]: number }; // stocks owned by user for a given stockid
+  stockDetailsMap: { [index: number]: Stock_pb }; // get stock detail for a given stockid
+  stocksReservedMap: { [index: number]: number }; //stocks reserved from user for a given stockid
+  constantsMap: { [index: string]: number }; // various constants. Documentation found in server/actionservice/Login method
 
-	isMarketOpen: boolean
-	isBlocked: boolean
-	isPhoneVerified: boolean
+  isMarketOpen: boolean;
+  isBlocked: boolean;
+  isPhoneVerified: boolean;
 }
 
 export class App extends React.Component<{}, AppState> {
@@ -63,7 +63,7 @@ export class App extends React.Component<{}, AppState> {
 			isLoggedIn: false,
 			sessionMd: new Metadata(),
 			user: new User_pb(),
-			email : "",
+			email: "",
 			stocksOwnedMap: {},
 			stockDetailsMap: {},
 			stocksReservedMap: {},
@@ -134,7 +134,7 @@ export class App extends React.Component<{}, AppState> {
 			isLoading: true,
 			sessionMd: new Metadata({ "sessionid": resp.getSessionId() }),
 			user: resp.getUser()!,
-			email:(user)?user.getEmail():"",
+			email: (user)?user.getEmail():"",
 			stocksOwnedMap: stocksOwnedMap,
 			stockDetailsMap: stockDetailsMap,
 			stocksReservedMap: stockReservedMap,
