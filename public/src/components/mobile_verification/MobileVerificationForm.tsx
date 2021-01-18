@@ -24,6 +24,7 @@ export interface MobileVerificationFormState {
 export interface MobileVerificationFormProps {
     sessionMd: Metadata
     updatePhoneVerifiedState: () => void
+    updateCash: (arg0: number) => void
 }
 
 export class MobileVerificationForm extends React.Component<MobileVerificationFormProps, MobileVerificationFormState> {
@@ -74,7 +75,9 @@ export class MobileVerificationForm extends React.Component<MobileVerificationFo
                 error: "Phone number registered successfully,all features will be unlocked now ",
                 successful: true
             })
+            this.props.updateCash(resp.getUserCash())
             this.props.updatePhoneVerifiedState();
+            console.log(resp.getUserCash())
             showSuccessNotif("Phone Number verified successfully");
 
         } catch (e) {

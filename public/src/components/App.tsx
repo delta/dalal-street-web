@@ -37,10 +37,11 @@ interface AppState {
 	sessionMd: Metadata
 	user: User_pb
 
-	stocksOwnedMap: { [index: number]: number } // stocks owned by user for a given stockid
-	stockDetailsMap: { [index: number]: Stock_pb } // get stock detail for a given stockid
-	stocksReservedMap: { [index: number]: number } //stocks reserved from user for a given stockid
-	constantsMap: { [index: string]: number } // various constants. Documentation found in server/actionservice/Login method
+  email: string
+  stocksOwnedMap: { [index: number]: number } // stocks owned by user for a given stockid
+  stockDetailsMap: { [index: number]: Stock_pb } // get stock detail for a given stockid
+  stocksReservedMap: { [index: number]: number } //stocks reserved from user for a given stockid
+  constantsMap: { [index: string]: number } // various constants. Documentation found in server/actionservice/Login method
 
 	isMarketOpen: boolean
 	isBlocked: boolean
@@ -62,6 +63,7 @@ export class App extends React.Component<{}, AppState> {
 			isLoggedIn: false,
 			sessionMd: new Metadata(),
 			user: new User_pb(),
+			email: "",
 			stocksOwnedMap: {},
 			stockDetailsMap: {},
 			stocksReservedMap: {},
@@ -105,6 +107,14 @@ export class App extends React.Component<{}, AppState> {
 		}
 	}
 
+	updateUserCash = (newAmt: number) => {
+		// this.setState({userCash: newAmt});
+		// console.log(this.state.userCash)
+		let newUser = this.state.user;
+		newUser.setCash(newAmt);
+		this.setState({user: newUser});
+	}
+
 	parseLoginResponse = (resp: LoginResponse) => {
 		// map is weirdly constructed by grpc-web. Gotta convert it to regular map.
 		const stocksOwnedMap: { [index: number]: number } = {};
@@ -132,6 +142,7 @@ export class App extends React.Component<{}, AppState> {
 			isLoading: true,
 			sessionMd: new Metadata({ "sessionid": resp.getSessionId() }),
 			user: resp.getUser()!,
+			email: (user)?user.getEmail():"",
 			stocksOwnedMap: stocksOwnedMap,
 			stockDetailsMap: stockDetailsMap,
 			stocksReservedMap: stockReservedMap,
@@ -168,6 +179,7 @@ export class App extends React.Component<{}, AppState> {
 				isLoggedIn: false,
 				sessionMd: new Metadata(),
 				user: new User_pb(),
+				email: "",
 				stocksOwnedMap: {},
 				stockDetailsMap: {},
 				stocksReservedMap: {},
@@ -271,6 +283,7 @@ export class App extends React.Component<{}, AppState> {
 				isLoggedIn: false,
 				sessionMd: new Metadata(),
 				user: new User_pb(),
+				email: "",
 				stocksOwnedMap: {},
 				stockDetailsMap: {},
 				stocksReservedMap: {},
@@ -320,7 +333,7 @@ export class App extends React.Component<{}, AppState> {
 			case MAIN:
 				return (
 					<Fragment>
-						<Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified ={this.state.isPhoneVerified}/>
+						<Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified={this.state.isPhoneVerified} email={this.state.email} sessionMd={this.state.sessionMd!}/>
 						<Main
 							sessionMd={this.state.sessionMd!}
 							user={this.state.user!}
@@ -339,8 +352,8 @@ export class App extends React.Component<{}, AppState> {
 			case MOBILEVERIFICATION:
 				return(
 				 <Fragment>
-					 <Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified ={this.state.isPhoneVerified}/>
-					 <MobileVerification  sessionMd={this.state.sessionMd} updatePhoneVerified={this.updateIsPhoneVerified} /> 
+					 <Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified={this.state.isPhoneVerified} email={this.state.email} sessionMd={this.state.sessionMd!}/>
+					 <MobileVerification  sessionMd={this.state.sessionMd} updatePhoneVerified={this.updateIsPhoneVerified} updateCash={this.updateUserCash}/> 
 				 </Fragment>
 				);	
 			case SIGNUP:

@@ -16,6 +16,7 @@ export interface RegisterFormState {
     disabled: boolean,
     error: string | null,
     successful: boolean,
+    referralCode: string,
 }
 export class RegisterForm extends React.Component<RegisterFormProps, RegisterFormState>{
     constructor(props: RegisterFormProps) {
@@ -26,6 +27,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
             confirmPassword: "",
             fullName: "",
             country: "",
+            referralCode: "",
             disabled: false,
             error: null,
             successful: false
@@ -54,6 +56,12 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
         this.setState({
             fullName: e.currentTarget.value
         });
+    }
+
+    handleReferralCodeChange = (e: React.FormEvent<HTMLInputElement>) => {
+        this.setState({
+            referralCode: e.currentTarget.value
+        })
     }
 
     validateInput = (): string => {
@@ -103,6 +111,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
             registerRequest.setPassword(this.state.password);
             registerRequest.setFullName(this.state.fullName);
             registerRequest.setCountry(this.state.country);
+            registerRequest.setReferralCode(this.state.referralCode);
             this.registerUser(registerRequest);
         }
         this.setState({
@@ -405,6 +414,12 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
                             <div className="ui left icon input">
                             <i className="lock icon"></i>
                                 <input type="password" name="name" placeholder="Confirm Password" onChange={this.handleConfirmPasswordChange} value={this.state.confirmPassword} />
+                            </div>
+                        </div>
+                        <div className="field">
+                            <div className="ui left icon input" data-content="Enter the referral code if you have one."  data-tooltip="Enter the referal code for extra in-game credits." data-position="right center">
+                                <i className="tags icon" ></i>
+                                <input type="text" name="Referral Code" placeholder="Have a referral Code? Enter it here." value={this.state.referralCode} onChange={this.handleReferralCodeChange}/>
                             </div>
                         </div>
                         {this.state.disabled ?

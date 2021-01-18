@@ -425,6 +425,15 @@ export class Main extends React.Component<MainProps, MainState> {
                          let blockedState: boolean = update.getGameState()!.getUserBlockState()!.getIsBlocked();
                          this.props.updateUserBlocked(blockedState);
                     }
+                    else if(update.getGameState()!.getUserReferredCredit()!)
+                    {
+                        let newCash: number =update.getGameState()!.getUserReferredCredit()!.getCash();
+                        this.setState({
+                            userCash: newCash,
+                            userTotal: this.calculateTotal(newCash,this.props.stocksOwnedMap, this.props.stockDetailsMap, this.props.stocksReservedMap, this.props.user.getReservedCash()),
+                        })
+                        showInfoNotif("You recieved a bonus of 2000Rs for referring to other users!","Bonus");
+                    }
                 }
             }
         }
