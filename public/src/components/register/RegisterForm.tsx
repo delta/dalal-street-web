@@ -111,7 +111,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
             registerRequest.setPassword(this.state.password);
             registerRequest.setFullName(this.state.fullName);
             registerRequest.setCountry(this.state.country);
-            registerRequest.setReferralcode(this.state.referralCode);
+            registerRequest.setReferralCode(this.state.referralCode);
             this.registerUser(registerRequest);
         }
         this.setState({
