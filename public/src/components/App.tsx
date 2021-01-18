@@ -107,6 +107,14 @@ export class App extends React.Component<{}, AppState> {
 		}
 	}
 
+	updateUserCash = (newAmt: number) => {
+		// this.setState({userCash: newAmt});
+		// console.log(this.state.userCash)
+		let newUser = this.state.user;
+		newUser.setCash(newAmt);
+		this.setState({user: newUser});
+	}
+
 	parseLoginResponse = (resp: LoginResponse) => {
 		// map is weirdly constructed by grpc-web. Gotta convert it to regular map.
 		const stocksOwnedMap: { [index: number]: number } = {};
@@ -275,6 +283,7 @@ export class App extends React.Component<{}, AppState> {
 				isLoggedIn: false,
 				sessionMd: new Metadata(),
 				user: new User_pb(),
+				email: "",
 				stocksOwnedMap: {},
 				stockDetailsMap: {},
 				stocksReservedMap: {},
@@ -344,7 +353,7 @@ export class App extends React.Component<{}, AppState> {
 				return(
 				 <Fragment>
 					 <Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified={this.state.isPhoneVerified} email={this.state.email} sessionMd={this.state.sessionMd!}/>
-					 <MobileVerification  sessionMd={this.state.sessionMd} updatePhoneVerified={this.updateIsPhoneVerified} /> 
+					 <MobileVerification  sessionMd={this.state.sessionMd} updatePhoneVerified={this.updateIsPhoneVerified} updateCash={this.updateUserCash}/> 
 				 </Fragment>
 				);	
 			case SIGNUP:

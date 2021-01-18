@@ -6,6 +6,7 @@ import {MobileVerificationForm} from "./MobileVerificationForm";
 export interface MobileVerificationProps {
     sessionMd: Metadata
     updatePhoneVerified: () => void
+    updateCash: (arg0: number) => void
 }
 
 export class MobileVerification extends React.Component<MobileVerificationProps,any> {
@@ -26,7 +27,7 @@ export class MobileVerification extends React.Component<MobileVerificationProps,
                                 Enter your registered Mobile Number
                             </div>
                         </h2>
-                        <MobileVerificationForm sessionMd={this.props.sessionMd} updatePhoneVerifiedState={this.handleIsPhoneVerified} />
+                        <MobileVerificationForm sessionMd={this.props.sessionMd} updatePhoneVerifiedState={this.handleIsPhoneVerified} updateCash={this.props.updateCash}/>
                        
                     </div>
                 </div>
