@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Metadata } from "grpc-web-client";
+import { grpc } from "@improbable-eng/grpc-web";
 import { showNotif, showErrorNotif, closeNotifs } from "../../utils";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { SetGivesDividendsRequest } from "../../../proto_build/actions/SetGivesDividends_pb";
@@ -8,7 +8,7 @@ import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 declare var $: any;
 
 export interface DividendProps{
-    sessionMd: Metadata,
+    sessionMd: grpc.Metadata,
     stockBriefInfoMap: { [index: number]: StockBriefInfo } // get stock detail for a given stockid
 }
 

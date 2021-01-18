@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Metadata } from "grpc-web-client";
+import {grpc}  from "@improbable-eng/grpc-web";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 
 

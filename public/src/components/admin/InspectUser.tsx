@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Metadata } from "grpc-web-client";
+import { grpc } from "@improbable-eng/grpc-web";
 import { showNotif, showErrorNotif, closeNotifs } from "../../utils";
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
@@ -13,7 +13,7 @@ type InspectUserRow = {
     stockSum: any
 }
 interface InspectUserProps {
-    sessionMd: Metadata,
+    sessionMd: grpc.Metadata,
 }
 
 interface InspectUserState {

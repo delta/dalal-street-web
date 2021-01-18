@@ -1,7 +1,7 @@
 import * as React from "react";
 import { LoginForm } from "./LoginForm";
 
-import { Metadata } from "grpc-web-client";
+import { grpc } from "@improbable-eng/grpc-web";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { LoginRequest, LoginResponse } from "../../../proto_build/actions/Login_pb";
 
@@ -22,7 +22,7 @@ export class Login extends React.Component<LoginProps, {}>{
             throw new Error("Not already logged in");
         }
 
-        const sessionMd = new Metadata({ "sessionid": sessionId });
+        const sessionMd = new grpc.Metadata({ "sessionid": sessionId });
         try {
             return await DalalActionService.login(new LoginRequest(), sessionMd);
         }

@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Metadata } from "grpc-web-client";
+import { grpc } from "@improbable-eng/grpc-web";
 import { showNotif, showErrorNotif, closeNotifs } from "../../utils";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { OpenMarketRequest } from "../../../proto_build/actions/OpenMarket_pb";
 import { CloseMarketRequest } from "../../../proto_build/actions/CloseMarket_pb";
 
 export interface MarketStateProps{
-    sessionMd: Metadata,
+    sessionMd: grpc.Metadata,
     isMarketOpen: boolean
 }
 export interface MarketStateState{

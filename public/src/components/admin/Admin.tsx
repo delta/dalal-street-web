@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Metadata } from "grpc-web-client";
+import { grpc } from "@improbable-eng/grpc-web";
 import { SendNewsRequest } from "../../../proto_build/actions/SendNews_pb";
 import { SendDividendsRequest } from "../../../proto_build/actions/SendDividends_pb";
 import { CloseMarketRequest } from "../../../proto_build/actions/CloseMarket_pb";
@@ -22,7 +22,7 @@ import { UpdateStockPrice } from "./UpdateStockPrice";
 type NumNumMap = { [index: number]: number };
 
 export interface AdminProps {
-    sessionMd: Metadata,
+    sessionMd: grpc.Metadata,
     stockBriefInfoMap: { [index: number]: StockBriefInfo }, // get stock detail for a given stockid
     stockPricesMap: NumNumMap,
     isMarketOpen: boolean

@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Metadata } from "grpc-web-client";
+import { grpc } from "@improbable-eng/grpc-web";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb"
 
 import { OrderBook } from "./OrderBook/OrderBook";
@@ -26,7 +26,7 @@ export type StockBriefInfo = {
 type NumNumMap = { [index: number]: number };
 
 export interface TradingTerminalProps {
-	sessionMd: Metadata,
+	sessionMd: grpc.Metadata,
 	notifications: Notification_pb[]
 
 	userName: string

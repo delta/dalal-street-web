@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Metadata } from "grpc-web-client";
+import { grpc } from "@improbable-eng/grpc-web";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { MortgageStocksRequest } from "../../../proto_build/actions/MortgageStocks_pb";
 import { RetrieveMortgageStocksRequest } from "../../../proto_build/actions/RetrieveMortgageStocks_pb";
@@ -16,7 +16,7 @@ import { MortgageDetail } from "../../../proto_build/models/MortgageDetail_pb";
 declare var $: any;
 
 export interface MortgageProps {
-    sessionMd: Metadata,
+    sessionMd: grpc.Metadata,
     notifications: Notification_pb[],
     stockBriefInfoMap: { [index: number]: StockBriefInfo },
     stockPricesMap: { [index: number]: number },

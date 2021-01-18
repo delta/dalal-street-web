@@ -1,8 +1,8 @@
-import {Metadata} from "grpc-web-client";
+import { grpc } from "@improbable-eng/grpc-web";
 import {DalalActionService, DalalStreamService} from "../proto_build/DalalMessage_pb_service";
 import {DataStreamType, SubscriptionId, SubscribeRequest, SubscribeResponse, UnsubscribeRequest, UnsubscribeResponse} from "../proto_build/datastreams/Subscribe_pb";
 
-export async function subscribe(sessionMd: Metadata, dst: DataStreamType, dsId?: string) {
+export async function subscribe(sessionMd: grpc.Metadata, dst: DataStreamType, dsId?: string) {
     const subreq = new SubscribeRequest();
     subreq.setDataStreamType(dst);
     if (dsId !== undefined) {
@@ -17,7 +17,7 @@ export async function subscribe(sessionMd: Metadata, dst: DataStreamType, dsId?:
     return subres.getSubscriptionId() as SubscriptionId;
 }
 
-export async function unsubscribe(sessionMd: Metadata, subscriptionId: SubscriptionId) {
+export async function unsubscribe(sessionMd: grpc.Metadata, subscriptionId: SubscriptionId) {
     const unsubreq = new UnsubscribeRequest();
     unsubreq.setSubscriptionId(subscriptionId);
 

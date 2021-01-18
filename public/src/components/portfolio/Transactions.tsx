@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Metadata } from "grpc-web-client";
+import { grpc } from "@improbable-eng/grpc-web";
 
 import { subscribe, unsubscribe } from "../../streamsutil";
 import { DataStreamType, SubscriptionId } from "../../../proto_build/datastreams/Subscribe_pb";
@@ -51,7 +51,7 @@ const transactionTime = (trTime: string): string => {
 }
 
 export interface TransactionsProps {
-    sessionMd: Metadata,
+    sessionMd: grpc.Metadata,
     transactionCount: number,
     stockBriefInfoMap: { [index:number]: StockBriefInfo },
     latestTransaction: Transaction_pb,

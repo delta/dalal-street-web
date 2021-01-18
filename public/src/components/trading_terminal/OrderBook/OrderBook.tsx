@@ -2,7 +2,7 @@ import * as React from "react";
 import { MarketDepth } from "../OrderBook/MarketDepth";
 import { TradingHistory, Trade } from "./TradingHistory";
 import { Fragment } from "react";
-import { Metadata } from "grpc-web-client";
+import { grpc } from "@improbable-eng/grpc-web";
 import { DalalStreamService} from "../../../../proto_build/DalalMessage_pb_service";
 import { DataStreamType, SubscriptionId, SubscribeRequest } from "../../../../proto_build/datastreams/Subscribe_pb";
 import { MarketDepthUpdate } from "../../../../proto_build/datastreams/MarketDepth_pb";
@@ -12,7 +12,7 @@ declare var $: any;
 
 export interface OrderBookProps {
 	stockId: number
-	sessionMd: Metadata
+	sessionMd: grpc.Metadata
 	handleClickOpen: Function
 }
 
@@ -52,7 +52,7 @@ export class OrderBook extends React.Component<OrderBookProps, OrderBookState> {
 		unsubscribe(this.props.sessionMd, this.state.subscriptionId);
 	}
 
-	handleMarketDepthStream = async (sessionMd: Metadata, stockId: number) => {
+	handleMarketDepthStream = async (sessionMd: grpc.Metadata, stockId: number) => {
 		const subscriptionId = await subscribe(sessionMd, DataStreamType.MARKET_DEPTH, stockId + "");
 
 		this.setState({

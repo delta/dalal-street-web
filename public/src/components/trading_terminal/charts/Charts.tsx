@@ -5,7 +5,7 @@ import { Candlestick } from "./candlestick";
 import { LineChart } from "./lineChart";
 import {VolumeChart} from "./volume";
 import { GetStockHistoryRequest, GetStockHistoryResponse, StockHistoryResolution} from "../../../../proto_build/actions/GetStockHistory_pb";
-import { Metadata } from "grpc-web-client";
+import { grpc } from "@improbable-eng/grpc-web";
 import { DalalActionService, DalalStreamService} from "../../../../proto_build/DalalMessage_pb_service";
 import { StockHistoryUpdate } from "../../../../proto_build/datastreams/StockHistory_pb"
 import { subscribe, unsubscribe } from "../../../streamsutil";
@@ -18,7 +18,7 @@ declare var $: any; // $ will be exposed globally by jQuery
 
 export interface ChartsProps {
 	stockId: number,
-	sessionMd: Metadata,
+	sessionMd: grpc.Metadata,
 }
 
 export interface intervalData {

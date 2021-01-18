@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Metadata } from "grpc-web-client";
+import { grpc } from "@improbable-eng/grpc-web";
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 
 declare var $: any;
 
 export interface DividendProps{
-    sessionMd: Metadata,
+    sessionMd: grpc.Metadata,
     stockBriefInfoMap: { [index: number]: StockBriefInfo } // get stock detail for a given stockid
     currentStockId: Number
     dividendAmount: Number

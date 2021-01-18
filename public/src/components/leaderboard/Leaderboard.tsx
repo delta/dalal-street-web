@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Metadata } from "grpc-web-client";
+import { grpc } from "@improbable-eng/grpc-web";
 import ReactPaginate from "react-paginate";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { Notification } from "../common/Notification";
@@ -20,7 +20,7 @@ export interface LeaderboardProps {
     connectionStatus: boolean,
     isMarketOpen: boolean,
     isBlocked: boolean
-    sessionMd: Metadata,
+    sessionMd: grpc.Metadata,
     leaderboardCount: number,
     notifications: Notification_pb[],
     disclaimerElement: JSX.Element,
