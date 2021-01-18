@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { grpc } from "@improbable-eng/grpc-web";
+import { Metadata } from "grpc-web-client";
 import { showNotif, showErrorNotif, closeNotifs,showSuccessNotif } from "../../utils";
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { AddStocksToExchangeRequest } from "../../../proto_build/actions/AddStocksToExchange_pb";
 
 interface AddStocksToExchangeProps {
-    sessionMd: grpc.Metadata,
+    sessionMd: Metadata,
 }
 
 interface AddStocksToExchangeState {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { grpc } from "@improbable-eng/grpc-web";
+import { Metadata } from "grpc-web-client";
 import { Fragment } from "react";
 import { OrderType } from "../../../proto_build/models/OrderType_pb";
 import { StockBriefInfo } from "./TradingTerminal";
@@ -26,7 +26,7 @@ const orderTypeToStr = (ot: OrderType): string => {
 }
 
 export interface OpenOrdersProps {
-	sessionMd: grpc.Metadata,
+	sessionMd: Metadata,
 	stockBriefInfoMap: { [index:number]: StockBriefInfo }
 	isMarketOpen: boolean
 	isBlocked: boolean

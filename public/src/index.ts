@@ -1,4 +1,5 @@
-import { grpc } from "@improbable-eng/grpc-web";import {DalalActionService, DalalStreamService} from "../proto_build/DalalMessage_pb_service";
+import { Metadata } from "grpc-web-client";
+import {DalalActionService, DalalStreamService} from "../proto_build/DalalMessage_pb_service";
 import {LoginRequest, LoginResponse} from "../proto_build/actions/Login_pb";
 import {BuyStocksFromExchangeRequest, BuyStocksFromExchangeResponse} from "../proto_build/actions/BuyStocksFromExchange_pb";
 import {DataStreamType, SubscriptionId, SubscribeRequest, SubscribeResponse} from "../proto_build/datastreams/Subscribe_pb";
@@ -7,7 +8,7 @@ import {Notification} from "../proto_build/models/Notification_pb";
 DalalActionService.serviceURL = "https://localhost:8000";
 DalalStreamService.serviceURL = "https://localhost:8000";
 
-let sessionMd: grpc.Metadata;
+let sessionMd: Metadata;
 
 async function subscribe(dst: DataStreamType, dsId?: string) {
     const subreq = new SubscribeRequest();
@@ -49,7 +50,7 @@ async function login() {
 
     try {
         const resp = await DalalActionService.login(loginRequest);
-        sessionMd = new grpc.Metadata({"sessionid": resp.getSessionId()});
+        sessionMd = new Metadata({"sessionid": resp.getSessionId()});
         handleNotificationsStream();
         handleStockPricesStream();
     }

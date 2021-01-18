@@ -1,10 +1,10 @@
 import * as React from "react";
-import { grpc } from "@improbable-eng/grpc-web";
+import { Metadata } from "grpc-web-client";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import {MobileVerificationForm} from "./MobileVerificationForm";
 
 export interface MobileVerificationProps {
-    sessionMd: grpc.Metadata
+    sessionMd: Metadata
     updatePhoneVerified: () => void
     updateCash: (arg0: number) => void
 }

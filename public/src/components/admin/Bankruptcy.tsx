@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { grpc } from "@improbable-eng/grpc-web";
+import { Metadata } from "grpc-web-client";
 import { showNotif, showErrorNotif, closeNotifs , showSuccessNotif } from "../../utils";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { SetBankruptcyRequest } from "../../../proto_build/actions/SetBankruptcy_pb";
@@ -8,7 +8,7 @@ import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 declare var $: any;
 
 export interface BankruptcyProps{
-    sessionMd: grpc.Metadata,
+    sessionMd: Metadata,
     stockBriefInfoMap: { [index: number]: StockBriefInfo } // get stock detail for a given stockid
 }
 

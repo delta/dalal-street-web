@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { grpc } from "@improbable-eng/grpc-web";
+import { Metadata } from "grpc-web-client";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { UnblockUserRequest } from "../../../proto_build/actions/UnblockUser_pb"
 import { showNotif, showErrorNotif, isPositiveInteger, closeNotifs } from "../../utils";
@@ -10,7 +10,7 @@ export interface UnBlockUserState {
 }
 
 export interface UnBlockUserProps{
-    sessionMd: grpc.Metadata,   
+    sessionMd: Metadata,   
 }
 
 export class UnBlockUser extends React.Component<UnBlockUserProps,UnBlockUserState> {

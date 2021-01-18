@@ -1,5 +1,5 @@
 import * as React from "react";
-import { grpc } from "@improbable-eng/grpc-web";
+import { Metadata } from "grpc-web-client";
 
 export interface TimerState {
   minutes : number

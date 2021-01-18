@@ -2,7 +2,7 @@ import * as React from "react";
 import {PlaceOrderRequest, PlaceOrderResponse} from "../../../proto_build/actions/PlaceOrder_pb";
 import { OrderType } from "../../../proto_build/models/OrderType_pb";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
-import { grpc } from "@improbable-eng/grpc-web";
+import { Metadata } from "grpc-web-client";
 import { Fragment } from "react";
 
 import { showNotif, showErrorNotif, showInfoNotif, isPositiveInteger, closeNotifs } from "../../utils";
@@ -23,7 +23,7 @@ const orderTypeToStr = (ot: OrderType): string => {
 export interface PlaceOrderBoxProps{
     stockId: number,
     currentPrice: number,
-    sessionMd: grpc.Metadata,
+    sessionMd: Metadata,
     isMarketOpen: boolean,
     isBlocked: boolean,
     isBankrupt: boolean,

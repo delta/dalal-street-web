@@ -1,5 +1,5 @@
 import * as React from "react";
-import { grpc } from "@improbable-eng/grpc-web";
+import { Metadata } from "grpc-web-client";
 import { TickerBar } from "./../common/TickerBar";
 import { TickerProps, Ticker } from "./../common/Ticker";
 import { DataStreamType, SubscriptionId, SubscribeRequest, } from "../../../proto_build/datastreams/Subscribe_pb"
@@ -25,7 +25,7 @@ export interface MarketProps {
     connectionStatus: boolean,
     isMarketOpen: boolean,
     isBlocked: boolean
-    sessionMd: grpc.Metadata,
+    sessionMd: Metadata,
     stockDetailsMap: { [index: number]: Stock_pb },
     notifications: Notification_pb[],
     disclaimerElement: JSX.Element,

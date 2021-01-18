@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { grpc } from "@improbable-eng/grpc-web";
+import { Metadata } from "grpc-web-client";
 import { showNotif, showErrorNotif, closeNotifs } from "../../utils";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { SendNotificationsRequest } from "../../../proto_build/actions/SendNotifications_pb";
@@ -8,7 +8,7 @@ import { isPositiveInteger } from "../../utils";
 declare var $: any;
 
 export interface NotificationsProps{
-    sessionMd: grpc.Metadata
+    sessionMd: Metadata
 }
 
 export interface NotificationsState{

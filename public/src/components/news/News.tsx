@@ -2,7 +2,7 @@ import * as React from "react";
 import { Notification } from "../common/Notification";
 import { TinyNetworth } from "../common/TinyNetworth";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
-import { grpc } from "@improbable-eng/grpc-web";
+import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService } from "../../../proto_build/DalalMessage_pb_service";
 import { GetMarketEventsRequest, GetMarketEventsResponse } from "../../../proto_build/actions/GetMarketEvents_pb";
 import { MarketEvent } from "../../../proto_build/models/MarketEvent_pb";
@@ -22,7 +22,7 @@ export interface NewsProps {
     connectionStatus: boolean,
     isMarketOpen: boolean,
     isBlocked: boolean,
-    sessionMd: grpc.Metadata,
+    sessionMd: Metadata,
     newsCount: number,
     notifications: Notification_pb[],
     disclaimerElement: JSX.Element,

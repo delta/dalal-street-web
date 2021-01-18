@@ -1,5 +1,5 @@
 import * as React from "react";
-import { grpc } from "@improbable-eng/grpc-web";
+import { Metadata } from "grpc-web-client";
 
 import { Networth } from "./Networth";
 import { StockChart } from "./StockChart";
@@ -19,7 +19,7 @@ import { StockCharts } from "./StockCharts";
 declare var $: any; // $ will be exposed globally by jQuery
 
 export interface PortfolioProps {
-    sessionMd: grpc.Metadata,
+    sessionMd: Metadata,
     notifications: Notification_pb[],
     transactionCount: number,
     userCash: number,

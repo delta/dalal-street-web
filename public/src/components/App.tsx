@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Fragment } from "react";
 
-import { grpc } from "@improbable-eng/grpc-web";
+import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService } from "../../proto_build/DalalMessage_pb_service";
 import { LoginResponse } from "../../proto_build/actions/Login_pb";
 import { LogoutRequest, LogoutResponse } from "../../proto_build/actions/Logout_pb";
@@ -34,7 +34,7 @@ const MOBILEVERIFICATION = 8;
 interface AppState {
 	isLoading: boolean // Waiting for response from login
 	isLoggedIn: boolean // To check if a successful login response has been handled
-	sessionMd: grpc.Metadata
+	sessionMd: Metadata
 	user: User_pb
 
   email: string
@@ -61,7 +61,7 @@ export class App extends React.Component<{}, AppState> {
 		this.state = {
 			isLoading: true,
 			isLoggedIn: false,
-			sessionMd: new grpc.Metadata(),
+			sessionMd: new Metadata(),
 			user: new User_pb(),
 			email: "",
 			stocksOwnedMap: {},
@@ -140,7 +140,7 @@ export class App extends React.Component<{}, AppState> {
 		this.setState({
 			isLoggedIn: true,
 			isLoading: true,
-			sessionMd: new grpc.Metadata({ "sessionid": resp.getSessionId() }),
+			sessionMd: new Metadata({ "sessionid": resp.getSessionId() }),
 			user: resp.getUser()!,
 			email: (user)?user.getEmail():"",
 			stocksOwnedMap: stocksOwnedMap,
@@ -177,7 +177,7 @@ export class App extends React.Component<{}, AppState> {
 			this.setState({
 				isLoading: false,
 				isLoggedIn: false,
-				sessionMd: new grpc.Metadata(),
+				sessionMd: new Metadata(),
 				user: new User_pb(),
 				email: "",
 				stocksOwnedMap: {},
@@ -281,7 +281,7 @@ export class App extends React.Component<{}, AppState> {
 			this.setState({
 				isLoading: false,
 				isLoggedIn: false,
-				sessionMd: new grpc.Metadata(),
+				sessionMd: new Metadata(),
 				user: new User_pb(),
 				email: "",
 				stocksOwnedMap: {},

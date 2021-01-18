@@ -1,5 +1,5 @@
 import * as React from "react";
-import { grpc } from "@improbable-eng/grpc-web";
+import { Metadata } from "grpc-web-client";
 import { AddPhoneRequest, AddPhoneResponse } from "../../../proto_build/actions/AddPhone_pb";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { VerifyOTPRequest } from "../../../proto_build/actions/VerifyOTP_pb";
@@ -22,7 +22,7 @@ export interface MobileVerificationFormState {
 }
 
 export interface MobileVerificationFormProps {
-    sessionMd: grpc.Metadata
+    sessionMd: Metadata
     updatePhoneVerifiedState: () => void
     updateCash: (arg0: number) => void
 }

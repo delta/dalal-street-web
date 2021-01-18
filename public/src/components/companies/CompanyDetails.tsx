@@ -1,5 +1,5 @@
 import * as React from "react";
-import { grpc } from "@improbable-eng/grpc-web";
+import { Metadata } from "grpc-web-client";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { GetCompanyProfileRequest, GetCompanyProfileResponse } from "../../../proto_build/actions/GetCompanyProfile_pb";
 import { Stock as Stock_pb } from "../../../proto_build/models/Stock_pb";
@@ -7,7 +7,7 @@ import { Fragment } from "react";
 
 declare var $: any;
 export interface CompanyDetailsProps {
-    sessionMd: grpc.Metadata,
+    sessionMd: Metadata,
     currentStockId: number,
     currentPrice: number,
 }

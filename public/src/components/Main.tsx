@@ -14,7 +14,7 @@ import { Company } from "./companies/Companies";
 import { Mortgage } from "./mortgage/Mortgage";
 import { Help } from "./help/Help";
 
-import { grpc } from "@improbable-eng/grpc-web";
+import { Metadata } from "grpc-web-client";
 import { DalalActionService, DalalStreamService } from "../../proto_build/DalalMessage_pb_service";
 import { GetNotificationsRequest } from "../../proto_build/actions/GetNotifications_pb";
 import { DataStreamType, SubscriptionId } from "../../proto_build/datastreams/Subscribe_pb";
@@ -33,7 +33,7 @@ declare var PNotify: any;
 declare var moment: any;
 
 export interface MainProps {
-    sessionMd: 		grpc.Metadata
+    sessionMd: 		Metadata
     user: 			User_pb
 
     stocksOwnedMap:  { [index:number]: number } // stocks owned by user for a given stockid
