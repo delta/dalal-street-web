@@ -1,4 +1,4 @@
-import {grpc, Code, Metadata} from "grpc-web-client";
+import { Metadata } from "grpc-web-client";
 import {DalalActionService, DalalStreamService} from "../proto_build/DalalMessage_pb_service";
 import {LoginRequest, LoginResponse} from "../proto_build/actions/Login_pb";
 import {BuyStocksFromExchangeRequest, BuyStocksFromExchangeResponse} from "../proto_build/actions/BuyStocksFromExchange_pb";

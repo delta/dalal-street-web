@@ -1,8 +1,14 @@
 const webpack = require('webpack');
 const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
 
 module.exports = {
+  mode: 'production',
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000
+},
   cache: true,
   entry: ["babel-polyfill", "./public/src/index.tsx"],
   output: {
@@ -19,7 +25,7 @@ module.exports = {
             path.resolve(__dirname, 'public/src'),
             path.resolve(__dirname, 'public/proto_build'),
         ],
-        loaders: ["babel-loader", "ts-loader"], // tsc converts to es6. convert that to es5
+        use: ["babel-loader", "ts-loader"], // tsc converts to es6. convert that to es5
         exclude: [
           path.resolve(__dirname, 'node_modules'),
           path.resolve(__dirname, 'ts-protoc-gen')
@@ -36,30 +42,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.DefinePlugin({ //<--key to reduce React's size
-      'process.env': {
-        'NODE_ENV': JSON.stringify('production')
-      }
-    }),
-
-
-      new UglifyJsPlugin({
-        test: /\.js($|\?)/i,
-        sourceMap: true,
-        uglifyOptions: {
-          mangle: {
-            keep_fnames: true,
-          },
-          compress: {
-            warnings: false,
-          },
-          output: {
-            beautify: false,
-          },
-        },
-      }),
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.optimize.AggressiveMergingPlugin(),
+      new webpack.optimize.AggressiveMergingPlugin(),
     ],
   resolve: {
     extensions: [".ts", ".tsx", ".js"]

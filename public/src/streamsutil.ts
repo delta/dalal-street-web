@@ -1,4 +1,4 @@
-import {Metadata} from "grpc-web-client";
+import { Metadata } from "grpc-web-client";
 import {DalalActionService, DalalStreamService} from "../proto_build/DalalMessage_pb_service";
 import {DataStreamType, SubscriptionId, SubscribeRequest, SubscribeResponse, UnsubscribeRequest, UnsubscribeResponse} from "../proto_build/datastreams/Subscribe_pb";
 
