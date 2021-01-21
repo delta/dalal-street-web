@@ -74,6 +74,10 @@ export class Navbar extends React.Component<NavProps, {}> {
 			<i className="trophy icon"></i>
 			Leaderboard
 		</a>
+		<a className={"item " + (currentLink == "/dailyChallenges" ? "active" : "")} onClick={e => this.handleClick(e, "/dailyChallenges")}>
+			<i className="calendar check icon"></i>
+			Daily Challenges
+		</a>
 		
 		
 		<a className={"item " + (currentLink == "/help" ? "active" : "")} onClick={e => this.handleClick(e, "/help")}>

@@ -8,6 +8,7 @@ import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { Dividend } from "./Dividend";
 import { Notifications } from "./Notification";
 import { showNotif, showErrorNotif, isPositiveInteger, closeNotifs } from "../../utils";
+import { AddDailyChallenge } from "./AddDailyChallenge";
 import { MarketState } from "./MarketState";
 import { MarketEvent } from "./MarketEvent";
 import { Bankruptcy } from "./Bankruptcy";
@@ -194,6 +195,11 @@ export class Admin extends React.Component<AdminProps, AdminState> {
                                         sessionMd={this.props.sessionMd}
                                     />
                                 </td>
+                            </tr>
+                            <tr>
+                                <AddDailyChallenge
+                                        sessionMd={this.props.sessionMd}
+                                />
                             </tr>
                         </tbody>
                     </table>

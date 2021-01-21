@@ -27,6 +27,7 @@ import { Transaction as Transaction_pb, TransactionType as TransactionType_pb, T
 
 import * as jspb from "google-protobuf";
 import { Admin } from "./admin/Admin";
+import { DailyChallenges } from "./dailychallenges/Dailychallenges";
 
 declare var $: any;
 declare var PNotify: any;
@@ -657,6 +658,21 @@ export class Main extends React.Component<MainProps, MainState> {
                     notifications={this.state.notifications}
                     disclaimerElement={this.disclaimerElement}
                 />;
+                case "/dailyChallenges":
+                    return <DailyChallenges
+                        sessionMd={this.props.sessionMd}
+                        leaderboardCount={this.props.constantsMap['LEADERBOARD_COUNT']}
+                        userCash={this.state.userCash}
+                        reservedStocksWorth={this.state.reservedStocksWorth}
+                        userReservedCash={this.state.userReservedCash}
+                        userTotal={this.state.userTotal}
+                        userStockWorth={this.state.stockWorth}
+                        connectionStatus={this.state.connectionStatus}
+                        isMarketOpen={this.state.isMarketOpen}
+                        isBlocked={this.props.isBlocked}
+                        notifications={this.state.notifications}
+                        disclaimerElement={this.disclaimerElement}
+                    />;    
             case "/news":
                 return <News
                     sessionMd={this.props.sessionMd}
