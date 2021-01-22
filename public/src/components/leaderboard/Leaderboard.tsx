@@ -139,8 +139,16 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                             </div>
                             <br/>
                             <div className="ui buttons">
-                                <button className={"ui big inverted button " + (this.state.leaderboardType == "overall" && "active")} onClick={() => this.handleChangeLeaderBoardType("overall")}>Overall Leaderboard</button>
-                                <button className={"ui big inverted button " + (this.state.leaderboardType == "daily" && "active")} onClick={() => this.handleChangeLeaderBoardType("daily")}>Daily LeaderBoard</button>
+                                <button 
+                                    className={"ui big inverted button " + (this.state.leaderboardType == "overall" && "active")} 
+                                    onClick={() => this.handleChangeLeaderBoardType("overall")}
+                                    data-position="left center" data-tooltip="leaderboard over the whole game"
+                                    >Overall Leaderboard</button>
+                                <button 
+                                    className={"ui big inverted button " + (this.state.leaderboardType == "daily" && "active")} 
+                                    onClick={() => this.handleChangeLeaderBoardType("daily")}
+                                    data-position="right center" data-tooltip="top players this market day"
+                                >Daily LeaderBoard</button>
                             </div>
                             </div>
                         </h2>
@@ -168,12 +176,18 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                                 <tr id="leaderboard">
                                     <th>Rank</th>
                                     <th>Username</th>
-                                    <th className="box" data-position="top center" data-content="Cash in hand + Reserved cash">
+                                    <th 
+                                        className="box" 
+                                        data-position="top center" 
+                                        data-content={this.state.leaderboardType == "overall" ? "Cash in hand + Reserved cash" : "Change in the total cash in hand today"}>
                                     <div>
                                        Total Cash (₹) <i className="fa fa-question-circle" aria-hidden="true"></i>
                                     </div>
                                     </th>
-                                    <th className="box" data-position="top center" data-content="Stock owned + Reserved stock">
+                                    <th 
+                                        className="box" 
+                                        data-position="top center"
+                                        data-content={this.state.leaderboardType == "overall" ? "Stock owned + Reserved stock" : "Change in worth of the stocks today"}>
                                        Total Stock Worth (₹) <i className="fa fa-question-circle" aria-hidden="true"></i>
                                     </th>
                                     <th>Net Worth (₹)</th>
