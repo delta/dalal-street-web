@@ -27,10 +27,13 @@ export interface LeaderboardProps {
     reservedStocksWorth: number,
 }
 
+type leaderboardType = "overall" | "daily"; // overall || daily
+
 interface LeaderboardState {
     totalPages: number,
     leaderboardEntries: LeaderboardRow_pb[],
     userRank: number,
+    leaderboardType: leaderboardType, // overall || daily
 }
 
 export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
@@ -41,6 +44,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
             totalPages: 1,
             leaderboardEntries: [],
             userRank: 0,
+            leaderboardType: "overall"
         };
     }
 
@@ -54,23 +58,33 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
         // this.setState({
         //     isLoading: true,
         // });
+        
         const leaderboardRequest = new GetLeaderboardRequest();
         leaderboardRequest.setStartingId(offset);
         leaderboardRequest.setCount(this.props.leaderboardCount);
-
+        
         try {
-            const resp = await DalalActionService.getLeaderboard(leaderboardRequest, this.props.sessionMd);
-            this.setState({
-                totalPages: Math.ceil(resp.getTotalUsers() / this.props.leaderboardCount),
-                leaderboardEntries: resp.getRankListList(),
-                userRank: resp.getMyRank(),
-            });
-        }
-        catch (e) {
-            // error could be grpc error or Dalal error. Both handled in exception
-            console.log("Error happened! ", e.statusCode, e.statusMessage, e);
-            showErrorNotif("Error fetching leaderboard. Try refreshing.");
-        }
+            if(this.state.leaderboardType == 'overall'){
+                const resp = await DalalActionService.getLeaderboard(leaderboardRequest, this.props.sessionMd);
+                this.setState({
+                    totalPages: Math.ceil(resp.getTotalUsers() / this.props.leaderboardCount),
+                    leaderboardEntries: resp.getRankListList(),
+                    userRank: resp.getMyRank(),
+                });
+            } else {
+                const resp = await DalalActionService.getDailyLeaderboard(leaderboardRequest, this.props.sessionMd);
+                this.setState({
+                    totalPages: Math.ceil(resp.getTotalUsers() / this.props.leaderboardCount),
+                    leaderboardEntries: resp.getRankListList(),
+                    userRank: resp.getMyRank(),
+                });
+            }
+            }
+            catch (e) {
+                // error could be grpc error or Dalal error. Both handled in exception
+                console.log("Error happened! ", e.statusCode, e.statusMessage, e);
+                showErrorNotif("Error fetching leaderboard. Try refreshing.");
+            }
     };
 
     handlePageChange = async (data: any) => {
@@ -78,6 +92,18 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
         const offset = startPage * this.props.leaderboardCount + 1;
 
         await this.getLeaderboard(offset);
+    }
+
+    handleChangeLeaderBoardType = (type: leaderboardType) => {
+        this.setState({leaderboardType : type})
+    }
+
+    componentDidUpdate(_props : LeaderboardProps, prevState : LeaderboardState) {
+        if(prevState.leaderboardType != this.state.leaderboardType)
+        {
+            // if the type of leaderboard has been changed, fetch from server again
+            this.getLeaderboard(1);
+        }
     }
 
     render() {
@@ -110,6 +136,11 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                                 Leaderboard
                             <div className="grey sub header">
                                     This is what it all comes down to
+                            </div>
+                            <br/>
+                            <div className="ui buttons">
+                                <button className={"ui big inverted button " + (this.state.leaderboardType == "overall" && "active")} onClick={() => this.handleChangeLeaderBoardType("overall")}>Overall Leaderboard</button>
+                                <button className={"ui big inverted button " + (this.state.leaderboardType == "daily" && "active")} onClick={() => this.handleChangeLeaderBoardType("daily")}>Daily LeaderBoard</button>
                             </div>
                             </div>
                         </h2>
