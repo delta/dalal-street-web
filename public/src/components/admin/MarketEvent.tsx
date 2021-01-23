@@ -3,7 +3,6 @@ import { Metadata } from "grpc-web-client";
 import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { AddMarketEventRequest } from "../../../proto_build/actions/AddMarketEvent_pb";
-import { UpdateEndOfDayValuesRequest } from "../../../proto_build/actions/UpdateEndOfDayValues_pb";
 import { showNotif, showErrorNotif, closeNotifs } from "../../utils";
 
 declare var $: any;
@@ -53,15 +52,6 @@ export class MarketEvent extends React.Component<MarketEventProps,{}> {
        }
     }
     
-    updateEndOfDayValue = async () => {
-      const updateEndOfDayValue = new UpdateEndOfDayValuesRequest();
-      try {
-        await DalalActionService.updateEndOfDayValues(updateEndOfDayValue);
-      } catch (error) {
-        console.log("Something went wrong, ", error);
-      }
-    }
-
     render() {
         return (
             <React.Fragment>
@@ -86,9 +76,6 @@ export class MarketEvent extends React.Component<MarketEventProps,{}> {
                     <tr>
                         <td>
                           <input type="button" className="ui inverted green button" onClick={this.setMarketEvent} value="Set Market Event"/>
-                        </td>
-                        <td>
-                          <input type="button" className="ui inverted green button" onClick={this.setMarketEvent} value="Update End of Day Value"/>
                         </td>
                     </tr>
                 </tbody>

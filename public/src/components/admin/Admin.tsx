@@ -18,6 +18,7 @@ import { AddStocksToExchange } from "./StocksToExhange";
 import { UnBlockUser } from "./UnBlockUser";
 import { UnBlockAllUsers } from "./UnBlockAllUsers"
 import { UpdateStockPrice } from "./UpdateStockPrice";
+import { UpdateEndOfDayValues } from "./updateEndOfdayValues";
 
 type NumNumMap = { [index: number]: number };
 
@@ -164,9 +165,16 @@ export class Admin extends React.Component<AdminProps, AdminState> {
                                 </td>
                             </tr>
                             <tr>
+                                <td>
                                 <UnBlockAllUsers
                                     sessionMd={this.props.sessionMd}
-                                />
+                                    />
+                                </td>
+                                <td>
+                                <UpdateEndOfDayValues 
+                                    sessionMd={this.props.sessionMd} 
+                                    />
+                                </td>
                             </tr>
                             <tr>
                                 <td>
