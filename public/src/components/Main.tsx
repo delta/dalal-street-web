@@ -28,7 +28,7 @@ import { Transaction as Transaction_pb, TransactionType as TransactionType_pb, T
 import * as jspb from "google-protobuf";
 import { Admin } from "./admin/Admin";
 import { DailyChallenges } from "./dailychallenges/Dailychallenges";
-
+import {GetDailyChallengeConfigRequest} from "../../proto_build/actions/GetDailyChallengeConfig_pb"
 declare var $: any;
 declare var PNotify: any;
 declare var moment: any;
@@ -47,6 +47,7 @@ export interface MainProps {
     isBlocked:                  boolean
     changeStockDetailsMapCallBack: (stockDetailsMap: { [index: number]: Stock_pb }) => void
     updateUserBlocked: (blockedStatus: boolean) => void
+    dailyChallengeNotif: (status:boolean)=> void
 }
 
 interface MainState {
@@ -78,6 +79,8 @@ interface MainState {
     networkTimeOutCounterTrans: number
     networkTimeOutCounterPrices: number
     successCounter: number // goes up to 3
+
+    isDailyChallengeOpen: boolean
 }
 
 // We tried out a couple of ways to pass notification from main
@@ -122,14 +125,34 @@ export class Main extends React.Component<MainProps, MainState> {
             networkTimeOutCounterPrices: 1,
             successCounter: 0,
             connectionStatus: true,
+            isDailyChallengeOpen: false
         };
-
+        this.isDailyChallengeOpen();
         this.handleNotificationsStream();
         this.handleStockPricesStream();
         this.handleTransactionsStream();
         this.handleGameStateStream();
     }
+    isDailyChallengeOpen = async() =>{
+        const sessionMd = this.props.sessionMd;
+            const GetDailyChallengeConfigReq = new GetDailyChallengeConfigRequest();
+        try{
+            const resp = await DalalActionService.getDailyChallengeConfig(GetDailyChallengeConfigReq,sessionMd);
+            const status = resp.getIsDailyChallengOpen();
+            this.setState({
+                isDailyChallengeOpen: status
+            })
 
+        }
+        catch(e){
+            console.log("Error happened while updating DailyChallengeState! ", e.statusCode, e.statusMessage, e);
+            if (e.isGrpcError) {
+                showErrorNotif("Oops! Unable to reach server. Please check your internet connection!");
+            } else {
+                showErrorNotif("Oops! Something went wrong! " + e.statusMessage);
+            }
+        }
+    }
     disclaimerElement = (
         <div className="row disclaimer-footer">
             Disclaimer : Stock prices and news articles released in this game are entirely fictitious and in no way related to the real world.<br></br>
@@ -392,7 +415,22 @@ export class Main extends React.Component<MainProps, MainState> {
                         }
                         else
                         showInfoNotif("Dalal Street Stock Market is closed right now","Market Closed");
-                    } else if (update.getGameState()!.getStockDividendState()) {
+                    } 
+                    else if(update.getGameState()!.hasDailyChallengeState()){
+                        const DailyChallengeState = update.getGameState()!.getDailyChallengeState()
+                        this.setState({
+                            isDailyChallengeOpen: DailyChallengeState!.getIsDailyChallengeOpen()
+                        })
+                        if(this.state.isDailyChallengeOpen){
+                            showInfoNotif("Daily Challenge for today is open","Daily Challenge Open")
+                        }
+                        else{
+                            showInfoNotif("Daily Challenge for today is closed","Daily Challenge Closed")
+                        }
+                        this.props.dailyChallengeNotif(this.state.isDailyChallengeOpen)
+
+                    }
+                    else if (update.getGameState()!.getStockDividendState()) {
                         let stockDetailsMap: { [index: number]: Stock_pb } = this.state.stockDetailsMap;
                         let stockid = update.getGameState()!.getStockDividendState()!.getStockId();
                         let stock: Stock_pb = stockDetailsMap[stockid];
@@ -661,7 +699,6 @@ export class Main extends React.Component<MainProps, MainState> {
                 case "/dailyChallenges":
                     return <DailyChallenges
                         sessionMd={this.props.sessionMd}
-                        leaderboardCount={this.props.constantsMap['LEADERBOARD_COUNT']}
                         userCash={this.state.userCash}
                         reservedStocksWorth={this.state.reservedStocksWorth}
                         userReservedCash={this.state.userReservedCash}
@@ -672,6 +709,7 @@ export class Main extends React.Component<MainProps, MainState> {
                         isBlocked={this.props.isBlocked}
                         notifications={this.state.notifications}
                         disclaimerElement={this.disclaimerElement}
+                        isDailyChallengeOpen={this.state.isDailyChallengeOpen}
                     />;    
             case "/news":
                 return <News
@@ -746,6 +784,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     stockBriefInfoMap={this.state.stockBriefInfoMap}
                     stockPricesMap={this.getStockPrices(this.state.stockDetailsMap)}
                     isMarketOpen={this.state.isMarketOpen}
+                    isDailyChallengeOpen={this.state.isDailyChallengeOpen}
                 />
             default:
                 return <NotFound />;

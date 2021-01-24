@@ -20,6 +20,7 @@ import { UnBlockUser } from "./UnBlockUser";
 import { UnBlockAllUsers } from "./UnBlockAllUsers"
 import { UpdateStockPrice } from "./UpdateStockPrice";
 import { UpdateEndOfDayValues } from "./updateEndOfdayValues";
+import {DailyChallengeState} from "../admin/DailyChallengeState";
 
 type NumNumMap = { [index: number]: number };
 
@@ -27,7 +28,8 @@ export interface AdminProps {
     sessionMd: Metadata,
     stockBriefInfoMap: { [index: number]: StockBriefInfo }, // get stock detail for a given stockid
     stockPricesMap: NumNumMap,
-    isMarketOpen: boolean
+    isMarketOpen: boolean,
+    isDailyChallengeOpen: boolean
 }
 
 interface AdminState {
@@ -200,6 +202,19 @@ export class Admin extends React.Component<AdminProps, AdminState> {
                                 <AddDailyChallenge
                                         sessionMd={this.props.sessionMd}
                                 />
+                            </tr>
+                            <tr>
+                                <td>
+                                <DailyChallengeState
+                                sessionMd={this.props.sessionMd}
+                                isDailyChallengeOpen={this.props.isDailyChallengeOpen}
+
+                                />
+                                </td>
+                                <td>
+                                    
+                                </td>
+                                
                             </tr>
                         </tbody>
                     </table>

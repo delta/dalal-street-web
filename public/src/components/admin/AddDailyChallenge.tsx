@@ -27,6 +27,7 @@ export class AddDailyChallenge extends React.Component<AddDailyChallengeProps,{}
         const challengeType = $('#type-select').val() as ChallengeType;
         const stock_id = $('#stockid').val() as number;
         const stockvalue = $('#stockvalue').val() as number;
+        const reward = $('#reward').val() as number;
 
         const addDailyChallengeReq= new AddDailyChallengeRequest();
 
@@ -35,10 +36,11 @@ export class AddDailyChallenge extends React.Component<AddDailyChallengeProps,{}
             addDailyChallengeReq.setChallengeType(challengeType);
             addDailyChallengeReq.setStockid(stock_id);
             addDailyChallengeReq.setValue(stockvalue);
+            addDailyChallengeReq.setReward(reward);
             
             const resp = await DalalActionService.addDailyChallenge(addDailyChallengeReq, sessionMd);
 
-            showNotif("Notification has been sent successfully!");
+            showNotif("New Daily Challenge for the specified market day has been added");
 
         } catch(e){
             console.log("Error happened while adding Challenge! ", e.statusCode, e.statusMessage, e);
@@ -99,11 +101,20 @@ export class AddDailyChallenge extends React.Component<AddDailyChallengeProps,{}
                     </td>
                     <td>
                     <tr>
-                        <label>Enter Stock Value: </label>
+                        <label>Enter Value: </label>
                     </tr>
                         
                 
                     <input type="integer" className="notify-text" id="stockvalue" placeholder="0" />
+                    </td>
+
+                    <td>
+                    <tr>
+                        <label>Enter Reward: </label>
+                    </tr>
+                        
+                
+                    <input type="integer" className="notify-text" id="reward" placeholder="0" />
                     </td>
                     
                     

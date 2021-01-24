@@ -10,92 +10,226 @@ import { LeaderboardRow as LeaderboardRow_pb } from "../../../proto_build/models
 import { Fragment } from "react";
 import { addCommas, showErrorNotif } from "../../utils";
 import { render } from "react-dom";
+import {DailyChallenge} from "../../../proto_build/models/DailyChallenge_pb"
+import { DailyChallengeRow } from "../dailychallenges/DailyChallengeRow";
+import {GetDailyChallengesRequest} from "../../../proto_build/actions/GetDailyChallenges_pb"
+import { DailyChallengeStateProps } from "../admin/DailyChallengeState";
+import { GetDailyChallengeConfigRequest } from "../../../proto_build/actions/GetDailyChallengeConfig_pb";
 
 declare var $: any;
-
+const days=['Mon','Tue','Wed','Thur','Fri','Sat','Sun']
 export interface DailyChallengesProps {
-    userCash: number,
-    userReservedCash: number,
-    userTotal: number,
-    userStockWorth: number,
-    connectionStatus: boolean,
-    isMarketOpen: boolean,
-    isBlocked: boolean
-    sessionMd: Metadata,
-    leaderboardCount: number,
-    notifications: Notification_pb[],
-    disclaimerElement: JSX.Element,
-    reservedStocksWorth: number,
+  userCash: number,
+  userReservedCash: number,
+  userTotal: number,
+  userStockWorth: number,
+  connectionStatus: boolean,
+  isMarketOpen: boolean,
+  isBlocked: boolean
+  sessionMd: Metadata,
+  notifications: Notification_pb[],
+  disclaimerElement: JSX.Element,
+  reservedStocksWorth: number,
+  isDailyChallengeOpen:boolean
+
 }
 
 interface DailyChallengesState {
-    DailyChallengesRow: string[]
+  DailyChallenges: any[],
+  curMarketDay: number,
+  dispMarketDay: number,
+  timeline: any[],
+  isDailyChallengeOpen:boolean
 }
 
-export class DailyChallenges extends React.Component<DailyChallengesProps, DailyChallengesProps> {
-    constructor(props: DailyChallengesProps) {
-        super(props);
+export class DailyChallenges extends React.Component<DailyChallengesProps, DailyChallengesState> {
+  constructor(props: DailyChallengesProps) {
+    super(props);
 
+    this.state={
+      DailyChallenges: [],
+      curMarketDay: 1,
+      dispMarketDay: 0,
+      timeline: [],
+      isDailyChallengeOpen:this.props.isDailyChallengeOpen
     }
 
+  }
+  
+  intialTimeline = () =>{
+    const state = this.state;
+    var timeline=[];
+    let i:number;
 
-    render() {
+    for(i=1;i<=7;i++){
+      if(i<state.curMarketDay){
+        var bubble = <li>
+                      <a data-value={i} onClick={(e)=>this.handleChangeDay(e)}>{days[i-1]}</a>
+                  </li>;
+      } else if(i==state.curMarketDay){
+        var bubble = <li >
+                      <a className="selected" data-value={i} onClick={(e)=>this.handleChangeDay(e)}>{days[i-1]}</a>
+                  </li>;
+      }
+      else{
+        var bubble = <li key={i}>
+        <i className="lock icon large locked"></i>
+      </li>
+      }
 
-            return(
-                <Fragment>
-                <div className="row" id="top_bar">
-                    <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} userStockWorth={this.props.userStockWorth} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen} isBlocked={this.props.isBlocked}/>
-                    <div id="notif-component">
-                        <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
-                    </div>
-                </div>
-                <div id="dailyChallenges-container" className="ui stackable grid pusher main-container">
-                    <div className="row">
-                        <h2 className="ui center aligned icon header inverted">
-                            <i className="calendar check icon"></i>
-                            <div className="content">
-                                Daily Challenges
+      
+      timeline.push(bubble);  
+  }
+  this.setState({
+    timeline: timeline
+  })
+
+  }
+
+  displayDailyChallenge = async(day:number) =>{
+    const sessionMd = this.props.sessionMd;
+    const GetDailyChallengesReq = new GetDailyChallengesRequest();
+    GetDailyChallengesReq.setMarketDay(day);
+    try{
+      const resp = await DalalActionService.getDailyChallenges(GetDailyChallengesReq, sessionMd);
+      const list = resp.getDailyChallengesList();
+      var dailyRows=[] as any[];
+      console.log(list)
+      list.forEach((item,index)=>{
+        var row = <DailyChallengeRow isDailyChallengeOpen={this.props.isDailyChallengeOpen} key={item.getChallengeId()} challenge={item} sessionMd={this.props.sessionMd}></DailyChallengeRow>
+        dailyRows.push(row);
+      })
+      this.setState({
+        DailyChallenges:[]
+      })
+      this.setState({
+        DailyChallenges:dailyRows,
+        dispMarketDay: day
+      })
+    }
+    catch(e){
+      console.log("Error happened while updating dailyChallenge Rows! ", e.statusCode, e.statusMessage, e);
+          if (e.isGrpcError) {
+            showErrorNotif("Oops! Unable to reach server. Please check your internet connection!");
+          } else {
+            showErrorNotif("Oops! Something went wrong! " + e.statusMessage);
+          }
+    }
+  }
+  handleChangeDay = async(e:any) =>{
+  
+    const state = this.state;
+    var timeline=[];
+    //This block of code is for generating timeline
+    for(var i=1;i<=7;i++){
+      if(i<=state.curMarketDay && i==e.currentTarget.dataset.value){
+        var bubble = <li>
+                      <a className="selected" data-value={i} onClick={(e)=>this.handleChangeDay(e)}>{days[i-1]}</a>
+                  </li>;
+      } else if(i<=state.curMarketDay){
+        var bubble = <li>
+                      <a data-value={i} onClick={(e)=>this.handleChangeDay(e)}>{days[i-1]}</a>
+                  </li>;
+      }
+      else{
+        var bubble = <li>
+        <i className="lock icon large locked"></i>
+      </li>
+      }
+      
+      timeline.push(bubble);  
+  }
+  //This block of code is for adding the rows
+  await this.displayDailyChallenge(e.currentTarget.dataset.value);
+
+}
+  setCurMarketDay = async() =>{
+
+    try{
+    const sessionMd = this.props.sessionMd;
+    const GetDailyChallengeConfigReq = new GetDailyChallengeConfigRequest();
+    const resp = await DalalActionService.getDailyChallengeConfig(GetDailyChallengeConfigReq,sessionMd);
+    const market_day = resp.getMarketDay();
+    this.setState({
+      curMarketDay: market_day
+    })
+    } catch(e){
+      console.log("Error happened while updating curMarket day! ", e.statusCode, e.statusMessage, e);
+          if (e.isGrpcError) {
+            showErrorNotif("Oops! Unable to reach server. Please check your internet connection!");
+          } else {
+            showErrorNotif("Oops! Something went wrong! curMarket " + e.statusMessage);
+          }
+
+    }
+  }
+  
+  componentDidMount = async() =>{
+    await this.setCurMarketDay();
+    this.intialTimeline();
+    await this.displayDailyChallenge(this.state.curMarketDay);
+  }
+  
+  componentWillReceiveProps= async() =>{
+    // await this.displayDailyChallenge(this.state.dispMarketDay);
+  }
+
+  render() {
+    
+    return (
+      <Fragment>
+        <div className="row" id="top_bar">
+          <TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} userStockWorth={this.props.userStockWorth} connectionStatus={this.props.connectionStatus} isMarketOpen={this.props.isMarketOpen} isBlocked={this.props.isBlocked} />
+          <div id="notif-component">
+            <Notification notifications={this.props.notifications} icon={"open envelope icon"} />
+          </div>
+        </div>
+        <div id="dailyChallenges-container" className="ui stackable grid pusher main-container">
+          <div className="row">
+            <h2 className="ui center aligned icon header inverted">
+              <i className="calendar check icon"></i>
+              <div className="content">
+                Daily Challenges
                             <div className="grey sub header">
                                     Complete these tasks to win exciting rewards
                             </div>
-                            </div>
-                        </h2>
-                    </div>
-                    </div>
+              </div>
+            </h2>
+          </div>
+        </div>
 
-                    <div className="timeline">
-      <div className="events">
-        <ol>
-          <ul>
-            <li>
-              <a>Monday</a>
-            </li>
-            <li>
-              <a href="#1">Tuesday</a>
-            </li>
-            <li>
-              <a href="#2" className="selected">Wednesday</a>
-            </li>
-            <li>
-              <i className="lock icon large locked"></i>
-            </li>
-            <li>
-            <i className="lock icon large locked"></i>
-            </li>
-            <li>
-            <i className="lock icon large locked"></i>
-            </li>
-            <li>
-            <i className="lock icon large locked"></i>
-            </li>
-          </ul>
-        </ol>
-      </div>
-    </div>
-    
-                </Fragment>  
-            )
-                  
+
+        <div className="content-div">
+
+        <div className="ui equal width center aligned padded grid">
+          <div className="row">
+            <div className="fourteen wide column timeline-row">
+            <p id="challenge-list">FIND A COOL FONT AND COLOR HERE</p>
+            <div className="timeline">
+            <div className="events">
+              <ol>
+                <ul>
+                  {this.state.timeline}
+                </ul>
+              </ol>
+            </div>
+          </div>
+          <p className="ital">Get an edge over the other!</p>
+          </div>
+          <div className="two wide column progress">
+
+          </div> 
+            </div>
+          
+            {this.state.DailyChallenges}
+  
+          
+          </div>
+        </div>
+
+      </Fragment>
+    )
+
 
 
     }

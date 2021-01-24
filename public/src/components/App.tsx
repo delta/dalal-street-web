@@ -20,6 +20,7 @@ import { ForgotPasswordResponse } from "../../proto_build/actions/ForgotPassword
 import { ChangePassword } from "./changepassword/ChangePassword";
 import { MobileVerification } from "./mobile_verification/MobileVerification";
 import { showInfoNotif ,showErrorNotif } from "../utils";
+import {GetDailyChallengeConfigRequest} from "../../proto_build/actions/GetDailyChallengeConfig_pb"
 
 const LOGIN = 1;
 const SIGNUP = 2;
@@ -46,6 +47,7 @@ interface AppState {
 	isMarketOpen: boolean
 	isBlocked: boolean
 	isPhoneVerified: boolean
+	isDailyChallengeOpen: boolean
 }
 
 export class App extends React.Component<{}, AppState> {
@@ -70,10 +72,37 @@ export class App extends React.Component<{}, AppState> {
 			constantsMap: {},
 			isMarketOpen: false,
 			isPhoneVerified: false,
-			isBlocked: false
+			isBlocked: false,
+			isDailyChallengeOpen:false
 		};
 	}
 
+	isDailyChallengeOpen = async() =>{
+        const sessionMd = this.state.sessionMd;
+            const GetDailyChallengeConfigReq = new GetDailyChallengeConfigRequest();
+        try{
+            const resp = await DalalActionService.getDailyChallengeConfig(GetDailyChallengeConfigReq,sessionMd);
+            const status = resp.getIsDailyChallengOpen();
+            this.setState({
+                isDailyChallengeOpen: status
+            })
+
+        }
+        catch(e){
+            console.log("Error happened while updating DailyChallengeState! ", e.statusCode, e.statusMessage, e);
+            if (e.isGrpcError) {
+                showErrorNotif("Oops! Unable to reach server. Please check your internet connection!");
+            } else {
+                showErrorNotif("Oops! Something went wrong! " + e.statusMessage);
+            }
+        }
+    }
+	updateDailyChallengeForNotif = (status:boolean)=>{
+		console.log("Vanakam di maplay")
+		this.setState({
+			isDailyChallengeOpen: status
+		})
+	}
 	async componentDidMount() {
 		//Initially when page loads no user info will be available
 		//Hence a request to login
@@ -164,6 +193,7 @@ export class App extends React.Component<{}, AppState> {
 				isLoading: false
 			})
 		}
+		this.isDailyChallengeOpen();
 	}
 
 	handleUrlChange = () => {
@@ -333,7 +363,7 @@ export class App extends React.Component<{}, AppState> {
 			case MAIN:
 				return (
 					<Fragment>
-						<Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified={this.state.isPhoneVerified} email={this.state.email} sessionMd={this.state.sessionMd!}/>
+						<Navbar isDailyChallengeOpen={this.state.isDailyChallengeOpen} handleUrlChange={this.handleUrlChange} isPhoneVerified={this.state.isPhoneVerified} email={this.state.email} sessionMd={this.state.sessionMd!}/>
 						<Main
 							sessionMd={this.state.sessionMd!}
 							user={this.state.user!}
@@ -346,13 +376,14 @@ export class App extends React.Component<{}, AppState> {
 							changeStockDetailsMapCallBack={this.changeStockDetailsMap}
 							isBlocked={this.state.isBlocked}
 							updateUserBlocked={this.updateUserBlocked}
+							dailyChallengeNotif={this.updateDailyChallengeForNotif}
 						/>
 					</Fragment>
 				);
 			case MOBILEVERIFICATION:
 				return(
 				 <Fragment>
-					 <Navbar handleUrlChange={this.handleUrlChange} isPhoneVerified={this.state.isPhoneVerified} email={this.state.email} sessionMd={this.state.sessionMd!}/>
+					 <Navbar isDailyChallengeOpen={this.state.isDailyChallengeOpen} handleUrlChange={this.handleUrlChange} isPhoneVerified={this.state.isPhoneVerified} email={this.state.email} sessionMd={this.state.sessionMd!}/>
 					 <MobileVerification  sessionMd={this.state.sessionMd} updatePhoneVerified={this.updateIsPhoneVerified} updateCash={this.updateUserCash}/> 
 				 </Fragment>
 				);	

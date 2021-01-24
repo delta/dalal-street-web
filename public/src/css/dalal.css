@@ -1,11 +1,27 @@
 .green{
 	color:#7DEA63 !important;
 }
+@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
 
 /* styling for Blink */
 .animate {
 	-webkit-animation: background 1s cubic-bezier(1,0,0,1) 1;
 	animation: background 1s cubic-bezier(1,0,0,1) 1;
+}
+.new-daily{
+	-webkit-animation: fade 3s infinite;
+	animation: fade 3s infinite;
+}
+@-webkit-keyframes fade {
+	0% {background-color:grey; }
+	50% {background-color:#1B1C1D;}
+	100% {background-color:grey; }
+}
+
+@keyframes fade {
+	0% {background-color:grey; }
+	50% {background-color:#1B1C1D;}
+	100% {background-color:grey; }
 }
 
 @-webkit-keyframes background {
@@ -1135,12 +1151,14 @@ h1 {
 
 
 .timeline {
-	width: 100%;
+	width: 90%;
 	height: 100px;
 	max-width: 800px;
-	margin: 0 auto;
+	margin-left: 3vw;
 	display: flex;      
-	justify-content: center;    
+	justify-content: center;  
+	transform: translateY(-50px);  
+	padding-right: 3vw;
   }
   
   .timeline .events {
@@ -1167,13 +1185,14 @@ h1 {
 	width: 12.65%;
 	margin: 0;
 	padding: 0;
+	transform: rotate(-20deg);
   }
   
   .timeline .events ul li a {
 	font-family: 'Arapey', sans-serif;
 	font-style: italic;
 	font-size: 1.25em;
-	color: #606060;
+	color:#b1bacc;
 	text-decoration: none;
 	position: relative;
 	top: -32px;
@@ -1205,7 +1224,130 @@ h1 {
   }
 			  
   .locked{
-	  font-size: 10px;
-	  color: white;
-	  transform: translateY(-12px);
+	font-size: 10px;
+	color: white;
+	transform: translateY(-12px);
+}
+
+.challenge{
+  min-height: 80px;
+  background-color: #283e63;
+  background-color:rgba(0, 0, 0, 0.15);
+  display: table-cell;
+  margin: 0px;
+  vertical-align: middle;
+  border-bottom: 2px solid black;
+
+}
+.challenge p{
+	padding-top:10px;
+	padding-bottom:10px;
+	float: left;
+	font-size: 20px;
+	color:#b1bacc;
+	list-style: none;
+
+}
+
+.challenge p::before {
+	content: "\2B50";
+	font-weight: bold;
+	display: inline-block; 
+	width: 1em;
+	margin-left: 1em;
+	margin-right: 1em;
   }
+
+.progress{
+  min-height: 80px;
+  height:inherit;
+  text-align: center;
+  vertical-align: middle;
+ background-color: #232b47;
+ background-color: black;
+ border-bottom: 2px solid black;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+
+}
+
+.content-div{
+	width: 60%;
+	margin: 0 auto;
+}
+#challenge-row{
+	padding:0px;
+	display: flex;
+}
+.timeline-row{
+	
+	background-color: rgba(0, 0, 0, 0.15);
+	min-height: 150px;
+	width: inherit;
+}
+#spin{
+	font-size: 3em;
+	color: blanchedalmond;
+	position:relative;
+    top: calc(50% - 0.5em);
+}
+#challenge-list{
+	font-family: 'Rock Salt';
+	font-size: 30px;
+	font-weight: 400;
+	color: white;
+	float: left;
+}
+.ital{
+	font-style: italic;
+	color: #7f8ea4;
+	float: left;
+	transform: translateY(-30px);
+	font-size: 20px;
+}
+.completed{
+	color: green;
+	font-size: 3em;
+	position:relative;
+    top: calc(50% - 0.5em);
+}
+.frown{
+	color: red;
+	font-size: 3em;
+	position:relative;
+    top: calc(50% - 0.5em);
+}
+#wrong{
+	font-size: 2.5em;
+	text-align: center;
+	position:relative;
+	top: calc(50% - 0.5em);
+}
+.reward{
+	font-size: 2.5em;
+	text-align: center;
+	position:relative;
+	top: calc(50% - 0.80em);
+}
+.green-color{
+	background-color: green;
+}
+button.orange {
+    color: white;
+    border: 1px solid #56ab2f; 
+    background: -webkit-linear-gradient(top,#56ab2f,#a8e063);
+    background: -moz-linear-gradient(top,#56ab2f,#a8e063);
+	background: -ms-linear-gradient(top,#56ab2f,#a8e063);
+	position:relative;
+	top: calc(50% - 0.80em);
+	font-size: 20px;
+}
+
+button.orange:hover {
+    border: 1px solid #58bc4f;
+    background: -webkit-linear-gradient(top, #58bc4f, #b9f174); 
+    background: -moz-linear-gradient(top, #FD924C, #F9760B); 
+    background: -ms-linear-gradient(top, #FD924C, #F9760B); 
+    box-shadow: 0 1px #EFEFEF;
+}
