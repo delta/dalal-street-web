@@ -13,6 +13,8 @@ import { Charts } from "./charts/Charts";
 import { Fragment } from "react";
 import ReactJoyride, { STATUS, StoreState, Step, EVENTS, ACTIONS } from 'react-joyride';
 import { StockBankruptState } from "../../../proto_build/models/GameState_pb";
+import {PushNotificationModal } from "../pushnotifications/pushNotificationModal";
+import { isDevServer } from "../pushnotifications/pushnotifications";
 
 export type StockBriefInfo = {
 	id: number
@@ -24,6 +26,7 @@ export type StockBriefInfo = {
 }
 
 type NumNumMap = { [index: number]: number };
+declare var $ : any;
 
 export interface TradingTerminalProps {
 	sessionMd: Metadata,
@@ -305,6 +308,17 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 		};
 	}
 
+  componentDidMount() {
+    if (!localStorage.getItem("first_time_dalal")) return;
+    else if (isDevServer()) $("#pushNotifModal").modal("show");
+    else if (
+      !localStorage.getItem("dalal_push_notif") ||
+      window.Notification.permission != "default"
+    ) {
+      $("#pushNotifModal").modal("show");
+    }
+  }
+
 	handleClickOpen = () => {
     const { stepIndex } = this.state;
 
@@ -345,6 +359,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 		const { action, status, type, index } = data;
 		if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
 		  localStorage.setItem("first_time_dalal",  "yeah");
+			$("#pushNotifModal").modal("show");
 		}
 		else if([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND].includes(type)){
 			const stepIndex = index + (action === ACTIONS.PREV ? -1 : 1);
@@ -421,6 +436,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					</div>
 					{this.props.disclaimerElement}
 				</div>
+				<PushNotificationModal />
 			</Fragment>
 		);
 	}
