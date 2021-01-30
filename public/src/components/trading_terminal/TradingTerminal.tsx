@@ -436,7 +436,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					</div>
 					{this.props.disclaimerElement}
 				</div>
-				<PushNotificationModal />
+				<PushNotificationModal sessionMd={this.props.sessionMd} />
 			</Fragment>
 		);
 	}

@@ -1,8 +1,13 @@
 import * as React from "react";
-import { askUserPermission, register } from "./pushnotifications";
+import { askUserPermission, register, isDevServer } from "./pushnotifications";
 import { showErrorNotif } from "../../utils";
-
-class PushNotificationModal extends React.Component<{}, {}> {
+import { Metadata } from "grpc-web-client";
+import { AddUserSubscriptionRequest } from "../../../proto_build/actions/AddUserSubscription_pb";
+import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
+interface PushNotificationProps {
+  sessionMd: Metadata;
+}
+class PushNotificationModal extends React.Component<PushNotificationProps, {}> {
   handleAccept = async () => {
     const resp = await askUserPermission();
     if (resp === "granted") {
@@ -12,12 +17,30 @@ class PushNotificationModal extends React.Component<{}, {}> {
         showErrorNotif(
           "Unable to register for push Notifications, try again later"
         );
-      console.log("Subscription : ", subscription);
+      if (isDevServer()) console.log("Subscription : ", subscription);
     }
   };
   handleReject = () => {
     localStorage.setItem("dalal_push_notif", "no");
   };
+
+  sendSubscriptionToServer = async (subscription: PushSubscription | null) => {
+    if (!subscription) return;
+    const request = new AddUserSubscriptionRequest();
+    request.setData(JSON.stringify(subscription));
+    try {
+      await DalalActionService.addUserSubscription(
+        request,
+        this.props.sessionMd
+      );
+    } catch (err) {
+      console.log(err);
+      showErrorNotif(
+        "Unable to register for push Notifications, try again later"
+      );
+    }
+  };
+
   render() {
     return (
       <div className="ui basic modal" id="pushNotifModal">
