@@ -64,11 +64,11 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
     for(i=1;i<=7;i++){
       if(i<state.curMarketDay){
         var bubble = <li>
-                      <a data-value={i} onClick={(e)=>this.handleChangeDay(e)}>{days[i-1]}</a>
+                      <a data-value={i} onClick={(e)=>this.handleChangeDay(e)}>Day {i}</a>
                   </li>;
       } else if(i==state.curMarketDay){
         var bubble = <li >
-                      <a className="selected" data-value={i} onClick={(e)=>this.handleChangeDay(e)}>{days[i-1]}</a>
+                      <a className="selected" data-value={i} onClick={(e)=>this.handleChangeDay(e)}>Day {i}</a>
                   </li>;
       }
       else{
@@ -96,7 +96,7 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
       var dailyRows=[] as any[];
       console.log(list)
       list.forEach((item,index)=>{
-        var row = <DailyChallengeRow isDailyChallengeOpen={this.props.isDailyChallengeOpen} key={item.getChallengeId()} challenge={item} sessionMd={this.props.sessionMd}></DailyChallengeRow>
+        var row = <DailyChallengeRow isDailyChallengeOpen={this.props.isDailyChallengeOpen} curMarketDay={this.state.curMarketDay} key={new Date().getTime()} challenge={item} sessionMd={this.props.sessionMd}></DailyChallengeRow>
         dailyRows.push(row);
       })
       this.setState({
@@ -124,11 +124,11 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
     for(var i=1;i<=7;i++){
       if(i<=state.curMarketDay && i==e.currentTarget.dataset.value){
         var bubble = <li>
-                      <a className="selected" data-value={i} onClick={(e)=>this.handleChangeDay(e)}>{days[i-1]}</a>
+                      <a className="selected" data-value={i} onClick={(e)=>this.handleChangeDay(e)}>Day {i}</a>
                   </li>;
       } else if(i<=state.curMarketDay){
         var bubble = <li>
-                      <a data-value={i} onClick={(e)=>this.handleChangeDay(e)}>{days[i-1]}</a>
+                      <a data-value={i} onClick={(e)=>this.handleChangeDay(e)}>Day {i}</a>
                   </li>;
       }
       else{
@@ -136,7 +136,9 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
         <i className="lock icon large locked"></i>
       </li>
       }
-      
+      this.setState({
+        timeline: timeline
+      })
       timeline.push(bubble);  
   }
   //This block of code is for adding the rows
@@ -150,9 +152,13 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
     const GetDailyChallengeConfigReq = new GetDailyChallengeConfigRequest();
     const resp = await DalalActionService.getDailyChallengeConfig(GetDailyChallengeConfigReq,sessionMd);
     const market_day = resp.getMarketDay();
+    if(market_day!=0){
     this.setState({
-      curMarketDay: market_day
+      curMarketDay: market_day,
+      dispMarketDay:market_day
     })
+    }
+    
     } catch(e){
       console.log("Error happened while updating curMarket day! ", e.statusCode, e.statusMessage, e);
           if (e.isGrpcError) {
@@ -170,11 +176,14 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
     await this.displayDailyChallenge(this.state.curMarketDay);
   }
   
-  componentWillReceiveProps= async() =>{
-    // await this.displayDailyChallenge(this.state.dispMarketDay);
+  componentDidUpdate= async(prevProps:DailyChallengesProps) =>{
+   if(prevProps.isDailyChallengeOpen!=this.props.isDailyChallengeOpen){
+    console.log("Came Here")
+    await this.displayDailyChallenge(this.state.dispMarketDay);
+   }
   }
 
-  render() {
+  render(){
     
     return (
       <Fragment>
@@ -204,7 +213,7 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
         <div className="ui equal width center aligned padded grid">
           <div className="row">
             <div className="fourteen wide column timeline-row">
-            <p id="challenge-list">FIND A COOL FONT AND COLOR HERE</p>
+            <p id="challenge-list">LIST OF CHALLENGES</p>
             <div className="timeline">
             <div className="events">
               <ol>
