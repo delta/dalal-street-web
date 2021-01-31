@@ -1,5 +1,10 @@
 import * as React from "react";
-import { askUserPermission, register, isDevServer } from "./pushnotifications";
+import {
+  askUserPermission,
+  register,
+  isDevServer,
+  createNotificationSubscription,
+} from "./pushnotifications";
 import { showErrorNotif } from "../../utils";
 import { Metadata } from "grpc-web-client";
 import { AddUserSubscriptionRequest } from "../../../proto_build/actions/AddUserSubscription_pb";
@@ -12,12 +17,14 @@ class PushNotificationModal extends React.Component<PushNotificationProps, {}> {
     const resp = await askUserPermission();
     if (resp === "granted") {
       console.log("registered");
-      const subscription = await register({});
+      await register({ scope: "/" });
+      const subscription = await createNotificationSubscription();
       if (subscription == null)
         showErrorNotif(
           "Unable to register for push Notifications, try again later"
         );
       if (isDevServer()) console.log("Subscription : ", subscription);
+      this.sendSubscriptionToServer(subscription);
     }
   };
   handleReject = () => {

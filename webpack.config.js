@@ -56,6 +56,9 @@ module.exports = {
     "react-dom": "ReactDOM"
   },
   devServer: {
-    historyApiFallback: true
+    historyApiFallback: true,
+    headers: {
+      "Service-Worker-Allowed" : "/"
+    }
   },
 };

@@ -1,4 +1,4 @@
-const localHostTester = /^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*\:)*?:?0*1$/g; // check if react is running in dev environment
+const localHostTester = /^localhost$|^(0.0.0.0)$|^(?:0*\:)*?:?0*1$/g; // check if react is running in dev environment
 const isLocalHost = localHostTester.test(window.location.hostname);
 const pushServerPublicKey =
   "BLbkCsOGo6wNvFK4bf3EuV13jinglnLPydQs7TAZwl7qaEPG29Kk_BaQFeFrXOK6wQCC8Y-pymeaUW3wuHwihtQ";
@@ -21,8 +21,8 @@ function isDevServer(): boolean {
 /**
  * Registers a service worker for push notification, after checking for development environment
  */
-function register(config: any): Promise<PushSubscription | null> {
-  return new Promise(async (resolve) => {
+function register(config: any): Promise<ServiceWorkerRegistration | null> {
+  return new Promise(async (resolve, reject) => {
     if (process.env.NODE_ENV == "production" && "serviceWorker" in navigator) {
       // the browser supports SWs (Service Workers)
       // URL web-api is present is present in every browser which supports SWs
@@ -48,22 +48,26 @@ function register(config: any): Promise<PushSubscription | null> {
 
     // the url of the service worker, to fetch it
     const swUrl = `${process.env.ASSET_PATH}/serviceWorker.js`;
-    let subscription: PushSubscription | null = null;
+    let serviceWorker: ServiceWorkerRegistration | null = null;
+    try {
+      if (isLocalHost) {
+        // react is running in dev environment, check if the service worker exists or not
+        serviceWorker = await checkValidServiceWorkerAndRegister(swUrl, config);
 
-    if (isLocalHost) {
-      // react is running in dev environment, check if the service worker exists or not
-      subscription = await checkValidServiceWorkerAndRegister(swUrl, config);
-
-      // add some additional logging to localHost
-      navigator.serviceWorker.ready.then(() => {
-        console.log("Service worker is up and running");
-        console.log("~~~Additional Loggers~~~");
-      });
-    } else {
-      // not localhost, just register the service worker
-      subscription = await checkValidServiceWorkerAndRegister(swUrl, config);
+        // add some additional logging to localHost
+        navigator.serviceWorker.ready.then(() => {
+          console.log("Service worker is up and running");
+          console.log("~~~Additional Loggers~~~");
+        });
+      } else {
+        // not localhost, just register the service worker
+        serviceWorker = await checkValidServiceWorkerAndRegister(swUrl, config);
+      }
+      resolve(serviceWorker);
+    } catch (err) {
+      console.error("error while registering service worker, ", err);
+      reject(err);
     }
-    resolve(subscription);
   });
 }
 /**
@@ -74,7 +78,7 @@ function register(config: any): Promise<PushSubscription | null> {
 async function checkValidServiceWorkerAndRegister(
   swUrl: string,
   config: any
-): Promise<PushSubscription | null> {
+): Promise<ServiceWorkerRegistration | null> {
   // Check if the service worker can be found, if not send error ( some error in the swUrl)
   return fetch(swUrl)
     .then(async (response) => {
@@ -96,13 +100,13 @@ async function checkValidServiceWorkerAndRegister(
         );
       } else {
         // Service worker was found, register it.
-        return await registerServiceWorker(swUrl);
+        return await registerServiceWorker(swUrl, config);
       }
       return null;
     })
     .catch((err) => {
       // probably network error
-      console.log("something went wrong, ", err);
+      console.error("something went wrong, ", err);
       return null;
     });
 }
@@ -118,14 +122,21 @@ function unregister() {
 /**
  * returns a promise which resolves after the service worker is registered
  */
-function registerServiceWorker(swUrl: string): Promise<PushSubscription> {
-  return new Promise((resolve) => {
-    navigator.serviceWorker.register(swUrl).then((reg) => {
-      isLocalHost && console.log("Registration", reg);
-      createNotificationSubscription(reg).then((subscription) => {
-        resolve(subscription);
+function registerServiceWorker(
+  swUrl: string,
+  config: any
+): Promise<ServiceWorkerRegistration> {
+  return new Promise((resolve, reject) => {
+    navigator.serviceWorker
+      .register(swUrl, config)
+      .then((reg) => {
+        isLocalHost && console.log("Registration", reg);
+        resolve(reg);
+      })
+      .catch((err) => {
+        console.error("unable to register service worker, ", err);
+        reject("Unable to register service worker");
       });
-    });
   });
 }
 
@@ -133,14 +144,10 @@ function registerServiceWorker(swUrl: string): Promise<PushSubscription> {
  * using the registered service worker creates a push notification subscription and
  * returns the push notif object
  */
-// * BUG : Unable to get service worker with navigator.serviceWorker.ready,
-// * promise never resolves,
-// * So calling the function, after registering the service Worker
-async function createNotificationSubscription(
-  serviceWorker: ServiceWorkerRegistration
-) {
-  console.log("creating notification subscription");
-  console.log("service worker : ", serviceWorker);
+async function createNotificationSubscription() {
+  isLocalHost && console.log("creating notification subscription");
+  const serviceWorker = await navigator.serviceWorker.ready;
+  isLocalHost && console.log("service worker : ", serviceWorker);
   return await serviceWorker.pushManager.subscribe({
     userVisibleOnly: true,
     applicationServerKey: urlBase64ToUint8Array(pushServerPublicKey),
@@ -151,7 +158,7 @@ async function createNotificationSubscription(
  * returns the subscription if present or nothing
  * this can be used to get a subscription if present
  */
-function getUserSubscription() {
+async function getUserSubscription() {
   //wait for service worker installation to be ready, and then
   return navigator.serviceWorker.ready
     .then(function (pushSubscription) {
@@ -163,6 +170,10 @@ function getUserSubscription() {
     });
 }
 
+/**
+ * changes content encoding from urlbase64 to unit8, and returns an array
+ * @param base64String ...
+ */
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
@@ -176,4 +187,10 @@ function urlBase64ToUint8Array(base64String: string) {
   return outputArray;
 }
 
-export { register, askUserPermission, getUserSubscription, isDevServer };
+export {
+  register,
+  askUserPermission,
+  getUserSubscription,
+  isDevServer,
+  createNotificationSubscription,
+};
