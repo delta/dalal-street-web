@@ -1,19 +1,14 @@
 import * as React from "react";
 import { Metadata } from "grpc-web-client";
-import ReactPaginate from "react-paginate";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
-import { Notification } from "../common/Notification";
-import { TinyNetworth } from "../common/TinyNetworth";
-import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
-import { GetLeaderboardRequest, GetLeaderboardResponse } from "../../../proto_build/actions/GetLeaderboard_pb";
-import { LeaderboardRow as LeaderboardRow_pb } from "../../../proto_build/models/LeaderboardRow_pb";
 import { Fragment } from "react";
-import { addCommas, showErrorNotif } from "../../utils";
-import { render } from "react-dom";
+import { showErrorNotif } from "../../utils";
 import {DailyChallenge} from "../../../proto_build/models/DailyChallenge_pb"
 import { GetCompanyProfileRequest } from "../../../proto_build/actions/GetCompanyProfile_pb";
 import {GetMyUserStateRequest} from "../../../proto_build/actions/GetMyUserState_pb";
-import {GetMyRewardRequest} from "../../../proto_build/actions/GetMyReward_pb"
+import {GetMyRewardRequest} from "../../../proto_build/actions/GetMyReward_pb";
+import {showInfoNotif} from "../../utils";
+
 
 declare var $: any;
 
@@ -39,10 +34,11 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
             userState:""
         }
     }
+
     componentDidMount = async()=>{
         this.updateRow();
     }
-
+    // Logic for 1 specific challenge row
     updateRow = async()=>{
         const challenge_id = this.props.challenge.getChallengeId(),
               market_day = this.props.challenge.getMarketDay(),
@@ -59,7 +55,6 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
 
                 const userState = respUserState.getUserState();
                 
-                //Add is Daily challenge Open in this block of code
                 if(userState!=null){
                     this.setState({
                         userState:userState.getId()
@@ -67,8 +62,6 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
                     const isRewardClaimed = userState.getIsRewardClamied();
                     const progress = userState.getIsCompleted();
 
-                    console.log("Reward Accepted:"+isRewardClaimed);
-                    console.log("Progress:"+progress)
                     if(progress&&(isRewardClaimed)){
                         var progressbox = <div className="two wide column progress">
                         <i className="check completed huge icon"></i>
@@ -82,7 +75,6 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
                         var progressbox = <div className="two wide column progress">
                                 <button className="orange" onClick={this.reward}>Claim</button>
                                 </div> 
-                    console.log("Inga vanchuda unda")
                     this.setState({
                         progress: progressbox
                     })
@@ -167,8 +159,8 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
             }
         }
     }
+    // Handles click on claim reward
     reward = async()=>{
-        console.log("Rewarddee")
         try{
             const GetMyRewardReq = new GetMyRewardRequest();
             GetMyRewardReq.setUserStateId(this.state.userState)
@@ -179,7 +171,9 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
                     this.setState({
                         progress: progressbox
                     })
-            this.updateRow();        
+            this.updateRow();
+            var rewardReceived = resp.getReward();
+            showInfoNotif("Reward of "+rewardReceived+" has been added","Reward");        
             
         } catch(e){
             console.log("Error happened while accepting reward! ", e.statusCode, e.statusMessage, e);
@@ -197,36 +191,6 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
         return(
             <Fragment>
                 {this.state.row}
-                
-                {/* <div className="row" id="challenge-row">
-                    <div className="fourteen wide column challenge">
-                    <p>
-                    Increase your networth to 50,000 Increase your 
-                    </p>
-                    </div>
-                    <div className="two wide column progress">
-                    <i className="spinner loading huge icon" id="spin"></i> 
-
-                    </div> 
-                </div> */}
-                {/* <div className="row" id="challenge-row">
-                    <div className="fourteen wide column challenge">
-                    <p>
-                    Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000
-                    Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000
-                    Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000
-                    Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000
-                    Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000
-                    Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000
-                    Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000
-                    Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000 Increase your networth to 50,000
-                    </p>
-                    </div>
-                    <div className="two wide column progress">
-                    <i className="spinner loading huge icon" id="spin"></i> 
-                    </div> 
-                </div> */}
-                
             </Fragment>
         )
             

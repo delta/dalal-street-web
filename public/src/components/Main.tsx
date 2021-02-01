@@ -473,6 +473,13 @@ export class Main extends React.Component<MainProps, MainState> {
                         })
                         showInfoNotif("You recieved a bonus of 2000Rs for referring to other users!","Bonus");
                     }
+                    else if(update.getGameState()!.getUserRewardCredit()!){
+                        let newCash: number =update.getGameState()!.getUserRewardCredit()!.getCash();
+                        this.setState({
+                            userCash: newCash,
+                            userTotal: this.calculateTotal(newCash,this.props.stocksOwnedMap, this.props.stockDetailsMap, this.props.stocksReservedMap, this.props.user.getReservedCash()),
+                        })
+                    }
                 }
             }
         }

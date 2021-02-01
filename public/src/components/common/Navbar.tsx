@@ -4,7 +4,6 @@ import { Referral } from "../referralcode/ReferralCode"
 import { Metadata } from "grpc-web-client";
 import { GetDailyChallengeConfigRequest } from "../../../proto_build/actions/GetDailyChallengeConfig_pb";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
-import { DailyChallenge } from "../../../proto_build/models/DailyChallenge_pb";
 
 
 export interface NavProps {
@@ -50,10 +49,10 @@ export class Navbar extends React.Component<NavProps, NavState> {
 		
 	}
 	componentDidMount = async()=>{
-		console.log("class names are"+$('#dailyChallenge').className)
 	const sessionMd = this.props.sessionMd;
 	const GetDailyChallengeConfigReq = new GetDailyChallengeConfigRequest();
 	try{
+		// Daily challenge notification
 		const resp = await DalalActionService.getDailyChallengeConfig(GetDailyChallengeConfigReq,sessionMd);
 		const market_day = resp.getMarketDay();
 		this.setState({
@@ -76,12 +75,11 @@ export class Navbar extends React.Component<NavProps, NavState> {
 				this.setState({
 					notif: "new-daily"
 				})
-				console.log("class names are"+$('#dailyChallenge').className)
 			}
 		}
 
 	} catch(e){
-
+		console.log(e);
 	}
     
 	}
@@ -105,7 +103,7 @@ export class Navbar extends React.Component<NavProps, NavState> {
 						}
 			
 					} catch(e){
-		
+						console.log(e);
 			
 					}
 				}

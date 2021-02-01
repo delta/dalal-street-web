@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Metadata } from "grpc-web-client";
-import { SendNewsRequest } from "../../../proto_build/actions/SendNews_pb";
 import { SendDividendsRequest } from "../../../proto_build/actions/SendDividends_pb";
 import { CloseMarketRequest } from "../../../proto_build/actions/CloseMarket_pb";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";

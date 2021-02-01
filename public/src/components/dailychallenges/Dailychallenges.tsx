@@ -1,23 +1,16 @@
 import * as React from "react";
 import { Metadata } from "grpc-web-client";
-import ReactPaginate from "react-paginate";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { Notification } from "../common/Notification";
 import { TinyNetworth } from "../common/TinyNetworth";
 import { Notification as Notification_pb } from "../../../proto_build/models/Notification_pb";
-import { GetLeaderboardRequest, GetLeaderboardResponse } from "../../../proto_build/actions/GetLeaderboard_pb";
-import { LeaderboardRow as LeaderboardRow_pb } from "../../../proto_build/models/LeaderboardRow_pb";
 import { Fragment } from "react";
-import { addCommas, showErrorNotif } from "../../utils";
-import { render } from "react-dom";
-import {DailyChallenge} from "../../../proto_build/models/DailyChallenge_pb"
+import { showErrorNotif } from "../../utils";
 import { DailyChallengeRow } from "../dailychallenges/DailyChallengeRow";
 import {GetDailyChallengesRequest} from "../../../proto_build/actions/GetDailyChallenges_pb"
-import { DailyChallengeStateProps } from "../admin/DailyChallengeState";
 import { GetDailyChallengeConfigRequest } from "../../../proto_build/actions/GetDailyChallengeConfig_pb";
 
 declare var $: any;
-const days=['Mon','Tue','Wed','Thur','Fri','Sat','Sun']
 export interface DailyChallengesProps {
   userCash: number,
   userReservedCash: number,
@@ -39,7 +32,8 @@ interface DailyChallengesState {
   curMarketDay: number,
   dispMarketDay: number,
   timeline: any[],
-  isDailyChallengeOpen:boolean
+  isDailyChallengeOpen:boolean,
+  render: boolean
 }
 
 export class DailyChallenges extends React.Component<DailyChallengesProps, DailyChallengesState> {
@@ -48,14 +42,16 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
 
     this.state={
       DailyChallenges: [],
-      curMarketDay: 1,
+      curMarketDay: 0,
       dispMarketDay: 0,
       timeline: [],
-      isDailyChallengeOpen:this.props.isDailyChallengeOpen
+      isDailyChallengeOpen:this.props.isDailyChallengeOpen,
+      render: false
     }
 
   }
   
+  // Displays the initial timeline
   intialTimeline = () =>{
     const state = this.state;
     var timeline=[];
@@ -86,15 +82,16 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
 
   }
 
+  // Handles displaying daily challenges of any day
   displayDailyChallenge = async(day:number) =>{
     const sessionMd = this.props.sessionMd;
     const GetDailyChallengesReq = new GetDailyChallengesRequest();
     GetDailyChallengesReq.setMarketDay(day);
     try{
-      const resp = await DalalActionService.getDailyChallenges(GetDailyChallengesReq, sessionMd);
+      if(day!=0){
+        const resp = await DalalActionService.getDailyChallenges(GetDailyChallengesReq, sessionMd);
       const list = resp.getDailyChallengesList();
       var dailyRows=[] as any[];
-      console.log(list)
       list.forEach((item,index)=>{
         var row = <DailyChallengeRow isDailyChallengeOpen={this.props.isDailyChallengeOpen} curMarketDay={this.state.curMarketDay} key={new Date().getTime()} challenge={item} sessionMd={this.props.sessionMd}></DailyChallengeRow>
         dailyRows.push(row);
@@ -106,6 +103,8 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
         DailyChallenges:dailyRows,
         dispMarketDay: day
       })
+      }
+      
     }
     catch(e){
       console.log("Error happened while updating dailyChallenge Rows! ", e.statusCode, e.statusMessage, e);
@@ -178,7 +177,6 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
   
   componentDidUpdate= async(prevProps:DailyChallengesProps) =>{
    if(prevProps.isDailyChallengeOpen!=this.props.isDailyChallengeOpen){
-    console.log("Came Here")
     await this.displayDailyChallenge(this.state.dispMarketDay);
     await this.setCurMarketDay();
     this.intialTimeline();
