@@ -180,6 +180,10 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
    if(prevProps.isDailyChallengeOpen!=this.props.isDailyChallengeOpen){
     console.log("Came Here")
     await this.displayDailyChallenge(this.state.dispMarketDay);
+    await this.setCurMarketDay();
+    this.intialTimeline();
+    await this.displayDailyChallenge(this.state.curMarketDay);
+
    }
   }
 

@@ -78,6 +78,9 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
                                 <button className="orange" onClick={this.reward}>Claim</button>
                                 </div> 
                     console.log("Inga vanchuda unda")
+                    this.setState({
+                        progress: progressbox
+                    })
                     }
                     
                     else{  //Add here
