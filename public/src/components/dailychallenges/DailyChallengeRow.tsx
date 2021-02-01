@@ -54,11 +54,12 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
                 const respUserState = await DalalActionService.getMyUserState(GetUserStateReq,this.props.sessionMd);
 
                 const userState = respUserState.getUserState();
-                this.setState({
-                    userState:userState!.getId()
-                })
+                
                 //Add is Daily challenge Open in this block of code
                 if(userState!=null){
+                    this.setState({
+                        userState:userState.getId()
+                    })
                     const isRewardClaimed = userState.getIsRewardClamied();
                     const progress = userState.getIsCompleted();
 
@@ -168,7 +169,13 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
         try{
             const GetMyRewardReq = new GetMyRewardRequest();
             GetMyRewardReq.setUserStateId(this.state.userState)
-            const resp = await DalalActionService.getMyReward(GetMyRewardReq,this.props.sessionMd)
+            const resp = await DalalActionService.getMyReward(GetMyRewardReq,this.props.sessionMd);
+            var progressbox = <div className="two wide column progress">
+                        <i className="check completed huge icon"></i>
+                    </div> 
+                    this.setState({
+                        progress: progressbox
+                    })
             
         } catch(e){
             console.log("Error happened while accepting reward! ", e.statusCode, e.statusMessage, e);
@@ -178,12 +185,7 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
                showErrorNotif("Oops! Something went wrong! " + e.statusMessage);
             } 
         }
-        var progressbox = <div className="two wide column progress">
-                        <i className="check completed huge icon"></i>
-                    </div> 
-                    this.setState({
-                        progress: progressbox
-                    })
+        
     }
 
     render(){
