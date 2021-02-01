@@ -40,6 +40,10 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
         }
     }
     componentDidMount = async()=>{
+        this.updateRow();
+    }
+
+    updateRow = async()=>{
         const challenge_id = this.props.challenge.getChallengeId(),
               market_day = this.props.challenge.getMarketDay(),
               challenge_type = this.props.challenge.getChallengeType(),
@@ -163,7 +167,6 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
             }
         }
     }
-
     reward = async()=>{
         console.log("Rewarddee")
         try{
@@ -176,6 +179,7 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
                     this.setState({
                         progress: progressbox
                     })
+            this.updateRow();        
             
         } catch(e){
             console.log("Error happened while accepting reward! ", e.statusCode, e.statusMessage, e);
