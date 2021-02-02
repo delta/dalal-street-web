@@ -20,7 +20,6 @@ export class DailyChallengeState extends React.Component<DailyChallengeStateProp
         this.state = {
           challengeState: this.props.isDailyChallengeOpen
         }
-        console.log("Ren der ed")
     }
     handleOpenChallenge = async (e:any) =>{
         
@@ -88,7 +87,6 @@ export class DailyChallengeState extends React.Component<DailyChallengeStateProp
         }
     }
     render(){
-        console.log(this.props.isDailyChallengeOpen)
         return(
             <React.Fragment>
                 <table>

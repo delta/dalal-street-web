@@ -98,7 +98,6 @@ export class App extends React.Component<{}, AppState> {
         }
     }
 	updateDailyChallengeForNotif = (status:boolean)=>{
-		console.log("Vanakam di maplay")
 		this.setState({
 			isDailyChallengeOpen: status
 		})
