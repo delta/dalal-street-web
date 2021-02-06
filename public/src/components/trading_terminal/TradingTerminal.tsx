@@ -152,6 +152,17 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					title: 'Leaderboard'
 				},
 				{
+					content: "Complete these Daily Challenges to win exciting rewards",
+					placement: 'right',
+					styles: {
+					  options: {
+
+					  }
+					},
+					target: '.calendar',
+					title: 'Daily Challenges'
+				},
+				{
 					content: "Still confused about something? This page contains all the help you might need to play the game.",
 					placement: 'right',
 					styles: {

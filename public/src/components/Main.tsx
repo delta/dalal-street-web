@@ -717,6 +717,7 @@ export class Main extends React.Component<MainProps, MainState> {
                         notifications={this.state.notifications}
                         disclaimerElement={this.disclaimerElement}
                         isDailyChallengeOpen={this.state.isDailyChallengeOpen}
+                        stocksOwnedMap={this.state.stocksOwnedMap}
                     />;    
             case "/news":
                 return <News
