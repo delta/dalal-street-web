@@ -212,6 +212,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                             containerClassName={"leaderboard-pagination"}
                             activeClassName={"active-leaderboard-page"}
                         />
+                        
                     </div>
                     {this.props.disclaimerElement}
                 </div>

@@ -242,8 +242,12 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
             <div className="ten wide column column-info" id="column-info"><p>Challenge</p></div>
             <div className="three wide column column-info" id="column-info"><p>Progress</p></div>
             {this.state.DailyChallenges}
+            
+            {this.props.disclaimerElement}
           </div>
+         
         </div>
+       
       </Fragment>
     )
   }

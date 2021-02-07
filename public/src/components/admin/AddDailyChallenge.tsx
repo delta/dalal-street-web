@@ -4,7 +4,7 @@ import { ChallengeType } from '../../../proto_build/actions/AddDailyChallenge_pb
 import { AddDailyChallengeRequest } from '../../../proto_build/actions/AddDailyChallenge_pb';
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 import { showNotif, showErrorNotif, closeNotifs } from "../../utils";
-
+import { GetDailyChallengeConfigRequest } from "../../../proto_build/actions/GetDailyChallengeConfig_pb";
 const CASH = ChallengeType.CASH;
 const NETWORTH = ChallengeType.NETWORTH;
 const STOCKWORTH = ChallengeType.STOCKWORTH;
@@ -13,10 +13,16 @@ const SPECIFICSTOCK = ChallengeType.SPECIFICSTOCK;
 export interface AddDailyChallengeProps {
     sessionMd: Metadata,
 }
+export interface AddDailyChallengeState{
+    totalMarketDaysDropDown: any[]
+}
 
-export class AddDailyChallenge extends React.Component<AddDailyChallengeProps, {}> {
+export class AddDailyChallenge extends React.Component<AddDailyChallengeProps, AddDailyChallengeState> {
     constructor(props: AddDailyChallengeProps) {
         super(props);
+        this.state = {
+            totalMarketDaysDropDown: []
+        }
     }
 
     setDailyChallenge = async () => {
@@ -52,6 +58,25 @@ export class AddDailyChallenge extends React.Component<AddDailyChallengeProps, {
     componentDidMount() {
         ($("#day-select") as any).dropdown();
         ($("#type-select") as any).dropdown();
+        this.setMarketDaysDropdown()
+    }
+    setMarketDaysDropdown = async()=>{
+        try{
+        const sessionMd = this.props.sessionMd;
+        const GetDailyChallengeConfigReq = new GetDailyChallengeConfigRequest();
+        const resp = await DalalActionService.getDailyChallengeConfig(GetDailyChallengeConfigReq, sessionMd);
+        const totalMarketDays = resp.getTotalMarketDays();
+        let dropDownelements = [];
+        for(var i=1;i<=totalMarketDays;i++){
+            let element = <option value={i}>Day {i}</option>;
+            dropDownelements.push(element);
+        }
+        this.setState({
+            totalMarketDaysDropDown: dropDownelements
+        })
+        } catch(e){
+
+        }
     }
 
     render() {
@@ -66,13 +91,7 @@ export class AddDailyChallenge extends React.Component<AddDailyChallengeProps, {
                                     <label>Enter Market Day: </label>
                                 </tr>
                                 <select name="Market-Day" id="day-select" className="ui selection dropdown">
-                                    <option value="1">Day 1</option>
-                                    <option value="2">Day 2</option>
-                                    <option value="3">Day 3</option>
-                                    <option value="4">Day 4</option>
-                                    <option value="5">Day 5</option>
-                                    <option value="6">Day 6</option>
-                                    <option value="7">Day 7</option>
+                                    {this.state.totalMarketDaysDropDown}
                                 </select>
                             </td>
                             <td>

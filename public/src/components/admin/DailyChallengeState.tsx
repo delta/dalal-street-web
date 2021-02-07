@@ -34,6 +34,7 @@ export class DailyChallengeState extends React.Component<DailyChallengeStateProp
             })
             showNotif("DailyChallenge has been successfully opened");
             ($(".ui.modal.open.mini") as any).modal('hide')
+            this.openDailyChallengeModalClose();
         }
         catch (e) {
             console.log("Error happened while Opening Daily Challenge! ", e.statusCode, e.statusMessage, e);
@@ -58,7 +59,7 @@ export class DailyChallengeState extends React.Component<DailyChallengeStateProp
                 challengeState: false
             })
             showNotif("DailyChallenge has been successfully closed");
-            ($(".ui.modal.close.mini") as any).modal('hide')
+            this.closeDailyChallengeModalClose();
         }
         catch (e) {
             console.log("Error happened while Closing Daily Challenge! ", e.statusCode, e.statusMessage, e);
@@ -119,7 +120,7 @@ export class DailyChallengeState extends React.Component<DailyChallengeStateProp
                 <div className="ui modal open mini">
                     <div className="header">Open Daily Challenge</div>
                     <div className="content">
-                        <p>Are you sure you wanna <strong>open</strong> Daily Challenges?</p>
+                        <p>Are you sure you want to <strong>open</strong> Daily Challenges?</p>
                     </div>
                     <div className="actions">
                         <div onClick={this.handleOpenChallenge} className="ui right floated positive button">Yes</div>
@@ -129,7 +130,7 @@ export class DailyChallengeState extends React.Component<DailyChallengeStateProp
                 <div className="ui modal close mini">
                     <div className="header">Close Daily Challenge</div>
                     <div className="content">
-                        <p>Are you sure you wanna <strong>close</strong> Daily Challenges?</p>
+                        <p>Are you sure you want to <strong>close</strong> Daily Challenges?</p>
                     </div>
                     <div className="actions">
                         <div onClick={this.handleCloseChallenge} className="ui right floated positive button">Yes</div>

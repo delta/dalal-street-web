@@ -329,6 +329,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                     <p><span id="wrong">&#10060;</span> : The Challenge has not been completed and the daily challenges has been closed.</p>
                                     <br/>
                                     <p><span>While challenge is open, the current value and the value needed to achieve the challenge will be displayed for users to check their progress. It will either be in green or red showing if the user has reached or has not reached the value.</span></p>
+                                    <p>Daily Challenges are closed at the end of the day.</p>
                                     </div>
                                     
                                     <div className="title">
