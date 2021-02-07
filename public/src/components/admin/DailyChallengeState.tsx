@@ -33,7 +33,6 @@ export class DailyChallengeState extends React.Component<DailyChallengeStateProp
                 challengeState: true
             })
             showNotif("DailyChallenge has been successfully opened");
-            ($(".ui.modal.open.mini") as any).modal('hide')
             this.openDailyChallengeModalClose();
         }
         catch (e) {
