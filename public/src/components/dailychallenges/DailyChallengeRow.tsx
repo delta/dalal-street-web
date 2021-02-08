@@ -53,7 +53,6 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
             reward_amt = this.props.challenge.getReward();
         try {
             const GetUserStateReq = new GetMyUserStateRequest();
-            GetUserStateReq.setMarketDay(market_day);
             GetUserStateReq.setChallengeId(challenge_id);
             const respUserState = await DalalActionService.getMyUserState(GetUserStateReq, this.props.sessionMd);
 
