@@ -25,6 +25,11 @@ export class Help extends React.Component<HelpProps, {}> {
     }
 
     render() {
+        const image_style={
+            width:"40px",
+            height:"40px",
+            border:"none"
+        }
         return (
             <Fragment>
                 <div className="row" id="top_bar">
@@ -309,7 +314,24 @@ export class Help extends React.Component<HelpProps, {}> {
                                     <p>Yes. A company might file for bankruptcy depending on their current financial situation. Stay tuned to the <strong>News Page</strong> for the latest updates about companies. When a company goes bankrupt, you can no longer exchange their stocks and all stocks that you own of this company become worthless.</p>
                                     </div>
 
-
+                                    <div className="title">
+                                        <i className="dropdown icon inverted"></i>
+                                        <span className="faq-questions">What are Daily Challenges?</span>
+                                    </div>
+                                    <div className="content">
+                                    <p>A set of daily challenges will be given for every market day along with an associated reward based on the difficulty of the challenge.</p>
+                                    <p>Each challenge constitutes increasing any one of the four following parameters to the specified value, namely, <strong>Cash worth, Stock Worth, Net worth, Number of a specific Stock.</strong></p>
+                                    <p>The challenge for a specific market day is <strong>valid only between the opening and closing of the Daily challenge </strong>and user should complete it within that period in order to be able to claim the reward.</p>
+                                    <p>The status and progress of a particular challenge is shown adjacent to that particular challenge by the following symbols</p>
+                                    <p><img src="./public/src/images/reward.png" style={image_style}></img> : The Challenge has been completed and reward is ready to be claimed. Users should click on the icon to claim the reward.</p>
+                                    <p><img src="./public/src/images/medal.png" style={image_style}/> : The Challenge has been completed and the reward has been claimed.</p>
+                                    <br></br>
+                                    <p><span id="wrong">&#10060;</span> : The Challenge has not been completed and the daily challenges has been closed.</p>
+                                    <br/>
+                                    <p><span>While challenge is open, the current value and the value needed to achieve the challenge will be displayed for users to check their progress. It will either be in green or red showing if the user has reached or has not reached the value.</span></p>
+                                    <p>Daily Challenges are closed at the end of the day.</p>
+                                    </div>
+                                    
                                     <div className="title">
                                         <i className="dropdown icon inverted"></i>
                                         <span className="faq-questions">Help! My account got blocked!</span>
@@ -317,6 +339,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                     <div className="content">
                                     <p>If a user is found breaking the rules of our Code of Conduct, the user will be blocked from playing the game any further. Check out our <strong>Action against Malpractice</strong> section in <strong>Getting Started</strong> for more details. Reach out to us on our forum for any further clarification.</p>
                                     </div>
+                                    
 
                                 </div>
                             </div>

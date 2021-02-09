@@ -2,18 +2,36 @@ import * as React from "react";
 import { MouseEvent } from "react";
 import { Referral } from "../referralcode/ReferralCode"
 import { Metadata } from "grpc-web-client";
+import { GetDailyChallengeConfigRequest } from "../../../proto_build/actions/GetDailyChallengeConfig_pb";
+import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
+
 
 export interface NavProps {
   handleUrlChange: () => void;
   isPhoneVerified: boolean;
   email: string;
   sessionMd: Metadata;
+  isDailyChallengeOpen:boolean;
+}
+export interface NavState{
+	market_day: number,
+	notif: string
 }
 
 declare var $: any;
 
-export class Navbar extends React.Component<NavProps, {}> {
+export class Navbar extends React.Component<NavProps, NavState> {
 	
+	constructor(props: NavProps) {
+		super(props);
+	
+		this.state={
+		  market_day: 0,
+		  notif:""
+		}
+	
+	  }
+
 	handleClick(event: any, newPath: string) {
 		$("#navbar a").removeClass("active");
 		event.currentTarget.className += " active";
@@ -21,10 +39,79 @@ export class Navbar extends React.Component<NavProps, {}> {
 		window.history.pushState({}, "Dalal Street", newPath);
 		//Rerender App and thereby changing appropriate component in Main
 		this.props.handleUrlChange();
+		if(event.currentTarget.dataset.value=="dailyChallenge"){
+			localStorage.setItem("market-day",this.state.market_day.toString());
+			localStorage.setItem("opened","true");
+			this.setState({
+				notif: ""
+			})
+		}
 		
 	}
+	componentDidMount = async()=>{
+	const sessionMd = this.props.sessionMd;
+	const GetDailyChallengeConfigReq = new GetDailyChallengeConfigRequest();
+	try{
+		// Daily challenge notification
+		const resp = await DalalActionService.getDailyChallengeConfig(GetDailyChallengeConfigReq,sessionMd);
+		const market_day = resp.getMarketDay();
+		this.setState({
+			market_day: market_day
+		})
+		if (localStorage.getItem("hasCodeRunBefore") === null) {
+			localStorage.setItem("market-day",market_day.toString())
+			if(this.props.isDailyChallengeOpen){
+				localStorage.setItem("opened","false");
+				this.setState({
+					notif: "new-daily"
+				})
+			}
+			localStorage.setItem("hasCodeRunBefore", "true");
+		}
+		if(this.props.isDailyChallengeOpen){
+			if((localStorage.getItem("market-day")!=market_day.toString())||(localStorage.getItem("opened")=="false")){
+				localStorage.setItem("market-day",market_day.toString());
+				localStorage.setItem("opened","false");
+				this.setState({
+					notif: "new-daily"
+				})
+			}
+		}
 
+	} catch(e){
+		console.log(e);
+	}
+    
+	}
+	componentDidUpdate= async(prevProps:NavProps) =>{
+		
+			if(prevProps.isDailyChallengeOpen!=this.props.isDailyChallengeOpen){
+				const sessionMd = this.props.sessionMd;
+				const GetDailyChallengeConfigReq = new GetDailyChallengeConfigRequest();
+					try{
+						const resp = await DalalActionService.getDailyChallengeConfig(GetDailyChallengeConfigReq,sessionMd);
+						const market_day = resp.getMarketDay();
+						this.setState({
+							market_day: market_day
+						})
+						if(localStorage.getItem("market-day")!=market_day.toString()){
+							localStorage.setItem("market-day",market_day.toString());
+							localStorage.setItem("opened","false");
+							this.setState({
+								notif: "new-daily"
+							})
+						}
+			
+					} catch(e){
+						console.log(e);
+			
+					}
+				}
+		
+	   	}
 	render(){
+		
+		
 		let currentLink: string = window.location.pathname;
 		//If it was initially rendered with some path that should be set to active
         return(
@@ -74,6 +161,10 @@ export class Navbar extends React.Component<NavProps, {}> {
 			<i className="trophy icon"></i>
 			Leaderboard
 		</a>
+		<a data-value="dailyChallenge" className={"item " + (currentLink == "/dailyChallenges" ? "active " : " ") + this.state.notif } id="dailyChallenge" onClick={e => this.handleClick(e, "/dailyChallenges")}>
+			<i className="calendar check icon"></i>
+			Daily Challenges
+		</a>
 		
 		
 		<a className={"item " + (currentLink == "/help" ? "active" : "")} onClick={e => this.handleClick(e, "/help")}>
@@ -88,7 +179,7 @@ export class Navbar extends React.Component<NavProps, {}> {
 
 		<Referral email={this.props.email} sessionMd={this.props.sessionMd!}/>
 
-		<a className={"item " + (currentLink == "/logout" ? "active" : "")} onClick={e => this.handleClick(e, "/logout")}>
+		<a className={"item " + (currentLink == "/logout" ? "active" : "")}  onClick={e => this.handleClick(e, "/logout")}>
 			<i className="window close icon"></i>
 			Logout
 		</a>

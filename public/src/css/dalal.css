@@ -1,11 +1,27 @@
 .green{
 	color:#7DEA63 !important;
 }
+@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
 
 /* styling for Blink */
 .animate {
 	-webkit-animation: background 1s cubic-bezier(1,0,0,1) 1;
 	animation: background 1s cubic-bezier(1,0,0,1) 1;
+}
+.new-daily{
+	-webkit-animation: fade 3s infinite;
+	animation: fade 3s infinite;
+}
+@-webkit-keyframes fade {
+	0% {background-color:grey; }
+	50% {background-color:#1B1C1D;}
+	100% {background-color:grey; }
+}
+
+@keyframes fade {
+	0% {background-color:grey; }
+	50% {background-color:#1B1C1D;}
+	100% {background-color:grey; }
 }
 
 @-webkit-keyframes background {
@@ -1126,3 +1142,243 @@ h1 {
 }
 
 /* Send Notification styling ends here */
+
+#description{
+	margin: 10px;
+}
+
+
+/* Daily Challenges begins here */
+.timeline {
+	width: 90%;
+	height: 100px;
+	max-width: 800px;
+	margin: 0 auto;
+	display: flex;      
+	justify-content: center;  
+	transform: translateY(5px);  
+}  
+.timeline .events {
+	position: relative;
+	background-color: #606060;
+	height: 3px;
+	width: 100%;
+	border-radius: 4px;
+	margin: 5em 0;
+}  
+.timeline .events ol {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+} 
+.timeline .events ul {
+	list-style: none;
+}  
+.timeline .events ul li {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	transform: rotate(-20deg);
+}  
+.timeline .events ul li a {
+	font-family: 'Arapey', sans-serif;
+	font-style: italic;
+	font-size: 1.25em;
+	color:#b1bacc;
+	text-decoration: none;
+	position: relative;
+	top: -32px;
+}  
+.timeline .events ul li a:after {
+	content: '';
+	position: absolute;
+	bottom: -25px;
+	left: 50%;
+	right: auto;
+	height: 20px;
+	width: 20px;
+	border-radius: 50%;
+	border: 3px solid #606060;
+	background-color: #fff;
+	transition: 0.3s ease;
+	transform: translateX(-50%);
+}  
+.timeline .events ul li a:hover::after {
+	background-color: #2ECC40;
+	border-color: #2ECC40;
+}  
+.timeline .events ul li a.selected:after {
+	background-color: #2ECC40;
+	border-color:#2ECC40;
+}			  
+.locked{
+	font-size: 10px;
+	color: white;
+	transform: translateY(-12px);
+}
+.challenge{
+  	background-color: #283e63;
+  	background-color:rgba(0, 0, 0, 0.15);
+  	display: table-cell;
+  	margin: 0px;
+  	vertical-align: middle;
+  	border-bottom: 2px solid black;
+}
+.challenge p{
+	padding-top:25px;
+	padding-bottom:25px;
+	float: left;
+	font-size: 1.35em;
+	color:white;
+	list-style: none;
+}
+.challenge p::before {
+	content: "\2B50";
+	font-weight: bold;
+	display: inline-block; 
+	width: 1.35em;
+	margin-left: 1em;
+	margin-right: 1em;
+}
+.progress{
+  	min-height: 80px;
+  	height:inherit;
+  	text-align: center;
+  	vertical-align: middle;
+	background-color: #232b47;
+ 	background-color: black;
+ 	border-bottom: 2px solid black;
+ 	display: table-cell;
+}
+.content-div{
+	width: 60%;
+	margin: 0 auto;
+}
+#challenge-row{
+	padding:0px;
+	display: flex;
+}
+.timeline-row{
+	background-color: rgba(0, 0, 0, 0.15);
+	min-height: 150px;
+	width: inherit;
+}
+#wrong{
+	font-size: 2em;
+	text-align: center;
+	position:relative;
+	top: calc(50% - 0.3em);
+}
+.reward{
+	font-size: 1.5em;
+	text-align: center;
+	position:relative;
+	top: calc(50% - 0.80em);
+}
+.green-color{
+	background-color: green;
+}
+#top-box{
+	border-radius: 10px;
+	background-color: #1B1C1D;
+	padding-top: 5px;
+	padding-bottom: 5px;	
+}
+.medal-image{
+	height: 50px;
+	width: 50px;
+	margin-top:17px ;
+}
+.open-image{
+	height:70px;
+	width:70px;
+	-moz-animation: blink normal 2s infinite ease-in-out; 
+    -webkit-animation: blink normal 2s infinite ease-in-out;
+    -ms-animation: blink normal 2s infinite ease-in-out;
+    animation: blink normal 2s infinite ease-in-out;
+}
+.open-image:hover{
+	cursor: pointer;
+}
+@-moz-keyframes blink {
+    0% {
+        opacity:1;
+    }
+    50% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+} 
+@-webkit-keyframes blink {
+    0% {
+        opacity:1;
+    }
+    50% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+}
+@-ms-keyframes blink {
+    0% {
+        opacity:1;
+    }
+    50% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+} 
+@keyframes blink {
+    0% {
+        opacity:1;
+    }
+    50% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+} 
+.amount{
+	color: #7DEA63;
+	font-size: 1.35em;
+	padding-top: 0.85em;
+	font-weight: 900;
+	float: left;
+	
+}
+.amount p{
+	padding-top: 28px;
+	word-break: break-all;
+}
+.column-info{
+	color: white;
+	font-size: 1.35em;
+	padding: 5px;
+	background-color: black;
+	font-weight: bold;
+	line-height: 2px;
+	
+}
+.column-info p{
+	padding: 5px;
+}
+.head{
+	margin-bottom: 30px;
+}
+#column-info{
+	padding:15px;
+}
+#faq-image{
+	height: 40px;
+	width: 40px;
+	border: none;
+}
+.content-div .disclaimer-footer{
+	margin-top: 30px;
+}

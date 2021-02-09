@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Metadata } from "grpc-web-client";
-import { SendNewsRequest } from "../../../proto_build/actions/SendNews_pb";
 import { SendDividendsRequest } from "../../../proto_build/actions/SendDividends_pb";
 import { CloseMarketRequest } from "../../../proto_build/actions/CloseMarket_pb";
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
@@ -8,6 +7,7 @@ import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { Dividend } from "./Dividend";
 import { Notifications } from "./Notification";
 import { showNotif, showErrorNotif, isPositiveInteger, closeNotifs } from "../../utils";
+import { AddDailyChallenge } from "./AddDailyChallenge";
 import { MarketState } from "./MarketState";
 import { MarketEvent } from "./MarketEvent";
 import { Bankruptcy } from "./Bankruptcy";
@@ -19,6 +19,7 @@ import { UnBlockUser } from "./UnBlockUser";
 import { UnBlockAllUsers } from "./UnBlockAllUsers"
 import { UpdateStockPrice } from "./UpdateStockPrice";
 import { UpdateEndOfDayValues } from "./updateEndOfdayValues";
+import {DailyChallengeState} from "../admin/DailyChallengeState";
 
 type NumNumMap = { [index: number]: number };
 
@@ -26,7 +27,8 @@ export interface AdminProps {
     sessionMd: Metadata,
     stockBriefInfoMap: { [index: number]: StockBriefInfo }, // get stock detail for a given stockid
     stockPricesMap: NumNumMap,
-    isMarketOpen: boolean
+    isMarketOpen: boolean,
+    isDailyChallengeOpen: boolean
 }
 
 interface AdminState {
@@ -194,6 +196,24 @@ export class Admin extends React.Component<AdminProps, AdminState> {
                                         sessionMd={this.props.sessionMd}
                                     />
                                 </td>
+                            </tr>
+                            <tr>
+                                <AddDailyChallenge
+                                        sessionMd={this.props.sessionMd}
+                                />
+                            </tr>
+                            <tr>
+                                <td>
+                                <DailyChallengeState
+                                sessionMd={this.props.sessionMd}
+                                isDailyChallengeOpen={this.props.isDailyChallengeOpen}
+
+                                />
+                                </td>
+                                <td>
+                                    
+                                </td>
+                                
                             </tr>
                         </tbody>
                     </table>

@@ -83,6 +83,18 @@
   #intro-div .container.\37 5\25 {
     width: 36em;
   }
+  .column-info{
+    font-size: 1em;  
+  }
+  .amount{
+    font-size: 1em;
+  }
+  .challenge p::before {
+    font-size: 1em;
+  }
+  .challenge p{
+    font-size: 1em;
+  }
 }
 @media screen and (max-width: 980px) {
   #intro-div .container {
@@ -91,6 +103,34 @@
   #intro-div .container.\37 5\25 {
     width: 71.25%;
   }
+  .challenge p::before {
+    font-size: 0.8em;
+  }
+  .challenge p{
+    font-size: 0.9em;
+  }
+  .amount{
+    font-size: 0.9em;
+  }
+}
+@media screen and (max-width:1171px){
+  
+  .content-div{
+    overflow: hidden;
+  }
+  .timeline .events ul li a {
+    font-size: 0.9em;
+  }
+  .timeline .events ul li a:after{
+    height: 18px;
+	  width: 18px;
+    transform: translateX(-40%);
+  }
+  .timeline .events ul li i{
+    font-size: 1.25em;
+    
+  }
+
 }
 @media screen and (max-width: 840px) {
   #intro-div .container {
@@ -99,6 +139,19 @@
   #intro-div .container.\37 5\25 {
     width: 71.25%;
   }
+  .column-info{
+    font-size: 0.85em;  
+  }
+  .amount{
+    font-size: 0.85em;
+  }
+  .challenge p::before {
+    font-size: 0.85em;
+  }
+  .challenge p{
+    font-size: 0.85em;
+  }
+  
 }
 @media screen and (max-width: 736px) {
   #intro-div .container {
@@ -106,6 +159,29 @@
   }
   #intro-div .container.\37 5\25 {
     width: 67.5%;
+  }
+  .timeline .events ul li a {
+    font-size: 0.65em;
+  }
+  .timeline .events ul li a:after{
+    height: 15px;
+	  width: 15px;
+    transform: translateX(-40%);
+  }
+  .timeline .events ul li i{
+    font-size: 1em; 
+  }
+  .amount{
+    font-size: 0.6em;
+  }
+  
+}
+@media screen and (max-width: 610px){
+  .timeline .events ul li a {
+    white-space: nowrap;
+  }
+  .amount{
+    white-space: nowrap;
   }
 }
 @media screen and (max-width: 480px) {
