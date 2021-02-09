@@ -116,7 +116,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                 {!entry.getIsBlocked() && <td><strong>{entry.getUserName()}</strong></td>}
                 <td><strong>{addCommas(entry.getCash())}</strong></td>
                 <td className={!entry.getIsBlocked()?(entry.getStockWorth() >= 0 ? "green" : "red"): (entry.getStockWorth() >= 0 ? "leaderboard-blocked-cell-green": "leaderboard-blocked-cell-red")}><strong>{addCommas(entry.getStockWorth())}</strong></td>
-                <td className={!entry.getIsBlocked()?"green": "leaderboard-blocked-cell-green"}><strong>{addCommas(entry.getTotalWorth())}</strong></td>
+                <td className={!entry.getIsBlocked()?(entry.getTotalWorth() >= 0 ? "green" : "red"): (entry.getTotalWorth() >= 0 ? "leaderboard-blocked-cell-green": "leaderboard-blocked-cell-red")}><strong>{addCommas(entry.getTotalWorth())}</strong></td>
             </tr>
         ));
 
