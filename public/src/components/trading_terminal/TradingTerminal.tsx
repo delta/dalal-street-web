@@ -310,7 +310,6 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 
   componentDidMount() {
     if (!localStorage.getItem("first_time_dalal")) return;
-    else if (isDevServer()) $("#pushNotifModal").modal("show");
     else if (
       !localStorage.getItem("dalal_push_notif") ||
       window.Notification.permission != "default"
