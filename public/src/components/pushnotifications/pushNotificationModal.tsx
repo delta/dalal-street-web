@@ -15,6 +15,7 @@ interface PushNotificationProps {
 class PushNotificationModal extends React.Component<PushNotificationProps, {}> {
   handleAccept = async () => {
     const resp = await askUserPermission();
+    localStorage.setItem("dalal_push_notif", "yes");
     if (resp === "granted") {
       console.log("registered");
       await register({ scope: "/" });

@@ -311,8 +311,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
   componentDidMount() {
     if (!localStorage.getItem("first_time_dalal")) return;
     else if (
-      !localStorage.getItem("dalal_push_notif") ||
-      window.Notification.permission != "default"
+      !localStorage.getItem("dalal_push_notif")
     ) {
       $("#pushNotifModal").modal("show");
     }
@@ -400,6 +399,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 							stockPricesMap={this.state.stockPricesMap}
 							handleStockIdCallback={this.handleStockIdChange}
 							defaultStock={this.state.currentStockId} />
+						<PushNotificationModal sessionMd={this.props.sessionMd} />
 					</div>
 
 					<TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} userStockWorth={this.props.userStockWorth} isMarketOpen={this.props.isMarketOpen} isBlocked={this.props.isBlocked} />
@@ -435,7 +435,6 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					</div>
 					{this.props.disclaimerElement}
 				</div>
-				<PushNotificationModal sessionMd={this.props.sessionMd} />
 			</Fragment>
 		);
 	}
