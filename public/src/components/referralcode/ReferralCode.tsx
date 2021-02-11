@@ -76,7 +76,7 @@ class Referral extends React.Component<ReferralProps, ReferralState> {
   render() {
     return (
       <React.Fragment>
-        <a className={"item"} onClick={() => this.showReferralCode()}>
+        <a className={"referral-code item"} onClick={() => this.showReferralCode()}>
           <i className="user plus icon"></i>
           Referral-Code
         </a>

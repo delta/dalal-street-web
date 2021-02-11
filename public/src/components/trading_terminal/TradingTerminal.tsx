@@ -179,6 +179,17 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					title: 'Help'
 				},
 				{
+					content: "Share the referral-code with your friends for extra in-game credits.",
+					placement: 'right',
+					styles: {
+					  options: {
+
+					  }
+					},
+					target: '.user.plus',
+					title: 'Referral Code'
+				},
+				{
 					content: (
 					  <React.Fragment>
 						<h3>Doing great so far!</h3>
