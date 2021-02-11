@@ -4,6 +4,7 @@ import {
   register,
   isDevServer,
   createNotificationSubscription,
+  setVAPIDPublicKey,
 } from "./pushnotifications";
 import { showErrorNotif } from "../../utils";
 import { Metadata } from "grpc-web-client";
@@ -11,6 +12,7 @@ import { AddUserSubscriptionRequest } from "../../../proto_build/actions/AddUser
 import { DalalActionService } from "../../../proto_build/DalalMessage_pb_service";
 interface PushNotificationProps {
   sessionMd: Metadata;
+  vapidPublicKey: string;
 }
 class PushNotificationModal extends React.Component<PushNotificationProps, {}> {
   handleAccept = async () => {
@@ -48,6 +50,10 @@ class PushNotificationModal extends React.Component<PushNotificationProps, {}> {
       );
     }
   };
+
+  componentDidMount() {
+    setVAPIDPublicKey(this.props.vapidPublicKey);
+  }
 
   render() {
     return (

@@ -1,7 +1,6 @@
 const localHostTester = /^localhost$|^(0.0.0.0)$|^(?:0*\:)*?:?0*1$/g; // check if react is running in dev environment
 const isLocalHost = localHostTester.test(window.location.hostname);
-const pushServerPublicKey =
-  "BLbkCsOGo6wNvFK4bf3EuV13jinglnLPydQs7TAZwl7qaEPG29Kk_BaQFeFrXOK6wQCC8Y-pymeaUW3wuHwihtQ";
+let pushServerPublicKey = "";
 
 /**
  * asks user consent to receive push notifications and returns the response of the user, one of granted, default, denied
@@ -16,6 +15,15 @@ async function askUserPermission() {
  */
 function isDevServer(): boolean {
   return isLocalHost ? true : false;
+}
+
+/**
+ * Sets the Public VAPID key info, acquired from the user
+ * @param publicKey VAPID Public key received from the server
+ */
+function setVAPIDPublicKey(publicKey: string) {
+  pushServerPublicKey = publicKey;
+  return;
 }
 
 /**
@@ -193,4 +201,5 @@ export {
   getUserSubscription,
   isDevServer,
   createNotificationSubscription,
+  setVAPIDPublicKey,
 };

@@ -48,6 +48,7 @@ interface AppState {
 	isBlocked: boolean
 	isPhoneVerified: boolean
 	isDailyChallengeOpen: boolean
+	vapidPublicKey: string
 }
 
 export class App extends React.Component<{}, AppState> {
@@ -73,7 +74,8 @@ export class App extends React.Component<{}, AppState> {
 			isMarketOpen: false,
 			isPhoneVerified: false,
 			isBlocked: false,
-			isDailyChallengeOpen:false
+			isDailyChallengeOpen:false,
+			vapidPublicKey: ""
 		};
 	}
 
@@ -165,6 +167,7 @@ export class App extends React.Component<{}, AppState> {
 			constantsMap[name] = value;
 		});
 		const user = resp.getUser();
+		const vapidPublicKey = resp.getVapidPublicKey();
 		this.setState({
 			isLoggedIn: true,
 			isLoading: true,
@@ -178,6 +181,7 @@ export class App extends React.Component<{}, AppState> {
 			isMarketOpen: resp.getIsMarketOpen(),
 			isPhoneVerified: (user)?user.getIsPhoneVerified():false,
 			isBlocked: (user)?user.getIsBlocked():false,
+			vapidPublicKey: vapidPublicKey
 		});
 	
 		const shouldRedirect = ["", "/", "/login", "/register", "/home"].indexOf(window.location.pathname) != -1;
@@ -374,6 +378,7 @@ export class App extends React.Component<{}, AppState> {
 							isPhoneVerified={this.state.isPhoneVerified}
 							changeStockDetailsMapCallBack={this.changeStockDetailsMap}
 							isBlocked={this.state.isBlocked}
+							vapidPublicKey={this.state.vapidPublicKey}
 							updateUserBlocked={this.updateUserBlocked}
 							dailyChallengeNotif={this.updateDailyChallengeForNotif}
 						/>

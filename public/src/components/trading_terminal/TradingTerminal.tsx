@@ -48,7 +48,9 @@ export interface TradingTerminalProps {
 
 	isMarketOpen: boolean
 	isBlocked: boolean
-   
+	
+	vapidPublicKey: string
+	
 	disclaimerElement: JSX.Element
 }
 
@@ -399,7 +401,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 							stockPricesMap={this.state.stockPricesMap}
 							handleStockIdCallback={this.handleStockIdChange}
 							defaultStock={this.state.currentStockId} />
-						<PushNotificationModal sessionMd={this.props.sessionMd} />
+						<PushNotificationModal sessionMd={this.props.sessionMd} vapidPublicKey={this.props.vapidPublicKey} />
 					</div>
 
 					<TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} userStockWorth={this.props.userStockWorth} isMarketOpen={this.props.isMarketOpen} isBlocked={this.props.isBlocked} />
