@@ -13,7 +13,8 @@ module.exports = {
   entry: ["babel-polyfill", "./public/src/index.tsx"],
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    publicPath: "./public/assets"
   },
   //devtool: 'inline-source-map', -> this guy bloats the size of bundle.js a heck lot.
   // commented out till required
@@ -43,6 +44,9 @@ module.exports = {
   },
   plugins: [
       new webpack.optimize.AggressiveMergingPlugin(),
+      new webpack.DefinePlugin({
+        'process.env.ASSET_PATH': JSON.stringify('./public/assets'),
+      }),
     ],
   resolve: {
     extensions: [".ts", ".tsx", ".js"]
@@ -52,6 +56,9 @@ module.exports = {
     "react-dom": "ReactDOM"
   },
   devServer: {
-    historyApiFallback: true
+    historyApiFallback: true,
+    headers: {
+      "Service-Worker-Allowed" : "/"
+    }
   },
 };

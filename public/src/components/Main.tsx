@@ -45,6 +45,9 @@ export interface MainProps {
     isMarketOpen: 				boolean
     isPhoneVerified:            boolean
     isBlocked:                  boolean
+
+    vapidPublicKey:             string
+
     changeStockDetailsMapCallBack: (stockDetailsMap: { [index: number]: Stock_pb }) => void
     updateUserBlocked: (blockedStatus: boolean) => void
     dailyChallengeNotif: (status:boolean)=> void
@@ -652,6 +655,7 @@ export class Main extends React.Component<MainProps, MainState> {
                     isMarketOpen={this.state.isMarketOpen}
                     isBlocked={this.props.isBlocked}
                     disclaimerElement={this.disclaimerElement}
+                    vapidPublicKey={this.props.vapidPublicKey}
                 />
             case "/portfolio":
                 return <Portfolio

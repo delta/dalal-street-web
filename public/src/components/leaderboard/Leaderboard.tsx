@@ -34,6 +34,8 @@ interface LeaderboardState {
     leaderboardEntries: LeaderboardRow_pb[],
     userRank: number,
     leaderboardType: leaderboardType, // overall || daily
+    offset: number,
+    isLeaderBoardUptoDate: boolean
 }
 
 export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
@@ -44,23 +46,25 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
             totalPages: 1,
             leaderboardEntries: [],
             userRank: 0,
-            leaderboardType: "overall"
+            leaderboardType: "overall",
+            offset: 1,
+            isLeaderBoardUptoDate: true,
         };
     }
 
     componentDidMount() {
         $("#leaderboard .box").popup();
-        this.getLeaderboard(1);
+        this.getLeaderboard();
     }
 
-    getLeaderboard = async (offset: number) => {
+    getLeaderboard = async () => {
         // No idea why this is required but react-paginate breaks if you change state while it's state change is happening
         // this.setState({
         //     isLoading: true,
         // });
         
         const leaderboardRequest = new GetLeaderboardRequest();
-        leaderboardRequest.setStartingId(offset);
+        leaderboardRequest.setStartingId(this.state.offset);
         leaderboardRequest.setCount(this.props.leaderboardCount);
         
         try {
@@ -79,6 +83,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                     userRank: resp.getMyRank(),
                 });
             }
+            this.updateLeaderboardCountdown()
             }
             catch (e) {
                 // error could be grpc error or Dalal error. Both handled in exception
@@ -90,8 +95,10 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
     handlePageChange = async (data: any) => {
         const startPage = data.selected as number;
         const offset = startPage * this.props.leaderboardCount + 1;
-
-        await this.getLeaderboard(offset);
+        this.setState({ offset }, async () => {
+            // making sure the offset has been updated before calling update leaderboard
+            await this.getLeaderboard()
+        })
     }
 
     handleChangeLeaderBoardType = (type: leaderboardType) => {
@@ -102,8 +109,21 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
         if(prevState.leaderboardType != this.state.leaderboardType)
         {
             // if the type of leaderboard has been changed, fetch from server again
-            this.getLeaderboard(1);
+            this.setState({ offset: 1 }, async () => {
+                await this.getLeaderboard()
+            })
         }
+    }
+
+    updateLeaderboardCountdown= () => {
+        this.setState({ isLeaderBoardUptoDate : true });
+        setTimeout(() => {
+            this.setState({ isLeaderBoardUptoDate : false });
+        }, 2 * 60  * 1000)
+    }
+
+    refreshLeaderBoard() {
+        this.getLeaderboard()
     }
 
     render() {
@@ -116,7 +136,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                 {!entry.getIsBlocked() && <td><strong>{entry.getUserName()}</strong></td>}
                 <td><strong>{addCommas(entry.getCash())}</strong></td>
                 <td className={!entry.getIsBlocked()?(entry.getStockWorth() >= 0 ? "green" : "red"): (entry.getStockWorth() >= 0 ? "leaderboard-blocked-cell-green": "leaderboard-blocked-cell-red")}><strong>{addCommas(entry.getStockWorth())}</strong></td>
-                <td className={!entry.getIsBlocked()?"green": "leaderboard-blocked-cell-green"}><strong>{addCommas(entry.getTotalWorth())}</strong></td>
+                <td className={!entry.getIsBlocked()?(entry.getTotalWorth() >= 0 ? "green" : "red"): (entry.getTotalWorth() >= 0 ? "leaderboard-blocked-cell-green": "leaderboard-blocked-cell-red")}><strong>{addCommas(entry.getTotalWorth())}</strong></td>
             </tr>
         ));
 
@@ -164,7 +184,13 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                         </div>
                         <div className="six wide column">
                             <div className="ui small right aligned header inverted">
-                                Leaderboard will be updated every 2 minutes
+                            {
+                                this.state.isLeaderBoardUptoDate ? (
+                                "Leaderboard will be updated every 2 minutes"
+                                ) : (
+                                <button className="ui inverted yellow button">
+                                    <i className="refresh icon"></i>Refresh Leaderboard</button>
+                            )}
                             </div>
                         </div>
                         <div className="one wide column"></div>

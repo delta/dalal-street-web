@@ -13,6 +13,8 @@ import { Charts } from "./charts/Charts";
 import { Fragment } from "react";
 import ReactJoyride, { STATUS, StoreState, Step, EVENTS, ACTIONS } from 'react-joyride';
 import { StockBankruptState } from "../../../proto_build/models/GameState_pb";
+import {PushNotificationModal } from "../pushnotifications/pushNotificationModal";
+import { isDevServer } from "../pushnotifications/pushnotifications";
 
 export type StockBriefInfo = {
 	id: number
@@ -24,6 +26,7 @@ export type StockBriefInfo = {
 }
 
 type NumNumMap = { [index: number]: number };
+declare var $ : any;
 
 export interface TradingTerminalProps {
 	sessionMd: Metadata,
@@ -45,7 +48,9 @@ export interface TradingTerminalProps {
 
 	isMarketOpen: boolean
 	isBlocked: boolean
-   
+	
+	vapidPublicKey: string
+	
 	disclaimerElement: JSX.Element
 }
 
@@ -172,6 +177,17 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 					},
 					target: '.help',
 					title: 'Help'
+				},
+				{
+					content: "Share the referral-code with your friends for extra in-game credits.",
+					placement: 'right',
+					styles: {
+					  options: {
+
+					  }
+					},
+					target: '.user.plus',
+					title: 'Referral Code'
 				},
 				{
 					content: (
@@ -305,6 +321,15 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 		};
 	}
 
+  componentDidMount() {
+    if (!localStorage.getItem("first_time_dalal")) return;
+    else if (
+      !localStorage.getItem("dalal_push_notif")
+    ) {
+      $("#pushNotifModal").modal("show");
+    }
+  }
+
 	handleClickOpen = () => {
     const { stepIndex } = this.state;
 
@@ -345,6 +370,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 		const { action, status, type, index } = data;
 		if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
 		  localStorage.setItem("first_time_dalal",  "yeah");
+			$("#pushNotifModal").modal("show");
 		}
 		else if([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND].includes(type)){
 			const stepIndex = index + (action === ACTIONS.PREV ? -1 : 1);
@@ -386,6 +412,7 @@ export class TradingTerminal extends React.Component<TradingTerminalProps, Tradi
 							stockPricesMap={this.state.stockPricesMap}
 							handleStockIdCallback={this.handleStockIdChange}
 							defaultStock={this.state.currentStockId} />
+						<PushNotificationModal sessionMd={this.props.sessionMd} vapidPublicKey={this.props.vapidPublicKey} />
 					</div>
 
 					<TinyNetworth userCash={this.props.userCash} userReservedCash={this.props.userReservedCash} userReservedStocksWorth={this.props.reservedStocksWorth} userTotal={this.props.userTotal} connectionStatus={this.props.connectionStatus} userStockWorth={this.props.userStockWorth} isMarketOpen={this.props.isMarketOpen} isBlocked={this.props.isBlocked} />
