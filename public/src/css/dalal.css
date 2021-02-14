@@ -1382,3 +1382,47 @@ h1 {
 .content-div .disclaimer-footer{
 	margin-top: 30px;
 }
+
+
+.admin-panel.content1 {
+	width: 60%;
+	/* background-color: #2f323d !important; */
+	border: solid 0.2px whitesmoke;
+	margin-top: 1.5rem;
+	margin-bottom: 2rem;
+}
+
+.admin-panel.content2 {
+	width: 75%;
+	/* background-color: #2f323d !important; */
+	border: solid 0.2px whitesmoke;
+	margin-top: 1.5rem;
+}
+
+.admin-panel.content3 {
+	width: 100%;
+	/* background-color: #2f323d !important; */
+	border: solid 0.2px whitesmoke;
+	margin-top: 1.5rem;
+	margin-bottom: 2rem;
+}
+
+#admin-panel .ui.secondary.pointing.menu .active.item {
+	border-color: aliceblue;
+	background: #1B1C1D;
+}
+
+#admin-panel > div > div > .ui.bottom.attached.tab.inverted.segment {
+	margin-top: 2rem;
+	font-size: 1.5rem;
+	font-weight: 500;
+}
+
+#admin-panel .item {
+	font-size: 1.1rem;
+	color: #979dac !important;
+}
+
+#admin-panel .item.active {
+	color: black;
+}

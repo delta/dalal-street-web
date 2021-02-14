@@ -123,6 +123,8 @@ export class AddDailyChallenge extends React.Component<AddDailyChallengeProps, A
                                 </tr>
                                 <input type="integer" className="notify-text" id="reward" placeholder="0" />
                             </td>
+                        </tr>
+                        <tr>
                             <td>
                                 <input type="button" className="ui inverted green button" onClick={this.setDailyChallenge} value="Add Daily Challenge" />
                             </td>
