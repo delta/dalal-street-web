@@ -124,7 +124,7 @@ export class Admin extends React.Component<AdminProps, AdminState> {
 						<div id="context1" style={{ width: "85%", margin: "1rem" }}>
 							<div className="ui pointing secondary menu">
 								<a className="item active" data-tab="first">
-									Stonks
+									Stocks
 								</a>
 								<a className="item" data-tab="second">
 									Daily Market
