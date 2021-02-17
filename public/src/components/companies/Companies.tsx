@@ -7,6 +7,12 @@ import { StockBriefInfo } from "../trading_terminal/TradingTerminal";
 import { SearchBar } from "../trading_terminal/SearchBar";
 import { CompanyDetails } from "./CompanyDetails";
 import { Fragment } from "react";
+import { GetMarketEventsRequest, GetMarketEventsResponse } from "../../../proto_build/actions/GetMarketEvents_pb";
+import { DalalActionService, DalalStreamService } from "../../../proto_build/DalalMessage_pb_service";
+import { MarketEvent } from "../../../proto_build/models/MarketEvent_pb";
+import { subscribe, unsubscribe } from "../../../src/streamsutil";
+import { SubscriptionId } from "../../../proto_build/datastreams/Subscribe_pb";
+import { NewsComponent } from "../news/NewsComponent";
 
 export interface CompanyProps {
     userCash: number,
@@ -27,6 +33,9 @@ export interface CompanyProps {
 interface CompanyState {
     currentStockId: number,
     currentPrice: number,
+    newsArray: MarketEvent[],
+    subscriptionId: SubscriptionId,
+    lastFetchedNewsId: number,
 }
 
 export class Company extends React.Component<CompanyProps, CompanyState> {
@@ -46,13 +55,67 @@ export class Company extends React.Component<CompanyProps, CompanyState> {
 			currentStockId= NaN;
 		}
         this.state = {
+            newsArray: [],
+            subscriptionId: new SubscriptionId,
+            lastFetchedNewsId: 0,
             currentStockId: currentStockId,
             currentPrice: props.stockPricesMap[currentStockId],
         };
     }
 
-    componentDidMount() {
+    getOldNews = async () => {
+            const req = new GetMarketEventsRequest();
+            req.setLastEventId(this.state.lastFetchedNewsId);
+            req.setCount(10000);
+            try {
+                let resp = await DalalActionService.getMarketEvents(req, this.props.sessionMd);
+                const nextId = resp.getMarketEventsList().slice(-1)[0].getId() - 1;
+                let updatedNews = this.state.newsArray.slice();
+                console.log("Current stock id " + this.state.currentStockId)
+                updatedNews.push(...resp.getMarketEventsList());
+                let CompanySpecificNews = updatedNews.filter((news)=>{
+                    return news.getStockId() == this.state.currentStockId
+                })
+                console.log("Array: "+CompanySpecificNews)
+                this.setState({
+                    newsArray: CompanySpecificNews,
+                    lastFetchedNewsId: nextId,
+                });
+            } catch (e) {
+                // error could be grpc error or Dalal error. Both handled in exception
+                console.log("Error happened! ", e.statusCode, e.statusMessage, e);
+            }
+    }
+    getNewNews = async () => {
+        const subscriptionId = await subscribe(this.props.sessionMd, 5);
 
+        this.setState({
+            subscriptionId: subscriptionId,
+        });
+
+        const newsRequest = await DalalStreamService.getMarketEventUpdates(subscriptionId, this.props.sessionMd);
+
+        let newsData = this.state.newsArray.slice();
+
+        for await (const update of newsRequest) {
+            let newsUpdate = update.getMarketEvent()!;
+            if(newsUpdate.getStockId()==this.state.currentStockId){
+                newsData.unshift(newsUpdate);
+        
+                this.setState({
+                    newsArray: newsData,
+                });
+            }
+           
+        }
+    }
+    componentDidMount() {
+        this.getOldNews();
+        this.getNewNews();
+    }
+
+    componentWillUnmount() {
+        unsubscribe(this.props.sessionMd, this.state.subscriptionId);
     }
 
     // child will affect the current stock id
@@ -61,9 +124,16 @@ export class Company extends React.Component<CompanyProps, CompanyState> {
             currentStockId: newStockId,
             currentPrice: this.props.stockPricesMap[newStockId],
         });
+        this.getOldNews();
     };
 
     render() {
+        const newsArray = this.state.newsArray;
+        const news = newsArray.map((entry, index) => (
+            <div className="four wide column box no-padding">
+                <NewsComponent key={index} newsDetail={entry} />
+            </div>
+        ));
         return (
             <Fragment>
                 <div className="row" id="top_bar">
@@ -86,9 +156,12 @@ export class Company extends React.Component<CompanyProps, CompanyState> {
                         currentStockId={this.state.currentStockId}
                         currentPrice={this.state.currentPrice}
                     />
+                    <div className="row" style={{margin: "3rem"}}>
+                        {news}
+                    </div>
                     {this.props.disclaimerElement}
                 </div>
             </Fragment>
-        );
+        ); 
     }
 }
