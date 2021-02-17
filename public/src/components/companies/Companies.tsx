@@ -66,17 +66,15 @@ export class Company extends React.Component<CompanyProps, CompanyState> {
     getOldNews = async () => {
             const req = new GetMarketEventsRequest();
             req.setLastEventId(this.state.lastFetchedNewsId);
-            req.setCount(10000);
+            req.setCount(10000); //Set a large number as I'm fetching all the news rather than giving market_event_count constant
             try {
                 let resp = await DalalActionService.getMarketEvents(req, this.props.sessionMd);
                 const nextId = resp.getMarketEventsList().slice(-1)[0].getId() - 1;
                 let updatedNews = this.state.newsArray.slice();
-                console.log("Current stock id " + this.state.currentStockId)
                 updatedNews.push(...resp.getMarketEventsList());
                 let CompanySpecificNews = updatedNews.filter((news)=>{
                     return news.getStockId() == this.state.currentStockId
                 })
-                console.log("Array: "+CompanySpecificNews)
                 this.setState({
                     newsArray: CompanySpecificNews,
                     lastFetchedNewsId: nextId,
