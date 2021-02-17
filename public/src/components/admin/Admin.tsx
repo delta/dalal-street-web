@@ -23,6 +23,7 @@ import {DailyChallengeState} from "../admin/DailyChallengeState";
 
 type NumNumMap = { [index: number]: number };
 
+declare var $: any;
 export interface AdminProps {
     sessionMd: Metadata,
     stockBriefInfoMap: { [index: number]: StockBriefInfo }, // get stock detail for a given stockid
@@ -104,121 +105,269 @@ export class Admin extends React.Component<AdminProps, AdminState> {
         } catch (e) {
             console.log(e);
         }
-    }
+		}
+		
+		componentDidMount() {
+			$('#context1 .menu .item')
+			.tab({
+				context: $('#context1')
+			});
+		}
+
     render() {
         return (
-            <React.Fragment>
-                <div id="admin-panel" className="main-container ui stackable grid pusher">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td className="dividendPanel">
-                                    <Dividend
-                                        sessionMd={this.props.sessionMd}
-                                        stockBriefInfoMap={this.props.stockBriefInfoMap}
-                                        currentStockId={this.state.currentStockId}
-                                        dividendAmount={this.state.dividendAmount}
-                                        handleStockIdChangeCallback={this.handleStockIdChange}
-                                        handleDividendAmountChangeCallback={this.handleDividendAmountChange}
-                                        applyDividendCallback={this.applyDividend}
-                                    />
-                                </td>
-                                <td className="marketStatus">
-                                    <MarketState
-                                        sessionMd={this.props.sessionMd}
-                                        isMarketOpen={this.props.isMarketOpen}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <Notifications sessionMd={this.props.sessionMd} />
-                                </td>
-                                <td>
-                                    <MarketEvent
-                                        sessionMd={this.props.sessionMd}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <Bankruptcy
-                                        stockBriefInfoMap={this.props.stockBriefInfoMap}
-                                        sessionMd={this.props.sessionMd}
-                                    />
-                                </td>
-                                <td>
-                                    <SetDividends
-                                        sessionMd={this.props.sessionMd}
-                                        stockBriefInfoMap={this.props.stockBriefInfoMap}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <BlockUser
-                                        sessionMd={this.props.sessionMd}
-                                    />
-                                </td>
-                                <td>
-                                    <UnBlockUser
-                                        sessionMd={this.props.sessionMd}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                <UnBlockAllUsers
-                                    sessionMd={this.props.sessionMd}
-                                    />
-                                </td>
-                                <td>
-                                <UpdateEndOfDayValues 
-                                    sessionMd={this.props.sessionMd} 
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <AddStocksToExchange
-                                        sessionMd={this.props.sessionMd}
-                                    />
-                                </td>
-                                <td>
-                                    <UpdateStockPrice
-                                        sessionMd={this.props.sessionMd}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <InspectUser
-                                        sessionMd={this.props.sessionMd}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <AddDailyChallenge
-                                        sessionMd={this.props.sessionMd}
-                                />
-                            </tr>
-                            <tr>
-                                <td>
-                                <DailyChallengeState
-                                sessionMd={this.props.sessionMd}
-                                isDailyChallengeOpen={this.props.isDailyChallengeOpen}
-
-                                />
-                                </td>
-                                <td>
-                                    
-                                </td>
-                                
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </React.Fragment>
+					<React.Fragment>
+					<div
+						id="admin-panel"
+						className="main-container ui stackable grid pusher"
+					>
+						<div id="context1" style={{ width: "85%", margin: "1rem" }}>
+							<div className="ui pointing secondary menu">
+								<a className="item active" data-tab="first">
+									Stocks
+								</a>
+								<a className="item" data-tab="second">
+									Daily Market
+								</a>
+								<a className="item" data-tab="third">
+									User Specific
+								</a>
+							</div>
+							<div className="ui tab inverted segment active" data-tab="first">
+								<div className="ui top attached tabular menu">
+									<a className="active item" data-tab="first/a">
+										Bankruptcy
+									</a>
+									<a className="item" data-tab="first/b">
+										Stock Price
+									</a>
+									<a className="item" data-tab="first/c">
+										Stock Exchange
+									</a>
+									<a className="item" data-tab="first/d">
+										Dividends
+									</a>
+									<a className="item" data-tab="first/e">
+										News
+									</a>
+								</div>
+								{/* start of BANKRUPTCY */}
+								<div
+									className="ui bottom attached active tab inverted segment"
+									data-tab="first/a"
+								>
+									Set and unset Bankruptcy of Companies.
+									<div className="admin-panel content1">
+										<Bankruptcy
+											stockBriefInfoMap={this.props.stockBriefInfoMap}
+											sessionMd={this.props.sessionMd}
+										/>
+									</div>
+								</div>
+								{/* end of BANKRUPTCY */}
+	
+								{/* start of STOCK PRICE */}
+								<div
+									className="ui bottom attached tab inverted segment"
+									data-tab="first/b"
+								>
+									Update the stock price of a company
+									<div className="admin-panel content1">
+										<UpdateStockPrice sessionMd={this.props.sessionMd} />
+									</div>
+								</div>
+								{/* end of STOCK PRICE */}
+	
+								{/* start of STOCK EXCHANGE */}
+								<div
+									className="ui bottom attached tab inverted segment"
+									data-tab="first/c"
+								>
+									Add stocks to exchange
+									<div className="admin-panel content1">
+										<AddStocksToExchange sessionMd={this.props.sessionMd} />
+									</div>
+								</div>
+								{/* end of STOCK EXCHANGE */}
+								{/* start of DIVIDENDS */}
+								<div
+									className="ui bottom attached tab inverted segment"
+									data-tab="first/d"
+								>
+									Add Dividends
+									<div className="admin-panel content1">
+										<Dividend
+											sessionMd={this.props.sessionMd}
+											stockBriefInfoMap={this.props.stockBriefInfoMap}
+											currentStockId={this.state.currentStockId}
+											dividendAmount={this.state.dividendAmount}
+											handleStockIdChangeCallback={this.handleStockIdChange}
+											handleDividendAmountChangeCallback={
+												this.handleDividendAmountChange
+											}
+											applyDividendCallback={this.applyDividend}
+										/>
+									</div>
+									Set Dividends
+									<div className="admin-panel content1">
+										<SetDividends
+											sessionMd={this.props.sessionMd}
+											stockBriefInfoMap={this.props.stockBriefInfoMap}
+										/>
+									</div>
+								</div>
+								{/* end of DIVIDENDS */}
+								{/* start of NEWS */}
+								<div
+									className="ui bottom attached tab inverted segment"
+									data-tab="first/e"
+								>
+									News
+									<div className="admin-panel content2">
+										<MarketEvent sessionMd={this.props.sessionMd} />
+									</div>
+								</div>
+								{/* end of NEWS */}
+							</div>
+							<div className="ui tab inverted segment" data-tab="second">
+								<div className="ui top attached tabular menu">
+									<a className="item active" data-tab="second/a">
+										Open/ Close Market
+									</a>
+									<a className="item" data-tab="second/b">
+										Daily Leader board
+									</a>
+									<a className="item" data-tab="second/c">
+										Daily Challenges
+									</a>
+								</div>
+	
+								{/* start of DAILY MARKET */}
+	
+								{/* start of OPEN /ClOSE MARKET */}
+								<div
+									className="ui bottom attached tab inverted segment active"
+									data-tab="second/a"
+								>
+									Open / Close Market
+									<div className="admin-panel content2">
+										<MarketState
+											sessionMd={this.props.sessionMd}
+											isMarketOpen={this.props.isMarketOpen}
+										/>
+									</div>
+								</div>
+								{/* end of OPEN /ClOSE MARKET */}
+	
+								{/* start of DAILY LEADER BOARD */}
+								<div
+									className="ui bottom attached tab inverted segment"
+									data-tab="second/b"
+								>
+									Update End of day Values
+									<div className="admin-panel content1">
+										<UpdateEndOfDayValues sessionMd={this.props.sessionMd} />
+									</div>
+								</div>
+								{/* end of DAILY LEADER BOARD */}
+	
+								{/* start of DAILY CHALLENGES */}
+								<div
+									className="ui bottom attached tab inverted segment"
+									data-tab="second/c"
+								>
+									Add Daily Challenge
+									<div className="admin-panel content3">
+										<AddDailyChallenge sessionMd={this.props.sessionMd} />
+									</div>
+									Update Daily Challenge State
+									<div className="admin-panel content2">
+										<DailyChallengeState
+											sessionMd={this.props.sessionMd}
+											isDailyChallengeOpen={this.props.isDailyChallengeOpen}
+										/>
+									</div>
+								</div>
+								{/* end of DAILY CHALLENGES */}
+	
+								{/* end of DAILY MARKET */}
+							</div>
+							<div className="ui tab inverted segment" data-tab="third">
+								<div className="ui top attached tabular menu">
+									<a className="item active" data-tab="third/a">
+										Block User
+									</a>
+									<a className="item" data-tab="third/b">
+										Unblock User
+									</a>
+									<a className="item" data-tab="third/c">
+										Inspect User
+									</a>
+									<a className="item" data-tab="third/d">
+										Send Notification
+									</a>
+								</div>
+	
+								{/* start of USER SPECIFIC */}
+	
+								{/* start of BLOCK USER */}
+								<div
+									className="ui bottom attached tab inverted segment active"
+									data-tab="third/a"
+								>
+									Block User
+									<div className="admin-panel content1">
+										<BlockUser sessionMd={this.props.sessionMd} />
+									</div>
+								</div>
+								{/* end of BLOCK USER */}
+	
+								{/* start of UNBLOCK USER */}
+								<div
+									className="ui bottom attached tab inverted segment"
+									data-tab="third/b"
+								>
+									Unblock User
+									<div className="admin-panel content1">
+										<UnBlockUser sessionMd={this.props.sessionMd} />
+									</div>
+									Unblock All Users
+									<div className="admin-panel content1">
+										<UnBlockAllUsers sessionMd={this.props.sessionMd} />
+									</div>
+								</div>
+								{/* end of UNBLOCK USER */}
+	
+								{/* start of INSPECT USER */}
+								<div
+									className="ui bottom attached tab inverted segment"
+									data-tab="third/c"
+								>
+									Inspect User
+									<div className="admin-panel content3">
+										<InspectUser sessionMd={this.props.sessionMd} />
+									</div>
+								</div>
+								{/* end of INSPECT USER */}
+	
+								{/* start of SEND NOTIFICATION */}
+								<div
+									className="ui bottom attached tab inverted segment"
+									data-tab="third/d"
+								>
+									Send Notification
+									<div className="admin-panel content2">
+										<Notifications sessionMd={this.props.sessionMd} />
+									</div>
+								</div>
+								{/* end of SEND NOTIFICATION */}
+	
+								{/* end of USER SPECIFIC */}
+							</div>
+						</div>
+						<div className="ui divider"></div>
+					</div>
+				</React.Fragment>
         )
     }
 }
