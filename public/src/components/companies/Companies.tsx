@@ -98,11 +98,8 @@ export class Company extends React.Component<CompanyProps, CompanyState> {
             let newsData = this.state.newsArray.slice();
             let newsUpdate = update.getMarketEvent()!;
                 newsData.unshift(newsUpdate);
-                let CompanySpecificNews = newsData.filter((news)=>{
-                    return news.getStockId() == this.state.currentStockId
-                })
                 this.setState({
-                    newsArray: CompanySpecificNews,
+                    newsArray: newsData,
                 });
         }
     }
