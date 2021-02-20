@@ -95,12 +95,16 @@ export class Company extends React.Component<CompanyProps, CompanyState> {
 
 
         for await (const update of newsRequest) {
-            let newsData = this.state.newsArray.slice();
             let newsUpdate = update.getMarketEvent()!;
+            if(newsUpdate.getStockId()==this.state.currentStockId){
+                let newsData = this.state.newsArray.slice();
+            
                 newsData.unshift(newsUpdate);
                 this.setState({
                     newsArray: newsData,
                 });
+            }
+            
         }
     }
     componentDidMount() {
