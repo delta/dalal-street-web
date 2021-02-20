@@ -93,18 +93,17 @@ export class Company extends React.Component<CompanyProps, CompanyState> {
 
         const newsRequest = await DalalStreamService.getMarketEventUpdates(subscriptionId, this.props.sessionMd);
 
-        let newsData = this.state.newsArray.slice();
 
         for await (const update of newsRequest) {
+            let newsData = this.state.newsArray.slice();
             let newsUpdate = update.getMarketEvent()!;
-            if(newsUpdate.getStockId()==this.state.currentStockId){
                 newsData.unshift(newsUpdate);
-        
+                let CompanySpecificNews = newsData.filter((news)=>{
+                    return news.getStockId() == this.state.currentStockId
+                })
                 this.setState({
-                    newsArray: newsData,
+                    newsArray: CompanySpecificNews,
                 });
-            }
-           
         }
     }
     componentDidMount() {
