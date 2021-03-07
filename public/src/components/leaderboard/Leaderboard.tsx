@@ -122,8 +122,8 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
         }, 2 * 60  * 1000)
     }
 
-    refreshLeaderBoard() {
-        this.getLeaderboard()
+    refreshLeaderBoard = async() => {
+        await this.getLeaderboard()
     }
 
     render() {
@@ -188,7 +188,7 @@ export class Leaderboard extends React.Component<LeaderboardProps, LeaderboardSt
                                 this.state.isLeaderBoardUptoDate ? (
                                 "Leaderboard will be updated every 2 minutes"
                                 ) : (
-                                <button className="ui inverted yellow button">
+                                <button className="ui inverted yellow button" onClick={this.refreshLeaderBoard}>
                                     <i className="refresh icon"></i>Refresh Leaderboard</button>
                             )}
                             </div>
