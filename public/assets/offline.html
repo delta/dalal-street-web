@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Dalal Street</title>
+
+  <style>
+      body {
+    width: 100%;
+    min-height: 100vh;
+    display: relative;
+    margin: 0;
+    padding: 0;
+    background-color: #2f313d;
+  }
+  .wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    align-items: center;
+    justify-content: center;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+    overflow: hidden; 
+    animation: animate 2s linear forwards;
+  }
+  h1 {
+    color: white;
+    font-family: arial;
+    font-weight: bold;
+    font-size: 50px;
+    letter-spacing: 5px;
+    line-height: 1rem;
+    text-shadow: 0 0 3px white;
+  }
+  h4 {
+    color: #f1f1f1;
+    font-family: arial;
+    font-weight: 300;
+    font-size: 16px;
+  }
+  .button {
+    display: block;
+    margin: 20px 0 0;
+    padding: 15px 30px;
+    color: white;
+    font-family: arial;
+    letter-spacing: 5px;
+    text-decoration: none;
+    box-shadow: 0 0 15px #22254C;
+    border-radius: 35px;
+    background-color: green;
+    padding-right: 20px;
+    padding-left: 20px;
+    cursor:pointer;
+  }
+  .button:hover{
+    background-color: #4fb64f;
+  }
+  img{
+      width: 80px;
+      height: 80px;
+  }
+  @keyframes animate { 
+            0% { 
+                height: 0px;
+            } 
+            30% { 
+                height: 254.266px; 
+            } 
+               
+        } 
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <img src="./sed.png">
+    <h1>OFFLINE</h1>
+    <h4>Please check your internet connection</h4>
+
+    <a onClick="window.location.reload();" class="button">RETRY</a>
+  </div>
+</body>
+</html>
