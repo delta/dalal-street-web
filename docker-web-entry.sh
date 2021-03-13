@@ -7,17 +7,17 @@ if [ ! -f protoc-3.2.0rc2-linux-x86_64.zip ]; then
     unzip protoc-3.2.0rc2-linux-x86_64.zip -d protobuf
 fi
 
-# Install dependencies
-echo "######## Installing dependencies ######"
-npm install
-rm -rf node_modules/@types/text-encoding/
-
 # Update protoc-gen
 echo "######## Updating protoc-gen ########"
 cd ts-protoc-gen
 npm install
 npm run build
 cd ..
+
+# Install dependencies
+echo "######## Installing dependencies ######"
+npm install
+rm -rf node_modules/@types/text-encoding/
 
 # build proto
 echo "######## Building proto #########"
