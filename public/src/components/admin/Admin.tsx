@@ -20,6 +20,8 @@ import { UnBlockAllUsers } from "./UnBlockAllUsers"
 import { UpdateStockPrice } from "./UpdateStockPrice";
 import { UpdateEndOfDayValues } from "./updateEndOfdayValues";
 import {DailyChallengeState} from "../admin/DailyChallengeState";
+import { InspectUserDegree } from "./InspectUserDegree";
+import { InspectConnectedComponents } from "./InspectConnectedComponents";
 
 type NumNumMap = { [index: number]: number };
 
@@ -131,6 +133,9 @@ export class Admin extends React.Component<AdminProps, AdminState> {
 								</a>
 								<a className="item" data-tab="third">
 									User Specific
+								</a>
+								<a className="item" data-tab="fourth">
+									Cheat
 								</a>
 							</div>
 							<div className="ui tab inverted segment active" data-tab="first">
@@ -363,7 +368,39 @@ export class Admin extends React.Component<AdminProps, AdminState> {
 								{/* end of SEND NOTIFICATION */}
 	
 								{/* end of USER SPECIFIC */}
-							</div>
+						</div>	
+								<div className="ui tab inverted segment" data-tab="fourth">
+									<div className="ui top attached tabular menu">
+										<a className="item active" data-tab="fourth/a">
+											InspectUserDegree
+											</a>
+										<a className="item" data-tab="fourth/b">
+											InspectConnectedComponents
+											</a>
+									</div>
+									{/* start of InspectUserDegree */}
+									<div
+										className="ui bottom attached tab inverted segment active"
+										data-tab="fourth/a"
+									>
+										<div>
+											<InspectUserDegree sessionMd={this.props.sessionMd} />
+										</div>
+									</div>
+
+									{/* end of InspectUserDegree */}
+
+									{/* start of  InspectConnectedComponents*/}
+									<div
+										className="ui bottom attached tab inverted segment"
+										data-tab="fourth/b"
+									>
+										<div>
+											<InspectConnectedComponents sessionMd={this.props.sessionMd} />
+										</div>
+									</div>
+									{/* end of InspectConnectedComponents */}
+								</div>
 						</div>
 						<div className="ui divider"></div>
 					</div>

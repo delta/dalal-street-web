@@ -1426,3 +1426,44 @@ h1 {
 #admin-panel .item.active {
 	color: black;
 }
+
+#user-degree-table{
+	margin: 5px auto;
+}
+
+#user-degree-pagination{
+	margin: 20px auto 0px auto;
+	text-align: center;
+}
+
+#user-degree-pagination button{
+	padding: 6px 10px;
+	font-size: 18px;
+	text-align: center;
+	border: none;
+	margin: 0 2.5px;
+	cursor: pointer;
+}
+
+#user-degree-pagination button.active{
+	background-color: #444444;
+	color: #ffffff;
+}
+
+#user-degree-pagination .navigate-button{
+	color: #ffffff;
+	background-color: #444444;
+	text-align: center;
+	padding: 6px;
+	transition: 0.3s;
+}
+
+#user-degree-pagination .navigate-button:hover{
+	color: #444444;
+	background-color: #ffffff;
+}
+
+#user-degree-pagination .navigate-button i {
+	margin: 0;
+	padding: 0;
+}
