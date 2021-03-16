@@ -6,9 +6,41 @@ self.addEventListener("push", (e) => {
   console.log("Push Received...", data);
   self.registration.showNotification(data.Title, {
     body: data.Message,
-    icon: "",
+    requireInteraction: true,
+    icon: data.LogoUrl,
   });
 });
+
+self.addEventListener("notificationclick", function (e) {
+  const urlToOpen = new URL("/", self.location.origin).href;
+  const promiseChain = clients
+    .matchAll({
+      type: "window",
+      includeUncontrolled: true,
+    })
+    .then((windowClients) => {
+      let matchingClient = null;
+
+      // check if the website is open, and then open / focus it
+      for (let i = 0; i < windowClients.length; i++) {
+        const windowClient = windowClients[i];
+        if (windowClient.url.includes(urlToOpen)) {
+          matchingClient = windowClient;
+          break;
+        }
+      }
+
+      if (matchingClient) {
+        return matchingClient.focus();
+      } else {
+        return clients.openWindow(urlToOpen);
+      }
+    });
+
+  e.waitUntil(promiseChain);
+  e.notification.close();
+});
+
 var currentCache = {
   offline: 'offline-cache_dalal'
 };
