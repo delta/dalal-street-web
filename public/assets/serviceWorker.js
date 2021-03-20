@@ -9,7 +9,7 @@ self.addEventListener("push", (e) => {
     requireInteraction: true,
     icon: data.LogoUrl,
     badge: data.LogoUrl,
-    image: data.LogoUrl,
+    image: data.ImageUrl,
   });
 });
 
