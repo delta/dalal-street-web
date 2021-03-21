@@ -20,7 +20,11 @@ export interface DailyChallengeRowProps {
     userCash: number,
     userTotal: number,
     userStockWorth: number,
-    stocksOwnedMap: { [index: number]: number }
+    stocksOwnedMap: { [index: number]: number },
+    stocksReservedMap: { [index: number]: number }
+    reservedStocksWorth: number,
+    userReservedCash: number
+
 }
 export interface DailyChallengeRowState {
     row: any,
@@ -92,7 +96,7 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
                 else {  //Add here
                     if (this.props.isDailyChallengeOpen && (market_day == this.props.curMarketDay)) {
                         if (challenge_type == "Cash") {
-                            let userCash = this.props.userCash;
+                            let userCash = this.props.userCash + this.props.userReservedCash;
                             let currentVal = userCash - initial;
                             let indicator = currentVal >= value ? "#7DEA63" : "red";
 
@@ -105,7 +109,7 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
                             })
                         }
                         else if (challenge_type == "StockWorth") {
-                            let userStockWorth = this.props.userStockWorth;
+                            let userStockWorth = this.props.userStockWorth + this.props.reservedStocksWorth;
                             let currentVal = userStockWorth - initial;
                             let indicator = currentVal >= value ? "#7DEA63" : "red";
 
@@ -131,7 +135,7 @@ export class DailyChallengeRow extends React.Component<DailyChallengeRowProps, D
                             })
                         }
                         else {
-                            let stocksowned = this.props.stocksOwnedMap[stock_id];
+                            let stocksowned = this.props.stocksOwnedMap[stock_id] + this.props.stocksReservedMap[stock_id];
                             let currentVal = isNaN(stocksowned) ? 0 : stocksowned - initial;
                             let indicator = currentVal >= value ? "#7DEA63" : "red";
 

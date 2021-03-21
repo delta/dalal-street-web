@@ -24,7 +24,8 @@ export interface DailyChallengesProps {
   disclaimerElement: JSX.Element,
   reservedStocksWorth: number,
   isDailyChallengeOpen: boolean,
-  stocksOwnedMap: { [index: number]: number }
+  stocksOwnedMap: { [index: number]: number },
+  stocksReservedMap: { [index: number]: number }
 }
 
 interface DailyChallengesState {
@@ -100,6 +101,9 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
             challenge={item}
             sessionMd={this.props.sessionMd}
             userCash={this.props.userCash}
+            userReservedCash={this.props.userReservedCash}
+            reservedStocksWorth={this.props.reservedStocksWorth}
+            stocksReservedMap={this.props.stocksReservedMap}
             userTotal={this.props.userTotal}
             userStockWorth={this.props.userStockWorth}
             stocksOwnedMap={this.props.stocksOwnedMap}
