@@ -191,6 +191,11 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
     await this.setCurMarketDay();
     this.intialTimeline();
     await this.displayDailyChallenge(this.state.curMarketDay);
+    if(this.state.curMarketDay==0){
+      $(".column-info").css("visibility","hidden")
+    } else{
+      $(".column-info").css("visibility","visible")
+    }
   }
 
   componentDidUpdate = async (prevProps: DailyChallengesProps) => {
