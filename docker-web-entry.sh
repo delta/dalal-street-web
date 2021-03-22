@@ -27,16 +27,6 @@ npm run build:proto
 echo "######## Build webpack ##########"
 npm run build:webpack
 
-# Removing all files not necessary for prod 
-
-echo "############ Cleaning Container After Build ##########"
-rm -rf *.sh .dockerignore package.json package-lock.json \
-    protobuf ts-protoc-gen *.zip public/src/components \
-    public/tsconfig.json public/src/*.ts public/src/*.tsx \
-    public/src/*.tsx2 webpack.config.js public/tls_keys \
-    && echo "######### Clean Successful #########"
-
-
 # protobuf, ts protoc gen
 echo "######## Starting nginx server #########"
 nginx -g "daemon off;"
