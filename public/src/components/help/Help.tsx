@@ -331,6 +331,17 @@ export class Help extends React.Component<HelpProps, {}> {
                                     <p><span>While challenge is open, the current value and the value needed to achieve the challenge will be displayed for users to check their progress. It will either be in green or red showing if the user has reached or has not reached the value.</span></p>
                                     <p>Daily Challenges are closed at the end of the day.</p>
                                     </div>
+
+                                    <div className="title">
+                                        <i className="dropdown icon inverted"></i>
+                                        <span className="faq-questions">How is the progress in daily challenges calculated?</span>
+                                    </div>
+                                    <div className="content">
+                                        <p><strong>Cash worth: </strong>The change in (cash in hand + Reserved Cash) quantity for that day is computed and displayed as progress.</p>
+                                        <p><strong>Stock worth: </strong>The change in (worth of stocks owned by you + Reserved Stocks worth) quantity that day is computed and displayed as progress.</p>
+                                        <p><strong>Specific stock: </strong>The change in (number of stocks owned + number of stocks reserved)(Both the terms relate to the specified stock) quantity that day is computed and displayed as progress.</p>
+                                        <p><strong>Net Worth: </strong>The change in the Net worth that day is computed and displayed as progress.</p>
+                                    </div>
                                     
                                     <div className="title">
                                         <i className="dropdown icon inverted"></i>
