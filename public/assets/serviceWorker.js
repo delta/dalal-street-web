@@ -4,13 +4,16 @@ self.addEventListener("push", (e) => {
   const data = e.data.json();
   console.log(data);
   console.log("Push Received...", data);
-  self.registration.showNotification(data.Title, {
+  const options = {
     body: data.Message,
     requireInteraction: true,
     icon: data.LogoUrl,
     badge: data.LogoUrl,
-    image: data.ImageUrl,
-  });
+  };
+  // add image only if it exists
+  if (data.ImageUrl) options.image = data.ImageUrl;
+
+  self.registration.showNotification(data.Title, options);
 });
 
 self.addEventListener("notificationclick", function (e) {
