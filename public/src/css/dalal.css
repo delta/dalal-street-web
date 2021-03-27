@@ -1468,7 +1468,7 @@ h1 {
 	padding: 0;
 }
 
-.middle {
+.coming-soon {
 	position: absolute;
 	top: 50%;
 	left: 53%;
@@ -1477,7 +1477,7 @@ h1 {
 	color: white;
 	font-family: "Courier New", Courier, monospace;
   }
-  .middle h1{
+  .coming-soon h1{
 	  font-size: 35px;
   }
   hr{

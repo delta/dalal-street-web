@@ -259,7 +259,7 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
             {this.props.disclaimerElement} 
           </div>  
         </div>
-        <div className="middle">
+        <div className="coming-soon">
             <h1>COMING SOON</h1>
             <hr></hr>
         </div>
