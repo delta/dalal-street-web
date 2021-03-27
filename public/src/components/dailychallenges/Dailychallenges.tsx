@@ -192,9 +192,11 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
     this.intialTimeline();
     await this.displayDailyChallenge(this.state.curMarketDay);
     if(this.state.curMarketDay==0){
-      $(".column-info").css("visibility","hidden")
+      $(".content-div").css("display","none")
+      $(".middle").css("display","block")
     } else{
-      $(".column-info").css("visibility","visible")
+      $(".content-div").css("display","block")
+      $(".middle").css("display","none")
     }
   }
 
@@ -228,6 +230,9 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
                             <div className="grey sub header">
                   Complete these tasks to win exciting rewards
                             </div>
+                            <div className="grey sub header">
+                  For more details, visit the faq section.
+                            </div>
               </div>
             </h2>
           </div>
@@ -251,12 +256,14 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
             <div className="ten wide column column-info" id="column-info"><p>Challenge</p></div>
             <div className="three wide column column-info" id="column-info"><p>Progress</p></div>
             {this.state.DailyChallenges}
-            
-            {this.props.disclaimerElement}
-          </div>
-         
+            {this.props.disclaimerElement} 
+          </div>  
         </div>
-       
+        <div className="middle">
+            <h1>COMING SOON</h1>
+            <hr></hr>
+        </div>
+        
       </Fragment>
     )
   }

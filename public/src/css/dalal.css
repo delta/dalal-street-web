@@ -1467,3 +1467,24 @@ h1 {
 	margin: 0;
 	padding: 0;
 }
+
+.middle {
+	position: absolute;
+	top: 50%;
+	left: 53%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	color: white;
+	font-family: "Courier New", Courier, monospace;
+  }
+  .middle h1{
+	  font-size: 35px;
+  }
+  hr{
+	border: 3px solid darkgreen;
+   }
+   #for-more{
+	   color: white;
+	   text-align: left;
+	   font-size: 20px;
+   }
