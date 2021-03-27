@@ -193,10 +193,10 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
     await this.displayDailyChallenge(this.state.curMarketDay);
     if(this.state.curMarketDay==0){
       $(".content-div").css("display","none")
-      $(".middle").css("display","block")
+      $(".coming-soon").css("display","block")
     } else{
       $(".content-div").css("display","block")
-      $(".middle").css("display","none")
+      $(".coming-soon").css("display","none")
     }
   }
 
