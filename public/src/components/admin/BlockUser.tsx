@@ -6,6 +6,7 @@ import { showNotif, showErrorNotif, isPositiveInteger, closeNotifs } from "../..
 
 export interface BlockUserState {
     userId: number
+    penalty: number
 
 }
 
@@ -18,6 +19,7 @@ export class BlockUser extends React.Component<BlockUserProps,BlockUserState> {
         super(props);      
         this.state = {
             userId: 0,
+            penalty: 0,
         }
 
     }
@@ -28,6 +30,7 @@ export class BlockUser extends React.Component<BlockUserProps,BlockUserState> {
         if(this.state.userId > 0)
         {
             blockUserRequest.setUserId(Number(this.state.userId));    
+            blockUserRequest.setPenalty(Number(this.state.penalty));
             this.blockUser(blockUserRequest);            
         }
         else{
@@ -61,6 +64,12 @@ export class BlockUser extends React.Component<BlockUserProps,BlockUserState> {
            userId: Number(event.currentTarget.value),
        })
     }
+
+    handlePenaltyChange = (event: React.FormEvent<HTMLInputElement>) =>{
+        this.setState({
+            penalty: Number(event.currentTarget.value),
+        })
+     }
       render() {
         return (
             <React.Fragment>
@@ -69,7 +78,12 @@ export class BlockUser extends React.Component<BlockUserProps,BlockUserState> {
                         <tr>
                             <td >
                             <div className="ui inverted input">
-                                <input type="number"  placeholder="User Id" onChange={this.handleUserIdChange} value={String(this.state.userId)} />
+                                <input type="integer" placeholder="User Id" onChange={this.handleUserIdChange} value={String(this.state.userId)} />
+                            </div>
+                            </td>
+                            <td >
+                            <div className="ui inverted input">
+                                <input type="integer"  placeholder="Penalty" onChange={this.handlePenaltyChange} value={String(this.state.penalty)} />
                             </div>
                             </td>
                             <td>
