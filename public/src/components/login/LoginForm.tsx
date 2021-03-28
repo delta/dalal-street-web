@@ -11,7 +11,7 @@ export interface LoginFormState {
     email: string,
     password: string,
     disabled: boolean,
-    error: string | null,
+    error: string | null | JSX.Element,
     success: string | null,
 }
 
@@ -23,7 +23,7 @@ export class LoginForm extends React.Component<LoginFormProps, LoginFormState>{
             email: "",
             disabled: false,
             error: null,
-            success: null
+            success: null,
         };
     }
 
@@ -36,20 +36,33 @@ export class LoginForm extends React.Component<LoginFormProps, LoginFormState>{
         loginRequest.setEmail(this.state.email);
         loginRequest.setPassword(this.state.password);
 
+        this.setState({
+            success: null    
+        });
+
         try {
             const resp = await DalalActionService.login(loginRequest);
             this.props.loginSuccessHandler(resp);
         } catch (e) {
             console.log(e);
-            this.setState({
-                error: e.isGrpcError ? "Unable to reach server. Please check your internet connection." : e.statusMessage,
-            });
+            if(e.isGrpcError) {
+                this.setState({
+                    error: "Unable to reach server. Please check your internet connection. Or try again later",
+                    })
+            } else if (e.statusMessage === "User has not verified account") {
+                this.setResendVerificationEmailTimerCountdown()
+            } else {       
+                this.setState({
+                    error: e.isGrpcError ? "Unable to reach server. Please check your internet connection." : e.statusMessage,
+                    });
+            }
         }
 
         this.setState({
             disabled: false,
         });
     }
+
 
     handlePasswordChange = (event: React.FormEvent<HTMLInputElement>) => {
         this.setState({
@@ -68,17 +81,35 @@ export class LoginForm extends React.Component<LoginFormProps, LoginFormState>{
         const resendVerificationEmailRequest = new ResendVerificationEmailRequest();
         resendVerificationEmailRequest.setEmail(this.state.email);
         try {
-            const resp = await DalalActionService.resendVerificationEmai(resendVerificationEmailRequest);
+            const resp = await DalalActionService.resendVerificationEmail(resendVerificationEmailRequest);
             this.setState({
                 error: null,
                 success: "Successfully resent verification Email"
             });
         } catch(err) {
+            console.log(err)
             this.setState({
                 error: err.isGrpcError ? "Unable to reach server. Please check your internet connection." : err.statusMessage,
             });
         }
     }
+
+    setResendVerificationEmailTimerCountdown = () => {
+        let timer = 60
+        let countDown = setInterval(() => {
+            timer --;
+            this.setState({
+                error: <span> Email hasn't been verified yet. Wait for { timer }s before resending it.</span>
+            });
+            if(!timer) {
+                clearInterval(countDown)
+                this.setState({
+                    error: <span> Email hasn't been verified yet. <a className="register-hover" onClick={this.handleResendVerificationEmail} >Resend verification email.</a> </span> 
+                });
+            }
+        }, 100)
+    }
+
 
     render() {
         return (
@@ -105,9 +136,11 @@ export class LoginForm extends React.Component<LoginFormProps, LoginFormState>{
                 </form>
                 { this.state.error != null &&<div className="ui negative bottom attached message">
                     <i className="icon error"></i>
-                    { this.state.error === "User has not verified account" ? 
-                    <span> Email hasn't been verified yet. <a className="register-hover" onClick={this.handleResendVerificationEmail} >Resend verification email.</a> </span> 
-                    : this.state.error }
+                    { this.state.error }
+                </div> }
+                { this.state.success != null &&<div className="ui positive bottom attached message">
+                    <i className="icon error"></i>
+                    { this.state.success }
                 </div> }
             </div>
         );
