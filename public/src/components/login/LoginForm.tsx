@@ -107,7 +107,7 @@ export class LoginForm extends React.Component<LoginFormProps, LoginFormState>{
                     error: <span> Email hasn't been verified yet. <a className="register-hover" onClick={this.handleResendVerificationEmail} >Resend verification email.</a> </span> 
                 });
             }
-        }, 100)
+        }, 1000)
     }
 
 
