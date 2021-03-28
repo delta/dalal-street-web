@@ -27,7 +27,7 @@ export class NewsComponent extends React.Component<NewsComponentProps,{}> {
     render() {
 
         const newsDetails = this.props.newsDetail;
-        const url = "url(./public/src/images/news/" + newsDetails.getImagePath() + ") center/cover no-repeat";
+        const url = "url(" + newsDetails.getImagePath() + ") center/cover no-repeat";
         const divStyle = {
             background: url
         }
@@ -44,15 +44,15 @@ export class NewsComponent extends React.Component<NewsComponentProps,{}> {
                             </div>
                             <ul className="menu-content">
                                 <li>
-                                    <a href="#" className="fa fa-bookmark-o"></a>
+                                    <a href="javascript:void(0)" className="fa fa-bookmark-o"></a>
                                 </li>
                             </ul>
                         </div>
                         <div className="news-data">
                             <div className="content">
-                                <h1 className="title"><a href="#">{newsDetails.getHeadline()}</a></h1>
+                                <h1 className="title"><a href="javascript:void(0)">{newsDetails.getHeadline()}</a></h1>
                                 <p className="text"></p>
-                                <a href="#" className="button">Read more</a>
+                                <a href="javascript:void(0)" className="button">Read more</a>
                             </div>
                         </div>
                     </div>
@@ -65,7 +65,7 @@ export class NewsComponent extends React.Component<NewsComponentProps,{}> {
                     </div>
                     <div className="image content">
                         <div className="ui medium image">
-                            <img src={"./public/src/images/news/" + newsDetails.getImagePath()}/>
+                            <img src={newsDetails.getImagePath()}/>
                         </div>
 
                         <div className="description">
