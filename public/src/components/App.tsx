@@ -227,16 +227,17 @@ export class App extends React.Component<{}, AppState> {
 			this.forceUpdate()
 		}
 	}
-	updateUserBlocked = (blockedStatus: boolean) =>{
-		 this.setState({
-			 isBlocked: blockedStatus
-		 })
-		 if(!blockedStatus){
-			 showInfoNotif("Your account has been unblocked! Any further violation of Code of Conduct will result in permanent ban of your account  ","Account Unblocked");
-		 }
-		 else{
-			showErrorNotif("Your account has been blocked due to violation of Code of Conduct","Account Blocked");
-		 }
+	updateUserBlocked = (blockedStatus: boolean, penalty: number) =>{
+		this.setState({
+			isBlocked: blockedStatus
+		})
+   
+		if(!blockedStatus){
+			showInfoNotif("Your account has been unblocked! Any further violation of Code of Conduct will result in permanent ban of your account  ","Account Unblocked");
+		}
+		else{
+		   showErrorNotif("Your account has been blocked due to violation of Code of Conduct and a penalty of " + penalty + " has been deducted from your cash.","Account Blocked");
+		}
 	}
 	updateIsPhoneVerified = () => {
 		this.setState({

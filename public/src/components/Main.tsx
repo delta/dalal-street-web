@@ -49,7 +49,7 @@ export interface MainProps {
     vapidPublicKey:             string
 
     changeStockDetailsMapCallBack: (stockDetailsMap: { [index: number]: Stock_pb }) => void
-    updateUserBlocked: (blockedStatus: boolean) => void
+    updateUserBlocked: (blockedStatus: boolean, penalty: number) => void
     dailyChallengeNotif: (status:boolean)=> void
 }
 
@@ -464,8 +464,17 @@ export class Main extends React.Component<MainProps, MainState> {
                     }
                     else if(update.getGameState()!.getUserBlockState()!)
                     {
-                         let blockedState: boolean = update.getGameState()!.getUserBlockState()!.getIsBlocked();
-                         this.props.updateUserBlocked(blockedState);
+                        let blockedState: boolean = update.getGameState()!.getUserBlockState()!.getIsBlocked();
+                        let newCash: number = update.getGameState()!.getUserBlockState()!.getCash();
+                        let penalty = newCash - this.state.userCash
+
+                        this.setState({
+                            userCash: newCash,
+                            userTotal: this.calculateTotal(newCash,this.props.stocksOwnedMap, this.props.stockDetailsMap, this.props.stocksReservedMap, this.props.user.getReservedCash()),
+                        })
+
+                         this.props.updateUserBlocked(blockedState, -penalty);
+
                     }
                     else if(update.getGameState()!.getUserReferredCredit()!)
                     {
