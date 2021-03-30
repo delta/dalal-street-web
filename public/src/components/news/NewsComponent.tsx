@@ -27,7 +27,7 @@ export class NewsComponent extends React.Component<NewsComponentProps,{}> {
     render() {
 
         const newsDetails = this.props.newsDetail;
-        const url = "url(" + newsDetails.getImagePath() + ") center/cover no-repeat";
+        const url = "url(./public/src/images/news/" + newsDetails.getImagePath() + ") center/cover no-repeat";
         const divStyle = {
             background: url
         }
@@ -65,7 +65,7 @@ export class NewsComponent extends React.Component<NewsComponentProps,{}> {
                     </div>
                     <div className="image content">
                         <div className="ui medium image">
-                            <img src={newsDetails.getImagePath()}/>
+                            <img src={"./public/src/images/news/" + newsDetails.getImagePath()}/>
                         </div>
 
                         <div className="description">
