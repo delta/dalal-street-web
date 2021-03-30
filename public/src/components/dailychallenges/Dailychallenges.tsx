@@ -237,7 +237,7 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
             </h2>
           </div>
         </div>
-        <div className="content-div">
+        <div className="content-div" style={{display: "none"}}>
           <div className="ui equal width center aligned padded grid">
             <div className="row head">
               <div className="fourteen wide column timeline-row" id="top-box">
@@ -259,7 +259,7 @@ export class DailyChallenges extends React.Component<DailyChallengesProps, Daily
             {this.props.disclaimerElement} 
           </div>  
         </div>
-        <div className="coming-soon">
+        <div className="coming-soon" style={{display: "none"}}>
             <h1>COMING SOON</h1>
             <hr></hr>
         </div>
