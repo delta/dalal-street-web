@@ -140,7 +140,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                         <span className="faq-questions">What time does the stock market open and close ?</span>
                                     </div>
                                     <div className="content">
-                                        <p>The market opens at <strong>20.00</strong> (IST) and closes at <strong>24.00</strong> (IST).</p>
+                                        <p>The market opens at <strong>20:00</strong> (IST) and closes at <strong>24:00</strong> (IST).</p>
                                     </div>
 
                                     <div className="title">
