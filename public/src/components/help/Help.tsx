@@ -295,7 +295,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                     </div>
                                     <div className="content">
                                         <p>While we don’t expect any more companies to go public over the course of this game, existing companies may release more shares in the middle. If this happens, then the number of <em>Stocks in Exchange</em> will increase, and you can buy these stocks from the <strong>Exchange Page</strong>. Stay tuned to the <strong>News Page</strong> or download the <a target="_blank" href="https://play.google.com/store/apps/details?id=org.pragyan.dalal18">Dalal Street Android App</a> to be the first to know when to expect more shares.</p>
-                                        <p>If you still have any queries, please feel free to ask it on our <a target="_blank" href="https://forum.pragyan.org/t/dalal-street-frequently-asked-questions/19">Official Forum</a> and we'll try to get back to you as soon as possible. Happy Trading!</p>
+                                        <p>If you still have any queries, please feel free to ask it on our <a target="_blank" href="https://discord.gg/jrfEXT5M">Official Forum</a> and we'll try to get back to you as soon as possible. Happy Trading!</p>
                                     </div>
 
                                     <div className="title">
@@ -356,7 +356,7 @@ export class Help extends React.Component<HelpProps, {}> {
                             </div>
                             <div className="ui bottom attached tab segment" data-tab="forum">
                                 For further queries, feel free to post your doubts on the
-                            <a href="https://forum.pragyan.org/t/dalal-street-frequently-asked-questions/19" target="_blank">
+                            <a href="https://discord.gg/jrfEXT5M" target="_blank">
                                     &nbsp;forum
                             </a>
                             </div>
