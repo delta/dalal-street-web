@@ -137,6 +137,14 @@ export class Help extends React.Component<HelpProps, {}> {
 
                                     <div className="title">
                                         <i className="dropdown icon inverted"></i>
+                                        <span className="faq-questions">What time does the stock market open and close ?</span>
+                                    </div>
+                                    <div className="content">
+                                        <p>The market opens at <strong>20:00</strong> (IST) and closes at <strong>24:00</strong> (IST).</p>
+                                    </div>
+
+                                    <div className="title">
+                                        <i className="dropdown icon inverted"></i>
                                         <span className="faq-questions">Help! I don’t know what Market, Limit and Stoploss orders are!</span>
                                     </div>
                                     <div className="content">
@@ -153,7 +161,7 @@ export class Help extends React.Component<HelpProps, {}> {
                                                 <li>Stopless Buys are converted to <em>Market Buys</em> as soon as the stocks price rises <em>above</em> the Stoploss price that you set.</li>
                                                 <li>Stopless Sells are converted to <em>Market Sells</em> as soon as the stocks price falls <em>below</em> the Stoploss price that you set.</li>
                                             </ul><br />
-                                            <p><em>Pro Tip</em>: Since the market is open 24/7, Stoploss orders can be very useful in case the market fluctuates wildly when you're not online! You can use Stopless Buy Orders to jump on a rising trend and you can use Stoploss Sell Orders to lock in a profit/limit your losses.</p>
+                                            <p><em>Pro Tip</em>: Since the market is open for four hours, Stoploss orders can be very useful in case the market fluctuates wildly when you're not online! You can use Stopless Buy Orders to jump on a rising trend and you can use Stoploss Sell Orders to lock in a profit/limit your losses.</p>
                                         </ol>
                                     </div>
 
