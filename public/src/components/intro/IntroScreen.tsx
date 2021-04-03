@@ -14,7 +14,7 @@ export class IntroScreen extends React.Component<{}, {}> {
                             <img className="image" src="./public/src/images/pragyanlogo.png" />
                         </div>
                         <div id="text">
-                        <h1>Dalal Street</h1>
+                        <h1>Dalal Street <strong id="demo-color">Demo</strong></h1>
                         <p>The stock market gaming engine</p>
                       </div>
                     </div>
