@@ -75,7 +75,7 @@ export class IntroScreen extends React.Component<{}, {}> {
                                 <h2>Questions or comments?</h2>
                             </header>
 
-                            <p>Reach out to us on <a href="https://discord.gg/jrfEXT5M">the Dalal Forum</a></p>
+                            <p>Reach out to us on <a href="https://discord.gg/Qz8QBvgs8H">the Dalal Forum</a></p>
 
 
                                 &copy; Made with <span className="red">&hearts;</span> by <a href="https://delta.nitt.edu">Delta Force</a>
