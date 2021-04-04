@@ -44,8 +44,7 @@ export class IntroScreen extends React.Component<{}, {}> {
                                 </div>
                             </section>
                         </div>
-
-
+                        
                         <footer className="major container 75%">
                             <h3>New to stock markets?</h3>
                             <p className="p-text">Don't worry. We've got a list of resouces to get you
@@ -55,6 +54,16 @@ export class IntroScreen extends React.Component<{}, {}> {
                             <ul className="actions">
                                 <li><a href="/register" className="intro-button">Get Started</a></li>
                             </ul>
+                        </footer>
+
+                        <footer className="major container 75%">
+                            <h1 style={{fontSize:"30px",marginLeft: "30px"}}>Media Partners</h1>
+                            <img id="sponsors" style={{margin: "30px"}} src="./public/src/images/DSIJ Logo.png" alt="" />
+                            <br/>
+                            <img id="sponsors" style={{margin: "30px"}} src="./public/src/images/MyCaptain Logo.png" alt="" />
+                            <br/>
+                            <img id="sponsors" style={{margin: "30px"}} src="./public/src/images/The CEO Magazine.png" alt="" />
+                            <br/>
                         </footer>
 
                     </div>

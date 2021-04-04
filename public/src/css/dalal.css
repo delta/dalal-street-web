@@ -1488,3 +1488,7 @@ h1 {
 	   text-align: left;
 	   font-size: 20px;
    }
+   #sponsors{
+	  border: none;
+	 margin: 200px;
+   }
