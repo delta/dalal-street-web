@@ -7,10 +7,20 @@ RUN apt-get update && \
     vim \
     wget \
     unzip \
-    gnupg && \
-    curl -sL https://deb.nodesource.com/setup_7.x | bash - && \
-    apt-get install -y nodejs
+    gnupg
+
+WORKDIR /
+
+COPY frontend-node-install.sh .
+
+RUN bash frontend-node-install.sh
+
+ENV PATH /var/www/dalalstreet/protobuf/bin:/node-v10.17.0-linux-x64/bin:$PATH
+
+RUN mkdir -p /var/www/dalalstreet
 
 WORKDIR /var/www/dalalstreet
+
+COPY . .
 
 CMD ["./docker-web-entry.sh"]
