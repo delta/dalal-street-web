@@ -57,7 +57,7 @@ export class IntroScreen extends React.Component<{}, {}> {
                         </footer>
 
                         <footer className="major container 75%">
-                            <h1 style={{fontSize:"30px",marginLeft: "30px"}}>Media Sponsors</h1>
+                            <h1 style={{fontSize:"30px",marginLeft: "30px"}}>Media Partners</h1>
                             <img id="sponsors" style={{margin: "30px"}} src="./public/src/images/DSIJ Logo.png" alt="" />
                             <br/>
                             <img id="sponsors" style={{margin: "30px"}} src="./public/src/images/MyCaptain Logo.png" alt="" />
